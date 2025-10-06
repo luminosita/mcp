@@ -55,7 +55,6 @@ Modern prompts require a composite architecture with five core components for op
 **Persona/Role:** Assigning an expert role primes the model's knowledge base and shapes response style. By instructing "Act as a senior platform engineer with expertise in AWS and Terraform," the prompt focuses attention on specific domain expertise, leading to accurate terminology, relevant considerations, and professional tone. This prevents generic, unfocused responses from underspecified prompts.
 
 **Task/Instruction:** The core instruction should use clear, unambiguous, action-oriented language. Verbs like "Generate," "Analyze," "Refactor," "Summarize," or "Classify" provide direct commands. For complex requests, use separate, distinct instructions for each sub-task to maintain clarity and logical separation. State the *who*, *what*, *why*, and *how* explicitly[^38].
-LAZA: explain with details *who*, *what*, *why*, and *how* 
 
 **Context:** Context provides necessary background, scope, and constraints that ground the model's response. Without sufficient context, responses remain too generic for professional use. Context includes existing code snippets, architectural constraints (e.g., "must use non-relational database"), business goals, or relevant data points. Use precise terms and keywords (brand names, technical terms) to focus retrieval and reasoning[^36]. This component is so critical it has given rise to "context engineering," treating all information available to the model as a finite resource to be optimized.
 
@@ -619,7 +618,7 @@ Choice depends on interaction model needed: Claude for complex, exploratory work
 The creation of clear, comprehensive, consistent documentation is foundational to software development. LLMs can automate and augment generation of key product documents. This section provides template-driven guidance for applying foundational and RAG techniques to software documentation.
 
 ### 6.1 Generating Product Requirement Documents (PRDs)
-LAZA: Are these two different prompts or one using the other?
+
 **Objective:** Automate creation of structured, comprehensive PRD from high-level feature idea or initial notes. Well-formed PRD articulates problem, target users, goals and non-goals, success metrics.
 
 **Technique:** Single-shot "write a PRD" is too under-specified. More effective: **conversational, slot-filling process**. LLM acts as product manager, interactively querying user for necessary PRD components. LLM maintains structured "slot map" of required information and asks targeted follow-up questions until all slots filled, then synthesizes into fully-formed document.
