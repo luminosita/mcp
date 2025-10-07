@@ -1,18 +1,27 @@
 # Master Plan - Context Engineering PoC
 
-**Document Version**: 1.0
-**Status**: Active
+**Document Version**: 1.1
+**Status**: Active - Phase 1 (PoC)
 **Last Updated**: 2025-10-07
 
 ---
 
-## Phase 1: Bootstrap & Foundation
+## Current Phase: Phase 1 - Bootstrap & Foundation
+
+**Current Status**: Bootstrap completed, ready for generator execution
+**Last Completed**: TASK-000 (Templates extracted and generated)
+**Next Task**: TASK-001 (Regenerate Product Idea from IDEA.md)
+**Completion**: 1/15 tasks (7%)
+
+---
+
+## Phase 1: Bootstrap & Foundation (PoC)
 
 ### TASK-000: Extract & Generate Templates
 **Priority**: Critical
 **Dependencies**: None
 **Estimated Time**: 30 minutes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed
 
 **Description**:
 Extract templates from research document (Section 6.1-6.4) and convert to XML format. Generate missing templates not explicitly defined in research.
@@ -23,43 +32,48 @@ Extract templates from research document (Section 6.1-6.4) and convert to XML fo
 3. PRD Template (extract from Section 6.1, lines 630-728)
 4. ADR Template (extract from Section 6.2, lines 773-849)
 5. Technical Specification Template (extract from Section 6.3, lines 905-1016)
-6. User Story Template (extract from Section 6.4, lines 1063-1108)
+6. Backlog Story Template (extract from Section 6.4, lines 1063-1108)
+7. Generator Schema Template (create for consistency)
 
 **Success Criteria**:
-- [ ] All 6 templates exist in `/prompts/templates/*.xml`
-- [ ] Each template is valid XML with proper CDATA sections
-- [ ] Templates include validation checklists from research
-- [ ] Metadata references source sections (where applicable)
-- [ ] Instructions are clear and actionable
+- [x] All 7 templates exist in `/prompts/templates/*.xml`
+- [x] Each template is valid XML with proper CDATA sections
+- [x] Validation checklists removed from templates (moved to generators)
+- [x] Metadata references source sections (where applicable)
+- [x] Instructions are clear and actionable
+- [x] Generator schema template created
 
 **Output Artifacts**:
-- `/prompts/templates/product-vision-template.xml`
-- `/prompts/templates/epic-template.xml`
-- `/prompts/templates/prd-template.xml`
-- `/prompts/templates/adr-template.xml`
-- `/prompts/templates/tech-spec-template.xml`
-- `/prompts/templates/user-story-template.xml`
+- `/prompts/templates/product-vision-template.xml` ✅
+- `/prompts/templates/epic-template.xml` ✅
+- `/prompts/templates/prd-template.xml` ✅
+- `/prompts/templates/adr-template.xml` ✅
+- `/prompts/templates/tech-spec-template.xml` ✅
+- `/prompts/templates/backlog-story-template.xml` ✅
+- `/prompts/templates/generator-schema-template.xml` ✅
 
 ---
 
-### TASK-001: Create Product Idea Stub
+### TASK-001: Regenerate Product Idea from IDEA.md
 **Priority**: High
 **Dependencies**: None
 **Estimated Time**: 10 minutes
 **Status**: ⏳ Pending
 
 **Description**:
-Create initial product idea document for CLI tool that will serve as input to Product Vision Generator.
+Regenerate product idea document using the concept outlined in `/IDEA.md`. Replace existing `/docs/product-idea.md` with new content.
 
 **Success Criteria**:
-- [ ] Document describes CLI tool purpose
+- [ ] Document describes product from IDEA.md
 - [ ] Includes problem statement (high-level)
 - [ ] Identifies target user persona
 - [ ] Lists 3-5 key capabilities
 - [ ] Readable and concise (<500 words)
 
 **Output Artifacts**:
-- `/docs/product-idea.md`
+- `/docs/product-idea.md` (regenerated)
+
+**Note**: DO NOT execute until explicitly requested by user
 
 ---
 
@@ -67,35 +81,70 @@ Create initial product idea document for CLI tool that will serve as input to Pr
 **Priority**: Critical
 **Dependencies**: TASK-000 (product-vision-template.xml must exist)
 **Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed
 
 **Description**:
 Create the first generator prompt that will produce Product Vision documents and Epic Generator prompts.
 
 **Success Criteria**:
-- [ ] Follows generator prompt XML schema (Section 5.1 of strategy)
-- [ ] References correct template path
-- [ ] Includes validation checklist
-- [ ] Specifies dual outputs (vision doc + epic generator)
-- [ ] Contains relevant guidance from research Section 6.1
-- [ ] Valid XML syntax
+- [x] Follows generator prompt XML schema template
+- [x] References correct template path
+- [x] Includes validation checklist in generator (not template)
+- [x] Specifies dual outputs (vision doc + epic generator)
+- [x] Contains research step for competitive analysis
+- [x] Constraints marked as [CUSTOMIZE PER PRODUCT]
+- [x] Valid XML syntax
 
 **Output Artifacts**:
-- `/prompts/product_vision_generator.xml`
+- `/prompts/product_vision_generator.xml` ✅
 
 ---
 
-## Phase 2: First Generator Execution & Iteration
-
-### TASK-003: Execute Product Vision Generator v1
+### TASK-003: Update Framework Files per Critique
 **Priority**: Critical
-**Dependencies**: TASK-001, TASK-002
+**Dependencies**: TASK-002
+**Estimated Time**: 60 minutes
+**Status**: ✅ Completed
+
+**Description**:
+Apply all updates from feedback/context_engineering_strategy_v1_critique.md:
+- Remove validation checklists from templates
+- Add research instructions to generators
+- Create generator schema template
+- Update command files
+- Update CLAUDE.md
+- Update strategy document with phase reorganization
+
+**Success Criteria**:
+- [x] Validation checklists removed from all templates
+- [x] Research steps added to Product Vision generator
+- [x] Generator schema template created
+- [x] Command files updated (remove /kickoff, fix references)
+- [x] CLAUDE.md updated (remove Current Phase section, fix commands)
+- [x] Strategy document updated with 5-phase model including MCP Server phase
+
+**Output Artifacts**:
+- Updated templates (6 files) ✅
+- `/prompts/templates/generator-schema-template.xml` ✅
+- Updated command files ✅
+- Updated `/CLAUDE.md` ✅
+- Updated `/docs/context_engineering_strategy_v1.md` ✅
+
+---
+
+## Phase 1: Generator Execution & Iteration
+
+### TASK-004: Execute Product Vision Generator v1
+**Priority**: Critical
+**Dependencies**: TASK-001 (product-idea.md must exist), TASK-003
 **Estimated Time**: 20 minutes
 **Status**: ⏳ Pending
 **Context**: New session C1 required
 
 **Description**:
 Execute Product Vision Generator in standalone context to produce first iteration of Product Vision document.
+
+**Command**: `/execute-generator TASK-004`
 
 **Context Requirements**:
 - `/CLAUDE.md`
@@ -109,7 +158,8 @@ Execute Product Vision Generator in standalone context to produce first iteratio
 - [ ] Problem statement includes quantified pain points
 - [ ] Success metrics are SMART-compliant
 - [ ] Target users clearly defined
-- [ ] 3-5 key features listed
+- [ ] 3-5 key capabilities listed
+- [ ] Competitive analysis includes research findings
 - [ ] Alignment with product-idea.md
 - [ ] Epic generator prompt is syntactically valid XML
 - [ ] Readability: Accessible to non-expert (manual Flesch >60)
@@ -120,9 +170,9 @@ Execute Product Vision Generator in standalone context to produce first iteratio
 
 ---
 
-### TASK-004: Critique Product Vision v1
+### TASK-005: Critique Product Vision v1
 **Priority**: High
-**Dependencies**: TASK-003
+**Dependencies**: TASK-004
 **Estimated Time**: 15 minutes
 **Status**: ⏳ Pending
 
@@ -141,24 +191,26 @@ Human review of Product Vision v1 with structured critique focusing on completen
 
 ---
 
-### TASK-005: Refine Product Vision Generator & Execute v2
+### TASK-006: Refine Product Vision Generator & Execute v2
 **Priority**: Critical
-**Dependencies**: TASK-004
+**Dependencies**: TASK-005
 **Estimated Time**: 30 minutes
 **Status**: ⏳ Pending
 **Context**: Can reuse C1 or start new session
 
 **Description**:
-Apply Self-Refine pattern (research Section 2.4) to update generator based on critique, then re-execute.
+Apply Self-Refine pattern to update generator based on critique, then re-execute.
+
+**Command**: `/refine-generator product_vision_generator`
 
 **Context Requirements**:
-- All from TASK-003
+- All from TASK-004
 - `/feedback/product_vision_v1_critique.md`
 
 **Success Criteria**:
 - [ ] Generator prompt updated with improvements
 - [ ] Changes address critique points
-- [ ] Version incremented (1.1 → 1.2)
+- [ ] Version incremented (1.0 → 1.1)
 - [ ] Vision v2 shows measurable improvement
 - [ ] Epic generator prompt refined (if issues noted)
 
@@ -169,9 +221,9 @@ Apply Self-Refine pattern (research Section 2.4) to update generator based on cr
 
 ---
 
-### TASK-006: Critique Product Vision v2
+### TASK-007: Critique Product Vision v2
 **Priority**: High
-**Dependencies**: TASK-005
+**Dependencies**: TASK-006
 **Estimated Time**: 15 minutes
 **Status**: ⏳ Pending
 
@@ -189,46 +241,50 @@ Second human review focusing on whether v1 critiques were addressed and identify
 
 ---
 
-### TASK-007: Final Refinement & Execute v3 + Update Strategy
+### TASK-008: Final Refinement & Execute v3 + Update Strategy
 **Priority**: Critical
-**Dependencies**: TASK-006
+**Dependencies**: TASK-007
 **Estimated Time**: 45 minutes
 **Status**: ⏳ Pending
 
 **Description**:
-Apply final refinements, execute generator for v3, and update strategy document with lessons learned.
+Apply final refinements, execute generator for v3, and **HUMAN manually updates** strategy document with lessons learned.
+
+**Command**: `/refine-generator product_vision_generator`
 
 **Context Requirements**:
-- All from TASK-005
+- All from TASK-006
 - `/feedback/product_vision_v2_critique.md`
 - `/docs/context_engineering_strategy_v1.md`
 
 **Success Criteria**:
-- [ ] Generator prompt finalized (version 1.3)
+- [ ] Generator prompt finalized (version 1.2)
 - [ ] Vision v3 meets all validation criteria
 - [ ] Epic generator prompt production-ready
-- [ ] Strategy doc Section 8.2 updated with patterns
-- [ ] Human approval obtained
+- [ ] **HUMAN**: Strategy doc Section 8.2 manually updated with patterns
+- [ ] Human approval obtained for v3
 
 **Output Artifacts**:
 - `/prompts/product_vision_generator.xml` (final)
 - `/artifacts/product_vision_v3.md` (approved)
 - `/prompts/epic_generator.xml` (final)
-- `/docs/context_engineering_strategy_v1.md` (updated)
+- `/docs/context_engineering_strategy_v1.md` (manually updated by human)
 
 ---
 
-## Phase 3: Cascade to Epic Generation
+## Phase 1: Cascade to Epic Generation
 
-### TASK-008: Execute Epic Generator v1
+### TASK-009: Execute Epic Generator v1
 **Priority**: Critical
-**Dependencies**: TASK-007
+**Dependencies**: TASK-008
 **Estimated Time**: 30 minutes
 **Status**: ⏳ Pending
 **Context**: New session C2 required
 
 **Description**:
 Execute Epic Generator in standalone context to decompose Product Vision into Epic documents.
+
+**Command**: `/execute-generator TASK-009`
 
 **Context Requirements**:
 - `/CLAUDE.md`
@@ -243,6 +299,7 @@ Execute Epic Generator in standalone context to decompose Product Vision into Ep
 - [ ] Epics decompose vision completely (no gaps)
 - [ ] Epics are non-overlapping
 - [ ] Each epic is independently valuable
+- [ ] Feature-specific research conducted
 - [ ] PRD generator prompt is valid XML
 - [ ] Clear dependency order between epics
 
@@ -252,14 +309,14 @@ Execute Epic Generator in standalone context to decompose Product Vision into Ep
 
 ---
 
-### TASK-009: Critique Epics v1
+### TASK-010: Critique Epics v1 & Refine to v2
 **Priority**: High
-**Dependencies**: TASK-008
-**Estimated Time**: 20 minutes
+**Dependencies**: TASK-009
+**Estimated Time**: 45 minutes
 **Status**: ⏳ Pending
 
 **Description**:
-Human review of Epic documents focusing on completeness of vision decomposition and independence.
+Human review of Epic documents, create critique, refine and execute v2.
 
 **Success Criteria**:
 - [ ] Critique document created
@@ -267,28 +324,10 @@ Human review of Epic documents focusing on completeness of vision decomposition 
 - [ ] Checks for gaps/overlaps
 - [ ] Assesses priority ordering
 - [ ] Reviews PRD generator quality
+- [ ] Generator refined and v2 generated
 
 **Output Artifacts**:
 - `/feedback/epics_v1_critique.md`
-
----
-
-### TASK-010: Refine Epic Generator & Execute v2
-**Priority**: Critical
-**Dependencies**: TASK-009
-**Estimated Time**: 30 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Refine Epic Generator based on critique and re-execute for improved epic set.
-
-**Success Criteria**:
-- [ ] Generator updated with improvements
-- [ ] Epic v2 set addresses critique issues
-- [ ] Decomposition logic refined
-- [ ] PRD generator improved
-
-**Output Artifacts**:
 - `/prompts/epic_generator.xml` (updated)
 - `/artifacts/epics/epic_001_v2.md` through `epic_00N_v2.md`
 - `/prompts/prd_generator.xml` (updated)
@@ -302,23 +341,23 @@ Refine Epic Generator based on critique and re-execute for improved epic set.
 **Status**: ⏳ Pending
 
 **Description**:
-Final critique and refinement cycle for Epic Generator, update strategy document.
+Final critique and refinement cycle for Epic Generator, **HUMAN manually updates** strategy document.
 
 **Success Criteria**:
 - [ ] Critique document created
 - [ ] Epic v3 approved
-- [ ] Strategy doc updated with Epic-specific patterns
+- [ ] **HUMAN**: Strategy doc manually updated with Epic-specific patterns
 - [ ] PRD generator ready for next phase
 
 **Output Artifacts**:
 - `/feedback/epics_v2_critique.md`
 - `/artifacts/epics/epic_001_v3.md` through `epic_00N_v3.md` (approved)
 - `/prompts/prd_generator.xml` (final)
-- `/docs/context_engineering_strategy_v1.md` (updated)
+- `/docs/context_engineering_strategy_v1.md` (manually updated by human)
 
 ---
 
-## Phase 4: PRD Generation
+## Phase 1: PRD Generation
 
 ### TASK-012: Execute PRD Generator v1 (Epic 001)
 **Priority**: Critical
@@ -330,6 +369,8 @@ Final critique and refinement cycle for Epic Generator, update strategy document
 **Description**:
 Execute PRD Generator for first epic in standalone context.
 
+**Command**: `/execute-generator TASK-012`
+
 **Context Requirements**:
 - `/CLAUDE.md`
 - `/prompts/CLAUDE-prd.md` (lazy-generate if missing)
@@ -338,16 +379,18 @@ Execute PRD Generator for first epic in standalone context.
 - `/artifacts/epics/epic_001_v3.md`
 
 **Success Criteria**:
-- [ ] PRD follows template from research Section 6.1
+- [ ] PRD follows template structure
 - [ ] All required sections complete
 - [ ] Success metrics are SMART
 - [ ] Requirements traceable to epic
-- [ ] User stories generator is valid XML
+- [ ] Technical approaches researched
+- [ ] Backlog story generator is valid XML
 - [ ] Technical feasibility addressed
 
 **Output Artifacts**:
-- `/artifacts/prds/epic_001_prd_v1.md`
-- `/prompts/user_story_generator.xml`
+- `/artifacts/prds/prd_001/prd_v1.md`
+- `/artifacts/prds/prd_001/TODO.md` (high-level story tracking)
+- `/prompts/backlog_story_generator.xml`
 
 ---
 
@@ -358,22 +401,24 @@ Execute PRD Generator for first epic in standalone context.
 **Status**: ⏳ Pending
 
 **Description**:
-Complete 3-iteration refinement cycle for PRD, update strategy document with lessons.
+Complete 3-iteration refinement cycle for PRD, **HUMAN manually updates** strategy document with lessons.
 
 **Success Criteria**:
+- [ ] PRD v2 critique created and refinements applied
+- [ ] PRD v3 critique created and final refinements applied
 - [ ] PRD v3 approved
 - [ ] Backlog story generator finalized
-- [ ] Strategy doc updated
-- [ ] Patterns documented
-- [ ] PRD/TODO.md created with high-level story tracking
+- [ ] **HUMAN**: Strategy doc manually updated with PRD patterns
+- [ ] PRD/TODO.md tracking high-level stories
 
 **Output Artifacts**:
-- `/feedback/epic_001_prd_v1_critique.md`
-- `/feedback/epic_001_prd_v2_critique.md`
+- `/feedback/prd_001_v1_critique.md`
+- `/feedback/prd_001_v2_critique.md`
+- `/artifacts/prds/prd_001/prd_v2.md`
 - `/artifacts/prds/prd_001/prd_v3.md` (approved)
-- `/artifacts/prds/prd_001/TODO.md` (high-level story tracking)
+- `/artifacts/prds/prd_001/TODO.md` (updated with stories)
 - `/prompts/backlog_story_generator.xml` (final)
-- `/docs/context_engineering_strategy_v1.md` (updated)
+- `/docs/context_engineering_strategy_v1.md` (manually updated by human)
 
 ---
 
@@ -387,7 +432,7 @@ Complete 3-iteration refinement cycle for PRD, update strategy document with les
 **Description**:
 Execute Backlog Story Generator for first high-level story from PRD.
 
-**Command**: `/kickoff execute-generator TASK-014 --story-id=US-01`
+**Command**: `/execute-generator TASK-014`
 
 **Context Requirements**:
 - `/CLAUDE.md`
@@ -409,178 +454,238 @@ Execute Backlog Story Generator for first high-level story from PRD.
 - [ ] Traceability to PRD established
 
 **Output Artifacts**:
-- `/artifacts/backlog_stories/US-01-01_feature/backlog_story_v1.md`
-- `/artifacts/backlog_stories/US-01-01_feature/TODO.md`
+- `/artifacts/backlog_stories/US-01-01_{feature}/backlog_story_v1.md`
+- `/artifacts/backlog_stories/US-01-01_{feature}/TODO.md`
 - `/prompts/adr_generator.xml`
 
 ---
 
-## Phase 5: Framework Validation & Graduation
-
-### TASK-015: Validate Automation Graduation Criteria
+### TASK-015: Generate Phase 1 Completion Report
 **Priority**: High
-**Dependencies**: TASK-013
-**Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Assess readiness to graduate from Phase 1 (manual) to Phase 2 (semi-automated) execution and iteration triggers.
-
-**Validation Areas**:
-1. **Task Execution Trigger**: Can we script generator execution?
-2. **Iteration Trigger**: Can we implement self-critique loops?
-3. **Quality Assessment**: Can we automate checklist validation?
-
-**Success Criteria**:
-- [ ] Completed ≥3 different generator types (Vision, Epic, PRD)
-- [ ] Each validated through 3-iteration cycle
-- [ ] ≥5 patterns documented in strategy
-- [ ] Graduation criteria assessment document created
-- [ ] Recommendations for Phase 2 enhancements
-
-**Output Artifacts**:
-- `/docs/phase2_graduation_assessment.md`
-- `/docs/context_engineering_strategy_v1.md` (updated Section 9)
-
----
-
-### TASK-016: Create Execution Script (Semi-Automation)
-**Priority**: Medium
-**Dependencies**: TASK-015
+**Dependencies**: TASK-014
 **Estimated Time**: 30 minutes
 **Status**: ⏳ Pending
 
 **Description**:
-Create script that automates generator execution based on TODO.md task IDs (Phase 2 enhancement).
+Generate comprehensive Phase 1 completion report documenting framework viability, lessons learned, and recommendations for Phase 2 (MCP Server extraction).
 
 **Success Criteria**:
-- [ ] Script parses TODO.md
-- [ ] Loads correct generator + context for task ID
-- [ ] Handles versioning (v1, v2, v3)
-- [ ] Provides human approval checkpoints
-- [ ] Documents usage in strategy
+- [ ] Report documents all completed generators (Vision, Epic, PRD, Backlog Story)
+- [ ] 3-iteration cycles validated for each generator type
+- [ ] At least 5 patterns documented
+- [ ] Framework viability assessment complete
+- [ ] Recommendations for Phase 2 MCP Server project
+- [ ] **HUMAN**: Final strategy document update with Phase 1 summary
 
 **Output Artifacts**:
-- `/.claude/commands/execute-task-script.sh`
-- `/docs/context_engineering_strategy_v1.md` (updated Section 6)
+- `/docs/phase1_completion_report.md`
+- `/docs/context_engineering_strategy_v1.md` (final Phase 1 update by human)
+
+**Phase 1 Completion Gate**: After this task, Phase 1 (PoC) is complete
 
 ---
 
-### TASK-017: Implement Self-Critique Loop (Semi-Automation)
-**Priority**: Medium
-**Dependencies**: TASK-015
+## Phase 2: MCP Server Extraction & Productization
+
+### TASK-016: Plan MCP Server Architecture
+**Priority**: High
+**Dependencies**: TASK-015 (Phase 1 complete)
 **Estimated Time**: 45 minutes
 **Status**: ⏳ Pending
 
 **Description**:
-Implement automated Chain-of-Verification (research Section 2.4) for artifact critique.
+Design MCP Server architecture for hosting prompts and templates as reusable resources.
 
 **Success Criteria**:
-- [ ] Critique prompt created
+- [ ] MCP Server framework selected (Python/FastMCP or alternative - TBD)
+- [ ] Architecture document created
+- [ ] API/resource structure defined
+- [ ] Integration patterns documented
+- [ ] Migration plan from PoC to MCP Server defined
+
+**Output Artifacts**:
+- `/docs/mcp_server_architecture.md`
+- `/docs/mcp_server_migration_plan.md`
+
+---
+
+### TASK-017: Create MCP Server Project Repository
+**Priority**: Critical
+**Dependencies**: TASK-016
+**Estimated Time**: 30 minutes
+**Status**: ⏳ Pending
+
+**Description**:
+Create new repository for MCP Server project following context engineering strategy.
+
+**Success Criteria**:
+- [ ] New repository created
+- [ ] Initial project structure set up
+- [ ] README with project overview
+- [ ] CLAUDE.md for MCP Server project created
+- [ ] TODO.md for MCP Server development created
+
+**Output Artifacts**:
+- New repository: `context-engineering-mcp-server/`
+- Repository structure following strategy
+
+**Note**: This task creates a new product that will be developed using the same context engineering framework (meta!)
+
+---
+
+### TASK-018: Extract and Clean Prompts/Templates
+**Priority**: Critical
+**Dependencies**: TASK-017
+**Estimated Time**: 60 minutes
+**Status**: ⏳ Pending
+
+**Description**:
+Extract all prompts and templates from PoC, remove PoC-specific references, generalize for reuse.
+
+**Success Criteria**:
+- [ ] All templates extracted and cleaned
+- [ ] Generator schema template extracted
+- [ ] All PoC-specific references removed
+- [ ] Generic [CUSTOMIZE PER PRODUCT] placeholders added where needed
+- [ ] Documentation updated
+- [ ] Templates validated for XML correctness
+
+**Output Artifacts**:
+- Clean templates in MCP Server repository
+- Migration log documenting changes
+
+---
+
+### TASK-019: Implement MCP Server
+**Priority**: Critical
+**Dependencies**: TASK-018
+**Estimated Time**: TBD (requires product vision/epic/PRD from MCP Server project)
+**Status**: ⏳ Pending
+
+**Description**:
+Implement MCP Server following architecture. Use context engineering framework to generate product vision, epics, PRDs, and implementation specs for the MCP Server itself.
+
+**Success Criteria**:
+- [ ] MCP Server product vision created (using framework!)
+- [ ] Epics defined
+- [ ] PRDs created
+- [ ] Implementation complete
+- [ ] Tests passing
+- [ ] Documentation complete
+
+**Output Artifacts**:
+- Functional MCP Server
+- MCP Server project artifacts (vision, epics, PRDs, code, tests)
+
+**Note**: Time estimate TBD - depends on scope defined during vision/epic phases
+
+---
+
+### TASK-020: Test MCP Server with New Project
+**Priority**: Critical
+**Dependencies**: TASK-019
+**Estimated Time**: 45 minutes
+**Status**: ⏳ Pending
+
+**Description**:
+Validate MCP Server by creating a new test project that uses prompts/templates from the MCP Server.
+
+**Success Criteria**:
+- [ ] Test project created
+- [ ] MCP Server integration successful
+- [ ] Prompts/templates loaded from MCP Server
+- [ ] Product vision generated using MCP-served resources
+- [ ] No PoC-specific coupling detected
+- [ ] Integration documented
+
+**Output Artifacts**:
+- Test project demonstrating MCP Server usage
+- Integration guide
+- Lessons learned document
+
+**Phase 2 Completion Gate**: After this task, Phase 2 (MCP Server) is complete
+
+---
+
+## Phase 3: Semi-Automated Execution (Future)
+
+### TASK-021: Implement Automated Self-Critique
+**Priority**: Medium
+**Dependencies**: TASK-020 (Phase 2 complete)
+**Estimated Time**: 60 minutes
+**Status**: ⏳ Pending
+
+**Description**:
+Implement Chain-of-Verification pattern for automated artifact critique.
+
+**Success Criteria**:
+- [ ] Critique agent prompt created
 - [ ] Auto-generates structured feedback
 - [ ] Integrates with refine-generator command
 - [ ] Human approval at 80% threshold
 - [ ] Documented in strategy
 
 **Output Artifacts**:
-- `/prompts/artifact_critique_agent.xml`
-- `/.claude/commands/refine-generator.xml` (updated)
-- `/docs/context_engineering_strategy_v1.md` (updated Section 6.3)
+- Critique agent implementation
+- Updated refine-generator command
+- Strategy document update
 
 ---
 
-## Phase 6: Extended SDLC Cascade (Optional)
-
-### TASK-018: Additional Backlog Story Generation
-**Priority**: Low
-**Dependencies**: TASK-014
+### TASK-022: Implement Script-Assisted Execution
+**Priority**: Medium
+**Dependencies**: TASK-021
 **Estimated Time**: 45 minutes
 **Status**: ⏳ Pending
 
 **Description**:
-Execute Backlog Story Generator for remaining high-level stories from PRD.
+Create automation scripts for generator execution from TODO.md.
+
+**Success Criteria**:
+- [ ] Script parses TODO.md
+- [ ] Loads correct generator + context for task ID
+- [ ] Handles versioning (v1, v2, v3)
+- [ ] Provides human approval checkpoints
+- [ ] Documented in strategy
 
 **Output Artifacts**:
-- `/artifacts/backlog_stories/US-01-02_feature/` through `/US-01-0N_feature/`
-- Updated `/artifacts/prds/prd_001/TODO.md`
+- Execution automation scripts
+- Strategy document update
 
----
-
-### TASK-019: ADR & Technical Specification Generation
-**Priority**: Low
-**Dependencies**: TASK-014
-**Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Execute User Story Generator to decompose PRD into actionable stories.
-
-**Output Artifacts**:
-- `/artifacts/user_stories/epic_001_story_001_v3.md` through `story_00N_v3.md`
-- `/prompts/adr_generator.xml` (or spec_generator.xml)
-
----
-
-### TASK-020: Code Generation
-**Priority**: Low
-**Dependencies**: TASK-019
-**Estimated Time**: 60 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Generate implementation code from technical specifications.
-
-**Output Artifacts**:
-- `/artifacts/code/` (source files)
-- `/prompts/test_generator.xml`
-
----
-
-### TASK-021: Test Generation
-**Priority**: Low
-**Dependencies**: TASK-020
-**Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Generate unit and integration tests for implementation code.
-
-**Output Artifacts**:
-- `/artifacts/tests/` (test files)
-- Complete SDLC cascade demonstration
+**Phase 3 Completion Gate**: After this task, semi-automation is complete
 
 ---
 
 ## Summary Statistics
 
-**Total Tasks**: 22 (21 active + 1 completed)
-**Critical Priority**: 12 tasks
-**High Priority**: 6 tasks
-**Medium Priority**: 2 tasks
-**Low Priority**: 4 tasks
+**Total Tasks**: 22
+**Completed**: 3 (14%)
+**Pending**: 19 (86%)
 
-**Estimated Total Time**: ~12-15 hours
+**By Phase**:
+- **Phase 1 (PoC)**: 15 tasks, 3 completed, 12 pending
+- **Phase 2 (MCP Server)**: 5 tasks, 0 completed, 5 pending
+- **Phase 3 (Semi-Automated)**: 2 tasks, 0 completed, 2 pending
 
-**Phase Breakdown**:
-- Phase 1 (Bootstrap): 3 tasks, ~90 minutes
-- Phase 2 (First Generator): 5 tasks, ~165 minutes
-- Phase 3 (Epic Cascade): 4 tasks, ~110 minutes
-- Phase 4 (PRD): 2 tasks, ~85 minutes
-- Phase 5 (Validation): 3 tasks, ~120 minutes
-- Phase 6 (Extended): 5 tasks, ~195 minutes (optional)
+**By Priority**:
+- **Critical**: 14 tasks
+- **High**: 6 tasks
+- **Medium**: 2 tasks
+
+**Estimated Remaining Time**: ~10-12 hours (Phase 1 only)
 
 ---
 
 ## Task Status Legend
 
+- ✅ Completed
 - ⏳ Pending
 - 🔄 In Progress
-- ✅ Completed
 - ⏸️ Blocked
 - ⚠️ Issues Found
 
 ---
 
 **Last Updated**: 2025-10-07
-**Current Phase**: Phase 1 - Bootstrap
-**Next Task**: TASK-000 (Extract & Generate Templates)
+**Current Phase**: Phase 1 - Bootstrap & Foundation
+**Next Task**: TASK-001 (Regenerate Product Idea from IDEA.md)
