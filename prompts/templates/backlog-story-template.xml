@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
   <metadata>
-    <name>User_Story_Template</name>
-    <version>1.0</version>
-    <source>Section 6.4 of advanced_prompt_engineering_software_docs_code_final.md (lines 1063-1112)</source>
-    <sdlc_phase>User_Story</sdlc_phase>
+    <name>Backlog_Story_Template</name>
+    <version>1.1</version>
+    <source>Section 6.4 of advanced_prompt_engineering_software_docs_code_final.md (lines 1063-1112), enhanced for Context Engineering Framework</source>
+    <sdlc_phase>Backlog_Story</sdlc_phase>
+    <note>This template is for DETAILED backlog user stories, not high-level stories in PRDs</note>
   </metadata>
 
   <instructions>
-    <guideline>Transform high-level user stories into comprehensive, actionable specifications</guideline>
+    <guideline>Transform high-level user stories from PRDs into comprehensive, actionable backlog specifications</guideline>
     <guideline>Use standard agile format: "As [role], I want [feature], so that [benefit]"</guideline>
     <guideline>Include acceptance criteria in Given-When-Then (Gherkin) format</guideline>
+    <guideline>List functional requirements covered from parent PRD</guideline>
+    <guideline>Define non-functional requirements (performance, security, scalability, etc.)</guideline>
     <guideline>List technical requirements covering frontend, backend, database changes</guideline>
+    <guideline>Implementation tasks will be tracked in separate TODO.md file in story subfolder</guideline>
     <guideline>Ensure all acceptance criteria are testable</guideline>
   </instructions>
 
@@ -27,11 +31,31 @@ As [role], I want [feature], so that [benefit].
 ## Description
 [Expanded problem statement or feature description with context and background]
 
+## Related PRD
+**PRD ID:** [PRD-XXX]
+**High-Level Story:** [US-XX reference from PRD]
+**Functional Requirements Covered:** [FR-01, FR-03, ...]
+
+## Functional Requirements
+- [User-facing feature 1]
+- [User-facing feature 2]
+- [Business logic requirement 1]
+
+## Non-Functional Requirements
+- **Performance:** [Response time, throughput targets - e.g., P95 < 200ms]
+- **Security:** [Auth, encryption, input validation requirements]
+- **Scalability:** [Concurrent user targets - e.g., 1000 concurrent users]
+- **Reliability:** [Uptime target, error handling - e.g., 99.9% uptime]
+- **Accessibility:** [WCAG compliance level - e.g., WCAG 2.1 Level AA]
+- **Maintainability:** [Code quality, documentation standards]
+
 ## Technical Requirements
 - [Frontend task 1]
 - [Backend task 1]
 - [Database change 1]
 - [Additional technical considerations]
+
+**Note:** Detailed implementation tasks with estimates, dependencies, and status tracking are maintained in `TODO.md` file in this story's subfolder.
 
 ## Acceptance Criteria
 ### Scenario 1: [Scenario name]
@@ -63,13 +87,17 @@ As [role], I want [feature], so that [benefit].
   <validation_checklist>
     <criterion>User story follows "As-I want-So that" format</criterion>
     <criterion>Description provides sufficient context</criterion>
-    <criterion>Technical requirements cover all implementation layers</criterion>
+    <criterion>Related PRD section identifies parent PRD, high-level story, and functional requirements covered</criterion>
+    <criterion>Functional requirements listed (user-facing features and business logic)</criterion>
+    <criterion>Non-functional requirements defined (performance, security, scalability, reliability, accessibility, maintainability)</criterion>
+    <criterion>Technical requirements cover all implementation layers (frontend, backend, database)</criterion>
     <criterion>At least 2 acceptance criteria defined</criterion>
     <criterion>All acceptance criteria use Given-When-Then format</criterion>
     <criterion>Acceptance criteria are testable and specific</criterion>
     <criterion>Definition of done includes code review and testing</criterion>
     <criterion>Story is independently deliverable</criterion>
     <criterion>Story size is appropriate (can be completed in single sprint)</criterion>
+    <criterion>Traceability to parent PRD established</criterion>
   </validation_checklist>
 
   <examples>

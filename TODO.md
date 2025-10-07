@@ -362,22 +362,62 @@ Complete 3-iteration refinement cycle for PRD, update strategy document with les
 
 **Success Criteria**:
 - [ ] PRD v3 approved
-- [ ] User story generator finalized
+- [ ] Backlog story generator finalized
 - [ ] Strategy doc updated
 - [ ] Patterns documented
+- [ ] PRD/TODO.md created with high-level story tracking
 
 **Output Artifacts**:
 - `/feedback/epic_001_prd_v1_critique.md`
 - `/feedback/epic_001_prd_v2_critique.md`
-- `/artifacts/prds/epic_001_prd_v3.md` (approved)
-- `/prompts/user_story_generator.xml` (final)
+- `/artifacts/prds/prd_001/prd_v3.md` (approved)
+- `/artifacts/prds/prd_001/TODO.md` (high-level story tracking)
+- `/prompts/backlog_story_generator.xml` (final)
 - `/docs/context_engineering_strategy_v1.md` (updated)
+
+---
+
+### TASK-014: Execute Backlog Story Generator v1 (US-01 from PRD)
+**Priority**: Critical
+**Dependencies**: TASK-013 (PRD v3 approved)
+**Estimated Time**: 25 minutes
+**Status**: ⏳ Pending
+**Context**: New session C4 required
+
+**Description**:
+Execute Backlog Story Generator for first high-level story from PRD.
+
+**Command**: `/kickoff execute-generator TASK-014 --story-id=US-01`
+
+**Context Requirements**:
+- `/CLAUDE.md`
+- `/prompts/CLAUDE-backlog-story.md` (lazy-generate if missing)
+- `/prompts/backlog_story_generator.xml`
+- `/prompts/templates/backlog-story-template.xml`
+- `/artifacts/prds/prd_001/prd_v3.md`
+- `/artifacts/prds/prd_001/TODO.md`
+
+**Success Criteria**:
+- [ ] Backlog story follows template structure
+- [ ] Related PRD section populated (PRD ID, high-level story, FRs)
+- [ ] Functional requirements listed
+- [ ] Non-functional requirements defined (all 6 dimensions)
+- [ ] Technical requirements cover all layers
+- [ ] Acceptance criteria in Given-When-Then format
+- [ ] TODO.md file created with implementation tasks
+- [ ] ADR generator prompt is valid XML
+- [ ] Traceability to PRD established
+
+**Output Artifacts**:
+- `/artifacts/backlog_stories/US-01-01_feature/backlog_story_v1.md`
+- `/artifacts/backlog_stories/US-01-01_feature/TODO.md`
+- `/prompts/adr_generator.xml`
 
 ---
 
 ## Phase 5: Framework Validation & Graduation
 
-### TASK-014: Validate Automation Graduation Criteria
+### TASK-015: Validate Automation Graduation Criteria
 **Priority**: High
 **Dependencies**: TASK-013
 **Estimated Time**: 45 minutes
@@ -404,9 +444,9 @@ Assess readiness to graduate from Phase 1 (manual) to Phase 2 (semi-automated) e
 
 ---
 
-### TASK-015: Create Execution Script (Semi-Automation)
+### TASK-016: Create Execution Script (Semi-Automation)
 **Priority**: Medium
-**Dependencies**: TASK-014
+**Dependencies**: TASK-015
 **Estimated Time**: 30 minutes
 **Status**: ⏳ Pending
 
@@ -426,9 +466,9 @@ Create script that automates generator execution based on TODO.md task IDs (Phas
 
 ---
 
-### TASK-016: Implement Self-Critique Loop (Semi-Automation)
+### TASK-017: Implement Self-Critique Loop (Semi-Automation)
 **Priority**: Medium
-**Dependencies**: TASK-014
+**Dependencies**: TASK-015
 **Estimated Time**: 45 minutes
 **Status**: ⏳ Pending
 
@@ -451,9 +491,24 @@ Implement automated Chain-of-Verification (research Section 2.4) for artifact cr
 
 ## Phase 6: Extended SDLC Cascade (Optional)
 
-### TASK-017: User Story Generation
+### TASK-018: Additional Backlog Story Generation
 **Priority**: Low
-**Dependencies**: TASK-013
+**Dependencies**: TASK-014
+**Estimated Time**: 45 minutes
+**Status**: ⏳ Pending
+
+**Description**:
+Execute Backlog Story Generator for remaining high-level stories from PRD.
+
+**Output Artifacts**:
+- `/artifacts/backlog_stories/US-01-02_feature/` through `/US-01-0N_feature/`
+- Updated `/artifacts/prds/prd_001/TODO.md`
+
+---
+
+### TASK-019: ADR & Technical Specification Generation
+**Priority**: Low
+**Dependencies**: TASK-014
 **Estimated Time**: 45 minutes
 **Status**: ⏳ Pending
 
@@ -466,24 +521,9 @@ Execute User Story Generator to decompose PRD into actionable stories.
 
 ---
 
-### TASK-018: Technical Specification Generation
+### TASK-020: Code Generation
 **Priority**: Low
-**Dependencies**: TASK-017
-**Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Generate technical specifications from user stories.
-
-**Output Artifacts**:
-- `/artifacts/specs/epic_001_story_001_spec_v3.md`
-- `/prompts/code_generator.xml`
-
----
-
-### TASK-019: Code Generation
-**Priority**: Low
-**Dependencies**: TASK-018
+**Dependencies**: TASK-019
 **Estimated Time**: 60 minutes
 **Status**: ⏳ Pending
 
@@ -496,9 +536,9 @@ Generate implementation code from technical specifications.
 
 ---
 
-### TASK-020: Test Generation
+### TASK-021: Test Generation
 **Priority**: Low
-**Dependencies**: TASK-019
+**Dependencies**: TASK-020
 **Estimated Time**: 45 minutes
 **Status**: ⏳ Pending
 
@@ -513,11 +553,11 @@ Generate unit and integration tests for implementation code.
 
 ## Summary Statistics
 
-**Total Tasks**: 21 (20 active + 1 completed)
-**Critical Priority**: 11 tasks
+**Total Tasks**: 22 (21 active + 1 completed)
+**Critical Priority**: 12 tasks
 **High Priority**: 6 tasks
 **Medium Priority**: 2 tasks
-**Low Priority**: 5 tasks
+**Low Priority**: 4 tasks
 
 **Estimated Total Time**: ~12-15 hours
 

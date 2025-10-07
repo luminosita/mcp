@@ -2,9 +2,10 @@
 <template>
   <metadata>
     <name>Product_Requirements_Document_Template</name>
-    <version>1.0</version>
-    <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728)</source>
+    <version>1.1</version>
+    <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
     <sdlc_phase>PRD</sdlc_phase>
+    <note>PRDs use numbering scheme: PRD-XXX (e.g., PRD-003). File naming: prd_XXX_feature_name_vN.md (e.g., prd_003_jwt_authentication_v3.md)</note>
   </metadata>
 
   <instructions>
@@ -13,6 +14,8 @@
     <guideline>Success metrics must be SMART (Specific, Measurable, Achievable, Relevant, Time-bound)</guideline>
     <guideline>Problem statement must include quantified pain points with data</guideline>
     <guideline>All acceptance criteria must be testable</guideline>
+    <guideline>High-level user stories in functional requirements will be tracked in separate TODO.md file in PRD subfolder</guideline>
+    <guideline>Each high-level user story should reference specific functional requirements (FR-XX)</guideline>
   </instructions>
 
   <structure format="markdown">

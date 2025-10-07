@@ -4,7 +4,7 @@
 
 This document defines the **Context Engineering Framework** for AI-assisted software development using recursive prompt generation. The framework transforms traditional artifact creation into a self-propagating chain where prompts generate both deliverables and next-level generator prompts.
 
-**Core Innovation**: Treat prompts as executable artifacts that spawn subsequent prompts, creating an SDLC-aligned cascade from Product Vision → Epic → PRD → Story → Spec → Code → Test.
+**Core Innovation**: Treat prompts as executable artifacts that spawn subsequent prompts, creating an SDLC-aligned cascade from Product Vision > Epic > PRD > Story > Spec > Code > Test.
 
 ---
 
@@ -24,7 +24,7 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 - Generator outputs dual artifacts:
   1. Terminal deliverable (e.g., Product Vision Document v1.md)
   2. Next-level generator prompt (e.g., epic_generator.xml)
-- Chain depth: SDLC-aligned (Vision → Epic → PRD → Story → ADR+Spec → Code → Test)
+- Chain depth: SDLC-aligned (Vision > Epic > PRD > Story > ADR+Spec > Code > Test)
 
 ### 1.4 Progressive Automation Maturity
 - **Phase 1 (PoC)**: Human-triggered execution with manual approval gates
@@ -64,16 +64,16 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 
 **Execution Pattern** (per generator):
 ```
-Iteration 1: Execute generator → Generate artifact v1
-↓
+Iteration 1: Execute generator > Generate artifact v1
+|
 Human Review: Approve/critique artifact v1
-↓
-Iteration 2: Refine generator based on feedback → Generate artifact v2
-↓
+|
+Iteration 2: Refine generator based on feedback > Generate artifact v2
+|
 Human Review: Approve/critique artifact v2
-↓
-Iteration 3: Apply learnings → Update Strategy Doc → Generate artifact v3
-↓
+|
+Iteration 3: Apply learnings > Update Strategy Doc > Generate artifact v3
+|
 Human Approval: Accept final version
 ```
 
@@ -120,10 +120,34 @@ C2: epic_generator.xml
 
 C3: prd_generator.xml
     ├── Reads: epic_001.md (specified via argument)
-    ├── Outputs: /artifacts/prds/epic_001_prd_v3.md + user_story_generator.xml
+    ├── Outputs: /artifacts/prds/prd_001/prd_v3.md + /artifacts/prds/prd_001/TODO.md + backlog_story_generator.xml
+
+C4: backlog_story_generator.xml
+    ├── Reads: /artifacts/prds/prd_001/prd_v3.md + /artifacts/prds/prd_001/TODO.md
+    ├── Outputs: /artifacts/backlog_stories/US-XX-YY_feature/backlog_story_v3.md +
+    │            /artifacts/backlog_stories/US-XX-YY_feature/TODO.md + adr_generator.xml
 
 [Continue cascade...]
 ```
+
+#### 2.3.4 Phase 4: Backlog Story Generation
+**Objective**: Transform high-level user stories from PRD into detailed, implementation-ready backlog stories
+
+**Execution Pattern**:
+- Input: PRD with high-level user stories (tracked in PRD/TODO.md)
+- Generator processes multiple stories (can split 1 high-level > N backlog stories)
+- Output: Backlog story subfolder per detailed story
+
+**Context Setup**:
+- /CLAUDE.md + /prompts/CLAUDE-backlog-story.md
+- /prompts/backlog_story_generator.xml
+- /prompts/templates/backlog-story-template.xml
+- /artifacts/prds/prd_XXX/prd_v3.md
+
+**Outputs**:
+- /artifacts/backlog_stories/US-XX-YY_feature/backlog_story_v3.md
+- /artifacts/backlog_stories/US-XX-YY_feature/TODO.md
+- /prompts/adr_generator.xml
 
 **File Routing Convention**:
 ```
@@ -133,12 +157,16 @@ C3: prd_generator.xml
 │   ├── epic_{id}_v{iteration}.md
 │   └── ...
 ├── prds/
-│   ├── epic_{id}_prd_v{iteration}.md
+│   ├── prd_{id}/
+│   │   ├── prd_v{iteration}.md
+│   │   └── TODO.md
 │   └── ...
-├── user_stories/
-│   ├── epic_{id}_story_{id}_v{iteration}.md
+├── backlog_stories/
+│   ├── US-{prd_id}-{story_id}_{feature_name}/
+│   │   ├── backlog_story_v{iteration}.md
+│   │   └── TODO.md
 │   └── ...
-└── [code/tests follow similar pattern]
+└── [specs/code/tests follow similar pattern]
 ```
 
 ---
@@ -150,7 +178,7 @@ C3: prd_generator.xml
 ├── .claude/
 │   └── commands/
 │       ├── execute-generator.xml       # Universal executor (fixed)
-│       └── refine-generator.xml        # Refinement orchestrator
+│       └── refine-generator.xml        # Iteration orchestrator
 │
 ├── docs/
 │   ├── advanced_prompt_engineering_software_docs_code_final.md  # Research (immutable)
@@ -161,12 +189,14 @@ C3: prd_generator.xml
 │   ├── CLAUDE-product-vision.md        # Specialized contexts (lazy-generated)
 │   ├── CLAUDE-epic.md
 │   ├── CLAUDE-prd.md
+│   ├── CLAUDE-backlog-story.md
 │   ├── [...additional specialized contexts...]
 │   │
 │   ├── templates/                      # XML-formatted templates
 │   │   ├── product-vision-template.xml
 │   │   ├── epic-template.xml
 │   │   ├── prd-template.xml
+│   │   ├── backlog-story-template.xml
 │   │   ├── adr-template.xml
 │   │   ├── tech-spec-template.xml
 │   │   └── user-story-template.xml
@@ -174,13 +204,20 @@ C3: prd_generator.xml
 │   ├── product_vision_generator.xml    # Generator prompts
 │   ├── epic_generator.xml              # (created by prior generators)
 │   ├── prd_generator.xml
+│   ├── backlog_story_generator.xml
 │   └── [...cascade continues...]
 │
 ├── artifacts/                          # All generated deliverables
 │   ├── product_vision_v{1-3}.md
 │   ├── epics/
 │   ├── prds/
-│   ├── user_stories/
+│   │   └── prd_{id}/
+│   │       ├── prd_v{1-3}.md
+│   │       └── TODO.md                 # High-level story tracking
+│   ├── backlog_stories/
+│   │   └── US-{prd_id}-{story_id}_{feature_name}/
+│   │       ├── backlog_story_v{1-3}.md
+│   │       └── TODO.md                 # Implementation task tracking
 │   ├── specs/
 │   ├── code/
 │   └── tests/
@@ -250,7 +287,7 @@ Next generator: {path to next .xml}
 
 **Lifecycle**: Lazy-generated on first execution
 - Execute-generator checks if `/prompts/CLAUDE-{task}.md` exists
-- If missing: Prompts human for confirmation → Generates from template
+- If missing: Prompts human for confirmation > Generates from template
 - If exists: Loads directly
 
 **Contents Template**:
@@ -474,7 +511,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 
 ### 6.3 Phase 3: Iteration & Refinement
 
-**Iteration 1 → 2**:
+**Iteration 1 > 2**:
 1. Human reviews v1 artifact
 2. Creates critique file: `/feedback/{artifact}_v1_critique.md`
 3. Runs: `/kickoff refine-generator {task}_generator`
@@ -482,28 +519,28 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
    - Loads generator + critique
    - Applies Self-Refine pattern (research Section 2.4)
    - Updates generator prompt based on feedback
-   - Re-executes → outputs v2
+   - Re-executes > outputs v2
 5. Human reviews v2
 
-**Iteration 2 → 3**:
+**Iteration 2 > 3**:
 1. Human reviews v2 artifact
 2. Creates `/feedback/{artifact}_v2_critique.md`
 3. Runs refinement again
 4. System:
-   - Analyzes patterns from v1→v2 critiques
+   - Analyzes patterns from v1>v2 critiques
    - Updates `/docs/context_engineering_strategy_v1.md` (lessons learned)
    - Refines generator
-   - Executes → outputs v3
+   - Executes > outputs v3
 5. Human approves final version
 
 **Approval Gate**:
 ```
 Human checklist:
-☐ All template sections complete
-☐ Readable by non-expert (subjective Flesch >60)
-☐ Actionable (clear next steps)
-☐ Traceable (links to upstream artifacts)
-☐ Next generator is valid XML
+[ ] All template sections complete
+[ ] Readable by non-expert (subjective Flesch >60)
+[ ] Actionable (clear next steps)
+[ ] Traceable (links to upstream artifacts)
+[ ] Next generator is valid XML
 ```
 
 ---
@@ -517,7 +554,7 @@ Human checklist:
 2. Run: `/kickoff execute-generator TASK-002`
 3. When prompted for input artifact location, confirm:
    `/artifacts/product_vision_v3.md`
-4. Proceed with same iteration cycle (v1 → v2 → v3)
+4. Proceed with same iteration cycle (v1 > v2 > v3)
 
 **AI Actions**:
 1. Load context:
@@ -530,10 +567,41 @@ Human checklist:
 3. Save outputs:
    - `/artifacts/epics/epic_001_v1.md` ... `epic_00N_v1.md`
    - `/prompts/prd_generator.xml`
-4. Iterate (v1 → v2 → v3) per epic
+4. Iterate (v1 > v2 > v3) per epic
 5. Update `/CLAUDE.md` with phase progression
 
 **Note**: Epic generator outputs **multiple documents** (one per epic). Folder structure prevents collision.
+
+---
+
+### 6.5 Phase 5: Backlog Story Generation (Context C4)
+
+**Task**: TASK-014 - Execute Backlog Story Generator
+
+**Human Actions**:
+1. Start new Claude Code session (C4)
+2. Run: `/kickoff execute-generator TASK-014 --story-id=US-01`
+3. When prompted for PRD location, confirm: `/artifacts/prds/prd_001/prd_v3.md`
+4. Proceed with iteration cycle (v1 > v2 > v3)
+
+**AI Actions**:
+1. Load context:
+   - `/CLAUDE.md`
+   - `/prompts/CLAUDE-backlog-story.md` (lazy-generated if missing)
+   - `/prompts/backlog_story_generator.xml` (created in C3)
+   - `/prompts/templates/backlog-story-template.xml`
+   - `/artifacts/prds/prd_001/prd_v3.md` (dependency)
+   - `/artifacts/prds/prd_001/TODO.md` (story status tracking)
+2. Execute generator
+3. Save outputs:
+   - `/artifacts/backlog_stories/US-01-01_feature/backlog_story_v1.md`
+   - `/artifacts/backlog_stories/US-01-01_feature/TODO.md`
+   - `/prompts/adr_generator.xml`
+4. Iterate (v1 > v2 > v3)
+5. Update `/CLAUDE.md` with phase progression
+6. Update `/artifacts/prds/prd_001/TODO.md` to mark story as processed
+
+**Note**: Backlog Story Generator may split one high-level story into multiple detailed backlog stories, each in its own subfolder.
 
 ---
 
@@ -595,7 +663,7 @@ ELSE prompt human for review
 *Track what context components were unnecessary/critical*
 
 ### 8.4 Automation Maturity Progression
-*Document transitions from manual → semi-automated → fully automated*
+*Document transitions from manual > semi-automated > fully automated*
 
 ---
 
@@ -608,9 +676,9 @@ ELSE prompt human for review
 
 ### 9.2 Target State (Phase 2)
 **Graduation Criteria**:
-- [ ] Complete 1 full SDLC cascade (Vision → Test)
-- [ ] Validate 3-iteration refinement on ≥3 different generators
-- [ ] Document ≥5 lessons learned in strategy doc
+- [ ] Complete 1 full SDLC cascade (Vision > Test)
+- [ ] Validate 3-iteration refinement on >= 3 different generators
+- [ ] Document >= 5 lessons learned in strategy doc
 
 **Enhancements**:
 - **Task Execution Trigger**: Graduate to semi-automated
@@ -627,7 +695,7 @@ ELSE prompt human for review
 **Vision**: Fully autonomous SDLC orchestration
 
 **Capabilities**:
-- Agentic workflow: Reads TODO.md → spawns contexts → executes → validates → iterates
+- Agentic workflow: Reads TODO.md > spawns contexts > executes > validates > iterates
 - Multi-agent critique: Separate generator/reviewer agents (research Section 7.7)
 - Adaptive thresholds: ML-based quality prediction
 - Live documentation: Auto-updates strategy doc with learnings
@@ -670,9 +738,11 @@ ELSE prompt human for review
 - **Terminal Artifact**: Final document (e.g., Product Vision v3.md), not a template
 - **Template**: XML-formatted prompt with structure/validation for specific document type
 - **Specialized CLAUDE.md**: Phase-specific context file (lazy-generated)
-- **Iteration**: Refinement cycle (v1 → critique → v2 → critique → v3)
+- **Iteration**: Refinement cycle (v1 > critique > v2 > critique > v3)
 - **Context Isolation**: Each generator executes in fresh Claude Code session
-- **Cascade**: SDLC progression through generated prompts (Vision→Epic→PRD...)
+- **Cascade**: SDLC progression through generated prompts (Vision>Epic>PRD...)
+- **High-Level User Story**: Conceptual story in PRD, references functional requirements
+- **Backlog User Story**: Detailed, implementation-ready story with non-functional requirements, technical requirements, and tasks
 
 ---
 
@@ -682,10 +752,10 @@ Track automation maturity per task type:
 
 | Task Type | Phase 1 (Manual) | Phase 2 (Semi-Auto) | Phase 3 (Full-Auto) |
 |-----------|------------------|---------------------|---------------------|
-| Execution Trigger | ☐ Human runs command | ☐ Script-assisted | ☐ Agentic spawn |
-| Iteration Trigger | ☐ Manual critique | ☐ Self-critique + approval | ☐ Threshold-based |
-| Quality Assessment | ☐ Subjective checklist | ☐ Quantitative metrics | ☐ ML prediction |
-| Context Assembly | ☐ Manual file lookup | ☐ Convention-based load | ☐ Dependency graph |
+| Execution Trigger | [ ] Human runs command | [ ] Script-assisted | [ ] Agentic spawn |
+| Iteration Trigger | [ ] Manual critique | [ ] Self-critique + approval | [ ] Threshold-based |
+| Quality Assessment | [ ] Subjective checklist | [ ] Quantitative metrics | [ ] ML prediction |
+| Context Assembly | [ ] Manual file lookup | [ ] Convention-based load | [ ] Dependency graph |
 
 ---
 
