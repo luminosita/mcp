@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Architecture_Decision_Record_Template</name>
+    <version>1.0</version>
+    <source>Section 6.2 of advanced_prompt_engineering_software_docs_code_final.md (lines 773-849)</source>
+    <sdlc_phase>Architecture</sdlc_phase>
+  </metadata>
+
+  <instructions>
+    <guideline>Document architectural decisions for long-term reference</guideline>
+    <guideline>List all considered alternatives with pros/cons</guideline>
+    <guideline>Justify chosen option with clear rationale</guideline>
+    <guideline>Document both positive and negative consequences</guideline>
+    <guideline>Include validation criteria for decision</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# ADR-[NUMBER]: [Decision Title]
+
+**Date:** [YYYY-MM-DD]
+**Status:** [Proposed | Accepted | Deprecated | Superseded]
+**Deciders:** [Names]
+**Technical Story:** [Ticket/Issue reference]
+
+## Context
+What is the issue we're addressing?
+[2-3 paragraphs explaining problem, constraints, forces at play]
+
+## Decision Drivers
+- [Driver 1: e.g., Performance requirements]
+- [Driver 2: e.g., Cost constraints]
+- [Driver 3: e.g., Team expertise]
+
+## Considered Options
+1. **Option 1:** [Name]
+2. **Option 2:** [Name]
+3. **Option 3:** [Name]
+
+## Decision Outcome
+**Chosen Option:** [Option name]
+
+**Rationale:** [Why this option selected over alternatives]
+
+### Consequences
+**Positive:**
+- [Benefit 1]
+- [Benefit 2]
+
+**Negative:**
+- [Tradeoff 1]
+- [Tradeoff 2]
+
+**Neutral:**
+- [Consideration 1]
+
+## Detailed Analysis
+
+### Option 1: [Name]
+**Pros:**
+- [Pro 1]
+- [Pro 2]
+
+**Cons:**
+- [Con 1]
+- [Con 2]
+
+**Cost:** [Estimation]
+**Risk:** [Assessment]
+
+[Repeat for each option]
+
+## Implementation Notes
+- [Technical detail 1]
+- [Migration path if applicable]
+- [Monitoring/observability considerations]
+
+## Validation
+- [ ] Proof of concept completed
+- [ ] Performance benchmarks met
+- [ ] Security review passed
+- [ ] Cost analysis approved
+
+## Related Decisions
+- [ADR-XXX: Related decision]
+
+## References
+- [Link to technical documentation]
+- [Link to benchmarks]
+    ]]>
+  </structure>
+
+  <validation_checklist>
+    <criterion>Context clearly explains the problem and constraints</criterion>
+    <criterion>All decision drivers identified</criterion>
+    <criterion>At least 3 alternatives considered</criterion>
+    <criterion>Each alternative has pros, cons, cost, risk</criterion>
+    <criterion>Chosen option has clear rationale</criterion>
+    <criterion>Both positive and negative consequences documented</criterion>
+    <criterion>Implementation notes provide actionable guidance</criterion>
+    <criterion>Validation criteria defined</criterion>
+  </validation_checklist>
+
+  <examples>
+    <example source="Section 6.2 lines 872-880">
+      # ADR-001: Use PostgreSQL for Primary Datastore
+      Status: Accepted
+      Context: Application requires relational database...
+      Decision: We will use PostgreSQL as primary relational database.
+      Consequences: Positive - Leverages existing team expertise...
+    </example>
+  </examples>
+</template>

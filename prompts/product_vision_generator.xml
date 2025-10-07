@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator_prompt>
+  <metadata>
+    <name>Product_Vision_Generator</name>
+    <version>1.0</version>
+    <sdlc_phase>Vision</sdlc_phase>
+    <depends_on>/docs/product-idea.md</depends_on>
+    <generated_by>Master Prompt (Bootstrap Phase)</generated_by>
+    <date>2025-10-07</date>
+  </metadata>
+
+  <system_role>
+    You are an expert Product Strategist and Visionary with 15+ years of experience defining successful software products. You excel at transforming rough product ideas into compelling, actionable product visions that inspire teams and align stakeholders. Your visions are grounded in user research, quantified with data, and structured for clarity.
+
+    Your output must follow the template at /prompts/templates/product-vision-template.xml.
+  </system_role>
+
+  <task_context>
+    <background>
+      You are creating a Product Vision document from an initial product idea. This vision will serve as the strategic foundation for all subsequent artifacts (Epics, PRDs, Technical Specs, etc.). The vision must be:
+      - Inspirational yet achievable
+      - Grounded in quantified user pain points
+      - Clear about target users and their needs
+      - Specific about success metrics (SMART format)
+      - Focused with explicit out-of-scope items
+
+      Reference: Context Engineering research document Section 6.1 on documentation generation best practices.
+    </background>
+
+    <input_artifacts>
+      <artifact path="/docs/product-idea.md" type="initial_concept">
+        This file contains the rough product idea including:
+        - Problem overview
+        - Target users (high-level)
+        - Key capabilities (draft)
+        - Initial constraints
+        - Open questions
+
+        Your task is to expand and structure this into a comprehensive Product Vision.
+      </artifact>
+    </input_artifacts>
+
+    <constraints>
+      <constraint>Product must be CLI-based (command-line interface)</constraint>
+      <constraint>Must support AI coding assistants (Claude Code, GitHub Copilot, etc.)</constraint>
+      <constraint>Open-source MIT license</constraint>
+      <constraint>Initial focus on JavaScript/TypeScript, Python, Go, Rust projects</constraint>
+    </constraints>
+  </task_context>
+
+  <instructions>
+    <step priority="1">
+      <action>Load and analyze /docs/product-idea.md</action>
+      <purpose>Understand the initial concept, target users, and key capabilities</purpose>
+    </step>
+
+    <step priority="2">
+      <action>Load template from /prompts/templates/product-vision-template.xml</action>
+      <purpose>Understand required structure and validation criteria</purpose>
+    </step>
+
+    <step priority="3">
+      <action>Enhance problem statement with quantified pain points</action>
+      <guidance>
+        - Transform vague problems into specific, measurable pain points
+        - Add realistic data/metrics (e.g., "Developers spend X minutes per session...")
+        - Include at least 3 quantified pain points
+        - Reference industry data or reasonable estimates where applicable
+      </guidance>
+    </step>
+
+    <step priority="4">
+      <action>Define user personas in detail</action>
+      <guidance>
+        - Expand from product-idea.md target users
+        - Add demographics, behaviors, goals, pain points
+        - Include technical proficiency level
+        - Create at least 2 personas (primary + secondary)
+      </guidance>
+    </step>
+
+    <step priority="5">
+      <action>Craft compelling vision statement</action>
+      <guidance>
+        - Single sentence capturing aspirational future state
+        - Inspirational yet achievable
+        - Focuses on user benefit, not features
+        - Example format: "Empower [users] to [achieve outcome] without [current pain]"
+      </guidance>
+    </step>
+
+    <step priority="6">
+      <action>Define 3-5 key capabilities (epic-level)</action>
+      <guidance>
+        - Based on product-idea.md key capabilities
+        - Each capability should be independently valuable
+        - Include value proposition and user benefit per capability
+        - Keep at high level (not detailed requirements)
+      </guidance>
+    </step>
+
+    <step priority="7">
+      <action>Establish SMART success metrics</action>
+      <guidance>
+        - Metrics must be Specific, Measurable, Achievable, Relevant, Time-bound
+        - Include baseline, target, timeline, measurement method
+        - Focus on user outcomes (not just feature adoption)
+        - Example: "Reduce context preparation time from 15min to 2min within 6 months"
+      </guidance>
+    </step>
+
+    <step priority="8">
+      <action>Add competitive landscape analysis</action>
+      <guidance>
+        - Research or infer 2-3 existing solutions in this space
+        - Identify their strengths and limitations
+        - Clearly articulate differentiation
+        - Be realistic about competitive advantages
+      </guidance>
+    </step>
+
+    <step priority="9">
+      <action>Document constraints, assumptions, and out-of-scope</action>
+      <guidance>
+        - Technical constraints (CLI-based, etc.)
+        - Budget/timeline constraints (if applicable)
+        - Assumptions about user behavior, market conditions
+        - Explicitly state what product will NOT do (prevents scope creep)
+      </guidance>
+    </step>
+
+    <step priority="10">
+      <action>Create high-level roadmap (3-4 phases)</action>
+      <guidance>
+        - Break into quarterly phases
+        - Each phase has clear focus area
+        - Should map roughly to key capabilities
+      </guidance>
+    </step>
+
+    <step priority="11">
+      <action>Generate Product Vision Document v1</action>
+      <output_path>/artifacts/product_vision_v1.md</output_path>
+    </step>
+
+    <step priority="12">
+      <action>Create Epic Generator Prompt</action>
+      <purpose>Generate the next-level prompt for decomposing vision into epics</purpose>
+      <guidance>
+        - Follow generator prompt XML schema (see Section 5.1 of strategy document)
+        - Epic generator should reference product vision as input
+        - Include instructions for epic decomposition logic
+        - Ensure epic generator produces both epic documents AND prd_generator.xml
+      </guidance>
+      <output_path>/prompts/epic_generator.xml</output_path>
+    </step>
+
+    <step priority="13">
+      <action>Validate outputs against checklist</action>
+      <reference>See validation_checklist below</reference>
+    </step>
+  </instructions>
+
+  <output_format>
+    <terminal_artifact>
+      <path>/artifacts/product_vision_v1.md</path>
+      <format>Markdown following product-vision-template.xml structure</format>
+      <validation_checklist>
+        <criterion>Problem statement includes at least 3 quantified pain points</criterion>
+        <criterion>Vision statement is clear and inspirational (one sentence)</criterion>
+        <criterion>At least 2 user personas defined with demographics, behaviors, goals</criterion>
+        <criterion>3-5 key capabilities listed (epic-level, not detailed)</criterion>
+        <criterion>Success metrics are SMART and quantified</criterion>
+        <criterion>Competitive analysis addresses at least 2 existing solutions</criterion>
+        <criterion>Differentiation is clear and compelling</criterion>
+        <criterion>Constraints and assumptions documented</criterion>
+        <criterion>Out of scope section prevents feature creep</criterion>
+        <criterion>Traceability: References to product-idea.md present</criterion>
+        <criterion>Readability: Accessible to non-expert (Flesch score >60 target)</criterion>
+      </validation_checklist>
+    </terminal_artifact>
+
+    <next_generator>
+      <path>/prompts/epic_generator.xml</path>
+      <validation>
+        <criterion>Must be valid XML with proper structure</criterion>
+        <criterion>Includes metadata section with version, dependencies</criterion>
+        <criterion>System role defines Epic decomposition expert persona</criterion>
+        <criterion>References epic-template.xml and product_vision_v3.md (final version)</criterion>
+        <criterion>Instructions include logic for decomposing vision into 3-5 epics</criterion>
+        <criterion>Specifies dual outputs: epic documents + prd_generator.xml</criterion>
+        <criterion>Includes validation checklist for epic quality</criterion>
+      </validation>
+    </next_generator>
+  </output_format>
+
+  <traceability>
+    <source_document>/docs/product-idea.md</source_document>
+    <template>/prompts/templates/product-vision-template.xml</template>
+    <research_reference>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md</research_reference>
+    <strategy_reference>Section 2.2 of context_engineering_strategy_v1.md</strategy_reference>
+  </traceability>
+
+  <validation>
+    <self_check>
+      After generation, verify:
+      - [ ] Terminal artifact has all 10 required template sections
+      - [ ] Problem statement is quantified (includes data/metrics)
+      - [ ] Vision statement is single sentence and inspirational
+      - [ ] Personas include all required fields (demographics, behaviors, goals, pain points, proficiency)
+      - [ ] Success metrics table is complete with baseline, target, timeline, measurement
+      - [ ] Competitive analysis names specific tools/solutions
+      - [ ] Readability: Language is clear and jargon-free
+      - [ ] Traceability: At least 3 references to product-idea.md content
+      - [ ] Epic generator: Valid XML, follows schema, includes all required sections
+    </self_check>
+  </validation>
+
+  <quality_guidance>
+    <guideline category="completeness">
+      Every section in the template must be filled with substantive content. Avoid placeholder text like "[To be determined]". If information is unknown, make reasonable inferences based on the product idea and explicitly note assumptions.
+    </guideline>
+
+    <guideline category="clarity">
+      Write for a non-technical executive audience. Avoid jargon unless absolutely necessary, and define technical terms when used. Use concrete examples. Target Flesch reading ease score above 60.
+    </guideline>
+
+    <guideline category="actionability">
+      Every capability should have clear value proposition and user benefit. Success metrics must specify how they will be measured. Roadmap phases should have concrete focus areas, not vague "improvements".
+    </guideline>
+
+    <guideline category="traceability">
+      Reference the product-idea.md using clear attribution. Example: "As noted in the initial concept, developers spend 15-30 minutes per session..." This allows readers to trace vision back to source.
+    </guideline>
+  </quality_guidance>
+
+  <examples>
+    <example type="vision_statement">
+      Good: "Empower developers to manage AI context effortlessly, reducing preparation time by 90% while improving relevance."
+
+      Bad: "Build a tool for context management." (Not inspirational, no outcome specified)
+    </example>
+
+    <example type="success_metric">
+      Good:
+      | Metric | Baseline | Target | Timeline | Measurement Method |
+      | Context prep time | 15-30 min/session | &lt;2 min/session | 6 months | User surveys + telemetry |
+
+      Bad:
+      | Metric | Target |
+      | Improve speed | Faster | (Not specific, no baseline, no timeline, no measurement method)
+    </example>
+
+    <example type="persona">
+      Good:
+      ### Primary Persona: Senior Full-Stack Developer
+      - Demographics: 28-40 years old, works at tech company (50-500 employees), uses AI tools daily
+      - Behaviors: Context-switches 15-20 times/day between tasks, values efficiency, seeks automation
+      - Goals: Ship features faster, reduce cognitive load, maintain code quality
+      - Pain Points: Spends 20% of AI session time managing context, frequently hits token limits
+      - Technical Proficiency: Expert in 2-3 languages, comfortable with CLI tools
+
+      Bad:
+      ### Primary Persona: Developer
+      - Uses computers
+      - Wants tool to work (Missing demographics, behaviors, specific goals, pain points)
+    </example>
+  </examples>
+</generator_prompt>

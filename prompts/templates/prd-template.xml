@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Product_Requirements_Document_Template</name>
+    <version>1.0</version>
+    <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728)</source>
+    <sdlc_phase>PRD</sdlc_phase>
+  </metadata>
+
+  <instructions>
+    <guideline>Fill all sections marked with [placeholder]</guideline>
+    <guideline>Ensure completeness, clarity, and stakeholder alignment</guideline>
+    <guideline>Success metrics must be SMART (Specific, Measurable, Achievable, Relevant, Time-bound)</guideline>
+    <guideline>Problem statement must include quantified pain points with data</guideline>
+    <guideline>All acceptance criteria must be testable</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# [Product/Feature Name]
+
+## Document Metadata
+- Author: [name]
+- Date: [date]
+- Version: [version]
+- Status: [Draft/Review/Approved]
+
+## Executive Summary
+[2-3 paragraph overview: problem, solution, impact]
+
+## Background & Context
+- **Business Context:** [why now]
+- **User Research:** [key findings]
+- **Market Analysis:** [competitive landscape]
+
+## Problem Statement
+**Current State:** [pain points with data]
+**Desired State:** [vision]
+**Impact if not solved:** [quantified consequences]
+
+## Goals & Success Metrics
+| Goal | Metric | Target | Measurement Method |
+|------|---------|--------|-------------------|
+| [Goal 1] | [Metric] | [Target] | [How measured] |
+
+## User Personas & Use Cases
+### Persona 1: [Name]
+- **Description:** [demographics, behaviors]
+- **Needs:** [primary needs]
+- **Use Case:** [specific scenario]
+
+## Requirements
+
+### Functional Requirements
+| ID | Requirement | Priority | Acceptance Criteria |
+|----|-------------|----------|-------------------|
+| FR-01 | [Requirement] | Must-have | [Criteria] |
+
+### Non-Functional Requirements
+- **Performance:** [specific targets]
+- **Security:** [requirements]
+- **Scalability:** [targets]
+- **Accessibility:** [WCAG standards]
+
+## User Experience
+### User Flows
+[Mermaid diagrams or step-by-step flows]
+
+### Wireframes/Mockups
+[Link to designs]
+
+## Technical Considerations
+- **Architecture:** [high-level approach]
+- **Dependencies:** [systems, services]
+- **Technical Constraints:** [limitations]
+- **Data Model:** [key entities]
+
+## Risks & Mitigations
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| [Risk 1] | High | Medium | [Strategy] |
+
+## Timeline & Milestones
+- Phase 1: [dates] - [deliverables]
+- Phase 2: [dates] - [deliverables]
+
+## Open Questions
+- [Question 1]
+- [Question 2]
+
+## Appendix
+[Additional context, research data]
+    ]]>
+  </structure>
+
+  <validation_checklist>
+    <criterion>Problem clearly defined with data</criterion>
+    <criterion>Success metrics are SMART</criterion>
+    <criterion>All stakeholders identified</criterion>
+    <criterion>Technical feasibility confirmed</criterion>
+    <criterion>Dependencies documented</criterion>
+    <criterion>Risks assessed with mitigations</criterion>
+    <criterion>Timeline realistic</criterion>
+    <criterion>Acceptance criteria testable</criterion>
+  </validation_checklist>
+
+  <process>
+    <step>CLARIFY requirements through questions</step>
+    <step>STRUCTURE document with standard sections</step>
+    <step>VALIDATE completeness against checklist</step>
+    <step>ITERATE based on stakeholder feedback</step>
+  </process>
+
+  <examples>
+    <example source="Section 6.1">
+      See research document for comprehensive PRD example with slot-filling process
+    </example>
+  </examples>
+</template>

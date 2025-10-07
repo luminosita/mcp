@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Epic_Template</name>
+    <version>1.0</version>
+    <source>Generated based on industry best practices and Context Engineering framework</source>
+    <sdlc_phase>Epic</sdlc_phase>
+  </metadata>
+
+  <instructions>
+    <guideline>Decompose product vision into independently valuable epics</guideline>
+    <guideline>Each epic should deliver standalone user value</guideline>
+    <guideline>Epics should be sized for 2-3 month implementation</guideline>
+    <guideline>Include clear acceptance criteria at epic level</guideline>
+    <guideline>Define dependencies between epics</guideline>
+    <guideline>Link to parent product vision</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# Epic: [Epic Title]
+
+## Metadata
+- **Epic ID:** EPIC-[XXX]
+- **Status:** [Draft/Planned/In Progress/Completed]
+- **Priority:** [Critical/High/Medium/Low]
+- **Product Vision:** [Link to product vision document]
+- **Owner:** [Name]
+- **Target Release:** [Q1 2025]
+
+## Epic Statement
+As [user persona], I need [capability] so that [business value].
+
+## Business Value
+[Clear articulation of why this epic matters]
+
+### User Impact
+[How users benefit from this epic]
+
+### Business Impact
+[Quantified business outcomes]
+- [Metric 1]: [Expected improvement]
+- [Metric 2]: [Expected improvement]
+
+## Problem Being Solved
+[Specific problem this epic addresses from product vision]
+
+## Scope
+
+### In Scope
+- [Capability 1]
+- [Capability 2]
+- [Capability 3]
+
+### Out of Scope
+- [What is explicitly not included]
+- [Deferred to future epics]
+
+## User Stories (High-Level)
+[List of major user stories that comprise this epic - not detailed yet]
+
+1. **Story 1:** As [role], I want [feature] so that [benefit]
+2. **Story 2:** As [role], I want [feature] so that [benefit]
+3. **Story 3:** As [role], I want [feature] so that [benefit]
+
+## Acceptance Criteria (Epic Level)
+
+### Criterion 1
+**Given** [context]
+**When** [user action]
+**Then** [system response]
+
+### Criterion 2
+**Given** [context]
+**When** [user action]
+**Then** [system response]
+
+## Success Metrics
+
+| Metric | Target | Measurement Method |
+|--------|--------|-------------------|
+| [Metric 1] | [Goal] | [How measured] |
+| [Metric 2] | [Goal] | [How measured] |
+
+## Technical Considerations
+
+### Architecture Impact
+[High-level technical changes required]
+
+### Dependencies
+**Technical Dependencies:**
+- [System/service dependency 1]
+- [External API/library dependency 2]
+
+**Epic Dependencies:**
+- **Depends On:** [EPIC-XXX: Must complete first]
+- **Blocks:** [EPIC-YYY: This epic must complete first]
+
+### Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation Strategy |
+|------|------------|--------|-------------------|
+| [Risk 1] | High/Med/Low | High/Med/Low | [Strategy] |
+| [Risk 2] | High/Med/Low | High/Med/Low | [Strategy] |
+
+## Effort Estimation
+- **Complexity:** [Low/Medium/High]
+- **Estimated Story Points:** [Range: e.g., 80-120]
+- **Estimated Duration:** [e.g., 2-3 months]
+- **Team Size:** [e.g., 2 frontend, 2 backend, 1 QA]
+
+## Milestones
+- **Milestone 1** (Week 4): [Deliverable]
+- **Milestone 2** (Week 8): [Deliverable]
+- **Milestone 3** (Week 12): [Deliverable]
+
+## Definition of Done (Epic Level)
+- [ ] All user stories completed and accepted
+- [ ] Acceptance criteria met and validated
+- [ ] Code reviewed and merged
+- [ ] Tests passing (unit, integration, e2e)
+- [ ] Documentation updated
+- [ ] Performance benchmarks met
+- [ ] Security review completed
+- [ ] Deployed to production
+- [ ] Success metrics baseline captured
+
+## Open Questions
+- [Question 1]
+- [Question 2]
+
+## Related Documents
+- Product Vision: [Link]
+- Related ADRs: [Links]
+- Technical Specs: [Links]
+- User Research: [Links]
+    ]]>
+  </structure>
+
+  <validation_checklist>
+    <criterion>Epic statement follows "As-I need-So that" format</criterion>
+    <criterion>Business value clearly articulated with quantified impact</criterion>
+    <criterion>Scope clearly defines what's in/out</criterion>
+    <criterion>At least 3-5 high-level user stories listed</criterion>
+    <criterion>Epic-level acceptance criteria defined</criterion>
+    <criterion>Success metrics are measurable</criterion>
+    <criterion>Technical dependencies identified</criterion>
+    <criterion>Epic dependencies mapped (depends on/blocks)</criterion>
+    <criterion>Risks assessed with mitigation strategies</criterion>
+    <criterion>Effort estimation includes complexity, duration, team size</criterion>
+    <criterion>Epic is independently valuable (can deliver standalone value)</criterion>
+    <criterion>Epic is appropriately sized (2-3 months)</criterion>
+    <criterion>Traceability to product vision</criterion>
+  </validation_checklist>
+
+  <examples>
+    <example>
+      # Epic: User Authentication System
+
+      As a CLI tool user, I need secure authentication so that my data remains private and only I can access my account.
+
+      Business Value:
+      - User Impact: Users can trust the tool with sensitive data
+      - Business Impact: Reduces support tickets by 40% (no password reset requests initially)
+
+      High-Level Stories:
+      1. As a new user, I want to create an account so that I can use the tool
+      2. As a returning user, I want to log in securely so that I can access my data
+      3. As a security-conscious user, I want 2FA so that my account is extra secure
+    </example>
+  </examples>
+</template>

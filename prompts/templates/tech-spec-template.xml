@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Technical_Specification_Template</name>
+    <version>1.0</version>
+    <source>Section 6.3 of advanced_prompt_engineering_software_docs_code_final.md (lines 905-1016)</source>
+    <sdlc_phase>Technical_Design</sdlc_phase>
+  </metadata>
+
+  <instructions>
+    <guideline>Create implementation specifications for engineering teams</guideline>
+    <guideline>Include detailed API specifications with request/response examples</guideline>
+    <guideline>Define data models with clear interfaces</guideline>
+    <guideline>Specify security, performance, and testing requirements</guideline>
+    <guideline>Provide implementation plan with phases</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# Technical Specification: [Feature/System Name]
+
+## Overview
+**Summary:** [One paragraph overview]
+**Related PRD:** [Link]
+**Related ADR:** [Link]
+
+## Goals
+- [Technical goal 1]
+- [Technical goal 2]
+
+## Non-Goals
+- [Explicitly out of scope]
+
+## System Architecture
+
+### High-Level Architecture
+```mermaid
+graph TD
+    A[Client] --> B[API Gateway]
+    B --> C[Service Layer]
+    C --> D[Data Layer]
+```
+
+### Component Diagram
+[Detailed component interactions]
+
+## API Specifications
+
+### Endpoint: [Name]
+**Method:** POST
+**Path:** `/api/v1/resource`
+
+**Request:**
+```json
+{
+  "field1": "string",
+  "field2": "number"
+}
+```
+
+**Response:**
+```json
+{
+  "id": "uuid",
+  "status": "success"
+}
+```
+
+**Error Codes:**
+- 400: Invalid input
+- 401: Unauthorized
+- 500: Server error
+
+## Data Models
+
+### Entity: User
+```typescript
+interface User {
+  id: UUID;
+  email: string;
+  createdAt: DateTime;
+  // ...
+}
+```
+
+## Security Considerations
+- **Authentication:** [Method]
+- **Authorization:** [RBAC model]
+- **Data Encryption:** [At-rest, in-transit]
+- **Input Validation:** [Strategy]
+
+## Performance Requirements
+- **Latency:** P95 < 200ms
+- **Throughput:** 10,000 requests/sec
+- **Availability:** 99.9% uptime
+
+## Testing Strategy
+- **Unit Tests:** [Coverage target: 80%]
+- **Integration Tests:** [Critical paths]
+- **Load Tests:** [Scenarios]
+
+## Deployment Strategy
+- **Environment Progression:** Dev → Staging → Production
+- **Rollout Plan:** [Phased rollout strategy]
+- **Rollback Plan:** [Procedure]
+
+## Monitoring & Observability
+- **Key Metrics:** [List]
+- **Alerts:** [Conditions and escalation]
+- **Logging:** [Strategy and retention]
+
+## Implementation Plan
+### Phase 1: [Duration]
+- [Task 1]
+- [Task 2]
+
+### Phase 2: [Duration]
+- [Task 3]
+- [Task 4]
+
+## Open Questions
+- [Question 1]
+
+## References
+- [Documentation links]
+    ]]>
+  </structure>
+
+  <validation_checklist>
+    <criterion>Overview links to related PRD and ADRs</criterion>
+    <criterion>Goals and non-goals clearly defined</criterion>
+    <criterion>Architecture diagrams included (mermaid format preferred)</criterion>
+    <criterion>All API endpoints documented with request/response/errors</criterion>
+    <criterion>Data models defined with type information</criterion>
+    <criterion>Security considerations address auth, encryption, validation</criterion>
+    <criterion>Performance requirements quantified (latency, throughput, availability)</criterion>
+    <criterion>Testing strategy covers unit, integration, load tests</criterion>
+    <criterion>Deployment and rollback procedures documented</criterion>
+    <criterion>Implementation plan broken into phases with tasks</criterion>
+  </validation_checklist>
+
+  <examples>
+    <example source="Section 6.3 lines 1020-1046">
+      See research document for User Profile API specification example with:
+      - OpenAPI 3.0 format
+      - JWT authentication
+      - CRUD operations
+      - Error handling
+    </example>
+  </examples>
+</template>

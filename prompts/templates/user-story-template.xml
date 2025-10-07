@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>User_Story_Template</name>
+    <version>1.0</version>
+    <source>Section 6.4 of advanced_prompt_engineering_software_docs_code_final.md (lines 1063-1112)</source>
+    <sdlc_phase>User_Story</sdlc_phase>
+  </metadata>
+
+  <instructions>
+    <guideline>Transform high-level user stories into comprehensive, actionable specifications</guideline>
+    <guideline>Use standard agile format: "As [role], I want [feature], so that [benefit]"</guideline>
+    <guideline>Include acceptance criteria in Given-When-Then (Gherkin) format</guideline>
+    <guideline>List technical requirements covering frontend, backend, database changes</guideline>
+    <guideline>Ensure all acceptance criteria are testable</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+**Title:** [Enhanced ticket title]
+**Type:** Feature
+**Priority:** [High/Medium/Low with brief justification]
+
+## User Story
+As [role], I want [feature], so that [benefit].
+
+## Description
+[Expanded problem statement or feature description with context and background]
+
+## Technical Requirements
+- [Frontend task 1]
+- [Backend task 1]
+- [Database change 1]
+- [Additional technical considerations]
+
+## Acceptance Criteria
+### Scenario 1: [Scenario name]
+**Given** [initial context]
+**When** [action taken]
+**Then** [expected outcome]
+
+### Scenario 2: [Scenario name]
+**Given** [initial context]
+**When** [action taken]
+**Then** [expected outcome]
+
+## Definition of Done
+- [ ] Code implemented and reviewed
+- [ ] Unit tests written and passing (80% coverage minimum)
+- [ ] Integration tests passing
+- [ ] Documentation updated
+- [ ] Acceptance criteria validated
+- [ ] Product owner approval obtained
+
+## Additional Information
+**Suggested Labels:** [List of labels, e.g., frontend, backend, user-profile]
+**Estimated Story Points:** [Fibonacci: 1, 2, 3, 5, 8, 13]
+**Dependencies:** [References to other stories or technical requirements]
+**Related PRD Section:** [Link to PRD section]
+    ]]>
+  </structure>
+
+  <validation_checklist>
+    <criterion>User story follows "As-I want-So that" format</criterion>
+    <criterion>Description provides sufficient context</criterion>
+    <criterion>Technical requirements cover all implementation layers</criterion>
+    <criterion>At least 2 acceptance criteria defined</criterion>
+    <criterion>All acceptance criteria use Given-When-Then format</criterion>
+    <criterion>Acceptance criteria are testable and specific</criterion>
+    <criterion>Definition of done includes code review and testing</criterion>
+    <criterion>Story is independently deliverable</criterion>
+    <criterion>Story size is appropriate (can be completed in single sprint)</criterion>
+  </validation_checklist>
+
+  <examples>
+    <example source="Section 6.4 lines 1075-1077">
+      As registered user, I want to be able to upload profile picture so that I can personalize my account.
+
+      Acceptance Criteria:
+      - Given I am logged in, When I navigate to profile settings, Then I see an upload button
+      - Given I select an image file, When I click upload, Then the image is saved and displayed
+    </example>
+  </examples>
+</template>
