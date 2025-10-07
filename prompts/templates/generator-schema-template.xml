@@ -52,15 +52,26 @@
     </constraints>
   </task_context>
 
+  <anti_hallucination_guidelines>
+    <guideline category="grounding">Base all outputs on provided input artifacts. Quote or reference specific sections from inputs when making claims.</guideline>
+    <guideline category="assumptions">When making inferences beyond input artifacts, explicitly mark with [ASSUMPTION] tag and explain reasoning.</guideline>
+    <guideline category="uncertainty">If input artifacts lack necessary information, state "Information not provided in inputs" rather than fabricating details.</guideline>
+    <guideline category="verification">For factual claims, trace back to specific sections of input artifacts or research sources.</guideline>
+    <guideline category="confidence">After generating content, identify any sections where confidence is low or additional information would improve quality.</guideline>
+    <guideline category="scope">Stay within the bounds of the current SDLC phase. Do not make detailed implementation decisions that belong in later phases.</guideline>
+  </anti_hallucination_guidelines>
+
   <instructions>
     <step priority="1">
       <action>[Load and analyze input artifact]</action>
       <purpose>[Why this step is necessary]</purpose>
+      <anti_hallucination>Extract facts, requirements, and constraints from input. Note any ambiguities or missing information for later clarification.</anti_hallucination>
     </step>
 
     <step priority="2">
       <action>[Load template]</action>
       <purpose>[Understand required structure]</purpose>
+      <anti_hallucination>Follow template structure exactly. If template section cannot be filled from available inputs, note as [NEEDS CLARIFICATION] rather than inventing content.</anti_hallucination>
     </step>
 
     <step priority="3">
@@ -70,6 +81,7 @@
         - Identify gaps and opportunities
         - Inform artifact generation with findings
       </guidance>
+      <anti_hallucination>When incorporating research findings, cite sources. Distinguish between verified facts from research and inferences you're making.</anti_hallucination>
     </step>
 
     <step priority="[N-2]">
