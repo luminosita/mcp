@@ -63,3 +63,6 @@ I revisited the phases listed in Section 1.4 of the strategy document. We need t
 - **Rationale**: current folder structure is great for the PoC product. If we want to use it for other products we need to copy/paste prompt and template files. This is a headache for maintenance. Much better approach is to isolate everything into a common repository (MCP Server repository) and make them reusable.
 - This requires update of the main strategy document as well as Graduation related documents
 
+**CRITICAL** Analyze my critiques, and perform clarification loop by asking questions until all statements are clarified. Propose updates to our plan with new tasks based on the critiques. Only proceed with updates upon confirmation.
+ 
+
