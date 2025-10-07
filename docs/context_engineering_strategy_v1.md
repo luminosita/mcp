@@ -216,8 +216,8 @@ C4: backlog_story_generator.xml
 /
 ├── .claude/
 │   └── commands/
-│       ├── execute-generator.xml       # Universal executor (fixed)
-│       └── refine-generator.xml        # Iteration orchestrator
+│       ├── execute-generator.md       # Universal executor (fixed)
+│       └── refine-generator.md        # Iteration orchestrator
 │
 ├── docs/
 │   ├── advanced_prompt_engineering_software_docs_code_final.md  # Research (immutable)
@@ -298,7 +298,7 @@ CLI tool development demonstration.
 ## Execution Instructions
 To execute a generator:
 1. Identify task in /TODO.md (e.g., TASK-002)
-2. Run: /kickoff execute-generator {task_id}
+2. Run: /execute-generator {task_id}
 3. System loads:
    - /prompts/{task}_generator.xml
    - /prompts/CLAUDE-{task}.md (auto-generates if missing)
@@ -494,7 +494,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 ### 6.1 Phase 1: Bootstrap (This Session)
 
 **Human Actions**:
-1. Run `/kickoff` with master prompt
+1. Run master prompt execution
 2. Answer clarification questions (Q1-Q13)
 3. Review generated artifacts:
    - `/docs/context_engineering_strategy_v1.md`
@@ -520,12 +520,12 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 
 **Human Actions**:
 1. Start new Claude Code session
-2. Run: `/kickoff execute-generator TASK-001`
+2. Run: `/execute-generator TASK-001`
 3. System prompts if `/prompts/CLAUDE-product-vision.md` missing
 4. Confirm generation of specialized CLAUDE.md
 5. Review `/artifacts/product_vision_v1.md`
 6. Create `/feedback/product_vision_v1_critique.md` with notes
-7. Run: `/kickoff refine-generator product_vision_generator`
+7. Run: `/refine-generator product_vision_generator`
 8. Repeat for v2, v3
 9. Approve final version
 
@@ -553,7 +553,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 **Iteration 1 > 2**:
 1. Human reviews v1 artifact
 2. Creates critique file: `/feedback/{artifact}_v1_critique.md`
-3. Runs: `/kickoff refine-generator {task}_generator`
+3. Runs: `/refine-generator {task}_generator`
 4. System:
    - Loads generator + critique
    - Applies Self-Refine pattern (research Section 2.4)
@@ -590,7 +590,7 @@ Human checklist:
 
 **Human Actions**:
 1. Start new Claude Code session (C2)
-2. Run: `/kickoff execute-generator TASK-002`
+2. Run: `/execute-generator TASK-002`
 3. When prompted for input artifact location, confirm:
    `/artifacts/product_vision_v3.md`
 4. Proceed with same iteration cycle (v1 > v2 > v3)
@@ -619,7 +619,7 @@ Human checklist:
 
 **Human Actions**:
 1. Start new Claude Code session (C4)
-2. Run: `/kickoff execute-generator TASK-014 --story-id=US-01`
+2. Run: `/execute-generator TASK-014`
 3. When prompted for PRD location, confirm: `/artifacts/prds/prd_001/prd_v3.md`
 4. Proceed with iteration cycle (v1 > v2 > v3)
 
@@ -709,7 +709,7 @@ ELSE prompt human for review
 ## 9. Maturity Roadmap
 
 ### 9.1 Current State (PoC Phase 1)
-- **Execution**: Human-triggered via `/kickoff execute-generator {task_id}`
+- **Execution**: Human-triggered via `/execute-generator {task_id}`
 - **Iteration**: Manual critique files + human approval
 - **Quality Gates**: Checklist-based, subjective assessment
 

@@ -129,7 +129,10 @@ The executor will:
 /refine-generator {task}_generator
 ```
 - System loads generator + critique
-- Applies Self-Refine pattern
+- Applies Self-Refine pattern (three-step workflow):
+  1. Load generator + critique feedback
+  2. Update generator instructions based on critique
+  3. Re-execute generator to produce improved version
 - Re-executes > produces v2
 - Repeat for v3 if necessary
 
@@ -193,8 +196,13 @@ Task-specific context files that provide:
 ### When Are They Created?
 **Lazy Generation**: Created on-demand during first generator execution
 - Executor checks if `/prompts/CLAUDE-{task}.md` exists
-- If missing: Prompts human > Generates from template
+- If missing: Prompts human for confirmation > Generates from `/prompts/templates/specialized-claude-template.md`
 - If exists: Load directly
+
+### Template Location
+- **Path**: `/prompts/templates/specialized-claude-template.md`
+- **Purpose**: Provides structure and guidelines for creating task-specific CLAUDE.md files
+- **Usage**: Fill in placeholders with phase-specific information
 
 ### Current Specialized Files:
 - None yet (will be created as tasks execute)
@@ -202,6 +210,8 @@ Task-specific context files that provide:
 ---
 
 ## Key Research References
+
+**Note**: These references are for documentation purposes only. Do NOT load these documents into context during generator execution.
 
 This framework is based on:
 - **Document**: `/docs/advanced_prompt_engineering_software_docs_code_final.md`

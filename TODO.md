@@ -140,6 +140,7 @@ Apply all updates from feedback/context_engineering_strategy_v1_critique.md:
 **Estimated Time**: 20 minutes
 **Status**: ⏳ Pending
 **Context**: New session C1 required
+**Task Type**: product-vision
 
 **Description**:
 Execute Product Vision Generator in standalone context to produce first iteration of Product Vision document.
@@ -280,6 +281,7 @@ Apply final refinements, execute generator for v3, and **HUMAN manually updates*
 **Estimated Time**: 30 minutes
 **Status**: ⏳ Pending
 **Context**: New session C2 required
+**Task Type**: epic
 
 **Description**:
 Execute Epic Generator in standalone context to decompose Product Vision into Epic documents.
@@ -365,6 +367,7 @@ Final critique and refinement cycle for Epic Generator, **HUMAN manually updates
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session C3 required
+**Task Type**: prd
 
 **Description**:
 Execute PRD Generator for first epic in standalone context.
@@ -428,6 +431,7 @@ Complete 3-iteration refinement cycle for PRD, **HUMAN manually updates** strate
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session C4 required
+**Task Type**: backlog-story
 
 **Description**:
 Execute Backlog Story Generator for first high-level story from PRD.

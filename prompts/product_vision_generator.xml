@@ -39,14 +39,16 @@
         Your task is to expand and structure this into a comprehensive Product Vision.
       </artifact>
     </input_artifacts>
-
-    <constraints>
-      <constraint>[CUSTOMIZE PER PRODUCT]</constraint>
-      <constraint>[CUSTOMIZE PER PRODUCT]</constraint>
-      <constraint>[CUSTOMIZE PER PRODUCT]</constraint>
-      <constraint>[CUSTOMIZE PER PRODUCT]</constraint>
-    </constraints>
   </task_context>
+
+  <anti_hallucination_guidelines>
+    <guideline category="grounding">Base product vision on product-idea.md. Quote or reference specific sections when making claims about the product concept.</guideline>
+    <guideline category="assumptions">When inferring capabilities or user needs beyond product-idea.md, explicitly mark with [ASSUMPTION] and explain reasoning.</guideline>
+    <guideline category="research">When incorporating competitive analysis findings, cite specific products/sources. Distinguish between verified competitive features and inferences about market gaps.</guideline>
+    <guideline category="metrics">For success metrics and pain point quantification, use realistic estimates based on industry data. If exact data unavailable, note as [ESTIMATED] with explanation.</guideline>
+    <guideline category="uncertainty">If product-idea.md lacks critical information (e.g., specific target users), note gaps and make reasonable assumptions explicitly marked as such.</guideline>
+    <guideline category="scope">Stay at vision level. Do not specify detailed technical implementations or user stories—those belong in Epic/PRD phases.</guideline>
+  </anti_hallucination_guidelines>
 
   <instructions>
     <step priority="1">
