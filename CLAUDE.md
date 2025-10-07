@@ -22,8 +22,8 @@ Prompts generate prompts in a self-propagating chain:
 /
    .claude/
       commands/
-          execute-generator.xml       # Universal executor
-          refine-generator.xml        # Iteration orchestrator
+          execute-generator.md       # Universal executor
+          refine-generator.md        # Iteration orchestrator
 
    docs/
       advanced_prompt_engineering_software_docs_code_final.md  # Research (immutable)
@@ -91,14 +91,14 @@ Prompts generate prompts in a self-propagating chain:
 
 **Step 3: Execute Generator**
 ```bash
-/kickoff execute-generator TASK-003
+/execute-generator TASK-003
 ```
 
 **Step 4: System Actions**
 The executor will:
 1. Parse task details from `/TODO.md`
 2. Check for specialized CLAUDE.md (e.g., `/prompts/CLAUDE-product-vision.md`)
-   - If missing: Prompt human for confirmation > Generate from template
+   - If missing: Prompt human for confirmation > Generate from guidelines in "Specialized CLAUDE.md Files" section
    - If exists: Load directly
 3. Load required context:
    - `/CLAUDE.md` (this file)
@@ -108,7 +108,7 @@ The executor will:
    - Input artifacts (from prior tasks)
 4. Execute generator prompt
 5. Save outputs to `/artifacts/`
-6. Update this file's "Current Phase" section
+6. Update `/TODO.md` task status
 7. Report validation checklist status
 
 **Step 5: Review Output**
@@ -126,10 +126,10 @@ The executor will:
 
 **Step 7: Iterate (if needed)**
 ```bash
-/kickoff refine-generator {task}_generator
+/refine-generator {task}_generator
 ```
 - System loads generator + critique
-- Applies Self-Refine pattern (research Section 2.4)
+- Applies Self-Refine pattern
 - Re-executes > produces v2
 - Repeat for v3 if necessary
 
@@ -178,22 +178,6 @@ Tracks implementation tasks with estimates, dependencies, assignments.
 - **Validation Checklists**: Included in all generators
 - **Versioning**: Metadata tracks iteration number
 - **Self-Contained**: Includes all necessary context
-
----
-
-## Current Phase
-
-**Phase**: Phase 1 - Bootstrap
-**Status**: Generating foundational artifacts
-**Last Completed Task**: None (initial setup)
-**Current Task**: TASK-000 (Extract & Generate Templates)
-**Next Generator**: product_vision_generator.xml
-
-**Recent Updates**:
-- 2025-10-07: Project initialized
-- 2025-10-07: Strategy document created
-- 2025-10-07: TODO.md master plan generated
-- 2025-10-07: Root CLAUDE.md created
 
 ---
 
@@ -286,7 +270,7 @@ Tasks requiring explicit human approval before proceeding:
 ## Maturity Progression
 
 ### Current: Phase 1 (Manual)
-- Human triggers all executions via `/kickoff` commands
+- Human triggers all executions via slash commands
 - Manual critique files with human-written feedback
 - Subjective quality assessment using checklists
 
@@ -312,13 +296,8 @@ Tasks requiring explicit human approval before proceeding:
 ## Commands Reference
 
 ### Primary Commands
-- `/kickoff execute-generator TASK-XXX` - Execute a generator from TODO.md
-- `/kickoff refine-generator {name}_generator` - Iterate based on feedback
-
-### Utility Commands (to be implemented)
-- `/kickoff validate-artifact {path}` - Check artifact against template
-- `/kickoff update-phase {phase_name}` - Update current phase in this file
-- `/kickoff generate-specialized-context {task}` - Create CLAUDE-{task}.md
+- `/execute-generator TASK-XXX` - Execute a generator from TODO.md
+- `/refine-generator {name}_generator` - Iterate based on feedback
 
 ---
 

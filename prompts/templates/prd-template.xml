@@ -96,17 +96,6 @@
     ]]>
   </structure>
 
-  <validation_checklist>
-    <criterion>Problem clearly defined with data</criterion>
-    <criterion>Success metrics are SMART</criterion>
-    <criterion>All stakeholders identified</criterion>
-    <criterion>Technical feasibility confirmed</criterion>
-    <criterion>Dependencies documented</criterion>
-    <criterion>Risks assessed with mitigations</criterion>
-    <criterion>Timeline realistic</criterion>
-    <criterion>Acceptance criteria testable</criterion>
-  </validation_checklist>
-
   <process>
     <step>CLARIFY requirements through questions</step>
     <step>STRUCTURE document with standard sections</step>

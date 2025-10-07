@@ -120,19 +120,6 @@
     ]]>
   </structure>
 
-  <validation_checklist>
-    <criterion>Problem statement includes at least 3 quantified pain points</criterion>
-    <criterion>Vision statement is clear and inspirational (one sentence)</criterion>
-    <criterion>At least 2 user personas defined with demographics, behaviors, goals</criterion>
-    <criterion>3-5 key capabilities listed (epic-level, not detailed)</criterion>
-    <criterion>Success metrics are SMART and quantified</criterion>
-    <criterion>Competitive analysis addresses at least 2 existing solutions</criterion>
-    <criterion>Differentiation is clear and compelling</criterion>
-    <criterion>Constraints and assumptions documented</criterion>
-    <criterion>Out of scope section prevents feature creep</criterion>
-    <criterion>Traceability to product idea or initial concept</criterion>
-  </validation_checklist>
-
   <examples>
     <example>
       Problem Statement:

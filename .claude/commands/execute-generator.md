@@ -14,7 +14,7 @@ This command executes a generator prompt based on the task ID specified in `/TOD
 ## Usage
 
 ```bash
-/kickoff execute-generator TASK-003
+/execute-generator TASK-003
 ```
 
 ## Workflow
@@ -29,11 +29,12 @@ This command executes a generator prompt based on the task ID specified in `/TOD
   - Output paths
 
 ### Step 2: Check Specialized CLAUDE.md
-- Determine specialized context file: `/prompts/CLAUDE-{phase}.md`
+- Determine specialized context file: `/prompts/CLAUDE-{task_name}.md`
+  - Derive task_name from generator prompt filename (e.g., product_vision_generator.xml → product-vision)
 - If file exists: Load it
 - If missing:
-  - **Prompt human**: "Specialized context `/prompts/CLAUDE-{phase}.md` not found. Generate it now? (y/n)"
-  - **If approved**: Generate from template (see Section 4.2 of strategy doc)
+  - **Prompt human**: "Specialized context `/prompts/CLAUDE-{task_name}.md` not found. Generate it now? (y/n)"
+  - **If approved**: Generate from guidelines in main `/CLAUDE.md` "Specialized CLAUDE.md Files" section
   - **If declined**: Exit with error
 
 ### Step 3: Load Context
@@ -86,14 +87,14 @@ Validation Status:
 Action Required:
 1. Review artifact at /artifacts/product_vision_v1.md
 2. Create critique file: /feedback/product_vision_v1_critique.md
-3. If refinement needed, run: /kickoff refine-generator product_vision_generator
+3. If refinement needed, run: /refine-generator product_vision_generator
 ```
 
-### Step 7: Update CLAUDE.md
-Update "Current Phase" section in `/CLAUDE.md`:
-- Set `Last Completed Task` to current task ID
-- Set `Current Task` to next task in dependency chain
-- Add entry to `Recent Updates` log
+### Step 7: Update TODO.md
+Update relevant task status in `/TODO.md`:
+- Mark current task checkbox as complete (if final version v3)
+- Update task status notes
+- Add entry to task completion log if applicable
 
 ## Error Handling
 
@@ -145,11 +146,8 @@ Proceed anyway? (y/n)
 ---
 
 **Related Commands**:
-- `/kickoff refine-generator` - Iterate based on feedback
-- `/kickoff validate-artifact` - Check artifact quality
-- `/kickoff update-phase` - Update CLAUDE.md phase tracking
+- `/refine-generator` - Iterate based on feedback
 
 **See Also**:
-- `/docs/context_engineering_strategy_v1.md` - Section 6.2
 - `/TODO.md` - Master task list
 - `/CLAUDE.md` - Root orchestration guide

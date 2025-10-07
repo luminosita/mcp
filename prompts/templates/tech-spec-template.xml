@@ -126,19 +126,6 @@ interface User {
     ]]>
   </structure>
 
-  <validation_checklist>
-    <criterion>Overview links to related PRD and ADRs</criterion>
-    <criterion>Goals and non-goals clearly defined</criterion>
-    <criterion>Architecture diagrams included (mermaid format preferred)</criterion>
-    <criterion>All API endpoints documented with request/response/errors</criterion>
-    <criterion>Data models defined with type information</criterion>
-    <criterion>Security considerations address auth, encryption, validation</criterion>
-    <criterion>Performance requirements quantified (latency, throughput, availability)</criterion>
-    <criterion>Testing strategy covers unit, integration, load tests</criterion>
-    <criterion>Deployment and rollback procedures documented</criterion>
-    <criterion>Implementation plan broken into phases with tasks</criterion>
-  </validation_checklist>
-
   <examples>
     <example source="Section 6.3 lines 1020-1046">
       See research document for User Profile API specification example with:

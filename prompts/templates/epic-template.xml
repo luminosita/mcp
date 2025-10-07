@@ -137,22 +137,6 @@ As [user persona], I need [capability] so that [business value].
     ]]>
   </structure>
 
-  <validation_checklist>
-    <criterion>Epic statement follows "As-I need-So that" format</criterion>
-    <criterion>Business value clearly articulated with quantified impact</criterion>
-    <criterion>Scope clearly defines what's in/out</criterion>
-    <criterion>At least 3-5 high-level user stories listed</criterion>
-    <criterion>Epic-level acceptance criteria defined</criterion>
-    <criterion>Success metrics are measurable</criterion>
-    <criterion>Technical dependencies identified</criterion>
-    <criterion>Epic dependencies mapped (depends on/blocks)</criterion>
-    <criterion>Risks assessed with mitigation strategies</criterion>
-    <criterion>Effort estimation includes complexity, duration, team size</criterion>
-    <criterion>Epic is independently valuable (can deliver standalone value)</criterion>
-    <criterion>Epic is appropriately sized (2-3 months)</criterion>
-    <criterion>Traceability to product vision</criterion>
-  </validation_checklist>
-
   <examples>
     <example>
       # Epic: User Authentication System

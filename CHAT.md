@@ -2430,3 +2430,181 @@ Answer: deferred
   ---
   Session Complete: Architecture finalized, templates updated, GRADUATION.md created
   Ready For: Next context to apply remaining documentation updates and begin execution phase
+
+
+  ---
+  Approval Process: Critique file created `feedback/context_engineering_strategy_v1_critique.md`
+
+  Clarification Questions
+
+  On Q1 (Duplication):
+
+  Q1.1: Should validation checklists only live in generators (and removed from templates), OR only in templates (and removed from generators)? What's your preference?
+
+  On Q2 (Research):
+
+  Q2.1: For Product Vision, should the generator explicitly instruct the LLM to research competitive solutions and suggest additional capabilities beyond what's in the product-idea.md?Q2.2: Should this research
+   happen at Vision stage (initial broad research) OR Epic stage (feature-specific research) OR both?Q2.3: Do we need explicit research instructions like "Use WebSearch tool to find..." or rely on implicit LLM
+  behavior?
+
+  On Q3 (Background/Constraints):
+
+  Q3.1: For "Reference" sections - do you want me to:
+  - Option A: Extract relevant content inline (increases prompt size but self-contained)
+  - Option B: Keep references as documentation only (agent won't load them)
+  - Option C: Load specific sections on-demand via read instructions
+
+  Q3.2: The 4 constraints in Product Vision generator - are these specific to the current CLI tool product or meant to be generic placeholders that should be replaced per-product? Should I mark them as
+  [CUSTOMIZE PER PRODUCT]?
+
+  On Q4 (Epic Generator XML Schema):
+
+  Q4.1: Should I extract the XML schema template from strategy doc and create a standalone /prompts/templates/generator-schema-template.xml file that all generators reference?
+
+  On Q5a-d (Command Names):
+
+  Q5.1: You want to remove /kickoff prefix entirely and use direct commands like /execute-generator and /refine-generator? Should I update the .claude/commands/ XML files to register these as direct slash
+  commands?
+
+  On Q5c (Phase Tracking):
+
+  Q5.2: Keep "Current Phase" section in CLAUDE.md as read-only (manual reference) and make TODO.md the single source of truth for status updates?
+
+  On Q6 (Strategy Updates):
+
+  Q6.1: Should I add a generator step that explicitly instructs agents to update strategy.md with lessons learned, OR is this a manual human task after each phase?
+
+  On Q7d (Utility Commands):
+
+  Q7.1: Should I create tasks in TODO.md to implement /validate-artifact and /update-phase commands, OR remove these references since they don't exist yet?
+
+  On Remarks - MCP Server Phase:
+
+  CRITICAL Q8: You propose inserting a new phase between PoC (Phase 1) and current Phase 2. This would:
+  - Make current Phase 2→3, Phase 3→4, Phase 4→5
+  - Add new Phase 2: "MCP Server Extraction & Productization"
+
+  Q8.1: Should this new MCP phase happen after completing the current PoC (i.e., after we've executed Product Vision/Epic/PRD generators at least once), OR immediately after template extraction?
+
+  Q8.2: For the MCP Server - do you want a Python/FastMCP implementation, OR a different MCP framework?
+
+  On TODO.md → PLAN.md Rename:
+
+  Q9: Rename affects many file references. Should I:
+  - Rename now (requires updating CLAUDE.md, strategy doc, all prompts)
+  - Rename after Phase 1 completion
+  - Keep TODO.md name for consistency with common conventions
+
+  **Human Response**
+
+  On Q1 (Duplication):
+
+  Q1.1: Only in generators. **Rationale**: Templates should not contain validations. They should only define structure
+
+  On Q2 (Research):
+
+  Q2.1: Yes
+  Q2.2: It should happen as part of vision, epic and prd phases?
+  Q2.3: Implicit LLM behavior
+
+  On Q3 (Background/Constraints):
+
+  Q3.1: Option B
+
+  Q3.2: [CUSTOMIZE PER PRODUCT]
+
+  On Q4 (Epic Generator XML Schema):
+
+  Q4.1: Yes
+
+  On Q5a-d (Command Names):
+
+  Q5.1: Yes
+
+  On Q5c (Phase Tracking):
+
+  Q5.2: Remove from CLAUDE.md and keep it only in TODO.md
+
+  On Q6 (Strategy Updates):
+
+  Q6.1: Make it part of Phase Report and clearly instruct human to do the manual update
+
+  On Q7d (Utility Commands):
+
+  Q7.1: Remove
+
+  On Remarks - MCP Server Phase:
+
+  CRITICAL Q8: We need to clarify phases. My understanding is that we are still on the Phase 1 (PoC). Phase 1 ends with TASK-014, as currently specified in `TODO.md`. After Phase 1 (PoC) we should proceed into Phase 2 (MCP Server Extraction & Productization). Afterwards, we continue as original planned thru Phase #3-5  
+  
+  Q8.1: After TASK-014 as specified now in `TODO.md`
+
+  Q8.2: We will define that as part of the new MCP Server project. The idea is for MCP Server project to be implemented using defined strategy, in the same way as PoC project.
+
+  On TODO.md → PLAN.md Rename:
+
+  Q9: Rename affects many file references. Should I:
+  - Keep TODO.md name for consistency with common conventions
+
+  ---
+  ⏺ Summary of Completed Changes
+
+  ✅ Completed Updates:
+
+  1. Templates (6 files)
+  - Removed validation checklists from all templates
+  - Templates now contain only structure and instructions
+  - Validation checklists moved to generators only
+
+  2. Product Vision Generator
+  - Added research step for competitive landscape (step 8)
+  - Marked constraints as [CUSTOMIZE PER PRODUCT]
+  - Updated reference to generator-schema-template.xml
+  - Added instruction to infer additional product capabilities from research
+
+  3. Generator Schema Template (NEW)
+  - Created /prompts/templates/generator-schema-template.xml
+  - Comprehensive XML schema for all future generators
+  - Includes all required sections with detailed documentation
+  - Referenced by all generators for consistency
+
+  4. Command Files
+  - Updated /execute-generator.md and /refine-generator.md
+  - Removed /kickoff prefix (now direct /execute-generator and /refine-generator)
+  - Fixed references to clarify {task_name} derivation
+  - Updated Step 6 to "Update TODO.md" instead of "Update CLAUDE.md"
+  - Removed non-existent utility command references
+  - Removed strategy doc loading references (kept as documentation only)
+  - Added explicit note about human manual strategy updates at v2→v3
+
+  5. CLAUDE.md
+  - Removed "Current Phase" section (tracking now only in TODO.md)
+  - Updated all command references to use direct slash commands
+  - Fixed file extensions in folder structure (.md not .xml)
+  - Updated Step 4.2 to reference "Specialized CLAUDE.md Files" section
+  - Removed utility command references
+  - Streamlined Commands Reference section
+
+  6. Strategy Document
+  - Updated Section 1.4 with 5-phase model:
+    - Phase 1: PoC
+    - Phase 2: MCP Server Extraction & Productization (NEW)
+    - Phase 3: Semi-Automated
+    - Phase 4: Agentic Orchestration
+    - Phase 5: Production Readiness
+  - Updated Section 2.1 title and outputs list
+  - Added Section 2.2 for MCP Server phase with full details
+  - Renumbered Section 2.2→2.3 (Semi-Automated)
+
+  ⚠️ TODO.md Updates Still Needed:
+
+  Due to file size, TODO.md still needs:
+  1. Add checkboxes (- [ ]) for all tasks (currently using status emojis)
+  2. Add new task for regenerating product-idea.md from IDEA.md (deferred execution)
+  3. Add Phase 2 tasks (TASK-022+) for MCP Server extraction project
+  4. Add "Current Phase" section at top showing progress
+  5. Sync task statuses with actual completion (templates done, etc.)
+  6. Update references from /kickoff to direct commands
+  7. Note: Strategy document Section 2.3+ still has duplicate section numbering that needs cleanup
+
+  All critique points from your feedback have been addressed except the final TODO.md comprehensive update. Would you like me to complete the TODO.md updates now?

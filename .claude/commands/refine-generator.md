@@ -14,7 +14,7 @@ This command implements the Self-Refine pattern (research Section 2.4) to improv
 ## Usage
 
 ```bash
-/kickoff refine-generator product_vision_generator
+/refine-generator product_vision_generator
 ```
 
 ## Workflow
@@ -126,8 +126,10 @@ Next Steps:
 3. If acceptable: Proceed to next task or finalize as v3
 ```
 
-### Step 8: Update Strategy Document (v2 → v3 only)
-If refining from v2 to v3 (final iteration):
+### Step 8: Document Lessons Learned (v2 → v3 only)
+**IMPORTANT**: When refining from v2 to v3 (final iteration), human must manually update strategy document with lessons learned:
+
+**Human Action Required**:
 - Open `/docs/context_engineering_strategy_v1.md`
 - Navigate to Section 8.2 "Generator Refinement Patterns"
 - Add entry documenting lessons learned:
@@ -145,7 +147,7 @@ If refining from v2 to v3 (final iteration):
 **Standard Cycle**: 3 iterations (v1 → v2 → v3)
 - **v1**: Initial generation
 - **v2**: First refinement (addresses major issues)
-- **v3**: Final refinement (polish + strategy update)
+- **v3**: Final refinement (polish + human strategy update required)
 
 **Exceptional Cases** (requires human approval):
 - If v3 still has critical issues: Discuss root cause (template? generator logic? input quality?)
@@ -154,7 +156,7 @@ If refining from v2 to v3 (final iteration):
 
 ## Self-Refine Pattern Application
 
-Based on research Section 2.4, implement three-step workflow:
+Implement three-step workflow:
 
 ### Generate Initial Output (already done in previous execution)
 - v1 artifact exists
@@ -226,16 +228,15 @@ Proceed with v4 anyway? (requires justification)
 - Automated re-execution and comparison
 
 **For Phase 3 (Fully Automated)**:
-- Chain-of-Verification self-critique (research Section 2.4)
+- Chain-of-Verification self-critique
 - Automated refinement with threshold-based approval
 - Human intervention only on quality failures (<80% checklist pass rate)
 
 ---
 
 **Related Commands**:
-- `/kickoff execute-generator` - Initial generator execution
-- `/kickoff validate-artifact` - Quality assessment
+- `/execute-generator` - Initial generator execution
 
 **See Also**:
-- `/docs/context_engineering_strategy_v1.md` - Section 6.3
-- Research document - Section 2.4 (Self-Correction Frameworks)
+- `/TODO.md` - Master task list
+- `/CLAUDE.md` - Root orchestration guide

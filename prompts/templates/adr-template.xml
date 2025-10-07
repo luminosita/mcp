@@ -91,17 +91,6 @@ What is the issue we're addressing?
     ]]>
   </structure>
 
-  <validation_checklist>
-    <criterion>Context clearly explains the problem and constraints</criterion>
-    <criterion>All decision drivers identified</criterion>
-    <criterion>At least 3 alternatives considered</criterion>
-    <criterion>Each alternative has pros, cons, cost, risk</criterion>
-    <criterion>Chosen option has clear rationale</criterion>
-    <criterion>Both positive and negative consequences documented</criterion>
-    <criterion>Implementation notes provide actionable guidance</criterion>
-    <criterion>Validation criteria defined</criterion>
-  </validation_checklist>
-
   <examples>
     <example source="Section 6.2 lines 872-880">
       # ADR-001: Use PostgreSQL for Primary Datastore

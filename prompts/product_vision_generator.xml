@@ -41,10 +41,10 @@
     </input_artifacts>
 
     <constraints>
-      <constraint>Product must be CLI-based (command-line interface)</constraint>
-      <constraint>Must support AI coding assistants (Claude Code, GitHub Copilot, etc.)</constraint>
-      <constraint>Open-source MIT license</constraint>
-      <constraint>Initial focus on JavaScript/TypeScript, Python, Go, Rust projects</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT]</constraint>
     </constraints>
   </task_context>
 
@@ -110,12 +110,13 @@
     </step>
 
     <step priority="8">
-      <action>Add competitive landscape analysis</action>
+      <action>Research competitive landscape and add analysis</action>
       <guidance>
-        - Research or infer 2-3 existing solutions in this space
+        - Research 2-3 existing solutions in this space
         - Identify their strengths and limitations
         - Clearly articulate differentiation
         - Be realistic about competitive advantages
+        - Infer potential product capabilities based on competitive analysis and gaps in the market
       </guidance>
     </step>
 
@@ -147,9 +148,9 @@
       <action>Create Epic Generator Prompt</action>
       <purpose>Generate the next-level prompt for decomposing vision into epics</purpose>
       <guidance>
-        - Follow generator prompt XML schema (see Section 5.1 of strategy document)
+        - Follow generator prompt XML schema template at /prompts/templates/generator-schema-template.xml
         - Epic generator should reference product vision as input
-        - Include instructions for epic decomposition logic
+        - Include instructions for epic decomposition logic and feature-specific research
         - Ensure epic generator produces both epic documents AND prd_generator.xml
       </guidance>
       <output_path>/prompts/epic_generator.xml</output_path>

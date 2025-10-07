@@ -27,16 +27,18 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 - Chain depth: SDLC-aligned (Vision > Epic > PRD > Story > ADR+Spec > Code > Test)
 
 ### 1.4 Progressive Automation Maturity
-- **Phase 1 (PoC)**: Human-triggered execution with manual approval gates
-- **Phase 2 (Target)**: Semi-automated with self-critique loops
-- **Phase 3 (Future)**: Fully automated orchestration with quality thresholds
+- **Phase 1 (PoC)**: Human-triggered execution with manual approval gates - Complete PoC demonstrating framework viability
+- **Phase 2 (MCP Server Extraction)**: Extract prompts/templates into standalone MCP Server repository for reusability across projects
+- **Phase 3 (Semi-Automated)**: Semi-automated with self-critique loops
+- **Phase 4 (Agentic Orchestration)**: Fully automated orchestration with quality thresholds
+- **Phase 5 (Production Readiness)**: Production-grade tooling and documentation
 
 ---
 
 ## 2. Workflow Phases
 
-### 2.1 Phase 1: Meta-Prompt Generation (This Session)
-**Objective**: Bootstrap the framework with foundational artifacts
+### 2.1 Phase 1: PoC - Meta-Prompt Generation & Validation
+**Objective**: Bootstrap the framework and validate through execution of Product Vision/Epic/PRD generators
 
 **Inputs**:
 - `/docs/advanced_prompt_engineering_software_docs_code_final.md` (research)
@@ -46,21 +48,58 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 - `/docs/context_engineering_strategy_v1.md` (this document)
 - `/TODO.md` (master task list with dependencies)
 - `/CLAUDE.md` (root orchestration guide)
-- `/.claude/commands/execute-generator.xml` (universal executor)
+- `/.claude/commands/execute-generator.md` (universal executor)
+- `/.claude/commands/refine-generator.md` (iteration orchestrator)
 - `/prompts/templates/*.xml` (extracted/generated templates)
+- `/prompts/templates/generator-schema-template.xml` (schema for all generators)
 - `/prompts/product_vision_generator.xml` (first exemplar)
 - `/docs/product-idea.md` (initial CLI tool concept stub)
+- Product Vision, Epic, and PRD artifacts (v1, v2, v3)
 
 **Validation Criteria**:
 - [ ] All templates extracted from research document (Section 6.1-6.4)
-- [ ] Master Plan contains enumerated tasks (TASK-001, TASK-002...)
+- [ ] Master Plan contains enumerated tasks (TASK-001 through TASK-014)
 - [ ] Each task has explicit validation criteria
 - [ ] Folder structure supports versioned outputs (v1, v2, v3)
+- [ ] At least 3 generator types completed through 3-iteration refinement cycles
+- [ ] Framework viability demonstrated
+
+**Phase 1 Completion**: Ends with TASK-014 (Backlog Story Generation)
 
 ---
 
-### 2.2 Phase 2: Generator Execution & Iteration
-**Objective**: Execute generator prompts with 3-iteration refinement cycle
+### 2.2 Phase 2: MCP Server Extraction & Productization
+**Objective**: Extract prompts and templates into standalone MCP Server for reusability
+
+**Activities**:
+1. Create new MCP Server project repository
+2. Clean up all prompts and templates from PoC-specific references
+3. Extract and relocate:
+   - All `/prompts/templates/*.xml` files
+   - Generator schema template
+   - Command documentation
+4. Implement MCP Server (Python/FastMCP or other framework - TBD)
+5. Document MCP Server usage patterns
+6. Test MCP Server integration with new project
+
+**Outputs**:
+- Standalone MCP Server repository
+- Clean, reusable prompts and templates
+- MCP Server integration documentation
+- Usage examples
+
+**Rationale**:
+- Current folder structure is optimized for PoC
+- Copy/paste approach for new projects creates maintenance burden
+- MCP Server enables framework reuse across multiple products
+- Centralizes prompt/template versioning and updates
+
+**Phase 2 Completion**: MCP Server operational and tested with new project
+
+---
+
+### 2.3 Phase 3: Semi-Automated Execution (Former Phase 2)
+**Objective**: Execute generator prompts with 3-iteration refinement cycle and automated self-critique
 
 **Execution Pattern** (per generator):
 ```

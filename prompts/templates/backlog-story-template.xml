@@ -84,22 +84,6 @@ As [role], I want [feature], so that [benefit].
     ]]>
   </structure>
 
-  <validation_checklist>
-    <criterion>User story follows "As-I want-So that" format</criterion>
-    <criterion>Description provides sufficient context</criterion>
-    <criterion>Related PRD section identifies parent PRD, high-level story, and functional requirements covered</criterion>
-    <criterion>Functional requirements listed (user-facing features and business logic)</criterion>
-    <criterion>Non-functional requirements defined (performance, security, scalability, reliability, accessibility, maintainability)</criterion>
-    <criterion>Technical requirements cover all implementation layers (frontend, backend, database)</criterion>
-    <criterion>At least 2 acceptance criteria defined</criterion>
-    <criterion>All acceptance criteria use Given-When-Then format</criterion>
-    <criterion>Acceptance criteria are testable and specific</criterion>
-    <criterion>Definition of done includes code review and testing</criterion>
-    <criterion>Story is independently deliverable</criterion>
-    <criterion>Story size is appropriate (can be completed in single sprint)</criterion>
-    <criterion>Traceability to parent PRD established</criterion>
-  </validation_checklist>
-
   <examples>
     <example source="Section 6.4 lines 1075-1077">
       As registered user, I want to be able to upload profile picture so that I can personalize my account.
