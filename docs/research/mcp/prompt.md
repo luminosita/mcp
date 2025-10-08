@@ -30,7 +30,7 @@ We want to implement MCP Server in Python with the following capabilities:
 
 - Do a research on proper documentation for MCP Server tools, prompts and resources
 
-- Do a research on existing Python framework best suited for the project
+- Do a research on existing Python framework best suited for the project (e.g., Pydantic AI, FastAPI)
 
 - Create a comprehensive report based on synthesized information
 
