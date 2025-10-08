@@ -125,24 +125,6 @@ Current: 105k tokens / 200k limit (52.5%)
 Recommendation: Split large templates or reduce input artifact size
 Proceed anyway? (y/n)
 ```
-
-## Implementation Notes
-
-**For Current PoC (Phase 1)**:
-- This command is defined in markdown for human manual execution
-- Human reads instructions and performs steps manually
-- Each step requires human judgment (e.g., file loading, validation)
-
-**For Phase 2 (Semi-Automated)**:
-- Convert to executable script (`.sh` or Claude Code slash command)
-- Automate file parsing, loading, validation
-- Human approval required only at checkpoints
-
-**For Phase 3 (Fully Automated)**:
-- Agentic execution: Reads TODO.md → spawns context → validates
-- Human approval only on threshold failures
-- Integrated with self-critique loops
-
 ---
 
 **Related Commands**:

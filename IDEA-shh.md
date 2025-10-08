@@ -1,0 +1,21 @@
+- Problem overview
+    - Our development team keeps secrets (API keys, passwords, client_id/secret) within plain text .env files
+    - We need a CLI tool to fetch secrets from secret repositories and provide the way to pass secrets to system process in a highly secured way
+    - There should be no secret leaks by putting secrets in plain-text files, tracing secrets within shell history, listing running system processes for parameters
+- Target users (high-level)
+    - Software engineers
+    - QA engineers
+    - DevOps
+- Key capabilities (draft)
+    - Multiple secret repositories
+    - Logging with redacted information (no secrets should show up in a log file)
+    - Configuration for source and path for secrets
+    - Mapping of retrieved secrets to custom export variable names (e.g., environment variables)
+    - CLI tool for shell execution
+    - Discovery of secret repository access info (local environment variables, local token stores)
+    - Production-ready tested tool
+- Initial constraints
+    - Inital scope is to encapsulate all AI agent artifacts within MCP Server
+- References
+    - Teller (https://github.com/tellerops/teller), great overview of required features 
+

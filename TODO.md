@@ -104,35 +104,18 @@ Create the first generator prompt that will produce Product Vision documents and
 **Priority**: Critical
 **Dependencies**: TASK-002
 **Estimated Time**: 60 minutes
-**Status**: ✅ Completed
+**Status**: ⏳ Pending
 
 **Description**:
-Apply all updates from feedback/context_engineering_strategy_v1_critique.md:
-- Remove validation checklists from templates
-- Add research instructions to generators
-- Create generator schema template
-- Update command files
-- Update CLAUDE.md
-- Update strategy document with phase reorganization
+Apply all updates from feedback/context_engineering_strategy_v3_critique.md
 
-**Success Criteria**:
-- [x] Validation checklists removed from all templates
-- [x] Research steps added to Product Vision generator
-- [x] Generator schema template created
-- [x] Command files updated (remove /kickoff, fix references)
-- [x] CLAUDE.md updated (remove Current Phase section, fix commands)
-- [x] Strategy document updated with 5-phase model including MCP Server phase
-
-**Output Artifacts**:
-- Updated templates (6 files) ✅
-- `/prompts/templates/generator-schema-template.xml` ✅
-- Updated command files ✅
-- Updated `/CLAUDE.md` ✅
-- Updated `/docs/context_engineering_strategy_v1.md` ✅
+**Context Requirements**:
+- All from TASK-004
+- `/feedback/context_engineering_strategy_v3_critique.md`
 
 ---
 
-## Phase 1: Generator Execution & Iteration
+## Phase 1.1: Generator Execution & Iteration
 
 ### TASK-004: Execute Product Vision Generator v1
 **Priority**: Critical
@@ -140,7 +123,6 @@ Apply all updates from feedback/context_engineering_strategy_v1_critique.md:
 **Estimated Time**: 20 minutes
 **Status**: ⏳ Pending
 **Context**: New session C1 required
-**Task Type**: product-vision
 
 **Description**:
 Execute Product Vision Generator in standalone context to produce first iteration of Product Vision document.
@@ -247,6 +229,7 @@ Second human review focusing on whether v1 critiques were addressed and identify
 **Dependencies**: TASK-007
 **Estimated Time**: 45 minutes
 **Status**: ⏳ Pending
+**Context**: Can reuse C1 or start new session
 
 **Description**:
 Apply final refinements, execute generator for v3, and **HUMAN manually updates** strategy document with lessons learned.
@@ -273,7 +256,7 @@ Apply final refinements, execute generator for v3, and **HUMAN manually updates*
 
 ---
 
-## Phase 1: Cascade to Epic Generation
+## Phase 1.2: Cascade to Epic Generation
 
 ### TASK-009: Execute Epic Generator v1
 **Priority**: Critical
@@ -281,7 +264,6 @@ Apply final refinements, execute generator for v3, and **HUMAN manually updates*
 **Estimated Time**: 30 minutes
 **Status**: ⏳ Pending
 **Context**: New session C2 required
-**Task Type**: epic
 
 **Description**:
 Execute Epic Generator in standalone context to decompose Product Vision into Epic documents.
@@ -291,7 +273,7 @@ Execute Epic Generator in standalone context to decompose Product Vision into Ep
 **Context Requirements**:
 - `/CLAUDE.md`
 - `/prompts/CLAUDE-epic.md` (lazy-generate if missing)
-- `/prompts/epic_generator.xml`
+- `/prompts/epic_generator.xml` 
 - `/prompts/templates/epic-template.xml`
 - `/artifacts/product_vision_v3.md`
 
@@ -359,7 +341,7 @@ Final critique and refinement cycle for Epic Generator, **HUMAN manually updates
 
 ---
 
-## Phase 1: PRD Generation
+## Phase 1.3: PRD Generation
 
 ### TASK-012: Execute PRD Generator v1 (Epic 001)
 **Priority**: Critical
@@ -367,7 +349,6 @@ Final critique and refinement cycle for Epic Generator, **HUMAN manually updates
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session C3 required
-**Task Type**: prd
 
 **Description**:
 Execute PRD Generator for first epic in standalone context.
@@ -407,8 +388,8 @@ Execute PRD Generator for first epic in standalone context.
 Complete 3-iteration refinement cycle for PRD, **HUMAN manually updates** strategy document with lessons.
 
 **Success Criteria**:
-- [ ] PRD v2 critique created and refinements applied
-- [ ] PRD v3 critique created and final refinements applied
+- [ ] PRD v1 critique created and refinements applied
+- [ ] PRD v2 critique created and final refinements applied
 - [ ] PRD v3 approved
 - [ ] Backlog story generator finalized
 - [ ] **HUMAN**: Strategy doc manually updated with PRD patterns
@@ -431,7 +412,6 @@ Complete 3-iteration refinement cycle for PRD, **HUMAN manually updates** strate
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session C4 required
-**Task Type**: backlog-story
 
 **Description**:
 Execute Backlog Story Generator for first high-level story from PRD.
@@ -479,6 +459,8 @@ Generate comprehensive Phase 1 completion report documenting framework viability
 - [ ] At least 5 patterns documented
 - [ ] Framework viability assessment complete
 - [ ] Recommendations for Phase 2 MCP Server project
+- [ ] All templates from final strategy document removed and replaced with extracted file references (e.g., prompts/templates/generator-schema-template.xml, prompts/templates/specialized-claude-template.md)
+- [ ] Section 6 of final strategy document Synced with TODO.md file
 - [ ] **HUMAN**: Final strategy document update with Phase 1 summary
 
 **Output Artifacts**:
@@ -489,187 +471,14 @@ Generate comprehensive Phase 1 completion report documenting framework viability
 
 ---
 
-## Phase 2: MCP Server Extraction & Productization
-
-### TASK-016: Plan MCP Server Architecture
-**Priority**: High
-**Dependencies**: TASK-015 (Phase 1 complete)
-**Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Design MCP Server architecture for hosting prompts and templates as reusable resources.
-
-**Success Criteria**:
-- [ ] MCP Server framework selected (Python/FastMCP or alternative - TBD)
-- [ ] Architecture document created
-- [ ] API/resource structure defined
-- [ ] Integration patterns documented
-- [ ] Migration plan from PoC to MCP Server defined
-
-**Output Artifacts**:
-- `/docs/mcp_server_architecture.md`
-- `/docs/mcp_server_migration_plan.md`
-
----
-
-### TASK-017: Create MCP Server Project Repository
-**Priority**: Critical
-**Dependencies**: TASK-016
-**Estimated Time**: 30 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Create new repository for MCP Server project following context engineering strategy.
-
-**Success Criteria**:
-- [ ] New repository created
-- [ ] Initial project structure set up
-- [ ] README with project overview
-- [ ] CLAUDE.md for MCP Server project created
-- [ ] TODO.md for MCP Server development created
-
-**Output Artifacts**:
-- New repository: `context-engineering-mcp-server/`
-- Repository structure following strategy
-
-**Note**: This task creates a new product that will be developed using the same context engineering framework (meta!)
-
----
-
-### TASK-018: Extract and Clean Prompts/Templates
-**Priority**: Critical
-**Dependencies**: TASK-017
-**Estimated Time**: 60 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Extract all prompts and templates from PoC, remove PoC-specific references, generalize for reuse.
-
-**Success Criteria**:
-- [ ] All templates extracted and cleaned
-- [ ] Generator schema template extracted
-- [ ] All PoC-specific references removed
-- [ ] Generic [CUSTOMIZE PER PRODUCT] placeholders added where needed
-- [ ] Documentation updated
-- [ ] Templates validated for XML correctness
-
-**Output Artifacts**:
-- Clean templates in MCP Server repository
-- Migration log documenting changes
-
----
-
-### TASK-019: Implement MCP Server
-**Priority**: Critical
-**Dependencies**: TASK-018
-**Estimated Time**: TBD (requires product vision/epic/PRD from MCP Server project)
-**Status**: ⏳ Pending
-
-**Description**:
-Implement MCP Server following architecture. Use context engineering framework to generate product vision, epics, PRDs, and implementation specs for the MCP Server itself.
-
-**Success Criteria**:
-- [ ] MCP Server product vision created (using framework!)
-- [ ] Epics defined
-- [ ] PRDs created
-- [ ] Implementation complete
-- [ ] Tests passing
-- [ ] Documentation complete
-
-**Output Artifacts**:
-- Functional MCP Server
-- MCP Server project artifacts (vision, epics, PRDs, code, tests)
-
-**Note**: Time estimate TBD - depends on scope defined during vision/epic phases
-
----
-
-### TASK-020: Test MCP Server with New Project
-**Priority**: Critical
-**Dependencies**: TASK-019
-**Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Validate MCP Server by creating a new test project that uses prompts/templates from the MCP Server.
-
-**Success Criteria**:
-- [ ] Test project created
-- [ ] MCP Server integration successful
-- [ ] Prompts/templates loaded from MCP Server
-- [ ] Product vision generated using MCP-served resources
-- [ ] No PoC-specific coupling detected
-- [ ] Integration documented
-
-**Output Artifacts**:
-- Test project demonstrating MCP Server usage
-- Integration guide
-- Lessons learned document
-
-**Phase 2 Completion Gate**: After this task, Phase 2 (MCP Server) is complete
-
----
-
-## Phase 3: Semi-Automated Execution (Future)
-
-### TASK-021: Implement Automated Self-Critique
-**Priority**: Medium
-**Dependencies**: TASK-020 (Phase 2 complete)
-**Estimated Time**: 60 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Implement Chain-of-Verification pattern for automated artifact critique.
-
-**Success Criteria**:
-- [ ] Critique agent prompt created
-- [ ] Auto-generates structured feedback
-- [ ] Integrates with refine-generator command
-- [ ] Human approval at 80% threshold
-- [ ] Documented in strategy
-
-**Output Artifacts**:
-- Critique agent implementation
-- Updated refine-generator command
-- Strategy document update
-
----
-
-### TASK-022: Implement Script-Assisted Execution
-**Priority**: Medium
-**Dependencies**: TASK-021
-**Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Create automation scripts for generator execution from TODO.md.
-
-**Success Criteria**:
-- [ ] Script parses TODO.md
-- [ ] Loads correct generator + context for task ID
-- [ ] Handles versioning (v1, v2, v3)
-- [ ] Provides human approval checkpoints
-- [ ] Documented in strategy
-
-**Output Artifacts**:
-- Execution automation scripts
-- Strategy document update
-
-**Phase 3 Completion Gate**: After this task, semi-automation is complete
-
----
-
 ## Summary Statistics
 
-**Total Tasks**: 22
-**Completed**: 3 (14%)
-**Pending**: 19 (86%)
+**Total Tasks**: 15
+**Completed**: 2 (14%)
+**Pending**: 13 (86%)
 
 **By Phase**:
-- **Phase 1 (PoC)**: 15 tasks, 3 completed, 12 pending
-- **Phase 2 (MCP Server)**: 5 tasks, 0 completed, 5 pending
-- **Phase 3 (Semi-Automated)**: 2 tasks, 0 completed, 2 pending
+- **Phase 1 (PoC)**: 15 tasks, 2 completed, 13 pending
 
 **By Priority**:
 - **Critical**: 14 tasks

@@ -1,4 +1,4 @@
-# Context Engineering Strategy Document v1.0
+# Context Engineering Strategy Document v1.1
 
 ## Executive Summary
 
@@ -29,19 +29,19 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 ### 1.4 Progressive Automation Maturity
 - **Phase 1 (PoC)**: Human-triggered execution with manual approval gates - Complete PoC demonstrating framework viability
 - **Phase 2 (MCP Server Extraction)**: Extract prompts/templates into standalone MCP Server repository for reusability across projects
-- **Phase 3 (Semi-Automated)**: Semi-automated with self-critique loops
-- **Phase 4 (Agentic Orchestration)**: Fully automated orchestration with quality thresholds
+- **Phase 3 (Semi-Automated)**: Semi-automated coding AI agent with self-critique loops
+- **Phase 4 (Agentic Orchestration)**: Fully automated AI agent orchestration with quality thresholds (coding, unit tests, deployment)
 - **Phase 5 (Production Readiness)**: Production-grade tooling and documentation
 
 ---
 
 ## 2. Workflow Phases
 
-### 2.1 Phase 1: PoC - Meta-Prompt Generation & Validation
-**Objective**: Bootstrap the framework and validate through execution of Product Vision/Epic/PRD generators
+### 2.1 Phase 1: PoC - Bootstrap and Execution Cascade
+**Objective**: Bootstrap the framework and validate through the execution of the full generator cascade from Product Vision through Backlog Stories.
 
 **Inputs**:
-- `/docs/advanced_prompt_engineering_software_docs_code_final.md` (research)
+- `/docs/research/advanced_prompt_engineering_software_docs_code_final.md` (research)
 - User responses to clarification questions
 
 **Outputs**:
@@ -52,19 +52,19 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 - `/.claude/commands/refine-generator.md` (iteration orchestrator)
 - `/prompts/templates/*.xml` (extracted/generated templates)
 - `/prompts/templates/generator-schema-template.xml` (schema for all generators)
-- `/prompts/product_vision_generator.xml` (first exemplar)
+- `/prompts/*_generator.xml` (generator prompts)
 - `/docs/product-idea.md` (initial CLI tool concept stub)
 - Product Vision, Epic, and PRD artifacts (v1, v2, v3)
 
 **Validation Criteria**:
 - [ ] All templates extracted from research document (Section 6.1-6.4)
-- [ ] Master Plan contains enumerated tasks (TASK-001 through TASK-014)
+- [ ] Master Plan contains enumerated tasks (TASK-001 through TASK-015)
 - [ ] Each task has explicit validation criteria
 - [ ] Folder structure supports versioned outputs (v1, v2, v3)
 - [ ] At least 3 generator types completed through 3-iteration refinement cycles
 - [ ] Framework viability demonstrated
 
-**Phase 1 Completion**: Ends with TASK-014 (Backlog Story Generation)
+**Phase 1 Completion**: Ends with TASK-015 (Backlog Story Generation)
 
 ---
 
@@ -98,118 +98,6 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 
 ---
 
-### 2.3 Phase 3: Semi-Automated Execution (Former Phase 2)
-**Objective**: Execute generator prompts with 3-iteration refinement cycle and automated self-critique
-
-**Execution Pattern** (per generator):
-```
-Iteration 1: Execute generator > Generate artifact v1
-|
-Human Review: Approve/critique artifact v1
-|
-Iteration 2: Refine generator based on feedback > Generate artifact v2
-|
-Human Review: Approve/critique artifact v2
-|
-Iteration 3: Apply learnings > Update Strategy Doc > Generate artifact v3
-|
-Human Approval: Accept final version
-```
-
-**Context Setup** (example for Product Vision Generator):
-```
-New Claude Code Session C1
-├── /CLAUDE.md (root)
-├── /prompts/CLAUDE-product-vision.md (specialized, lazy-generated)
-├── /prompts/product_vision_generator.xml
-├── /prompts/templates/product-vision-template.xml
-└── /docs/product-idea.md
-```
-
-**Outputs** (from C1):
-```
-/artifacts/product_vision_v1.md (Iteration 1)
-/artifacts/product_vision_v2.md (Iteration 2)
-/artifacts/product_vision_v3.md (Iteration 3 - final)
-/prompts/epic_generator.xml (next-level generator)
-```
-
-**Validation Criteria** (Product Vision example):
-- [ ] Contains all 8 required sections (from template)
-- [ ] Problem statement includes quantified pain points
-- [ ] Success metrics are SMART-compliant
-- [ ] Target users clearly defined
-- [ ] Epic generator prompt is syntactically valid XML
-- [ ] Flesch readability score >60 (manual assessment in Phase 1)
-
----
-
-### 2.3 Phase 3: Cascade Execution
-**Objective**: Propagate through SDLC phases using generated prompts
-
-**Dependency Chain**:
-```
-C1: product_vision_generator.xml
-    ├── Reads: product-idea.md
-    ├── Outputs: product_vision_v3.md + epic_generator.xml
-
-C2: epic_generator.xml
-    ├── Reads: product_vision_v3.md (file system lookup)
-    ├── Outputs: /artifacts/epics/epic_001.md ... epic_00N.md + prd_generator.xml
-
-C3: prd_generator.xml
-    ├── Reads: epic_001.md (specified via argument)
-    ├── Outputs: /artifacts/prds/prd_001/prd_v3.md + /artifacts/prds/prd_001/TODO.md + backlog_story_generator.xml
-
-C4: backlog_story_generator.xml
-    ├── Reads: /artifacts/prds/prd_001/prd_v3.md + /artifacts/prds/prd_001/TODO.md
-    ├── Outputs: /artifacts/backlog_stories/US-XX-YY_feature/backlog_story_v3.md +
-    │            /artifacts/backlog_stories/US-XX-YY_feature/TODO.md + adr_generator.xml
-
-[Continue cascade...]
-```
-
-#### 2.3.4 Phase 4: Backlog Story Generation
-**Objective**: Transform high-level user stories from PRD into detailed, implementation-ready backlog stories
-
-**Execution Pattern**:
-- Input: PRD with high-level user stories (tracked in PRD/TODO.md)
-- Generator processes multiple stories (can split 1 high-level > N backlog stories)
-- Output: Backlog story subfolder per detailed story
-
-**Context Setup**:
-- /CLAUDE.md + /prompts/CLAUDE-backlog-story.md
-- /prompts/backlog_story_generator.xml
-- /prompts/templates/backlog-story-template.xml
-- /artifacts/prds/prd_XXX/prd_v3.md
-
-**Outputs**:
-- /artifacts/backlog_stories/US-XX-YY_feature/backlog_story_v3.md
-- /artifacts/backlog_stories/US-XX-YY_feature/TODO.md
-- /prompts/adr_generator.xml
-
-**File Routing Convention**:
-```
-/artifacts/
-├── product_vision_v{iteration}.md
-├── epics/
-│   ├── epic_{id}_v{iteration}.md
-│   └── ...
-├── prds/
-│   ├── prd_{id}/
-│   │   ├── prd_v{iteration}.md
-│   │   └── TODO.md
-│   └── ...
-├── backlog_stories/
-│   ├── US-{prd_id}-{story_id}_{feature_name}/
-│   │   ├── backlog_story_v{iteration}.md
-│   │   └── TODO.md
-│   └── ...
-└── [specs/code/tests follow similar pattern]
-```
-
----
-
 ## 3. Folder Structure Standard
 
 ```
@@ -220,7 +108,8 @@ C4: backlog_story_generator.xml
 │       └── refine-generator.md        # Iteration orchestrator
 │
 ├── docs/
-│   ├── advanced_prompt_engineering_software_docs_code_final.md  # Research (immutable)
+│   └── research/                                                     # research papers
+│       └── advanced_prompt_engineering_software_docs_code_final.md   # Research (immutable)
 │   ├── context_engineering_strategy_v1.md # This document
 │   └── product-idea.md                 # CLI tool initial concept
 │
@@ -282,7 +171,7 @@ C4: backlog_story_generator.xml
 
 ### 4.1 Root CLAUDE.md (`/CLAUDE.md`)
 
-**Purpose**: Project-wide context and navigation guide
+**Purpose**: Project-wide context and navigation guide for the AI agent.
 
 **Contents**:
 ```markdown
@@ -310,19 +199,15 @@ To execute a generator:
 - All documents: Flesch readability >60
 - Code: 80% test coverage, zero critical security issues
 - Prompts: Valid XML, include validation checklists
+````
 
-## Current Phase
-[Updated by each generator execution]
-Phase: {Vision|Epic|PRD|Story|Spec|Code|Test}
-Last completed: {artifact name}
-Next generator: {path to next .xml}
-```
+*(Note: The "Current Phase" section was removed to simplify the root context file)*.
 
 ---
 
 ### 4.2 Specialized CLAUDE.md (`/prompts/CLAUDE-{task}.md`)
 
-**Purpose**: Task-specific guidance and context
+**Purpose**: Task-specific guidance and context, providing domain expertise for a specific SDLC phase.
 
 **Lifecycle**: Lazy-generated on first execution
 - Execute-generator checks if `/prompts/CLAUDE-{task}.md` exists
@@ -414,7 +299,7 @@ All generator prompts follow this XML schema:
     <step priority="5">
       Validate outputs against checklist
     </step>
-  </instructions>
+    </instructions>
 
   <output_format>
     <terminal_artifact>
@@ -514,13 +399,13 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 
 ---
 
-### 6.2 Phase 2: First Generator Execution (Context C1)
+### 6.2 First Generator Execution (Context C1)
 
-**Task**: TASK-001 - Execute Product Vision Generator
+**Task**: TASK-004 - Execute Product Vision Generator
 
 **Human Actions**:
 1. Start new Claude Code session
-2. Run: `/execute-generator TASK-001`
+2. Run: `/execute-generator TASK-004`
 3. System prompts if `/prompts/CLAUDE-product-vision.md` missing
 4. Confirm generation of specialized CLAUDE.md
 5. Review `/artifacts/product_vision_v1.md`
@@ -530,7 +415,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 9. Approve final version
 
 **AI Actions** (execute-generator.xml):
-1. Parse TASK-001 from `/TODO.md`
+1. Parse TASK-004 from `/TODO.md`
 2. Check for `/prompts/CLAUDE-product-vision.md`
    - If missing: Generate from template (with human approval)
 3. Load context:
@@ -548,7 +433,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 
 ---
 
-### 6.3 Phase 3: Iteration & Refinement
+### 6.3 Iteration & Refinement
 
 **Iteration 1 > 2**:
 1. Human reviews v1 artifact
@@ -584,9 +469,9 @@ Human checklist:
 
 ---
 
-### 6.4 Phase 4: Cascade to Next SDLC Phase
+### 6.4 Cascade to Next SDLC Phase
 
-**Task**: TASK-002 - Execute Epic Generator
+**Task**: `TASK-009 - Execute Epic Generator v1
 
 **Human Actions**:
 1. Start new Claude Code session (C2)
@@ -613,7 +498,7 @@ Human checklist:
 
 ---
 
-### 6.5 Phase 5: Backlog Story Generation (Context C4)
+### 6.5 Backlog Story Generation (Context C4)
 
 **Task**: TASK-014 - Execute Backlog Story Generator
 
@@ -713,7 +598,7 @@ ELSE prompt human for review
 - **Iteration**: Manual critique files + human approval
 - **Quality Gates**: Checklist-based, subjective assessment
 
-### 9.2 Target State (Phase 2)
+### 9.3 Target State (Phase 3)
 **Graduation Criteria**:
 - [ ] Complete 1 full SDLC cascade (Vision > Test)
 - [ ] Validate 3-iteration refinement on >= 3 different generators
@@ -730,7 +615,7 @@ ELSE prompt human for review
   - Automated Flesch scoring via readability API
   - Structured validation output (JSON checklist)
 
-### 9.3 Future State (Phase 3)
+### 9.4 Future State (Phase 4)
 **Vision**: Fully autonomous SDLC orchestration
 
 **Capabilities**:
@@ -782,19 +667,6 @@ ELSE prompt human for review
 - **Cascade**: SDLC progression through generated prompts (Vision>Epic>PRD...)
 - **High-Level User Story**: Conceptual story in PRD, references functional requirements
 - **Backlog User Story**: Detailed, implementation-ready story with non-functional requirements, technical requirements, and tasks
-
----
-
-## Appendix B: Task Graduation Checklist
-
-Track automation maturity per task type:
-
-| Task Type | Phase 1 (Manual) | Phase 2 (Semi-Auto) | Phase 3 (Full-Auto) |
-|-----------|------------------|---------------------|---------------------|
-| Execution Trigger | [ ] Human runs command | [ ] Script-assisted | [ ] Agentic spawn |
-| Iteration Trigger | [ ] Manual critique | [ ] Self-critique + approval | [ ] Threshold-based |
-| Quality Assessment | [ ] Subjective checklist | [ ] Quantitative metrics | [ ] ML prediction |
-| Context Assembly | [ ] Manual file lookup | [ ] Convention-based load | [ ] Dependency graph |
 
 ---
 

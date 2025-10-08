@@ -93,7 +93,7 @@ Update generator XML:
 - Existing validations (don't remove, only add)
 
 ### Step 6: Re-Execute Generator
-Run the refined generator (same as execute-generator command):
+Run the refined generator (/execute-generator command):
 1. Load updated generator + all required context
 2. Execute generation
 3. Save new version artifact: `{artifact}_v{N+1}.md`
@@ -213,24 +213,6 @@ If quality issues remain, consider:
 
 Proceed with v4 anyway? (requires justification)
 ```
-
-## Implementation Notes
-
-**For Current PoC (Phase 1)**:
-- Human performs all steps manually following this guide
-- Judgment required for refinement plan approval
-- Human writes updated generator XML
-
-**For Phase 2 (Semi-Automated)**:
-- Automated critique parsing
-- AI-generated refinement plan
-- Human approves plan before application
-- Automated re-execution and comparison
-
-**For Phase 3 (Fully Automated)**:
-- Chain-of-Verification self-critique
-- Automated refinement with threshold-based approval
-- Human intervention only on quality failures (<80% checklist pass rate)
 
 ---
 

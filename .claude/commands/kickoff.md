@@ -91,7 +91,7 @@ You are a senior AI prompt engineering specialist with expertise in:
 
 <input_data>
     <primary_document>
-        <path>@docs/advanced_prompt_engineering_software_docs_code_final.md</path>
+        <path>@docs/research/advanced_prompt_engineering_software_docs_code_final.md</path>
         <description>Research findings on Context Engineering paradigm</description>
         <required_sections>
             - Context Engineering best practices
@@ -161,7 +161,7 @@ You are a senior AI prompt engineering specialist with expertise in:
 
 <instructions>
     <instruction priority="1">
-        Parse @docs/advanced_prompt_engineering_software_docs_code_final.md
+        Parse @docs/research/advanced_prompt_engineering_software_docs_code_final.md
         Extract all Context Engineering topics (ignore RAG sections)
     </instruction>
 

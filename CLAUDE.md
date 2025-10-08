@@ -22,13 +22,14 @@ Prompts generate prompts in a self-propagating chain:
 /
    .claude/
       commands/
-          execute-generator.md       # Universal executor
-          refine-generator.md        # Iteration orchestrator
+         execute-generator.md       # Universal executor
+         refine-generator.md        # Iteration orchestrator
 
    docs/
-      advanced_prompt_engineering_software_docs_code_final.md  # Research (immutable)
-      context_engineering_strategy_v1.md  # Comprehensive methodology
-      product-idea.md                     # CLI tool initial concept
+      research/                                                   # research papers
+         advanced_prompt_engineering_software_docs_code_final.md  # Research (immutable)
+      context_engineering_strategy_v1.md                          # Comprehensive methodology
+      product-idea.md                                             # CLI tool initial concept
 
    prompts/
       CLAUDE-{task}.md                    # Specialized contexts (lazy-generated)
@@ -214,7 +215,7 @@ Task-specific context files that provide:
 **Note**: These references are for documentation purposes only. Do NOT load these documents into context during generator execution.
 
 This framework is based on:
-- **Document**: `/docs/advanced_prompt_engineering_software_docs_code_final.md`
+- **Document**: `/docs/research/advanced_prompt_engineering_software_docs_code_final.md`
 - **Section 1.1**: Anatomy of Effective Prompt (lines 49-92)
 - **Section 2.4**: Self-Refine Pattern (lines 176-184)
 - **Section 5.1**: Claude Optimization (lines 456-465)

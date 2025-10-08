@@ -1,5 +1,0 @@
-- feedback/context_engineering_strategy_v1_critique_v3.md
-- feedback/context_engineering_strategy_v1_critique_v4.md
-- review all documents from the beginning
-- items in paper notebook (handwritten)
-- verify that all requests from CHAT.md are applied

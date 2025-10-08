@@ -1,16 +1,14 @@
 - Problem overview
+    - Our current AI-assistance framework for software product documentation and implementation relies on AI agent artifacts (commands, prompts and templates) as local files residing in the same repository as software artifacts
+    - By using our AI-assistance framework for creation of new products we are forced to keep local version of AI agent artifacts per product repository. Huge maintenance problem. 
+    - We want a single repository for all AI agent artifacts with proper versioning and documentation
 - Target users (high-level)
+    - Product managers creating software product documentation utilizing assistance of AI agents
+    - Software engineers creating software artifacts utilizing assistance of AI agents
 - Key capabilities (draft)
+    - AI Agent should access commands, prompts and templates as MCP Server resources and prompts
+    - AI Agent should prime AI context with RAG queries accessable as MCP Server tool
 - Initial constraints
-- Open questions
+    - Inital scope is to encapsulate all AI agent artifacts within MCP Server
 
-universal secret manager for developers
 
-https://github.com/tellerops/teller
-Secret Repositories
-Discovery
-Configuration
-Logging
-CLI
-Unit testing
-Exports (research Teller)
