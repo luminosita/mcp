@@ -22,6 +22,7 @@
 - `docs/research/research_coverage_evaluation.md`
 - verify that all requests from CHAT.md are applied (or create AI report)
 - review all documents from the beginning
+- analyze all `portal` documents
 
 ## Finalization
 - remove CLAUDE-*.md lazy generation instructions, keep if exists verification
