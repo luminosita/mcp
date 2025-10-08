@@ -2,6 +2,7 @@
 ## Next Steps
 - feedback/context_engineering_strategy_v1_critique_v3.md
 - rewrite TASK_003 based on critique_v3 file before execution
+- verify Claude context is in the task report
 
 ## Open Questions
 ### PRD Generator
@@ -25,8 +26,9 @@
 - analyze all `portal` documents
 
 ## Finalization
-- remove CLAUDE-*.md lazy generation instructions, keep if exists verification
-- remove next_generator instructions, keep only reference to next_generator to be invoked
+- remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification
+- remove next_generator instructions, keep only reference to next_generator to be invoked in the report
+- strategy doc update
 - GRADUATION.md review
 
 ## Next Phases

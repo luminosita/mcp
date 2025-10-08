@@ -84,6 +84,9 @@ Validation Status:
 ✅ Traceability: 3 references to product-idea.md
 ✅ Next generator: Valid XML
 
+AI Context Report:
+[RUN `/context` COMMAND AND PASTE OUTPUT HERE] 
+
 Action Required:
 1. Review artifact at /artifacts/product_vision_v1.md
 2. Create critique file: /feedback/product_vision_v1_critique.md
