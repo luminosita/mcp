@@ -2,13 +2,20 @@
 
 **Author:** Gemini, Senior Software Engineer
 **Date:** October 8, 2025
-**Version:** 1.0
+**Version:** 1.1
+
+**Changelog v1.1:**
+* Added research on the "Pydantic AI" pattern for structured LLM output.
+* Recommended `instructor` as a key library for the AI Agent's client-side logic.
+* Included new implementation examples and architectural considerations for robust agent-to-server communication.
 
 ## 1. Executive Summary
 
 This report outlines the research, architecture, and implementation plan for creating a **Multi-purpose Command and Prompting (MCP) Server** in Python. The MCP Server will act as a centralized hub, providing AI agents with standardized tools, versioned prompts, and access to organizational resources like backlogs and code repositories.
 
 The core of this proposal is a modular architecture built on **FastAPI**, leveraging a powerful **Retrieval-Augmented Generation (RAG)** backend for context-aware operations. We recommend **Weaviate** or **PostgreSQL with `pgvector`** for production RAG backends due to their scalability and feature sets, with **ChromaDB** for local development. This approach will enable our AI agents to perform complex, context-aware tasks such as project initialization, CI/CD pipeline generation, and backlog management, all governed by the MCP Server.
+
+Crucially, this report now also recommends a specific pattern for the **AI Agent's client-side implementation**. The agent's logic should leverage structured output generation (via libraries like **`instructor`**) to ensure reliable, schema-compliant communication with the server's tools, drastically reducing errors and improving overall system robustness.
 
 ---
 
@@ -29,11 +36,10 @@ The MCP Server is an API-driven service designed to be the "brain" and "toolbelt
 
 ## 3. Proposed Architecture & Technology Stack
 
-We propose a modular, service-oriented architecture that is easy to develop, test, and deploy. The core of the server will be a FastAPI application.
+We propose a modular, service-oriented architecture. The core of the server is a FastAPI application, while the AI Agent client is empowered by a structured output library.
 
-![A diagram of the MCP Server Architecture. A central FastAPI application has modules for Tool Execution, Resource Management, RAG Connector, and Backlog Connector. It communicates with external services like a Git Server, JIRA, and a Vector Database. An AI Agent interacts with the FastAPI application via a REST API.](https://i.imgur.com/rN9kH3E.png)
 
-### 3.1. Technology Stack
+### 3.1. MCP Server Technology
 
 * **API Framework:** **FastAPI**. It's chosen for its high performance, native `async` support, Pydantic-based data validation, and automatic generation of OpenAPI (Swagger) documentation. This self-documentation is critical, as it allows agents (and developers) to discover and understand how to use the available tools.
 * **RAG Backend (Vector Database):**
@@ -43,6 +49,10 @@ We propose a modular, service-oriented architecture that is easy to develop, tes
         * **`pgvector`** is a great choice if your team already has strong PostgreSQL expertise, as it keeps the tech stack smaller.
 * **Data Parsing/Handling:** **Pydantic** for modeling all API requests and responses. Libraries like `LangChain` or `LlamaIndex` can be used to handle the document chunking, embedding, and indexing pipeline for the RAG backend.
 * **Deployment:** **Docker** for containerization and **Kubernetes** for orchestration.
+### 3.2. AI Agent Client-Side Technology (New Recommendation)
+
+* **Structured Output Generation:** **`instructor`**. This library patches the OpenAI client to force LLM outputs into a specified Pydantic model. This is not part of the server, but is the recommended way for the agent to interact with the server.
+* **Why `instructor`?** It solves the problem of LLM unreliability. Instead of prompting an LLM to "generate JSON in the right format," this pattern guarantees the output conforms to the Pydantic model required by the server's API, including validation and automated retries on failure.
 
 ---
 
@@ -93,7 +103,7 @@ def read_root():
     return {"message": "MCP Server is operational."}
 ```
 
-### 4.2. Documenting and Serving Resources (Prompts)
+### 4.2. Server: Documenting and Serving Resources (Prompts)
 
 Resources like prompts should be versioned and accessible via the API. Storing them in a structured format (e.g., YAML or JSON files) in your repository is a good practice.
 
@@ -141,7 +151,7 @@ template: |
   5. Initialize a Git repository and create an initial commit with the message "feat: initial project structure".
 ```
 
-### 4.3. Implementing Tools for the AI Agent
+### 4.3. Server: Implementing Tools for the AI Agent
 
 Tools are simply API endpoints that perform a specific action. The descriptions in the docstrings and Pydantic models are crucial, as they will appear in the OpenAPI spec that the agent consumes.
 
@@ -159,6 +169,7 @@ async def rag_query_tool(query: RAGQuery):
     prime the AI's context before generating a response.
     """
     try:
+        # The query object is a validated Pydantic instance
         results = await rag_service.search(query.query_text, top_k=query.top_k)
         return results
     except Exception as e:
@@ -211,6 +222,59 @@ async def get_project_backlog_tool(project_key: str):
         return tasks
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+```
+
+### 4.4. Agent-Side: Calling Tools with `instructor` (New Section)
+
+This code demonstrates the **recommended pattern for the AI agent's client logic**. It uses `instructor` to reliably generate a valid `RAGQuery` object and then calls the server endpoint.
+
+```python
+# In the agent's client-side code (NOT on the server)
+import instructor
+import openai
+import requests
+from pydantic import BaseModel
+
+# 1. Define the Pydantic model, mirroring the server's API.
+#    In a real application, this could even be auto-generated from the
+#    server's OpenAPI spec.
+class RAGQuery(BaseModel):
+    query_text: str
+    top_k: int = 5
+
+# 2. Patch the OpenAI client with instructor
+client = instructor.patch(openai.OpenAI())
+
+def call_rag_tool_safely(user_prompt: str) -> dict:
+    """
+    Uses an LLM to reliably generate a valid RAGQuery object and then
+    calls the MCP Server's tool endpoint.
+    """
+    print(f"Agent is thinking about the prompt: '{user_prompt}'")
+    
+    # 3. Let the LLM generate the structured request object.
+    #    `instructor` ensures the output matches the `RAGQuery` model.
+    rag_request = client.chat.completions.create(
+        model="gpt-4-turbo",
+        response_model=RAGQuery, # The magic happens here
+        messages=[{"role": "user", "content": f"Based on the user's request, formulate a search query: '{user_prompt}'"}]
+    )
+
+    print(f"--> Generated valid request object: {rag_request.model_dump_json(indent=2)}")
+
+    # 4. Call the MCP Server API with the guaranteed-valid data
+    response = requests.post(
+        "http://localhost:8000/tools/rag-query", # Assume local server
+        json=rag_request.model_dump()
+    )
+    response.raise_for_status() # Raise an exception for bad status codes
+    return response.json()
+
+# --- Example Usage in the Agent's main loop ---
+user_input = "Find documents about our Kubernetes deployment guidelines"
+results = call_rag_tool_safely(user_input)
+print(f"--> Received results from MCP Server: {results}")
+
 ```
 
 ---
@@ -319,7 +383,7 @@ To achieve high availability:
 
 ## 6. Capabilities of a RAG-based MCP Server
 
-A mature MCP Server should have the following features:
+A mature MCP Server, combined with a capable agent client, should have the following features:
 
 * **Resource Management:**
     * [x] Versioned access to prompts and templates.
@@ -353,6 +417,10 @@ A mature MCP Server should have the following features:
     * **Mitigation:** Implement strict authentication and authorization. Tools should follow the **principle of least privilege**. Never expose destructive or overly broad tools without a human-in-the-loop confirmation step.
 * **Pitfall: Lack of Versioning.** Changing a prompt or tool signature breaks agents that depend on it.
     * **Mitigation:** Use API versioning (e.g., `/v1/tools/rag-query`). Keep prompts versioned in their resource files.
+* **Pitfall: Poor Tool Invocation.** The agent misinterprets how to call a tool, leading to API errors.
+    * **Mitigation (Updated):** This is a two-part solution.
+        1. **Server-Side:** Use FastAPI's auto-documentation to provide a clear, machine-readable OpenAPI schema.
+        2. **Client-Side:** The AI Agent client **must** use a library like `instructor` to consume this schema and generate validated, structured requests. This shifts the burden from the LLM "understanding" documentation to programmatically conforming to a data structure, which is far more reliable.
 
 ### 7.2. RAG-based Tool Implementation
 
@@ -364,3 +432,5 @@ A mature MCP Server should have the following features:
     * **Mitigation:** Implement a process for periodically re-indexing or updating documents. The `rag-add` tool is part of this solution, but automated crawlers or webhooks can also trigger updates.
 * **Pitfall: Ineffective Retrieval.** The agent gets irrelevant results.
     * **Mitigation:** Use a **hybrid search** approach that combines semantic (vector) search with traditional keyword search. This often yields the best of both worlds. Weaviate supports this out of the box.
+* **Pitfall: Stale Information.** The knowledge base becomes outdated.
+    * **Mitigation:** Implement a process for periodically re-indexing documents, triggered via webhooks or scheduled jobs.
