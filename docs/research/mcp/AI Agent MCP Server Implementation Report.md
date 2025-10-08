@@ -18,7 +18,7 @@ A modular, scalable architecture is proposed, centered around a FastAPI web serv
 
 * **The AI Agent Host:** The application where the AI agent's reasoning loop executes. This could be a custom application, an Integrated Development Environment (IDE) extension, or a platform like GitHub Copilot Agent Mode.[^2] It contains an MCP Client component responsible for discovering and communicating with our server.  
 * **The MCP Server Core:** A Python application built with FastAPI and Pydantic. It handles MCP communication over a Streamable HTTP transport, authenticates requests, and routes them to the appropriate tool implementations. This core is the central nervous system of the entire operation.  
-* **The Developer Toolkit:** A collection of Python modules, each implementing a specific capability (e.g., Git operations, JIRA integration, CI/CD manifest generation). These capabilities are exposed as standardized MCP Tool primitives, defined with Pydantic schemas for type-safe, validated inputs and outputs.  
+* **The Developer Toolkit:** A collection of Python modules, each implementing a specific capability (e.g., JIRA integration, CI/CD manifest generation). These capabilities are exposed as standardized MCP Tool primitives, defined with Pydantic schemas for type-safe, validated inputs and outputs.  
 * **The RAG Subsystem:** A specialized component comprising a data ingestion pipeline, a vector database for storing document embeddings, and a query interface. This subsystem is exposed as a single, powerful rag_query tool to the agent, providing it with access to a dynamic knowledge base.
 
 ### **1.4. Architectural Diagram**
@@ -27,11 +27,11 @@ The proposed architecture facilitates a clear and secure flow of information, se
 
 The primary operational flow is as follows:
 
-1. A user submits a high-level request (e.g., "Review the current backlog for project 'X' and set up a new repository for the highest priority feature") to the AI Agent Host.  
+1. A user submits a high-level request (e.g., "Review the current backlog for project 'X' and set up a new Git branch for the highest priority feature") to the AI Agent Host.  
 2. The Agent's reasoning loop (the "brain") processes the request and determines that it needs to interact with external systems. It formulates a plan that involves calling one or more tools.  
 3. The MCP Client within the Host sends a tool/run request over a stateful JSON-RPC 2.0 connection to the MCP Server.[^3] This request specifies the tool name (e.g., retrieve_backlog_items) and its arguments.  
 4. The MCP Server Core receives and validates the request against the tool's Pydantic schema. It then invokes the corresponding Python tool function.  
-5. The tool function executes its logic, interacting with an external service (e.g., making a REST API call to JIRA or executing a local Git command in a sandboxed environment).  
+5. The tool function executes its logic, interacting with an external service (e.g., making a REST API call to JIRA).  
 6. The result of the tool's execution is packaged into a response and sent back to the AI Agent Host.  
 7. The Agent incorporates the tool's output into its context and proceeds to the next step in its plan, which may involve further reasoning or another tool call.
 
@@ -52,7 +52,7 @@ For a production-grade remote server, the protocol specifies transports like Ser
 ### **2.2. Core Primitives**
 
 An MCP server can expose its capabilities through three core primitives. This implementation will leverage all three to provide a rich, flexible interface for the AI agent.[^3] 
-* **Tools:** These are functions that the AI agent can execute to perform actions or cause side effects. Tools are the primary mechanism for an agent to interact with the world. Each tool is defined by a name, a detailed description for the LLM's comprehension, and a strict input schema that defines its parameters.[^4] This will be the most heavily utilized primitive in our server, exposing capabilities for Git, JIRA, and more.  
+* **Tools:** These are functions that the AI agent can execute to perform actions or cause side effects. Tools are the primary mechanism for an agent to interact with the world. Each tool is defined by a name, a detailed description for the LLM's comprehension, and a strict input schema that defines its parameters.[^4] This will be the most heavily utilized primitive in our server, exposing capabilities for JIRA, and more.  
 * **Resources:** These represent read-only contextual data that can be provided to the agent. Resources do not execute computations but return information to augment the agent's knowledge.[^4] This primitive is ideal for providing static but important context, such as a file containing the organization's coding standards, API design guidelines, or a manifest of available project templates.  
 * **Prompts:** These are reusable prompt templates or workflows that the server can offer to the client.[^4] This powerful feature allows the server to encapsulate complex, multi-step tasks into a single, named prompt. For example, a full_project_setup prompt could guide the agent through a sequence of tool calls: retrieve_backlog_items, initialize_project_repository, and create_kubernetes_manifest. This standardizes complex operations and improves the reliability of the agent.
 
@@ -71,6 +71,7 @@ The combination of FastAPI for the server layer and Pydantic for data validation
 
 A well-organized project structure is essential for maintainability and scalability. The following structure separates concerns, making it easier to navigate and extend the codebase.
 
+```
 /mcp-dev-agent/  
 ├──.venv/                  # Virtual environment  
 ├── pyproject.toml          # Project metadata and dependencies  
@@ -82,7 +83,6 @@ A well-organized project structure is essential for maintainability and scalabil
 │   ├── tools/  
 │   │   ├── __init__.py  
 │   │   ├── base_tools.py  
-│   │   ├── git_tools.py  
 │   │   ├── jira_tools.py  
 │   │   └── cicd_tools.py  
 │   └── rag/  
@@ -94,6 +94,7 @@ A well-organized project structure is essential for maintainability and scalabil
     ├── __init__.py  
     └── test_tools/  
         └── test_base_tools.py
+```
 
 Dependencies will be managed using uv, a modern, high-performance Python package manager.[^10] The pyproject.toml file will define all necessary dependencies, including fastapi, uvicorn, mcp-sdk, pydantic, pydantic-settings, and the libraries for each tool.
 
@@ -105,7 +106,7 @@ The foundation of the server is a standard FastAPI application. The MCP server l
 The official Python mcp SDK provides the FastMCP class, a high-level interface that simplifies the creation of MCP servers. It uses decorators to register Python functions as MCP tools, automatically handling the underlying protocol complexities.[^10] 
 The following code in mcp_server/main.py initializes both the FastAPI app and the FastMCP server. While libraries exist to automatically mount an MCP server onto FastAPI, a manual integration provides more control and clarity. For a production remote server, the streamable-http transport is the correct choice.
 
-Python
+```Python
 
 # mcp_server/main.py  
 import uvicorn  
@@ -114,7 +115,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp.transport.streamable_http import asgi_app as mcp_asgi_app
 
 from.config import settings  
-from.tools import base_tools, git_tools, jira_tools, cicd_tools  
+from.tools import base_tools, jira_tools, cicd_tools  
 from.rag import query as rag_query_tool
 
 # 1. Initialize the FastAPI application  
@@ -147,6 +148,7 @@ if __name__ == "__main__":
         port=settings.SERVER_PORT,  
         reload=True  
     )
+```
 
 ### **3.3. Defining Robust Tools with Pydantic**
 
@@ -157,7 +159,7 @@ A consistent and robust pattern for defining tools is crucial for the reliabilit
 3. **Descriptive Docstrings:** The function's docstring serves as the tool's primary description for the LLM. It must clearly and concisely explain the tool's purpose, its parameters, and when it should be used.[^17] 
 The following example of a simple echo tool in mcp_server/tools/base_tools.py demonstrates this pattern.
 
-Python
+```Python
 
 # mcp_server/tools/base_tools.py  
 from pydantic import BaseModel, Field  
@@ -194,6 +196,7 @@ async def echo(params: EchoInput) -> str:
         A string containing the repeated message.  
     """  
     return " ".join([params.message] * params.repeat_count)
+```
 
 This example showcases the synergy of the chosen technology stack. The EchoInput model ensures that any call to this tool will have a valid message and a repeat_count between 1 and 10. The mcp library introspects this model and the function signature to generate the precise JSON Schema that the MCP protocol requires. The docstring and field descriptions provide the necessary semantic information for the LLM to make an informed decision about using the tool. This pattern creates a self-documenting, type-safe, and reliable tool definition that minimizes boilerplate and runtime errors.
 
@@ -201,75 +204,7 @@ This example showcases the synergy of the chosen technology stack. The EchoInput
 
 This section provides the implementation details for the core tools that empower the AI agent to perform software development tasks. Each tool follows the robust Pydantic-based pattern established previously.
 
-### **4.1. Git Operations Tool**
-
-This tool provides the agent with the ability to interact with Git repositories, a fundamental task in software development.
-
-* **Library:** GitPython, a mature library for programmatic Git interaction.[^26] 
-* **Functionality:** The initialize_project_repository tool will automate the setup of a new project. It will clone a predefined template repository, create a new feature branch, and configure it to push to a new, empty remote repository.  
-* **Security:** Executing Git commands, even via a library, carries inherent risks. The server must run in a sandboxed, containerized environment with the principle of least privilege. The tool should never accept arbitrary shell commands as input. All inputs, such as URLs, must be strictly validated.
-
-Python
-
-# mcp_server/tools/git_tools.py  
-import tempfile  
-import shutil  
-from git import Repo  
-from pydantic import BaseModel, Field, HttpUrl  
-from..main import mcp_server  
-from..config import settings
-
-class InitializeRepoInput(BaseModel):  
-    template_url: HttpUrl = Field(..., description="The URL of the Git repository to use as a template.")  
-    new_repo_url: HttpUrl = Field(..., description="The URL of the new, empty remote repository to push to.")  
-    initial_branch_name: str = Field(..., description="The name for the initial development branch (e.g., 'feature/initial-setup').")
-
-@mcp_server.tool(  
-    name="git.initialize_project_repository",  
-    description="Initializes a new project by cloning a template, creating a branch, and pushing to a new remote."  
-)  
-async def initialize_project_repository(params: InitializeRepoInput) -> str:  
-    """  
-    Sets up a new Git repository for a project.
-
-    This tool performs the following actions:  
-    1. Clones a specified template repository to a temporary local directory.  
-    2. Creates a new branch for initial development.  
-    3. Adds a new remote origin pointing to the provided new repository URL.  
-    4. Pushes the new branch to the new remote repository.
-
-    Args:  
-        params: Input parameters containing template URL, new repository URL, and branch name.
-
-    Returns:  
-        A confirmation message indicating success or an error message.  
-    """  
-    temp_dir = tempfile.mkdtemp()  
-    try:  
-        # 1. Clone the template repository  
-        repo = Repo.clone_from(str(params.template_url), temp_dir)
-
-        # 2. Create and check out the new branch  
-        new_branch = repo.create_head(params.initial_branch_name)  
-        new_branch.checkout()
-
-        # 3. Add the new remote and push  
-        if 'origin' in repo.remotes:  
-            origin = repo.remote('origin')  
-            origin.set_url(str(params.new_repo_url))  
-        else:  
-            origin = repo.create_remote('origin', str(params.new_repo_url))  
-          
-        origin.push(refspec=f'{params.initial_branch_name}:{params.initial_branch_name}')
-
-        return f"Successfully initialized repository at {params.new_repo_url} from template {params.template_url} with branch '{params.initial_branch_name}'."  
-    except Exception as e:  
-        return f"Error initializing repository: {str(e)}"  
-    finally:  
-        # Clean up the temporary directory  
-        shutil.rmtree(temp_dir)
-
-### **4.2. JIRA Integration Tool**
+### **4.1. JIRA Integration Tool**
 
 This tool connects the agent to the project management system, allowing it to retrieve backlog items and understand current work priorities.
 
@@ -277,7 +212,7 @@ This tool connects the agent to the project management system, allowing it to re
 * **Functionality:** The retrieve_backlog_items tool will connect to a JIRA instance using credentials stored securely in the environment and execute a JIRA Query Language (JQL) search.  
 * **Output Structuring:** To provide clean, predictable data to the LLM, the raw API response will be parsed into a list of Pydantic models. This abstracts away the complexity of the full JIRA API response and provides only the essential fields.
 
-Python
+```Python
 
 # mcp_server/tools/jira_tools.py  
 from typing import List, Optional  
@@ -342,8 +277,9 @@ async def retrieve_backlog_items(params: JiraQueryInput) -> List[JiraIssueOutput
         # In a real system, log the full error  
         print(f"Error retrieving JIRA issues: {e}")  
         return
+```
 
-### **4.3. CI/CD Manifest Generation Tool**
+### **4.2. CI/CD Manifest Generation Tool**
 
 This tool automates the creation of standardized deployment artifacts, a repetitive and error-prone task for human developers.
 
@@ -351,7 +287,7 @@ This tool automates the creation of standardized deployment artifacts, a repetit
 * **Functionality:** The create_kubernetes_manifest tool will generate the YAML text for a Kubernetes Deployment and Service.  
 * **Rationale:** By providing this as a tool, the agent can create deployment configurations that adhere to organizational standards without needing to understand the intricacies of Kubernetes YAML syntax.
 
-Python
+```Python
 
 # mcp_server/tools/cicd_tools.py  
 import yaml  
@@ -415,14 +351,15 @@ async def create_kubernetes_manifest(params: K8sManifestInput) -> str:
       
     manifests = [deployment, service]  
     return yaml.dump_all(manifests, sort_keys=False)
+```
 
-### **4.4. RAG File Ingestion Endpoint**
+### **4.3. RAG File Ingestion Endpoint**
 
 This is not an MCP tool but a standard FastAPI endpoint that serves as the entry point to the RAG data pipeline. This architectural separation is deliberate: tool use is for querying and acting, while data ingestion is a separate data management process.
 
 * **Functionality:** The /rag/upload endpoint accepts a file upload. It then triggers a background task to process the file, preventing the HTTP request from blocking during the potentially long-running ingestion process.
 
-Python
+```Python
 
 # In mcp_server/main.py, add the following:  
 from fastapi import UploadFile, File, BackgroundTasks  
@@ -449,6 +386,7 @@ async def upload_file_for_rag_indexing(
         "content_type": file.content_type,  
         "message": "File accepted and scheduled for indexing."  
     }
+```
 
 This design ensures the API is responsive and robust. The agent can be given a tool to *check the status* of an indexing job, but the ingestion itself is handled by a dedicated, asynchronous data pipeline, which is a much more scalable and reliable pattern.
 
@@ -493,7 +431,7 @@ For this implementation, **PostgreSQL with pgvector is the recommended choice.**
 LlamaIndex is a data-centric framework specifically designed for building context-augmented LLM applications like RAG.[^36] Its strengths lie in its vast array of data connectors and its focus on the indexing and retrieval pipeline, making it an excellent choice for our RAG subsystem. It also has an official MCP integration package, llama-index-tools-mcp, demonstrating strong alignment with our chosen protocol.[^38] 
 The implementation involves configuring LlamaIndex to use our pgvector database and then wrapping its query engine in an MCP tool.
 
-Python
+```Python
 
 # mcp_server/rag/query.py  
 import asyncpg  
@@ -556,6 +494,7 @@ async def rag_query(query: str) -> str:
     # Format the response to be clean context for the LLM  
     context_str = "\n\n---\n\n".join([r.get_text() for r in response.source_nodes])  
     return context_str
+```
 
 This implementation provides a powerful, context-aware tool for the agent. The complexity of the RAG pipeline is completely abstracted away behind a simple, natural language interface.
 
@@ -572,7 +511,7 @@ The docker-compose.yml file will define two services:
 1. **mcp-server**: The FastAPI application, with the project directory mounted as a volume to enable hot-reloading for rapid development.  
 2. **postgres**: A PostgreSQL instance running an image that includes the pgvector extension. A volume is used to persist database data across container restarts.
 
-YAML
+```yaml
 
 # docker-compose.yml  
 version: '3.8'
@@ -615,6 +554,8 @@ services:
 volumes:  
   postgres_data:
 
+```
+
 ### **6.2. Production Deployment on Kubernetes**
 
 Kubernetes is the de-facto standard for deploying and scaling containerized applications in production.[^39] The deployment process involves containerizing the application and defining its desired state using Kubernetes manifest files.
@@ -622,8 +563,8 @@ Kubernetes is the de-facto standard for deploying and scaling containerized appl
 #### **6.2.1. Dockerfile Optimization**
 
 A multi-stage Dockerfile is a best practice for creating lean and secure production images. The first builder stage installs dependencies into a virtual environment. The final production stage copies only the application code and the pre-built virtual environment into a minimal base image, excluding build tools and development dependencies.[^40] 
-Dockerfile
 
+```dockerfile
 # Dockerfile
 
 # 1. Builder Stage: Installs dependencies  
@@ -647,6 +588,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY./mcp_server./mcp_server  
 EXPOSE 8000  
 CMD ["uvicorn", "mcp_server.main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
 
 #### **6.2.2. Kubernetes Manifests**
 
@@ -675,7 +617,7 @@ Ensuring high availability requires designing the system to be resilient to fail
 Building a robust MCP server involves more than just exposing functions. Several common pitfalls can compromise security, reliability, and usability.
 
 * **Insecure Tool Design:** A primary risk is exposing tools that can execute arbitrary code or shell commands without rigorous sandboxing.[^8] An agent could be manipulated through prompt injection to execute malicious commands.  
-  * **Mitigation:** The server must run in a container with minimal privileges (e.g., as a non-root user). All inputs to tools that interact with the filesystem or execute subprocesses (like the Git tool) must be strictly validated and sanitized. Never construct shell commands by concatenating unsanitized input from the agent.  
+  * **Mitigation:** The server must run in a container with minimal privileges (e.g., as a non-root user). All inputs to tools that interact with the filesystem or execute subprocesses must be strictly validated and sanitized. Never construct shell commands by concatenating unsanitized input from the agent.  
 * **Ignoring Protocol State:** Developers accustomed to stateless REST APIs may incorrectly treat the MCP connection as stateless. The MCP protocol requires a specific initialize handshake to negotiate capabilities, and failing to handle this lifecycle correctly will result in a non-functional server.[^3] 
   * **Mitigation:** Rely on a mature MCP server library like the official Python SDK's FastMCP, which correctly implements the protocol's stateful lifecycle management.  
 * **Vague or Ambiguous Tool Descriptions:** The LLM's ability to use tools effectively is entirely dependent on the quality of their descriptions (the function docstrings). If a description is unclear, the agent will fail to select the correct tool or will provide incorrect arguments.  
@@ -706,7 +648,7 @@ RAG systems are powerful but brittle. Their failures often fall into predictable
 For a production system, robust observability is not optional. It is essential for debugging, performance tuning, and understanding agent behavior.
 
 * **Logging:** Implement structured logging (e.g., JSON format) for every tool invocation. Logs should include a unique request ID, the tool name, the input parameters, the final output, and the execution duration.  
-* **Tracing:** Integrate an OpenTelemetry-compatible distributed tracing solution. This allows tracing a single request as it flows from the MCP server, through the execution of a tool, to any downstream API calls (e.g., to JIRA or GitHub), and back. Frameworks like Pydantic AI offer tight integration with tracing platforms like Pydantic Logfire, which can provide deep insights into agent behavior.[^17] 
+* **Tracing:** Integrate an OpenTelemetry-compatible distributed tracing solution. This allows tracing a single request as it flows from the MCP server, through the execution of a tool, to any downstream API calls (e.g., to JIRA), and back. Frameworks like Pydantic AI offer tight integration with tracing platforms like Pydantic Logfire, which can provide deep insights into agent behavior.[^17] 
 * **Metrics:** Expose key performance indicators (KPIs) in a Prometheus-compatible format. Essential metrics include:  
   * Tool call latency (per tool).  
   * Tool call error rate (per tool).  
@@ -725,10 +667,10 @@ A successful version 1.0 of this MCP server should focus on establishing a robus
 * [ ] **Testing:** A comprehensive suite of unit and integration tests covers all implemented tools, ensuring their correctness and reliability.  
 * [ ] **Deployment:** Complete, version-controlled Kubernetes manifests for the application are created and tested.  
 * [ ] **RAG:** A functional RAG pipeline is implemented, including the file upload endpoint and the rag_query tool.  
-* [ ] **Core Toolkit:** At least one core software development tool (e.g., jira.retrieve_backlog_items or git.initialize_project_repository) is fully implemented and tested.  
+* [ ] **Core Toolkit:** At least one core software development tool (e.g., jira.retrieve_backlog_items) is fully implemented and tested.  
 * [ ] **Health Probes:** A /health endpoint is implemented and configured in the Kubernetes deployment for liveness and readiness probes.
 
-### **8.2. Future Roadmap (V2.[^0] and Beyond)**
+### **8.2. Future Roadmap (V2.0 and Beyond)**
 
 Once the V1.0 foundation is stable, the system can be evolved to support more advanced agentic capabilities and improve performance.
 
