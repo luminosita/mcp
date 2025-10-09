@@ -41,7 +41,7 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 **Objective**: Bootstrap the framework and validate through the execution of the full generator cascade from Product Vision through Backlog Stories.
 
 **Inputs**:
-- `/docs/research/advanced_prompt_engineering_software_docs_code_final.md` (research)
+- `/docs/research/advanced_prompt_engineering/advanced_prompt_engineering_software_docs_code_final.md` (research)
 - User responses to clarification questions
 
 **Outputs**:
@@ -109,7 +109,9 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 │
 ├── docs/
 │   └── research/                                                     # research papers
-│       └── advanced_prompt_engineering_software_docs_code_final.md   # Research (immutable)
+│       └── advanced_prompt_engineering/                              # Advanced prompt engineering research
+│           ├── advanced_prompt_engineering_software_docs_code_final.md   # Research (immutable)
+│           └── research_coverage_evaluation.md                       # Coverage evaluation
 │   ├── context_engineering_strategy_v1.md # This document
 │   └── product-idea.md                 # CLI tool initial concept
 │

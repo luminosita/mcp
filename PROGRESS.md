@@ -24,7 +24,7 @@
 - Adding new implementation tasks without US reference (standalone -> quick bug fix) - research required
 
 ## Pre-finalization
-- `docs/research/research_coverage_evaluation.md`
+- `docs/research/advanced_prompt_engineering/research_coverage_evaluation.md`
 - verify that all requests from CHAT.md are applied (or create AI report)
 - review all documents from the beginning
 - analyze all `claude-md` documents
