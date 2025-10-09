@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Generator_Prompt_Schema_Template</name>
+    <version>2.0</version>
+    <source>Extracted from Context Engineering Framework</source>
+    <purpose>Standard XML schema for all generator prompts</purpose>
+  </metadata>
+
+  <instructions>
+    <guideline>All generator prompts must follow this XML structure</guideline>
+    <guideline>Each generator produces both a terminal artifact</guideline>
+    <guideline>Validation checklists ensure quality standards are met</guideline>
+    <guideline>Traceability section links to input artifacts and templates</guideline>
+  </instructions>
+
+  <structure format="xml">
+    <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<generator_prompt>
+  <metadata>
+    <name>[Generator_Name]</name>
+    <version>[version]</version>
+    <sdlc_phase>[Product_Research]</sdlc_phase>
+    <depends_on>[Path to input artifact(s)]</depends_on>
+    <generated_by>[Source that created this generator]</generated_by>
+    <date>[YYYY-MM-DD]</date>
+  </metadata>
+
+  <system_role>
+    You are an expert [role] with [X]+ years of experience in [domain]. You excel at [key expertise].
+
+    Your output must follow the template at [template_path].
+  </system_role>
+
+  <task_context>
+    <background>
+      [Description of what this generator creates and why it matters for a comprehensive product research]
+      [Key requirements and quality standards]
+
+      Reference: [Any relevant research sections - for documentation only, not loaded]
+    </background>
+
+    <input_artifacts>
+      <artifact path="[path]" type="[type]">
+        [Description of what this input contains and how to use it]
+      </artifact>
+    </input_artifacts>
+
+    <constraints>
+      <constraint>[CUSTOMIZE PER PRODUCT - Technical/business/timeline constraints]</constraint>
+    </constraints>
+  </task_context>
+
+  <anti_hallucination_guidelines>
+    <guideline category="grounding">Base all outputs on provided input artifacts. Quote or reference specific sections from inputs when making claims.</guideline>
+    <guideline category="assumptions">When making inferences beyond input artifacts, explicitly mark with [ASSUMPTION] tag and explain reasoning.</guideline>
+    <guideline category="uncertainty">If input artifacts lack necessary information, state "Information not provided in inputs" rather than fabricating details.</guideline>
+    <guideline category="verification">For factual claims, trace back to specific sections of input artifacts or research sources.</guideline>
+    <guideline category="confidence">After generating content, identify any sections where confidence is low or additional information would improve quality.</guideline>
+    <guideline category="scope">Stay within the bounds of the current SDLC phase. Do not make detailed implementation decisions that belong in later phases.</guideline>
+  </anti_hallucination_guidelines>
+
+  <instructions>
+    <step priority="1">
+      <action>[Load and analyze input artifact]</action>
+      <purpose>[Why this step is necessary]</purpose>
+      <anti_hallucination>Extract facts, requirements, and constraints from input. Note any ambiguities or missing information for later clarification.</anti_hallucination>
+    </step>
+
+    <step priority="2">
+      <action>[Load template]</action>
+      <purpose>[Understand required structure]</purpose>
+      <anti_hallucination>Follow template structure exactly. If template section cannot be filled from available inputs, note as [NEEDS CLARIFICATION] rather than inventing content.</anti_hallucination>
+    </step>
+
+    <step priority="3">
+      <action>[Research phase - if applicable]</action>
+      <guidance>
+        - Research relevant domain information
+        - Identify gaps and opportunities
+        - Inform artifact generation with findings
+      </guidance>
+      <anti_hallucination>When incorporating research findings, cite sources. Distinguish between verified facts from research and inferences you're making.</anti_hallucination>
+    </step>
+
+    <step priority="[N-2]">
+      <action>[Generate terminal artifact]</action>
+      <output_path>[/artifacts/path/artifact_v1.md]</output_path>
+    </step>
+
+    <step priority="[N]">
+      <action>Validate outputs against checklist</action>
+      <reference>See validation_checklist below</reference>
+    </step>
+  </instructions>
+
+  <output_format>
+    <terminal_artifact>
+      <path>[/artifacts/path/artifact_v1.md]</path>
+      <format>[Markdown following template structure]</format>
+      <validation_checklist>
+        <criterion>[Specific validation criterion 1]</criterion>
+        <criterion>[Specific validation criterion 2]</criterion>
+        <criterion>[Specific validation criterion 3]</criterion>
+        <criterion>Traceability: References to input artifact(s) present</criterion>
+        <criterion>Readability: Accessible to target audience (Flesch score >60 target for docs)</criterion>
+      </validation_checklist>
+    </terminal_artifact>
+
+  </output_format>
+
+  <traceability>
+    <source_document>[Path to input artifact]</source_document>
+    <template>[Path to template used]</template>
+    <research_reference>[Optional: Section references for documentation only]</research_reference>
+    <strategy_reference>[Optional: Section references for documentation only]</strategy_reference>
+  </traceability>
+
+  <validation>
+    <self_check>
+      After generation, verify:
+      - [ ] Terminal artifact has all required template sections
+      - [ ] [Phase-specific validation item 1]
+      - [ ] [Phase-specific validation item 2]
+      - [ ] Readability: Language is clear and appropriate for audience
+      - [ ] Traceability: References to input artifact(s) present
+    </self_check>
+  </validation>
+
+  <quality_guidance>
+    <guideline category="completeness">
+      Every section in the template must be filled with substantive content. Avoid placeholder text like "[To be determined]". If information is unknown, make reasonable inferences based on inputs and explicitly note assumptions.
+    </guideline>
+
+    <guideline category="clarity">
+      Write for the target audience of this phase. Avoid jargon unless necessary, and define technical terms when used. Use concrete examples.
+    </guideline>
+
+    <guideline category="actionability">
+      Content should provide clear next steps and guidance. Avoid vague statements. Be specific and concrete.
+    </guideline>
+
+    <guideline category="traceability">
+      Reference input artifacts with clear attribution. This allows readers to trace decisions and content back to source.
+    </guideline>
+  </quality_guidance>
+
+  <examples>
+    <example type="[type]">
+      Good: [Positive example demonstrating best practice]
+
+      Bad: [Counter-example showing what to avoid]
+    </example>
+  </examples>
+</generator_prompt>
+    ]]>
+  </structure>
+
+  <key_elements>
+    <element name="metadata">
+      <description>Tracks generator identity, version, dependencies, and provenance</description>
+      <required_fields>name, version, sdlc_phase, depends_on, generated_by, date</required_fields>
+    </element>
+
+    <element name="system_role">
+      <description>Defines expert persona and primary responsibility</description>
+      <must_reference>Template path that output must follow</must_reference>
+    </element>
+
+    <element name="task_context">
+      <description>Provides background, inputs, and constraints</description>
+      <must_include>Background explanation, input artifact descriptions, constraints</must_include>
+    </element>
+
+    <element name="instructions">
+      <description>Step-by-step execution guidance with priority ordering</description>
+      <must_include>Load inputs, load template, research (if applicable), generate terminal artifact, validate</must_include>
+    </element>
+
+    <element name="output_format">
+      <description>Specifications for both terminal artifact</description>
+      <must_include>Paths, formats, validation checklists for both outputs</must_include>
+    </element>
+
+    <element name="traceability">
+      <description>Links to source documents and references (documentation only)</description>
+      <note>References are for documentation, not required context loading</note>
+    </element>
+
+    <element name="validation">
+      <description>Self-check criteria for quality assurance</description>
+      <must_include>Checklist covering completeness, quality, XML validity</must_include>
+    </element>
+
+    <element name="quality_guidance">
+      <description>Best practices for completeness, clarity, actionability, traceability</description>
+      <categories>completeness, clarity, actionability, traceability</categories>
+    </element>
+
+    <element name="examples">
+      <description>Concrete good/bad examples for key output types</description>
+      <purpose>Demonstrates standards and common pitfalls</purpose>
+    </element>
+  </key_elements>
+
+  <usage_notes>
+    <note>When creating a new generator, copy this structure and fill in phase-specific details</note>
+    <note>Validation checklists should be specific to the artifact type being generated</note>
+    <note>Research steps should be included for Vision, Epic, and PRD phases</note>
+    <note>Constraints should be marked [CUSTOMIZE PER PRODUCT] for reusable generators</note>
+    <note>References in traceability section are for documentation only - not loaded into context</note>
+  </usage_notes>
+</template>

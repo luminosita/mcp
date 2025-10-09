@@ -22,7 +22,7 @@ We want to implement Product Management Backlog solution with the following capa
 #TASKS
 
 - Do an analysis of Advanced Prompt Engineering research document, with emphasis on Product Management artifacts templates, metadata and dependencies/references.
-- Do a research on exisitng Backlog solutions (e.g., Plane, OpenProject, JIRA)
+- Do a research on existing Backlog solutions (e.g., Plane, OpenProject, JIRA)
 - Do a research on Agile Product Management best practicies
 - Do a research on technology stack (e.g. graph databases) 
 - Create a comprehensive report based on synthesized information
