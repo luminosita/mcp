@@ -107,15 +107,26 @@
       <purpose>Ensure research direction aligns with human expectations</purpose>
       <details>
         Based on validated inputs, create a research plan covering:
-        1. **Products to Analyze**: List of competitors/similar solutions with brief description
+        1. **Products to Analyze**:
+           - List human-provided product references as starting points
+           - Describe discovery strategy for finding additional products (emerging solutions, market leaders, alternative approaches)
+           - Target: Minimum 5-7 products total to ensure comprehensive market coverage
         2. **Research Areas**: Market segmentation, feature analysis, technology stack, architecture patterns
         3. **Key Questions**: Specific questions the research will answer
         4. **Deliverables**: What will be included in final research artifact
+
+        IMPORTANT: Communicate to human that research will EXPAND beyond their provided references to discover:
+        - Newly emerged solutions (2024-2025) with innovative capabilities
+        - Market leaders that may not have been mentioned
+        - Open-source alternatives and niche players
+
+        This ensures comprehensive market understanding and identifies all competitive approaches.
 
         Present plan to human and get confirmation before proceeding.
       </details>
       <anti_hallucination>
         Do NOT start deep research until human approves the plan. This prevents wasted effort on wrong direction.
+        Confirm with human that expanding research beyond their references is acceptable and desired.
       </anti_hallucination>
     </step>
 
@@ -137,7 +148,9 @@
       <action>Conduct market and competitive analysis</action>
       <purpose>Understand existing solutions, identify gaps and opportunities</purpose>
       <guidance>
-        For each product reference provided by human: [LAZA]
+        **Phase 4A: Analyze Human-Provided Product References**
+
+        Start with product references provided by human as initial guideline:
         1. **Analyze Core Capabilities**: What does it do? What are its key features?
         2. **Identify Strengths**: What does it do exceptionally well?
         3. **Identify Weaknesses**: What are its limitations, gaps, or pain points?
@@ -145,7 +158,31 @@
         5. **Market Positioning**: Who is the target audience? What segment does it serve?
         6. **Pricing/Business Model**: Open-source? SaaS? Self-hosted? Enterprise?
 
-        Create market segmentation analysis grouping similar products by approach/philosophy.
+        **Phase 4B: Discover Additional Market Solutions**
+
+        DO NOT limit research to only human-provided references. Expand research to discover:
+        - **Emerging Solutions**: Newly released products (past 1-2 years) with innovative capabilities
+        - **Alternative Approaches**: Products using different technical or business model approaches
+        - **Market Leaders**: Established solutions that may not have been mentioned but dominate market share
+        - **Open-Source Alternatives**: Community-driven solutions that compete with commercial products
+        - **Niche Players**: Specialized solutions targeting specific use cases or segments
+
+        Discovery methods:
+        - Search for "[product domain] solutions 2024/2025"
+        - Research "best [product category] tools" comparison articles
+        - Look for GitHub repos with high stars in relevant categories
+        - Review Y Combinator, Product Hunt, or tech news for recent launches
+        - Check technology-specific ecosystems (e.g., CNCF landscape for cloud-native tools)
+
+        Target: Analyze minimum 5-7 products total, including but not limited to human references.
+
+        **Phase 4C: Create Market Segmentation**
+
+        Group all discovered products (human-provided + newly discovered) into market segments by:
+        - Architectural approach (e.g., CLI aggregator vs. hosted platform vs. self-hosted vault)
+        - Business model (open-source, commercial SaaS, hybrid, enterprise)
+        - Target audience (developers, enterprises, specific verticals)
+        - Technical philosophy (e.g., zero-trust, serverless-first, AI-native)
 
         CRITICAL: Cite sources for every product capability claim.
       </guidance>
@@ -154,6 +191,8 @@
         - Cite official documentation, GitHub repos, public APIs, blog posts, technical papers
         - If a feature is not documented, do not claim the product has it
         - Distinguish between features in documentation vs. features you can verify
+        - When discovering new products, verify they are real (check website, GitHub, social proof)
+        - Do not invent products or capabilities - every product must be verifiable through citations
       </anti_hallucination>
     </step>
 
@@ -347,6 +386,8 @@
         <criterion>All template sections filled with substantive content (no placeholders)</criterion>
         <criterion>Executive Summary provides clear synthesis of key findings</criterion>
         <criterion>Market Analysis includes competitive landscape segmentation</criterion>
+        <criterion>Minimum 5-7 products analyzed (including but not limited to human-provided references)</criterion>
+        <criterion>Research includes emerging solutions and alternative approaches beyond human references</criterion>
         <criterion>All products analyzed with strengths, weaknesses, and positioning</criterion>
         <criterion>Market and technical gaps clearly identified with justification</criterion>
         <criterion>Architecture recommendations include rationale and trade-offs</criterion>
@@ -389,6 +430,8 @@
       - [ ] Research artifact has all required template sections
       - [ ] Executive summary synthesizes key findings clearly
       - [ ] Market analysis complete with competitive segmentation
+      - [ ] Minimum 5-7 products analyzed (including discoveries beyond human references)
+      - [ ] Research includes emerging solutions and market leaders not initially referenced
       - [ ] Gap analysis identifies specific opportunities
       - [ ] Architecture recommendations comprehensive and justified
       - [ ] Technology stack recommendations current and cited
