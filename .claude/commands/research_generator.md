@@ -1,3 +1,6 @@
+#This prompt generators generic research prompt in XML format and research artifact template in Markdown
+#DO NOT USE IT FOR RESEARCH
+
 ## ROLE
 You are a senior software product researcher with the strong technical background. Your expertise is in comparing published software products in the market, gather extensive information, capabilities, key features and finding important market and technical gaps to provide strong advises on a future product vision and roadmap.
 
@@ -59,10 +62,12 @@ Establish a clear and comprehensive research prompt and research artifact templa
     - AI Agent assistance
 
 - Research Artifact Template should provide abundant information and examples for SDLC phases artifacts requirements. Research Artifact Template is the main reference to establish sophisticated SDLC artifacts.
-- Research Prompt and Research Artifact Template documents must be in Markdown and available for download
+- Research Prompt must be formatted as XML
+- Research Artifact Template must be formatted as Markdown
 
 ## VALIDATION CHECKLIST
-- [ ] All output is in Markdown format
+- [ ] Research Prompt is in XML format
+- [ ] Research Artifact Template is in Markdown format
 - [ ] Reserch Prompt follows `generator-schema-template_v2.xml`
 - [ ] Research Prompt contains human input validation and clarification instructions
 - [ ] Research Prompt contains anti-hallucation guardrails
@@ -73,13 +78,13 @@ Establish a clear and comprehensive research prompt and research artifact templa
 - [ ] Research Artifact Template structure correlates with SDLC phases artifacts requirements
 
 ## REFERENCES
-- `backlog_prompt.md`                                   #prompt used for backlog solution research
-- `Backlog Solution Implementation Guidelines.md`       #backlog solution research artifact 
-- `mcp_prompt.md`                                       #prompt used for mcp server research
-- `AI Agent MCP Server Implementation Report.md`        #mcp server research artifact 
-- `shh_prompt.md`                                       #prompt used for secrets management research
-- `Secrets Management Solution Research Report.md`      #secrets management research artifact 
-- `generator-schema-template_v2.xml`                    #existing generator prompt template
+- `docs/research/backlog/backlog_prompt.md`                                   #prompt used for backlog solution research
+- `docs/research/backlog/Backlog Solution Implementation Guidelines.md`       #backlog solution research artifact 
+- `docs/research/mcp/mcp_prompt.md`                                       #prompt used for mcp server research
+- `docs/research/mcp/AI Agent MCP Server Implementation Report.md`        #mcp server research artifact 
+- `docs/research/shh/shh_prompt.md`                                       #prompt used for secrets management research
+- `docs/research/shh/Secrets Management Solution Research Report.md`      #secrets management research artifact 
+- `prompts/templates/generator-schema-template_v2.xml`                    #existing generator prompt template
 - SDLC phases artifacts templates:
     - `prompts/templates/product-vision-template.xml`       #product vision template
     - `prompts/templates/epic-template.xml`                 #epic template
@@ -89,8 +94,8 @@ Establish a clear and comprehensive research prompt and research artifact templa
     - `prompts/templates/tech-spec-template.xml`            #tech spec template
 
 ## OUTPUT
-- Research Generator Prompt
-- Research Artifact Template
+- Save Research Generator Prompt to `docs/research/research_generator/research_prompt.md`
+- Save Research Artifact Template to `docs/research/research_generator/research_artifact_template.md`
 
 ## CITATION REQUIREMENTS
 ```markdown
