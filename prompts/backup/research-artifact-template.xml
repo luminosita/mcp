@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Research_Artifact_Template</name>
+    <version>1.0</version>
+    <sdlc_phase>Research - Combined Business & Implementation</sdlc_phase>
+    <status>OBSOLETE</status>
+    <replacement_templates>business_research_template.xml, implementation_research_template.xml</replacement_templates>
+    <note>This template has been superseded by separate business and implementation research templates for better separation of concerns</note>
+  </metadata>
+
+  <instructions>
+    <guideline>THIS TEMPLATE IS OBSOLETE - Use business_research_template.xml and implementation_research_template.xml instead</guideline>
+    <guideline>For business/market analysis, use prompts/templates/business_research_template.xml</guideline>
+    <guideline>For technical/implementation analysis, use prompts/templates/implementation_research_template.xml</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# [Product Name] Research Report
+
+## Document Metadata
+- **Author:** [Researcher Name]
+- **Date:** [YYYY-MM-DD]
+- **Version:** [version number]
+- **Status:** OBSOLETE, use `prompts/templates/business_research_template.xml` and `prompts/templates/implementation_research_template.xml`
+- **Product Category:** [CLI Tool/SaaS Platform/Infrastructure Tool/AI-ML Product/Other]
+
+---
+
+## NOTICE: This Template is Obsolete
+
+This template has been replaced by two specialized templates:
+
+1. **Business Research Template** (`prompts/templates/business_research_template.xml`)
+   - Focus: Market analysis, user needs, competitive landscape
+   - Use for: Product Vision, Epics, PRDs, strategic planning
+
+2. **Implementation Research Template** (`prompts/templates/implementation_research_template.xml`)
+   - Focus: Technical architecture, implementation patterns, code examples
+   - Use for: Backlog Stories, ADRs, Technical Specifications
+
+Please use the appropriate specialized template for your research needs.
+
+---
+
+**End of Obsolete Template Notice**
+    ]]>
+  </structure>
+
+  <examples>
+    <example>
+      This template is no longer in use. Refer to the specialized templates for business or implementation research.
+    </example>
+  </examples>
+</template>

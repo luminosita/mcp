@@ -7,9 +7,9 @@
 - [X] Update CLAUDE.md folder structure
 - [X] No lazy generation of specialized CLAUDE.md files
 - [X] research_generator should have product_idea.md (based on product_idea_template.md) as input
-- [ ] business_research_template in XML format
-- [ ] implementation_research_template in XML format
-- [ ] research-artifact-template in XML format
+- [X] business_research_template in XML format
+- [X] implementation_research_template in XML format
+- [X] research-artifact-template in XML format
 - [X] Review CLAUDE.md
 - [X] extract product research prompt template
 - [X] define product research output template
@@ -21,7 +21,7 @@
 - [ ] Test Product Vision Generator
 - [ ] Perform refinement cycle
 ## Research documents restructuring
-- [ ] restructure research documents (use docs/research_restructuring_guidelines.md) (restructure @docs/research/shh/Secrets_Management_Solution_Research_Report_v2.md according to @docs/research_restructuring_guidelines.md)
+- [ ] restructure research documents (use docs/research_restructuring_guidelines.md) (restructure @docs/research/rag/Rag_2_0_detailed_analysis_v2.md.md according to @docs/research_restructuring_guidelines.md. Use appropriate tools because of output token limit of 32k)
 
 ## Semi-automatic testing
 - [ ] feedback/context_engineering_strategy_v1_critique_v3.md
