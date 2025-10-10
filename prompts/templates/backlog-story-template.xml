@@ -58,6 +58,13 @@ As [role], I want [feature], so that [benefit].
 **Note:** Detailed implementation tasks with estimates, dependencies, and status tracking are maintained in `TODO.md` file in this story's subfolder.
 
 ## Acceptance Criteria
+
+**Format Guidance:**
+- **Preferred:** Gherkin format (Given-When-Then) for scenario-based validation
+- **Fallback:** Checklist format for simpler validations or non-scenario-based criteria
+- Reference: SDLC Artifacts Guideline v1.1, Section 3.1.3
+
+### Gherkin Format Example:
 ### Scenario 1: [Scenario name]
 **Given** [initial context]
 **When** [action taken]
@@ -67,6 +74,11 @@ As [role], I want [feature], so that [benefit].
 **Given** [initial context]
 **When** [action taken]
 **Then** [expected outcome]
+
+### Checklist Format Example (Alternative):
+- [ ] [Specific testable criterion 1]
+- [ ] [Specific testable criterion 2]
+- [ ] [Specific testable criterion 3]
 
 ## Definition of Done
 - [ ] Code implemented and reviewed
@@ -85,12 +97,30 @@ As [role], I want [feature], so that [benefit].
   </structure>
 
   <examples>
-    <example source="Section 6.4 lines 1075-1077">
+    <example source="Section 6.4 lines 1075-1077, enhanced with format guidance">
+      **User Story:**
       As registered user, I want to be able to upload profile picture so that I can personalize my account.
 
-      Acceptance Criteria:
-      - Given I am logged in, When I navigate to profile settings, Then I see an upload button
-      - Given I select an image file, When I click upload, Then the image is saved and displayed
+      **Acceptance Criteria (Gherkin Format - Preferred):**
+
+      Scenario 1: Successful profile picture upload
+      Given I am logged in
+      When I navigate to profile settings
+      Then I see an upload button for profile picture
+
+      Scenario 2: Upload and display profile picture
+      Given I have selected a valid image file
+      When I click the upload button
+      Then the image is saved to my profile
+      And the new profile picture is displayed immediately
+
+      **Acceptance Criteria (Checklist Format - Alternative):**
+      - [ ] Upload button visible on profile settings page for logged-in users
+      - [ ] Clicking upload button opens file selection dialog
+      - [ ] Valid image file (JPG, PNG) can be selected and uploaded
+      - [ ] Uploaded image is saved to user profile
+      - [ ] Profile picture displays immediately after successful upload
+      - [ ] Error message shown for invalid file types
     </example>
   </examples>
 </template>

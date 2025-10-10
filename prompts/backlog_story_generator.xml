@@ -136,12 +136,14 @@
     <step priority="7">
       <action>Specify Acceptance Criteria</action>
       <guidance>
-        - Use Given/When/Then format, if applicable, or checklist format
+        - **Preferred Format:** Gherkin (Given-When-Then) for scenario-based validation
+        - **Fallback Format:** Checklist for simpler validations or non-scenario-based criteria
         - Highly specific and testable
         - Cover happy path, alternate paths, error conditions
         - Include edge cases
         - 5-10 criteria typical for backlog story
         - Must be verifiable by QA without ambiguity
+        - Reference: SDLC Artifacts Guideline v1.1, Section 3.1.3
       </guidance>
     </step>
 
@@ -301,7 +303,34 @@
     </example>
 
     <example type="acceptance_criteria">
-      Good:
+      Good (Gherkin Format - Preferred):
+      **Acceptance Criteria:**
+
+      Scenario 1: Successful notification preference update
+      Given I am an authenticated user with userId "12345"
+      When I POST to /api/v1/users/12345/notification-preferences with valid category array
+      Then the endpoint returns 200 OK
+      And the response contains updated preference object
+      And preferences are persisted to notifications_preferences table
+
+      Scenario 2: Invalid userId
+      Given userId "99999" does not exist in database
+      When I POST to /api/v1/users/99999/notification-preferences
+      Then the endpoint returns 404 Not Found
+      And the response contains error message "User not found"
+
+      Scenario 3: Invalid category name
+      Given I am an authenticated user with userId "12345"
+      When I POST to /api/v1/users/12345/notification-preferences with invalid category "invalid_category"
+      Then the endpoint returns 400 Bad Request
+      And the response lists valid category options
+
+      Scenario 4: Performance requirement
+      Given 100 concurrent requests to the endpoint
+      When all requests are processed
+      Then p99 response time is < 200ms
+
+      Good (Checklist Format - Fallback):
       **Acceptance Criteria:**
       - [ ] POST /api/v1/users/{userId}/notification-preferences endpoint accepts JSON payload with category array
       - [ ] Endpoint validates userId exists in database before updating preferences

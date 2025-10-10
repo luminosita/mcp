@@ -34,7 +34,8 @@ Prompts generate prompts in a self-propagating chain:
       product-idea.md                                             # CLI tool initial concept
 
    prompts/
-      CLAUDE-{task}.md                    # Specialized contexts (lazy-generated)
+      CLAUDE/
+         CLAUDE-{task}.md                    # Specialized contexts (lazy-generated)
       templates/                          # XML-formatted templates
          product-vision-template.xml
          epic-template.xml
@@ -100,19 +101,18 @@ Prompts generate prompts in a self-propagating chain:
 **Step 4: System Actions**
 The executor will:
 1. Parse task details from `/TODO.md`
-2. Check for specialized CLAUDE.md (e.g., `/prompts/CLAUDE-product-vision.md`)
-   - If missing: Prompt human for confirmation > Generate from guidelines in "Specialized CLAUDE.md Files" section
-   - If exists: Load directly
-3. Load required context:
+2. Load required context:
    - `/CLAUDE.md` (this file)
-   - `/prompts/CLAUDE-{task}.md` (specialized)
+   - `/prompts/CLAUDE/CLAUDE-{task}.md` (specialized - must exist)
    - `/prompts/{task}_generator.xml`
    - `/prompts/templates/{task}-template.xml`
    - Input artifacts (from prior tasks)
-4. Execute generator prompt
-5. Save outputs to `/artifacts/`
-6. Update `/TODO.md` task status
-7. Report validation checklist status
+3. Execute generator prompt
+4. Save outputs to `/artifacts/`
+5. Update `/TODO.md` task status
+6. Report validation checklist status
+
+**Note**: All specialized CLAUDE.md files must be created manually before executing their corresponding generators. See "Specialized CLAUDE.md Files" section for current status.
 
 **Step 5: Review Output**
 - Check `/artifacts/{output}_v1.md`
@@ -191,24 +191,19 @@ Tracks implementation tasks with estimates, dependencies, assignments.
 
 ### What Are They?
 Task-specific context files that provide:
-- Domain expertise for specific SDLC phase
-- Template usage instructions
-- Common pitfalls and lessons learned
-- Example outputs from research
+- Orchestration guidance for specific SDLC phase
+- File path references and context loading requirements
+- Common iteration patterns from experience
+- Known pitfalls observed from actual use
+- Phase transition notes
 
-### When Are They Created?
-**Lazy Generation**: Created on-demand during first generator execution
-- Executor checks if `/prompts/CLAUDE-{task}.md` exists
-- If missing: Prompts human for confirmation > Generates from `/prompts/templates/specialized-claude-template.md`
-- If exists: Load directly
-
-### Template Location
-- **Path**: `/prompts/templates/specialized-claude-template.md`
-- **Purpose**: Provides structure and guidelines for creating task-specific CLAUDE.md files
-- **Usage**: Fill in placeholders with phase-specific information
+**Important**: Specialized CLAUDE.md files provide ORCHESTRATION CONTEXT ONLY. They do NOT duplicate content from generators or templates (execution instructions, validation checklists, examples).
 
 ### Current Specialized Files:
-- None yet (will be created as tasks execute)
+- `/prompts/CLAUDE/CLAUDE-product-vision.md` ✅
+- `/prompts/CLAUDE/CLAUDE-epic.md` ⏳ Pending
+- `/prompts/CLAUDE/CLAUDE-prd.md` ⏳ Pending
+- `/prompts/CLAUDE/CLAUDE-backlog-story.md` ⏳ Pending
 
 ---
 
@@ -223,16 +218,20 @@ This framework is based on:
 - **Section 5.1**: Claude Optimization (lines 456-465)
 - **Section 6.1-6.4**: Documentation Templates (lines 620-1117)
 
-For detailed methodology, see:
+For detailed methodology and artifact definitions, see:
 - **Strategy Document**: `/docs/context_engineering_strategy_v1.md`
+- **SDLC Artifacts Guideline**: `/docs/sdlc_artifacts_comprehensive_guideline.md`
+  - Section 1: SDLC Artifact Definitions (Initiative, Epic, Feature, High-Level Story, Backlog Story, Implementation Task)
+  - Section 3.1.3: Backlog Story Characteristics and Acceptance Criteria Formats (Gherkin vs. Checklist)
+  - Section 10: Research Architecture for SDLC Artifacts (Business vs. Implementation Research)
 
 ---
 
 ## Troubleshooting
 
 ### Issue: Specialized CLAUDE.md Missing
-**Symptom**: Executor prompts for file generation
-**Resolution**: Confirm generation when prompted (recommended) or create manually
+**Symptom**: Executor exits with error when specialized CLAUDE.md file not found
+**Resolution**: Create the required specialized CLAUDE.md file before executing the generator. Check "Specialized CLAUDE.md Files" section for current status and list of required files.
 
 ### Issue: Context Window Overflow
 **Symptom**: Token limit warnings

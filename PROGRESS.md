@@ -2,19 +2,19 @@
 ## Next Steps
 - [X] create missing SDLC templates
 - [X] create missing SDLC generator prompts
-- [ ] SDLC Guide: 3.1.3 Gherkin format
-- [ ] All Backlog story generators and templates -> Gherkin format, failback to Checklist
-- [ ] Update CLAUDE.md folder structure
+- [X] SDLC Guide: 3.1.3 Gherkin format
+- [X] All Backlog story generators and templates -> Gherkin format, failback to Checklist
+- [X] Update CLAUDE.md folder structure
+- [X] No lazy generation of specialized CLAUDE.md files
 - [ ] restructure research documents (use docs/research_restructuring_guidelines.md)
 - [ ] generate plan (TODO.md) based on sdlc_artifacts_guidelines.md
 - [ ] feedback/context_engineering_strategy_v1_critique_v3.md
 - [ ] rewrite TASK_003 based on critique_v3 file before execution
 - [ ] verify Claude context is in the task report
-- [ ] execute research prompt with execute-generator prompt
 - [X] extract product research prompt template
 - [X] define product research output template
 - [X] improve product research prompt template to include sections covered by specialized CLAUDE.md files in `claude-md` project
-- [ ] base Product Vision Generator off of product research artifact instead of simple idea
+- [X] base Product Vision Generator off of product research artifact instead of simple idea
 - [X] merge generator-schema-templates
 
 ## Open Questions

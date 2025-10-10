@@ -669,7 +669,11 @@ Implementation Task
 - **Excludes** technical design decisions (decided during sprint)
 - **Excludes** implementation domain breakdown (handled via tasks)
 
-**Example:**
+**Acceptance Criteria Format:**
+- **Preferred:** Gherkin format (Given-When-Then) when applicable for scenario-based validation
+- **Fallback:** Checklist format for simpler validations or non-scenario-based criteria
+
+**Example (Gherkin Format):**
 ```
 Title: Enable Google Sign-Up
 
@@ -678,11 +682,38 @@ I want to sign up using my Google account,
 So that I can register quickly without creating a new password.
 
 Acceptance Criteria:
-- Google sign-up button visible on registration page
-- Clicking button initiates OAuth flow
-- Successful authentication creates user account
-- User redirected to onboarding flow
-- Error messages displayed for failed authentication
+
+Scenario 1: Successful Google Sign-Up
+Given I am on the registration page
+When I click the "Sign up with Google" button
+And I successfully authenticate with Google
+Then my user account is created
+And I am redirected to the onboarding flow
+
+Scenario 2: Failed Google Authentication
+Given I am on the registration page
+When I click the "Sign up with Google" button
+And Google authentication fails
+Then I see an error message explaining the failure
+And I remain on the registration page
+
+Story Points: 3
+```
+
+**Example (Checklist Format):**
+```
+Title: Enable Google Sign-Up
+
+As a user,
+I want to sign up using my Google account,
+So that I can register quickly without creating a new password.
+
+Acceptance Criteria:
+- [ ] Google sign-up button visible on registration page
+- [ ] Clicking button initiates OAuth flow
+- [ ] Successful authentication creates user account
+- [ ] User redirected to onboarding flow
+- [ ] Error messages displayed for failed authentication
 
 Story Points: 3
 ```
