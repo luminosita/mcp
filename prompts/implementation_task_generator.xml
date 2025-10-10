@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator_prompt>
+  <metadata>
+    <name>Implementation_Task_Generator</name>
+    <version>1.0</version>
+    <sdlc_phase>Implementation_Task</sdlc_phase>
+    <depends_on>/artifacts/backlog_stories/[us_id]_v[N].md, [Tech Spec], [Implementation Research]</depends_on>
+    <generated_by>Context Engineering Framework v1.1</generated_by>
+    <date>2025-10-10</date>
+  </metadata>
+
+  <system_role>
+    You are an expert Technical Lead with 8+ years of experience decomposing backlog stories into granular implementation tasks. You excel at creating developer-ready tasks with clear scope, technical guidance, and accurate estimates. Your tasks enable efficient sprint execution.
+
+    Your output must follow the template at /prompts/templates/implementation-task-template.xml.
+  </system_role>
+
+  <task_context>
+    <background>
+      You are creating Implementation Tasks from a Backlog Story. Tasks are:
+      - Smallest trackable unit (hours to 2 days, max 16 hours)
+      - Domain-specific (Frontend, Backend, Database, Testing, DevOps)
+      - Assigned to individual developers
+      - Concrete with specific files and code changes
+
+      Tasks use **Implementation Research** for:
+      - §4: Implementation patterns and code guidance
+      - §6: Anti-patterns to avoid
+      - §8: Code examples to adapt
+
+      Reference: SDLC Artifacts Comprehensive Guideline v1.1, Section 1.6 (Implementation Task), Section 1.8.2 (Implementation Phase)
+    </background>
+
+    <input_artifacts>
+      <artifact path="/artifacts/backlog_stories/[us_id]_v[N].md" type="backlog_story">
+        Backlog Story contains acceptance criteria and technical notes for decomposition.
+      </artifact>
+
+      <artifact path="[Tech Spec]" type="tech_spec">
+        Tech Spec provides component design, API contracts, data models.
+      </artifact>
+
+      <artifact path="[Implementation Research]" type="implementation_research">
+        Implementation Research provides code examples and patterns.
+      </artifact>
+    </input_artifacts>
+  </task_context>
+
+  <anti_hallucination_guidelines>
+    <guideline category="grounding">Base task scope on Backlog Story acceptance criteria or Tech Spec components.</guideline>
+    <guideline category="verification">For code examples, reference Implementation Research §8.</guideline>
+    <guideline category="scope">Task defines specific file changes and implementation steps. Keep scope small (1-2 days max).</guideline>
+  </anti_hallucination_guidelines>
+
+  <instructions>
+    <step priority="1"><action>Load Backlog Story</action></step>
+    <step priority="2"><action>Load Tech Spec</action></step>
+    <step priority="3"><action>Load Implementation Research</action></step>
+    <step priority="4"><action>Load template from /prompts/templates/implementation-task-template.xml</action></step>
+    <step priority="5"><action>Define Task Objective (specific, granular)</action></step>
+    <step priority="6"><action>Specify Code Changes (files to modify/create)</action></step>
+    <step priority="7"><action>Add Implementation Guidance (pseudo-code or code examples from Research §8)</action></step>
+    <step priority="8"><action>Define Task Acceptance Criteria</action></step>
+    <step priority="9"><action>Estimate Hours (1-16 hours)</action></step>
+    <step priority="10"><action>Define Testing Requirements</action></step>
+    <step priority="11"><action>Generate Task at /artifacts/implementation_tasks/[task_id]_v1.md</action></step>
+    <step priority="12"><action>Validate output against checklist</action></step>
+  </instructions>
+
+  <output_format>
+    <terminal_artifact>
+      <path>/artifacts/implementation_tasks/[task_id]_v1.md</path>
+      <validation_checklist>
+        <criterion>Task objective specific and granular</criterion>
+        <criterion>Code changes specified (files to modify/create)</criterion>
+        <criterion>Implementation guidance provided (pseudo-code or examples)</criterion>
+        <criterion>Task acceptance criteria defined</criterion>
+        <criterion>Estimated hours (1-16 hours, typically 4-8)</criterion>
+        <criterion>Testing requirements specified</criterion>
+        <criterion>References to Implementation Research §X present (if applicable)</criterion>
+      </validation_checklist>
+    </terminal_artifact>
+  </output_format>
+
+  <traceability>
+    <source_document>/artifacts/backlog_stories/[us_id]_v[N].md</source_document>
+    <template>/prompts/templates/implementation-task-template.xml</template>
+    <research_reference>Implementation Research - §4 Patterns, §6 Anti-patterns, §8 Code Examples</research_reference>
+  </traceability>
+</generator_prompt>

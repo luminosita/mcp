@@ -5,6 +5,7 @@
     <version>1.0</version>
     <source>Extracted from Context Engineering Framework</source>
     <purpose>Standard XML schema for all generator prompts</purpose>
+    <status>OBSOLETE - replaced by `prompts/templates/generator-schema-template_v2.xml`</status>
   </metadata>
 
   <instructions>

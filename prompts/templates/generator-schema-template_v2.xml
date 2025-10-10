@@ -21,7 +21,7 @@
   <metadata>
     <name>[Generator_Name]</name>
     <version>[version]</version>
-    <sdlc_phase>[Product_Research]</sdlc_phase>
+    <sdlc_phase>[Product_Research|Vision|Initiative|Epic|PRD|Feature|High_Level_Story|Backlog_Story|Architecture|Technical_Design|Code|Test]</sdlc_phase>
     <depends_on>[Path to input artifact(s)]</depends_on>
     <generated_by>[Source that created this generator]</generated_by>
     <date>[YYYY-MM-DD]</date>
@@ -35,7 +35,7 @@
 
   <task_context>
     <background>
-      [Description of what this generator creates and why it matters for a comprehensive product research]
+      [Description of what this generator creates and why it matters in the SDLC workflow]
       [Key requirements and quality standards]
 
       Reference: [Any relevant research sections - for documentation only, not loaded]

@@ -1,5 +1,9 @@
 # Progress Steps
 ## Next Steps
+- [X] create missing SDLC templates
+- [X] create missing SDLC generator prompts
+- [ ] restructure research documents
+- [ ] generate plan (TODO.md) based on sdlc_artifacts_guidelines.md
 - [ ] feedback/context_engineering_strategy_v1_critique_v3.md
 - [ ] rewrite TASK_003 based on critique_v3 file before execution
 - [ ] verify Claude context is in the task report

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>High_Level_User_Story_Template</name>
+    <version>1.0</version>
+    <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
+    <sdlc_phase>High-Level User Story</sdlc_phase>
+    <alias>Capability Story, Parent Story, Feature (in Strategy 1)</alias>
+  </metadata>
+
+  <instructions>
+    <guideline>User-centric expression of functionality at higher abstraction than backlog stories</guideline>
+    <guideline>Bridges gap between features/epics and detailed backlog stories</guideline>
+    <guideline>Time horizon: Few sprints (2-6 weeks)</guideline>
+    <guideline>Purely functional - NO technical constraints or implementation details</guideline>
+    <guideline>Implementation-agnostic - focuses on WHAT users need and WHY</guideline>
+    <guideline>Uses standard user story format: As a [user], I want [goal], so that [benefit]</guideline>
+    <guideline>Will decompose into multiple backlog stories (sprint-sized)</guideline>
+    <guideline>Can represent cross-feature user experiences</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# High-Level User Story: [Story Title]
+
+## Metadata
+- **Story ID:** HLS-[XXX]
+- **Status:** [Draft/Ready/In Progress/Completed]
+- **Priority:** [Critical/High/Medium/Low]
+- **Parent Epic:** [EPIC-XXX]
+- **Parent Feature:** [Feature name, if applicable]
+- **Owner:** [Product Owner Name]
+- **Target Release:** [Q1 2025 / Sprint 15-17]
+
+## User Story Statement
+
+**As a** [user persona],
+**I want** [goal or capability],
+**So that** [business value or user benefit].
+
+## User Context
+
+### Target Persona
+[Primary user persona this story serves - link to detailed persona doc]
+
+**User Characteristics:**
+- [Key characteristic 1]
+- [Key characteristic 2]
+- [Pain point this addresses]
+
+### User Journey Context
+[Where in the user journey does this story fit? What comes before/after?]
+
+## Business Value
+
+### User Value
+[What benefit does the user get from this capability?]
+
+### Business Value
+[What business outcome does this enable?]
+- [Quantifiable impact if known, e.g., "Reduces onboarding time by 30%"]
+- [Qualitative benefit, e.g., "Improves user satisfaction"]
+
+### Success Criteria
+[How will we know this story was successful?]
+- [Measurable criterion 1]
+- [Measurable criterion 2]
+
+## Functional Requirements (High-Level)
+
+### Primary User Flow
+
+**Happy Path:**
+1. User [action 1]
+2. System [response 1]
+3. User [action 2]
+4. System [response 2]
+5. User achieves [goal]
+
+**Alternative Flows:**
+- **Alt Flow 1:** If [condition], then [alternative path]
+- **Alt Flow 2:** If [condition], then [alternative path]
+
+### User Interactions
+[Describe what the user does - NOT how it's implemented]
+- [Interaction 1: e.g., "User enters notification preferences"]
+- [Interaction 2: e.g., "User saves preferences"]
+- [Interaction 3: e.g., "User receives confirmation"]
+
+### System Behaviors (User Perspective)
+[What the system does from user's point of view - NO technical details]
+- [Behavior 1: e.g., "System validates inputs"]
+- [Behavior 2: e.g., "System persists changes"]
+- [Behavior 3: e.g., "System provides feedback"]
+
+## Acceptance Criteria (High-Level)
+
+### Criterion 1: [Description]
+**Given** [user context or precondition]
+**When** [user action]
+**Then** [expected outcome from user perspective]
+
+### Criterion 2: [Description]
+**Given** [user context or precondition]
+**When** [user action]
+**Then** [expected outcome from user perspective]
+
+### Criterion 3: [Description]
+**Given** [user context or precondition]
+**When** [user action]
+**Then** [expected outcome from user perspective]
+
+### Edge Cases & Error Conditions
+- **Invalid Input:** [How system responds to user]
+- **System Unavailable:** [What user experiences]
+- **Partial Success:** [How system handles]
+
+## Scope & Boundaries
+
+### In Scope
+- [Capability 1 included]
+- [Capability 2 included]
+- [Capability 3 included]
+
+### Out of Scope (Deferred to Future Stories)
+- [Capability explicitly not included]
+- [Enhancement for later iteration]
+
+## Decomposition into Backlog Stories
+
+### Estimated Backlog Stories (Not Yet Detailed)
+
+1. **[Story 1 Title]** (~[3] SP)
+   - Brief: [One sentence description]
+
+2. **[Story 2 Title]** (~[5] SP)
+   - Brief: [One sentence description]
+
+3. **[Story 3 Title]** (~[2] SP)
+   - Brief: [One sentence description]
+
+**Total Estimated Story Points:** [~13 SP]
+**Estimated Sprints:** [2-3 sprints]
+
+### Decomposition Strategy
+[How to break this high-level story into backlog stories - by workflow step, by component, by persona, etc.]
+
+## Dependencies
+
+### User Story Dependencies
+- **Depends On:** [HLS-XXX: Must complete before this story]
+- **Blocks:** [HLS-YYY: This story must complete first]
+
+### External Dependencies
+- [Third-party service dependency]
+- [Data availability dependency]
+
+## Non-Functional Requirements (User-Facing Only)
+
+**Note:** Technical NFRs (performance targets, architecture) belong in PRD or Backlog Stories. Only user-facing NFRs here.
+
+- **Usability:** [User experience requirements]
+- **Accessibility:** [WCAG level, screen reader support]
+- **Localization:** [Languages supported]
+- **Compliance:** [User-facing compliance needs, e.g., "User must consent to data collection"]
+
+## Risks & Open Questions
+
+### Risks
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| [User adoption risk] | High/Med/Low | [Strategy] |
+| [Usability risk] | High/Med/Low | [Strategy] |
+
+### Open Questions
+- [Question 1 about user behavior or requirements]
+- [Question 2 about scope or priority]
+
+## Definition of Ready (Before Backlog Refinement)
+
+- [ ] User story statement complete and validated
+- [ ] User persona identified and documented
+- [ ] Business value articulated and quantified
+- [ ] High-level acceptance criteria defined
+- [ ] Dependencies identified
+- [ ] Product Owner approval obtained
+
+## Definition of Done (High-Level Story Complete)
+
+- [ ] All decomposed backlog stories completed
+- [ ] All acceptance criteria met and validated
+- [ ] User testing completed (if applicable)
+- [ ] Success metrics baseline captured
+- [ ] Documentation updated (user-facing)
+- [ ] Product Owner acceptance obtained
+
+## Related Documents
+- **Parent Epic:** [Link to epic]
+- **PRD:** [Link to PRD section describing this capability]
+- **User Research:** [Link to research supporting this story]
+- **User Personas:** [Link to persona documents]
+- **Wireframes/Mockups:** [Link if available]
+- **Business Research:** [Link to relevant sections, e.g., "Business Research §3.2 - UX Gaps"]
+
+---
+
+**Story Author:** [Name]
+**Last Updated:** [Date]
+**Next Review:** [Date]
+    ]]>
+  </structure>
+
+  <examples>
+    <example>
+      # High-Level User Story: Configure Push Notification Preferences
+
+      ## User Story Statement
+      **As a** mobile app user,
+      **I want** to configure which types of push notifications I receive,
+      **So that** I only get notifications relevant to my interests and avoid notification fatigue.
+
+      ## User Context
+
+      ### Target Persona
+      Active mobile app user who receives multiple notifications daily
+
+      **User Characteristics:**
+      - Uses app 3-5 times per week
+      - Frustrated by irrelevant notifications
+      - Values control over their notification experience
+
+      ## Business Value
+
+      ### User Value
+      - Reduces notification fatigue
+      - Improves app experience by showing only relevant content
+      - Gives users control over their interaction with the app
+
+      ### Business Value
+      - Reduces app uninstalls due to notification annoyance (target: -20%)
+      - Increases engagement with notifications (target: +35% open rate)
+      - Improves user satisfaction scores
+
+      ## Functional Requirements (High-Level)
+
+      ### Primary User Flow
+
+      **Happy Path:**
+      1. User navigates to notification settings
+      2. User views available notification categories
+      3. User enables/disables categories
+      4. User saves preferences
+      5. System confirms changes applied
+
+      ## Acceptance Criteria
+
+      ### Criterion 1: User can view notification categories
+      **Given** user is in notification settings
+      **When** user views the settings screen
+      **Then** user sees all available notification categories (marketing, transactional, alerts)
+
+      ### Criterion 2: User can toggle categories
+      **Given** user sees notification categories
+      **When** user toggles a category on/off
+      **Then** system immediately updates the preference
+
+      ### Criterion 3: Changes persist
+      **Given** user has changed notification preferences
+      **When** user closes and reopens the app
+      **Then** preferences remain as configured
+
+      ## Decomposition into Backlog Stories
+
+      1. **Display notification preferences screen** (~3 SP)
+         - Brief: Create UI to show all notification categories
+
+      2. **Implement preference toggle logic** (~5 SP)
+         - Brief: Backend API to save/retrieve user preferences
+
+      3. **Apply preferences to notification delivery** (~5 SP)
+         - Brief: Filter notifications based on user preferences
+
+      **Total Estimated Story Points:** ~13 SP
+      **Estimated Sprints:** 2 sprints
+    </example>
+  </examples>
+</template>

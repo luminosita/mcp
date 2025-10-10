@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator_prompt>
+  <metadata>
+    <name>Backlog_Story_Generator</name>
+    <version>1.0</version>
+    <sdlc_phase>Backlog_Story</sdlc_phase>
+    <depends_on>/artifacts/high_level_stories/[hls_id]_v[N].md, [Implementation Research]</depends_on>
+    <generated_by>Context Engineering Framework v1.1</generated_by>
+    <date>2025-10-10</date>
+  </metadata>
+
+  <system_role>
+    You are an expert Agile Product Owner with 10+ years of experience refining backlog stories for sprint execution. You excel at decomposing high-level stories into sprint-ready, testable backlog stories with clear acceptance criteria. Your stories balance user value with technical implementation guidance, enabling efficient sprint planning.
+
+    Your output must follow the template at /prompts/templates/backlog-story-template.xml.
+  </system_role>
+
+  <task_context>
+    <background>
+      You are creating a Backlog Story from a High-Level User Story. This story will:
+      - Be sprint-ready (completable in 1 sprint, typically 2-5 story points)
+      - Provide clear acceptance criteria for development and testing
+      - Include technical context from Implementation Research
+      - Balance user perspective with implementation guidance
+      - Enable parallel development across domains (frontend, backend, etc.)
+
+      The backlog story must be:
+      - User-focused with implementation adjacency (close to technical details without prescribing exact design)
+      - Testable with specific acceptance criteria
+      - Estimated appropriately (1-5 story points typical)
+      - Traceable to parent high-level story
+      - Enriched with Implementation Research references for technical guidance
+
+      **Key Distinction:** Backlog Story uses Implementation Research (not Business Research).
+      - Focus: Technical implementation approaches, patterns, code examples, performance targets
+      - References: Implementation Research §X for patterns, anti-patterns, code guidance
+
+      Reference: SDLC Artifacts Comprehensive Guideline v1.1, Section 1.5 (Backlog User Story), Section 1.5.7 (Story Categories), Section 1.8.2 (Implementation Phase)
+    </background>
+
+    <input_artifacts>
+      <artifact path="/artifacts/high_level_stories/[hls_id]_v[N].md" type="high_level_story">
+        High-Level Story contains:
+        - User story statement and user context
+        - Primary user flow and acceptance criteria
+        - Decomposition plan (3-5 backlog stories estimated)
+        - Scope and dependencies
+
+        Select one backlog story from decomposition plan to develop in detail.
+      </artifact>
+
+      <artifact path="[Implementation Research]" type="implementation_research">
+        Implementation Research provides (TECHNICAL PERSPECTIVE):
+        - Architecture patterns and technology stack
+        - Implementation capabilities with code examples (§4)
+        - Technical NFRs (performance, security, observability)
+        - Implementation pitfalls and anti-patterns (§6)
+        - Code examples and benchmarks (§8)
+
+        Use for technical guidance, pattern references, and implementation best practices.
+      </artifact>
+
+      <artifact path="[PRD - Optional]" type="prd">
+        PRD provides (if needed for context):
+        - Detailed functional requirements
+        - Technical NFRs
+        - Dependencies and constraints
+
+        Use for additional context on requirements and technical constraints.
+      </artifact>
+    </input_artifacts>
+
+    <constraints>
+      <constraint>[CUSTOMIZE PER PRODUCT - Sprint: Sprint 15]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT - Story point range: 1-5 SP]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT - Technology stack: React, Node.js, PostgreSQL]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT - Definition of Done: Tests required, code review mandatory]</constraint>
+    </constraints>
+  </task_context>
+
+  <anti_hallucination_guidelines>
+    <guideline category="grounding">Base story scope on High-Level Story decomposition plan. Quote specific workflow steps when defining story boundaries.</guideline>
+    <guideline category="assumptions">When suggesting implementation approach, reference Implementation Research patterns. Mark suggestions as [RECOMMENDED APPROACH] if not explicit in research.</guideline>
+    <guideline category="uncertainty">If Implementation Research lacks specific pattern, note as [REQUIRES TECHNICAL SPIKE] rather than inventing approach.</guideline>
+    <guideline category="verification">For technical notes and implementation guidance, cite Implementation Research sections. Format: "ref: Implementation Research §4.3 - Pattern Name"</guideline>
+    <guideline category="confidence">Identify areas requiring architecture decision. Mark as [REQUIRES ADR] for significant technical choices.</guideline>
+    <guideline category="scope">Backlog story should be implementation-adjacent (hints at technical approach) but not prescriptive (exact implementation in tasks). Do NOT write code in backlog story—code goes in Implementation Tasks.</guideline>
+  </anti_hallucination_guidelines>
+
+  <instructions>
+    <step priority="1">
+      <action>Load and analyze High-Level User Story</action>
+      <purpose>Extract backlog story to develop from decomposition plan</purpose>
+      <anti_hallucination>Identify specific story from decomposition plan. Note workflow step or component this story addresses.</anti_hallucination>
+    </step>
+
+    <step priority="2">
+      <action>Load Implementation Research</action>
+      <purpose>Identify relevant patterns, anti-patterns, and code examples for technical guidance</purpose>
+      <anti_hallucination>Search Implementation Research for relevant sections: §4 (Implementation Capabilities), §6 (Pitfalls/Anti-patterns), §8 (Code Examples). Note specific sections for referencing.</anti_hallucination>
+    </step>
+
+    <step priority="3">
+      <action>Load PRD (if available for additional context)</action>
+      <purpose>Extract detailed requirements and technical NFRs relevant to this story</purpose>
+      <anti_hallucination>Use PRD for functional requirements and technical NFRs. Do not re-invent requirements—extract from PRD.</anti_hallucination>
+    </step>
+
+    <step priority="4">
+      <action>Load template from /prompts/templates/backlog-story-template.xml</action>
+      <purpose>Understand required structure and validation criteria</purpose>
+      <anti_hallucination>Follow template structure exactly. Include traceability section with Implementation Research references.</anti_hallucination>
+    </step>
+
+    <step priority="5">
+      <action>Craft Story Title and Description</action>
+      <guidance>
+        - Title: Action-oriented, specific (e.g., "Implement notification preferences API endpoint")
+        - Description: Clear, concise statement of what needs to be built
+        - User story format optional at this level (can be system-focused)
+        - Example: "As a system, I need to expose an API endpoint for saving user notification preferences so that frontend can persist user choices"
+      </guidance>
+    </step>
+
+    <step priority="6">
+      <action>Define Detailed Requirements</action>
+      <guidance>
+        - Functional requirements: What the story delivers
+        - Specific scenarios or system behaviors
+        - Input/output specifications
+        - Data model requirements
+        - Extract from High-Level Story flow + PRD requirements
+      </guidance>
+    </step>
+
+    <step priority="7">
+      <action>Specify Acceptance Criteria</action>
+      <guidance>
+        - Use Given/When/Then format, if applicable, or checklist format
+        - Highly specific and testable
+        - Cover happy path, alternate paths, error conditions
+        - Include edge cases
+        - 5-10 criteria typical for backlog story
+        - Must be verifiable by QA without ambiguity
+      </guidance>
+    </step>
+
+    <step priority="8">
+      <action>Add Technical Notes and Implementation Guidance</action>
+      <guidance>
+        - Reference Implementation Research sections for patterns
+        - Suggest approach without prescribing exact implementation
+        - Note relevant code examples from Implementation Research §8
+        - Identify anti-patterns to avoid from Implementation Research §6
+        - Format: "ref: Implementation Research §4.3 - REST API Pattern"
+        - Example: "Consider circuit breaker pattern for external API calls (ref: Implementation Research §6.1 - Anti-pattern: Cascade Failures)"
+      </guidance>
+    </step>
+
+    <step priority="9">
+      <action>Define Technical Specifications</action>
+      <guidance>
+        - API endpoints (if applicable): Method, path, request/response schemas
+        - Database schema changes (if applicable): Tables, columns, indexes
+        - Dependencies: Libraries, services, APIs required
+        - Performance targets from PRD (if applicable): p99 < 200ms
+        - Security requirements: Authentication, authorization, encryption
+      </guidance>
+    </step>
+
+    <step priority="10">
+      <action>Identify Dependencies and Prerequisites</action>
+      <guidance>
+        - Story dependencies (other backlog stories that must complete first)
+        - Technical dependencies (services, APIs, infrastructure)
+        - Team dependencies (coordination with other teams)
+      </guidance>
+    </step>
+
+    <step priority="11">
+      <action>Estimate Story Points</action>
+      <guidance>
+        - Use team's estimation scale (typically Fibonacci: 1, 2, 3, 5, 8)
+        - Consider complexity, uncertainty, effort
+        - Target: 1-5 SP for sprint-ready story
+        - If >5 SP, consider breaking down further
+        - Mark as [ESTIMATED] clearly
+      </guidance>
+    </step>
+
+    <step priority="12">
+      <action>Define Testing Strategy</action>
+      <guidance>
+        - Unit tests: Key scenarios to test
+        - Integration tests: End-to-end flows
+        - Manual testing: Steps to verify
+        - Performance testing (if applicable): Load, stress tests
+      </guidance>
+    </step>
+
+    <step priority="13">
+      <action>Add Traceability References</action>
+      <guidance>
+        - Parent High-Level Story: [HLS-XXX]
+        - PRD Section: [Link to relevant PRD section]
+        - Implementation Research: §X.Y - [Pattern Name]
+        - **Critical:** For non-PRD-derived stories, include justification and research reference per SDLC Guideline v1.1 Section 1.5.7
+      </guidance>
+    </step>
+
+    <step priority="14">
+      <action>Generate backlog story document</action>
+      <output_path>/artifacts/backlog_stories/[us_id]_v1.md</output_path>
+      <format>Markdown following backlog-story-template.xml structure</format>
+    </step>
+
+    <step priority="15">
+      <action>Validate output against checklist</action>
+      <reference>See validation_checklist below</reference>
+    </step>
+  </instructions>
+
+  <output_format>
+    <terminal_artifact>
+      <path>/artifacts/backlog_stories/[us_id]_v1.md</path>
+      <format>Markdown following backlog-story-template.xml structure</format>
+      <validation_checklist>
+        <criterion>Story title is action-oriented and specific</criterion>
+        <criterion>Detailed requirements clearly stated</criterion>
+        <criterion>Acceptance criteria highly specific and testable (5-10 criteria)</criterion>
+        <criterion>Technical notes reference Implementation Research sections</criterion>
+        <criterion>Technical specifications include API/database/dependencies (if applicable)</criterion>
+        <criterion>Story points estimated (1-5 SP typical)</criterion>
+        <criterion>Testing strategy defined (unit, integration, manual)</criterion>
+        <criterion>Dependencies identified (story, technical, team)</criterion>
+        <criterion>Traceability: References to High-Level Story, PRD, Implementation Research present</criterion>
+        <criterion>Implementation-adjacent: Hints at approach without prescribing exact code</criterion>
+        <criterion>Sprint-ready: Can be completed in 1 sprint by team</criterion>
+        <criterion>For non-PRD-derived stories: Justification and Implementation Research reference per Section 1.5.7</criterion>
+      </validation_checklist>
+    </terminal_artifact>
+  </output_format>
+
+  <traceability>
+    <source_document>/artifacts/high_level_stories/[hls_id]_v[N].md</source_document>
+    <template>/prompts/templates/backlog-story-template.xml</template>
+    <research_reference>Implementation Research - §4 Implementation Capabilities, §6 Pitfalls/Anti-patterns, §8 Code Examples</research_reference>
+    <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.5 (Backlog User Story), Section 1.5.7 (Story Categories), Section 1.8.2 (Implementation Phase)</strategy_reference>
+  </traceability>
+
+  <validation>
+    <self_check>
+      After generation, verify:
+      - [ ] Backlog story document has all required template sections
+      - [ ] Story traces to High-Level Story decomposition plan
+      - [ ] Acceptance criteria highly specific and unambiguous
+      - [ ] Technical notes reference Implementation Research §X.Y
+      - [ ] Story sized appropriately (1-5 SP for sprint completion)
+      - [ ] Testing strategy covers unit, integration, and manual tests
+      - [ ] Dependencies clearly identified
+      - [ ] Traceability section complete with all references
+      - [ ] Implementation-adjacent: Provides guidance without prescribing exact implementation
+      - [ ] Sprint-ready: Team can pick up and complete in one sprint
+      - [ ] For non-PRD-derived stories: Includes category justification per Section 1.5.7
+    </self_check>
+  </validation>
+
+  <quality_guidance>
+    <guideline category="completeness">
+      Every section must have substantive content. Technical notes should reference at least 1-2 Implementation Research sections. Testing strategy must be detailed enough for QA.
+    </guideline>
+
+    <guideline category="clarity">
+      Write for development team. Acceptance criteria must be unambiguous. Technical notes should guide (not prescribe) implementation.
+    </guideline>
+
+    <guideline category="actionability">
+      Story must be sprint-ready. Team should be able to estimate, plan, and execute without waiting for clarification. If unknowns exist, mark [REQUIRES SPIKE] or [REQUIRES ADR].
+    </guideline>
+
+    <guideline category="traceability">
+      Every technical note should reference Implementation Research. Format: "ref: Implementation Research §4.3 - REST API Pattern" or "Consider pattern from Implementation Research §6.1"
+    </guideline>
+  </quality_guidance>
+
+  <examples>
+    <example type="technical_notes">
+      Good:
+      **Implementation Guidance:**
+      - Use REST API pattern with JSON payloads (ref: Implementation Research §4.2 - RESTful API Design)
+      - Implement request validation with Joi schema (ref: Implementation Research §4.5 - Input Validation)
+      - Apply circuit breaker for external notification service calls to prevent cascade failures (ref: Implementation Research §6.1 - Anti-pattern: Cascade Failures)
+      - Store preferences in PostgreSQL with user_id index for query performance (ref: Implementation Research §5.1 - Database Schema Design)
+
+      Bad:
+      **Technical Notes:**
+      - Build an API
+      - Make it secure
+      - Store data in database
+      [Too vague, no Implementation Research references, no actionable guidance]
+    </example>
+
+    <example type="acceptance_criteria">
+      Good:
+      **Acceptance Criteria:**
+      - [ ] POST /api/v1/users/{userId}/notification-preferences endpoint accepts JSON payload with category array
+      - [ ] Endpoint validates userId exists in database before updating preferences
+      - [ ] Endpoint returns 400 Bad Request for invalid category names with error message listing valid categories
+      - [ ] Endpoint returns 200 OK with updated preference object on success
+      - [ ] Preferences persist to PostgreSQL notifications_preferences table
+      - [ ] Endpoint response time p99 < 200ms under 100 concurrent requests
+      - [ ] Unit tests cover happy path, invalid userId, invalid category, and database errors
+      - [ ] Integration test verifies end-to-end preference save and retrieval
+
+      Bad:
+      **Acceptance Criteria:**
+      - API works
+      - Data is saved
+      - Tests pass
+      [Too vague, not testable, no specific scenarios]
+    </example>
+
+    <example type="non_prd_derived_traceability">
+      Good (Category 2: Emergent Implementation Requirement):
+      **Story:** Implement circuit breaker pattern for notification service API
+      **Justification:** Necessary to implement PRD-042 requirement robustly and prevent cascade failures when notification service is unavailable
+      **Reference:** Implementation Research §6.1 - Anti-pattern: Cascade Failures
+      **Implementation Guidance:** Implementation Research §4.7 - Circuit Breaker Code Example
+
+      Bad:
+      **Story:** Add circuit breaker
+      [No justification, no research reference, no traceability to PRD]
+    </example>
+  </examples>
+</generator_prompt>
