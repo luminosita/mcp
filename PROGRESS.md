@@ -1,5 +1,5 @@
 # Progress Steps
-## Manual testing
+## Bootstrap
 - [X] create missing SDLC templates
 - [X] create missing SDLC generator prompts
 - [X] SDLC Guide: 3.1.3 Gherkin format
@@ -17,6 +17,9 @@
 - [X] base Product Vision Generator off of product research artifact instead of simple idea
 - [X] merge generator-schema-templates
 
+## Manual testing
+- [ ] Test Product Vision Generator
+- [ ] Perform refinement cycle
 ## Research documents restructuring
 - [ ] restructure research documents (use docs/research_restructuring_guidelines.md) (restructure @docs/research/shh/Secrets_Management_Solution_Research_Report_v2.md according to @docs/research_restructuring_guidelines.md)
 

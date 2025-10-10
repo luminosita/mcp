@@ -23,18 +23,14 @@ This command executes a generator prompt based on the task ID specified in `/TOD
 - Locate task by ID in `/TODO.md`
 - Extract task metadata:
   - Generator prompt path
-  - Required context files
   - Input artifacts (dependencies)
-  - Validation criteria
-  - Output paths
 
 ### Step 2: Load Context
 Required files for execution:
 1. `/CLAUDE.md` (root orchestration)
 2. `/prompts/{task_name}_generator.xml` (the generator to execute)
   - Derive task_name from generator prompt filename (e.g., product_vision_generator.xml → product-vision)
-3. `/prompts/templates/{artifact}-template.xml` (template referenced by generator)
-4. Input artifacts (from task dependencies, e.g., `/artifacts/product_vision_v3.md`)
+3. Input artifacts (from task dependencies, e.g., `/artifacts/product_vision_v3.md`)
 
 **Context Validation**:
 - Verify all required files exist
@@ -47,33 +43,16 @@ Required files for execution:
    - `{UPSTREAM_ARTIFACT}` → content from input file
    - `{TEMPLATE}` → content from template file
    - `{ITERATION}` → version number (v1, v2, or v3)
-3. Process generator instructions step-by-step
-4. Generate outputs:
-   - **Terminal artifact**: Primary deliverable (e.g., `/artifacts/product_vision_v1.md`)
-   - **Next-level generator**: Prompt for next SDLC phase (e.g., `/prompts/epic_generator.xml`)
-
-### Step 4: Save Outputs
-- Write terminal artifact to path specified in generator `<output_format>`
-- Write next-level generator to `/prompts/` directory
-- Ensure proper file naming with version suffix
-
-### Step 5: Validate Outputs
-Run validation checklist from generator XML:
-- [ ] Terminal artifact has all required template sections
-- [ ] Readability check (manual Flesch >60 assessment)
-- [ ] Traceability: References to upstream artifacts present
-- [ ] Next generator: Valid XML syntax
+3. Run generator
 
 **Report Results**:
 ```
 ✅ Terminal Artifact: /artifacts/product_vision_v1.md
-✅ Next Generator: /prompts/epic_generator.xml
 
 Validation Status:
 ✅ All template sections present (8/8)
 ⚠️  Readability: Manual check required
 ✅ Traceability: 3 references to product-idea.md
-✅ Next generator: Valid XML
 
 AI Context Report:
 [RUN `/context` COMMAND AND PASTE OUTPUT HERE] 
@@ -84,7 +63,7 @@ Action Required:
 3. If refinement needed, run: /refine product_vision_generator
 ```
 
-### Step 7: Update TODO.md
+### Step 4: Update TODO.md
 Update relevant task status in `/TODO.md`:
 - Mark current task checkbox as complete (if final version v3)
 - Update task status notes

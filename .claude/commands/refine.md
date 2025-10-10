@@ -126,22 +126,6 @@ Next Steps:
 3. If acceptable: Proceed to next task or finalize as v3
 ```
 
-### Step 8: Document Lessons Learned (v2 → v3 only)
-**IMPORTANT**: When refining from v2 to v3 (final iteration), human must manually update strategy document with lessons learned:
-
-**Human Action Required**:
-- Open `/docs/context_engineering_strategy_v1.md`
-- Navigate to Section 8.2 "Generator Refinement Patterns"
-- Add entry documenting lessons learned:
-
-```markdown
-#### Pattern: {Generator_Type} Refinement
-**Issue Pattern**: [Common issues encountered across v1/v2]
-**Solution**: [Effective refinement strategy]
-**Applicability**: [When to apply this pattern to future generators]
-**Evidence**: Improved validation score from X% to Y%
-```
-
 ## Iteration Limits
 
 **Standard Cycle**: 3 iterations (v1 → v2 → v3)

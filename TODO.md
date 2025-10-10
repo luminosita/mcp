@@ -77,25 +77,11 @@ Create the first generator prompt that will produce Product Vision documents.
 
 ---
 
-### TASK-003: Update Framework Files per Critique
-**Priority**: Critical
-**Dependencies**: TASK-002
-**Estimated Time**: 60 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Apply all updates from feedback/context_engineering_strategy_v3_critique.md
-
-**Context Requirements**:
-- `/feedback/context_engineering_strategy_v3_critique.md`
-
----
-
 ## Phase 1.1: Generator Execution & Iteration
 
 ### TASK-004: Execute Product Vision Generator v1
 **Priority**: Critical
-**Dependencies**: TASK-001 (product-idea.md must exist), TASK-003
+**Dependencies**: None
 **Estimated Time**: 20 minutes
 **Status**: ⏳ Pending
 **Context**: New session C1 required
@@ -105,10 +91,27 @@ Execute Product Vision Generator in standalone context to produce first iteratio
 
 **Command**: `/generate TASK-004`
 
-**Context Requirements**:
-- Business Research (`docs/research/mcp/AI_Agent_MCP_Server_business_research.md`)
+**Input artifacts**:
+- Business Research - `docs/research/mcp/AI_Agent_MCP_Server_business_research.md`
 
 ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### TASK-005: Critique Product Vision v1
 **Priority**: High

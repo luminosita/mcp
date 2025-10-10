@@ -47,6 +47,13 @@
 
 ---
 
+## Generate Command Instructions
+
+### Start New Context (if required)**
+- Most tasks require fresh Claude Code session
+- Check task `Context:` field in TODO.md
+- If "New session CX required", start clean session
+
 ## Commands Reference
 
 ### Primary Commands

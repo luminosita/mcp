@@ -2,7 +2,7 @@
 ## v1 to v2 Restructuring Analysis
 
 **Date:** 2025-10-10
-**Migration Type:** Restructuring existing content to follow research_artifact_template.md
+**Migration Type:** Restructuring existing content to follow research-artifact-template.md
 **Status:** Planning Complete - Execution Required
 
 ---
