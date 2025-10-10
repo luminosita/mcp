@@ -459,8 +459,8 @@ This ensures:
 #### 11.1.1 Business Research
 
 **File Pattern:** `[Product]_business_research.md`
-**Template:** `docs/research/research_generator/business_research_template.md`
-**Generator:** `docs/research/research_generator/business_research_generator.xml`
+**Template:** `prompts/templates/business_research_template.md`
+**Generator:** `prompts/business_research_generator.xml`
 
 **Focus:**
 - Market dynamics, competitive positioning
@@ -502,8 +502,8 @@ This ensures:
 #### 11.1.2 Implementation Research
 
 **File Pattern:** `[Product]_implementation_research.md`
-**Template:** `docs/research/research_generator/implementation_research_template.md`
-**Generator:** `docs/research/research_generator/implementation_research_generator.xml`
+**Template:** `prompts/templates/implementation_research_template.md`
+**Generator:** `prompts/implementation_research_generator.xml`
 
 **Focus:**
 - Architecture patterns, technology stack
@@ -658,7 +658,7 @@ PRD Creation:
 
 **Existing Research:** Some products may have comprehensive (monolithic) research artifacts created before split architecture.
 
-**Migration Guideline:** `docs/research/research_generator/research_restructuring_guidelines.md`
+**Migration Guideline:** `prompts/research_restructuring_guidelines.md`
 
 **Migration Process:**
 1. Load existing monolithic research

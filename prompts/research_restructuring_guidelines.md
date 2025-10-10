@@ -87,7 +87,7 @@ Before splitting, understand the structure:
 
 ### Step 2: Extract Business Research
 
-**Target Template:** `docs/research/research_generator/business_research_template.md`
+**Target Template:** `prompts/templates/business_research_template.md`
 
 #### Section 1: Problem Space Analysis
 **Extract:**

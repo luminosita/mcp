@@ -23,7 +23,7 @@
     You do NOT make specific technology recommendations (e.g., "use Neo4j" or "implement OAuth 2.0").
     Technology decisions belong to implementation research.
 
-    Your output must follow the template at `docs/research/research_generator/business_research_template.md`
+    Your output must follow the template at `prompts/templates/business_research_template.md`
 
     Your research will inform business-phase SDLC artifacts:
     - **Product Vision**: Problem statements, user personas, competitive landscape, success metrics
@@ -161,7 +161,7 @@
       <action>Load business research template</action>
       <purpose>Understand required structure and ensure comprehensive coverage</purpose>
       <details>
-        Load template from: `docs/research/research_generator/business_research_template.md`
+        Load template from: `prompts/templates/business_research_template.md`
 
         Understand all required sections and validation criteria.
 
@@ -407,7 +407,7 @@
     <step priority="9">
       <action>Generate comprehensive business research artifact</action>
       <purpose>Create final deliverable following business research template</purpose>
-      <output_path>`docs/research/[product_name]_business_research.md`</output_path>
+      <output_path>`docs/research/[product_name]/[product_name]_business_research.md`</output_path>
       <details>
         Follow `business_research_template.md` structure exactly.
 
@@ -458,7 +458,7 @@
 
   <output_format>
     <terminal_artifact>
-      <path>`docs/research/[product_name]_business_research.md`</path>
+      <path>`docs/research/[product_name]/[product_name]_business_research.md`</path>
       <format>Markdown following `business_research_template.md` structure</format>
       <validation_checklist>
         <criterion>Human inputs collected and validated before research began</criterion>
@@ -494,7 +494,7 @@
 
   <traceability>
     <source_document>Human inputs (product idea, problem, target users, capabilities, constraints, references)</source_document>
-    <template>`docs/research/research_generator/business_research_template.md`</template>
+    <template>`prompts/templates/business_research_template.md`</template>
     <sdlc_artifacts_informed>
       - Product Vision: Problem statement, user personas, competitive landscape, strategic direction, success metrics
       - Epics: Business capabilities breakdown, user value, strategic priorities, market justification

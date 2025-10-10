@@ -1,6 +1,6 @@
 # Research Document Coverage Evaluation
 
-**Document**: `/docs/research/advanced_prompt_engineering_software_docs_code_final.md`
+**Document**: `/docs/research/advanced_prompt_engineering/advanced_prompt_engineering_software_docs_code_final.md`
 **Evaluation Date**: 2025-10-07
 **Framework Version**: 1.0
 

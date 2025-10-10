@@ -4,7 +4,7 @@
 - **Author:** [Researcher Name]
 - **Date:** [YYYY-MM-DD]
 - **Version:** [version number]
-- **Status:** [Draft/Review/Final]
+- **Status:** OBSOLETE, use `prompts/templates/business_research_template.xml` and `prompts/templates/implementation_research_template.xml`
 - **Product Category:** [CLI Tool/SaaS Platform/Infrastructure Tool/AI-ML Product/Other]
 
 ---

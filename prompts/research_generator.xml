@@ -7,6 +7,7 @@
     <depends_on>Human inputs: product idea, problem overview, target users, key capabilities, constraints, product references</depends_on>
     <generated_by>Context Engineering Framework - Research Analysis Synthesis</generated_by>
     <date>2025-10-09</date>
+    <status>OBSOLETE - replaced by `prompts/business_research_generator.xml` and `prompts/implementation_research_generator.xml`</status>
   </metadata>
 
   <system_role>
@@ -17,7 +18,7 @@
     - Providing sophisticated architectural guidance
     - Conducting thorough technology stack evaluations
 
-    Your output must follow the template at `docs/research/research_generator/research_artifact_template.md`
+    Your output must follow the template at `prompts/templates/research_artifact_template.md`
 
     Your research must provide abundant information and examples to inform all SDLC phase artifacts (Product Vision, Epics, PRDs, Backlog Stories).
   </system_role>
@@ -134,7 +135,7 @@
       <action>Load research artifact template</action>
       <purpose>Understand required structure and ensure comprehensive coverage</purpose>
       <details>
-        Load template from: `docs/research/research_generator/research_artifact_template.md`
+        Load template from: `prompts/templates/research_artifact_template.md`
 
         Understand all required sections and validation criteria.
       </details>
@@ -330,7 +331,7 @@
     <step priority="9">
       <action>Generate comprehensive research artifact with citations</action>
       <purpose>Create final deliverable following template structure</purpose>
-      <output_path>`docs/research/research_generator/[product_name]_research_report.md`</output_path>
+      <output_path>`docs/research/[product_name]/[product_name]_research_report.md`</output_path>
       <details>
         Follow `research_artifact_template.md` structure exactly.
 
@@ -378,7 +379,7 @@
 
   <output_format>
     <terminal_artifact>
-      <path>`docs/research/research_generator/[product_name]_research_report.md`</path>
+      <path>`docs/research/[product_name]/[product_name]_research_report.md`</path>
       <format>Markdown following `research_artifact_template.md` structure</format>
       <validation_checklist>
         <criterion>Human inputs collected and validated before research began</criterion>
@@ -410,7 +411,7 @@
 
   <traceability>
     <source_document>Human inputs (product idea, problem, users, capabilities, constraints, references)</source_document>
-    <template>`docs/research/research_generator/research_artifact_template.md`</template>
+    <template>`prompts/templates/research_artifact_template.md`</template>
     <research_reference>
       Example: `docs/research/shh/Secrets Management Solution Research Report.md` (for structure and citation quality reference only)
     </research_reference>

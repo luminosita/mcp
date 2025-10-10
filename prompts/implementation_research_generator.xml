@@ -23,7 +23,7 @@
     You ASSUME product direction is set (from business research).
     You focus on HOW to build, WHICH technologies to use, WHAT patterns to follow, WHAT pitfalls to avoid.
 
-    Your output must follow the template at `docs/research/research_generator/implementation_research_template.md`
+    Your output must follow the template at `prompts/templates/implementation_research_template.md`
 
     Your research will inform implementation-phase SDLC artifacts:
     - **Backlog Stories**: Technical implementation approaches, code patterns, performance targets, traceability to Implementation Research sections (e.g., "ref: §6.1 - Circuit Breaker Pattern")
@@ -153,7 +153,7 @@
       <action>Load implementation research template</action>
       <purpose>Understand structure and validation criteria</purpose>
       <details>
-        Load template from: `docs/research/research_generator/implementation_research_template.md`
+        Load template from: `prompts/templates/implementation_research_template.md`
 
         Template focuses on TECHNICAL perspective:
         - Technical context and constraints
@@ -418,7 +418,7 @@
     <step priority="9">
       <action>Generate comprehensive implementation research artifact</action>
       <purpose>Create final deliverable following implementation template</purpose>
-      <output_path>`docs/research/[product_name]_implementation_research.md`</output_path>
+      <output_path>`docs/research/[product_name]/[product_name]_implementation_research.md`</output_path>
       <details>
         Follow `implementation_research_template.md` structure exactly.
 
@@ -464,7 +464,7 @@
 
   <output_format>
     <terminal_artifact>
-      <path>`docs/research/[product_name]_implementation_research.md`</path>
+      <path>`docs/research/[product_name]/[product_name]_implementation_research.md`</path>
       <format>Markdown following `implementation_research_template.md` structure</format>
       <validation_checklist>
         <criterion>Human inputs collected and validated</criterion>
@@ -502,7 +502,7 @@
 
   <traceability>
     <source_document>Human inputs (product idea, technical challenges, requirements, constraints, references)</source_document>
-    <template>`docs/research/research_generator/implementation_research_template.md`</template>
+    <template>`prompts/templates/implementation_research_template.md`</template>
     <sdlc_artifacts_informed>
       - Backlog Stories: Implementation approaches, code patterns, performance targets, traceability to research sections (e.g., "Story: Implement circuit breaker pattern (ref: Implementation Research §6.1 - Anti-pattern: Cascade Failures)")
       - ADRs: Architecture decisions, technology choices, trade-off analysis

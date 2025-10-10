@@ -19,7 +19,7 @@ Primary idea of Research Artifact is to be the primary source of truth for creat
 - No overwrites of existing files
 
 ## INPUT
-- `docs/research/research_generator/research_artifact_template.md`
-- `docs/research/research_generator/research_prompt.xml`
+- `prompts/templates/research_artifact_template.md`
+- `prompts/research_prompt.xml`
 - `docs/research/backlog/Backlog_Solution_Implementation_Guidelines_v2.md`
 
