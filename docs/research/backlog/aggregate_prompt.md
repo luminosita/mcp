@@ -1,0 +1,6 @@
+- Do a deep analysis of `docs/research/backlog/sdlc-chat.md`
+- Clarify SDLC artifacts, creation timeline (planning phases), and relations based on strategic, functional and contextual perspective
+- Break down into two strategies: agile smaller team vs agile SAFe (scaled)
+- Evaluate assumptions that simplifed agile strategy is mostly used with smaller development team and SAFe (scaled) agile strategy is for bigger teams. Evaluate assumption that SAFe Agile and Scaled Agile are synonyms
+- Synthesize into comprehensive guideline for SDLC artifacts 
+- Save as Markdown in the same folder

@@ -40,8 +40,8 @@ This command executes a generator prompt based on the task ID specified in `/TOD
 ### Step 3: Load Context
 Required files for execution:
 1. `/CLAUDE.md` (root orchestration)
-2. `/prompts/CLAUDE-{phase}.md` (specialized, from Step 2)
-3. `/prompts/{phase}_generator.xml` (the generator to execute)
+2. `/prompts/CLAUDE-{task_name}.md` (specialized, from Step 2)
+3. `/prompts/{task_name}_generator.xml` (the generator to execute)
 4. `/prompts/templates/{artifact}-template.xml` (template referenced by generator)
 5. Input artifacts (from task dependencies, e.g., `/artifacts/product_vision_v3.md`)
 

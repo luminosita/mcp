@@ -1,39 +1,41 @@
 # Progress Steps
 ## Next Steps
-- feedback/context_engineering_strategy_v1_critique_v3.md
-- rewrite TASK_003 based on critique_v3 file before execution
-- verify Claude context is in the task report
-- extract product research prompt template
-- define product research output template
-- improve product research prompt template to include sections covered by specialized CLAUDE.md files in `claude-md` project
-- base Product Vision Generator off of product research document instead of simple idea
+- [ ] feedback/context_engineering_strategy_v1_critique_v3.md
+- [ ] rewrite TASK_003 based on critique_v3 file before execution
+- [ ] verify Claude context is in the task report
+- [ ] execute research prompt with execute-generator prompt
+- [X] extract product research prompt template
+- [X] define product research output template
+- [X] improve product research prompt template to include sections covered by specialized CLAUDE.md files in `claude-md` project
+- [ ] base Product Vision Generator off of product research artifact instead of simple idea
+- [ ] merge generator-schema-templates
 
 ## Open Questions
 ### PRD Generator
-- How is Epic ID specified? Attribute, extraction from TASK name?
+- [ ] How is Epic ID specified? Attribute, extraction from TASK name?
 
 ### Backlog Story Generator
-- How is PRD ID, High-level User Story ID specified? Attribute, extraction from TASK name?
+- [ ] How is PRD ID, High-level User Story ID specified? Attribute, extraction from TASK name?
 
 ### Product Management 
-- Adding new PRDs with TODO.md or directly invoking commands? Probably update to Epic's (non)functional requirements
-- Adding new high-level user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
-- Adding new backlog user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
-- Adding new high-level user stories without PRD reference (standalone) - research required
-- Adding new backlog user stories without PRD/high-level US reference (standalone -> enhancements) - research required
-- Adding new implementation tasks without US reference (standalone -> quick bug fix) - research required
+- [ ] Adding new PRDs with TODO.md or directly invoking commands? Probably update to Epic's (non)functional requirements
+- [ ] Adding new high-level user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
+- [ ] Adding new backlog user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
+- [ ] Adding new high-level user stories without PRD reference (standalone) - research required
+- [ ] Adding new backlog user stories without PRD/high-level US reference (standalone -> enhancements) - research required
+- [ ] Adding new implementation tasks without US reference (standalone -> quick bug fix) - research required
 
 ## Pre-finalization
-- `docs/research/advanced_prompt_engineering/research_coverage_evaluation.md`
-- verify that all requests from CHAT.md are applied (or create AI report)
-- review all documents from the beginning
-- analyze all `claude-md` documents
+- [ ] `docs/research/advanced_prompt_engineering/research_coverage_evaluation.md`
+- [ ] verify that all requests from CHAT.md are applied (or create AI report)
+- [ ] review all documents from the beginning
+- [ ] analyze all `claude-md` documents
 
 ## Finalization
-- remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification
-- remove next_generator instructions, keep only reference to next_generator to be invoked in the report
-- strategy doc update
-- GRADUATION.md review
+- [ ] remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification
+- [ ] remove next_generator instructions, keep only reference to next_generator to be invoked in the report
+- [ ] strategy doc update
+- [ ] GRADUATION.md review
 
 ## Next Phases
 ### Phase 2 
