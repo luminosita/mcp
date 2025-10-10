@@ -309,7 +309,7 @@
       - Localization: Category names localized for English, Spanish, French
 
       Bad (Technical NFRs - DO NOT INCLUDE):
-      - API response time p99 < 200ms
+      - API response time p99 &lt; 200ms
       - PostgreSQL database with replication
       - OAuth 2.0 authentication
       [These are technical NFRs that belong in PRD and Backlog Stories, not High-Level User Story]

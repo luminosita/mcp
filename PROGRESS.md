@@ -19,18 +19,18 @@
 
 ## Open Questions
 ### PRD Generator
-- [ ] How is Epic ID specified? Attribute, extraction from TASK name?
+- [X] How is Epic ID specified? Attribute, extraction from TASK name?
 
 ### Backlog Story Generator
-- [ ] How is PRD ID, High-level User Story ID specified? Attribute, extraction from TASK name?
+- [X] How is PRD ID, High-level User Story ID specified? Attribute, extraction from TASK name?
 
 ### Product Management 
-- [ ] Adding new PRDs with TODO.md or directly invoking commands? Probably update to Epic's (non)functional requirements
-- [ ] Adding new high-level user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
-- [ ] Adding new backlog user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
-- [ ] Adding new high-level user stories without PRD reference (standalone) - research required
-- [ ] Adding new backlog user stories without PRD/high-level US reference (standalone -> enhancements) - research required
-- [ ] Adding new implementation tasks without US reference (standalone -> quick bug fix) - research required
+- [X] Adding new PRDs with TODO.md or directly invoking commands? Probably update to Epic's (non)functional requirements
+- [X] Adding new high-level user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
+- [X] Adding new backlog user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
+- [X] Adding new high-level user stories without PRD reference (standalone) - research required
+- [X] Adding new backlog user stories without PRD/high-level US reference (standalone -> enhancements) - research required
+- [X] Adding new implementation tasks without US reference (standalone -> quick bug fix) - research required
 
 ## Pre-finalization
 - [ ] `docs/research/advanced_prompt_engineering/research_coverage_evaluation.md`
@@ -39,23 +39,23 @@
 - [ ] analyze all `claude-md` documents
 
 ## Finalization
-- [ ] remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification
-- [ ] remove next_generator instructions, keep only reference to next_generator to be invoked in the report
+- [X] remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification
+- [X] remove next_generator instructions, keep only reference to next_generator to be invoked in the report
 - [ ] strategy doc update
 - [ ] GRADUATION.md review
 
 ## Implementation
 ### Where is the specification/guidelines on:
-- entities
-- value objects
-- data models
-- API contracts to be created
-- DTO
-- interfaces
-- abstract classes
-- patterns (observability, security, encryption, logging ...)
-- libraries (utility/common, external integration)
-- frameworks / SDKs
+- [ ] entities
+- [ ] value objects
+- [ ] data models
+- [ ] API contracts to be created
+- [ ] DTO
+- [ ] interfaces
+- [ ] abstract classes
+- [ ] patterns (observability, security, encryption, logging ...)
+- [ ] libraries (utility/common, external integration)
+- [ ] frameworks / SDKs
 
 ### QA Test Plan test plan creation
 
