@@ -43,6 +43,21 @@
 - [ ] strategy doc update
 - [ ] GRADUATION.md review
 
+## Implementation
+### Where is the specification/guidelines on:
+- entities
+- value objects
+- data models
+- API contracts to be created
+- DTO
+- interfaces
+- abstract classes
+- patterns (observability, security, encryption, logging ...)
+- libraries (utility/common, external integration)
+- frameworks / SDKs
+
+### QA Test Plan test plan creation
+
 ## Next Phases
 ### Phase 2 
     * software implementation generator prompts (source code, unit tests, deployments)
