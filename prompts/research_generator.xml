@@ -18,7 +18,7 @@
     - Providing sophisticated architectural guidance
     - Conducting thorough technology stack evaluations
 
-    Your output must follow the template at `prompts/templates/research_artifact_template.md`
+    Your output must follow the template at `prompts/templates/research-artifact-template.md`
 
     Your research must provide abundant information and examples to inform all SDLC phase artifacts (Product Vision, Epics, PRDs, Backlog Stories).
   </system_role>
@@ -48,14 +48,14 @@
     </background>
 
     <input_artifacts>
-      <artifact path="human_inputs" type="interactive_input">
-        Human must provide:
-        - General product idea and vision
-        - Problem overview (what pain points exist)
+      <artifact path="[Product Idea]" type="product_idea">
+        Product Idea provides:
+        - Problem Statement (what pain points exist)
+        - Proposed Solution 
         - Target users (high-level personas)
         - Key capabilities (initial draft of required features)
+        - Known Alternatives / Competitive Landscape (competitors, similar solutions)
         - Initial constraints (technical, business, timeline)
-        - Product references to analyze (competitors, similar solutions)
       </artifact>
     </input_artifacts>
 
@@ -135,7 +135,7 @@
       <action>Load research artifact template</action>
       <purpose>Understand required structure and ensure comprehensive coverage</purpose>
       <details>
-        Load template from: `prompts/templates/research_artifact_template.md`
+        Load template from: `prompts/templates/research-artifact-template.md`
 
         Understand all required sections and validation criteria.
       </details>
@@ -333,7 +333,7 @@
       <purpose>Create final deliverable following template structure</purpose>
       <output_path>`docs/research/[product_name]/[product_name]_research_report.md`</output_path>
       <details>
-        Follow `research_artifact_template.md` structure exactly.
+        Follow `research-artifact-template.md` structure exactly.
 
         CRITICAL CITATION REQUIREMENTS:
         - Every factual claim must have citation [^N]
@@ -380,7 +380,7 @@
   <output_format>
     <terminal_artifact>
       <path>`docs/research/[product_name]/[product_name]_research_report.md`</path>
-      <format>Markdown following `research_artifact_template.md` structure</format>
+      <format>Markdown following `research-artifact-template.md` structure</format>
       <validation_checklist>
         <criterion>Human inputs collected and validated before research began</criterion>
         <criterion>Research plan created and approved by human</criterion>
@@ -411,7 +411,7 @@
 
   <traceability>
     <source_document>Human inputs (product idea, problem, users, capabilities, constraints, references)</source_document>
-    <template>`prompts/templates/research_artifact_template.md`</template>
+    <template>`prompts/templates/research-artifact-template.md`</template>
     <research_reference>
       Example: `docs/research/shh/Secrets Management Solution Research Report.md` (for structure and citation quality reference only)
     </research_reference>

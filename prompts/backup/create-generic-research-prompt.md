@@ -95,7 +95,7 @@ Establish a clear and comprehensive research prompt and research artifact templa
 
 ## OUTPUT
 - Save Research Generator Prompt to `prompts/research_generator.md`
-- Save Research Artifact Template to `prompts/templates/research_artifact_template.md`
+- Save Research Artifact Template to `prompts/templates/research-artifact-template.md`
 
 ## CITATION REQUIREMENTS
 ```markdown

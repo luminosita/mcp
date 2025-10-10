@@ -17,7 +17,7 @@
 
 ## Phase 1: Bootstrap & Foundation (PoC)
 
-### TASK-000: Extract & Generate Templates
+### TASK-001: Extract & Generate Templates
 **Priority**: Critical
 **Dependencies**: None
 **Estimated Time**: 30 minutes
@@ -54,43 +54,20 @@ Extract templates from research document (Section 6.1-6.4) and convert to XML fo
 
 ---
 
-### TASK-001: Regenerate Product Idea from IDEA.md
-**Priority**: High
-**Dependencies**: None
-**Estimated Time**: 10 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Regenerate product idea document using the concept outlined in `/IDEA.md`. Replace existing `/docs/product-idea.md` with new content.
-
-**Success Criteria**:
-- [ ] Document describes product from IDEA.md
-- [ ] Includes problem statement (high-level)
-- [ ] Identifies target user persona
-- [ ] Lists 3-5 key capabilities
-- [ ] Readable and concise (<500 words)
-
-**Output Artifacts**:
-- `/docs/product-idea.md` (regenerated)
-
-**Note**: DO NOT execute until explicitly requested by user
-
----
-
 ### TASK-002: Generate Product Vision Generator Prompt
 **Priority**: Critical
-**Dependencies**: TASK-000 (product-vision-template.xml must exist)
+**Dependencies**: TASK-001 (product-vision-template.xml must exist)
 **Estimated Time**: 45 minutes
 **Status**: ✅ Completed
 
 **Description**:
-Create the first generator prompt that will produce Product Vision documents and Epic Generator prompts.
+Create the first generator prompt that will produce Product Vision documents.
 
 **Success Criteria**:
 - [x] Follows generator prompt XML schema template
 - [x] References correct template path
 - [x] Includes validation checklist in generator (not template)
-- [x] Specifies dual outputs (vision doc + epic generator)
+- [x] Specifies dual outputs (vision doc)
 - [x] Contains research step for competitive analysis
 - [x] Constraints marked as [CUSTOMIZE PER PRODUCT]
 - [x] Valid XML syntax
@@ -110,7 +87,6 @@ Create the first generator prompt that will produce Product Vision documents and
 Apply all updates from feedback/context_engineering_strategy_v3_critique.md
 
 **Context Requirements**:
-- All from TASK-004
 - `/feedback/context_engineering_strategy_v3_critique.md`
 
 ---
@@ -127,29 +103,10 @@ Apply all updates from feedback/context_engineering_strategy_v3_critique.md
 **Description**:
 Execute Product Vision Generator in standalone context to produce first iteration of Product Vision document.
 
-**Command**: `/execute-generator TASK-004`
+**Command**: `/generate TASK-004`
 
 **Context Requirements**:
-- `/CLAUDE.md`
-- `/prompts/CLAUDE-product-vision.md` (lazy-generate if missing)
-- `/prompts/product_vision_generator.xml`
-- `/prompts/templates/product-vision-template.xml`
-- `/docs/product-idea.md`
-
-**Success Criteria**:
-- [ ] Vision document contains all required sections (per template)
-- [ ] Problem statement includes quantified pain points
-- [ ] Success metrics are SMART-compliant
-- [ ] Target users clearly defined
-- [ ] 3-5 key capabilities listed
-- [ ] Competitive analysis includes research findings
-- [ ] Alignment with product-idea.md
-- [ ] Epic generator prompt is syntactically valid XML
-- [ ] Readability: Accessible to non-expert (manual Flesch >60)
-
-**Output Artifacts**:
-- `/artifacts/product_vision_v1.md`
-- `/prompts/epic_generator.xml`
+- Business Research (`docs/research/mcp/AI_Agent_MCP_Server_business_research.md`)
 
 ---
 
@@ -184,7 +141,7 @@ Human review of Product Vision v1 with structured critique focusing on completen
 **Description**:
 Apply Self-Refine pattern to update generator based on critique, then re-execute.
 
-**Command**: `/refine-generator product_vision_generator`
+**Command**: `/refine product_vision_generator`
 
 **Context Requirements**:
 - All from TASK-004
@@ -195,12 +152,10 @@ Apply Self-Refine pattern to update generator based on critique, then re-execute
 - [ ] Changes address critique points
 - [ ] Version incremented (1.0 → 1.1)
 - [ ] Vision v2 shows measurable improvement
-- [ ] Epic generator prompt refined (if issues noted)
 
 **Output Artifacts**:
-- `/prompts/product_vision_generator.xml` (updated)
+- `/prompts/product_vision_generator_v2.xml` (updated)
 - `/artifacts/product_vision_v2.md`
-- `/prompts/epic_generator.xml` (updated)
 
 ---
 
@@ -234,25 +189,20 @@ Second human review focusing on whether v1 critiques were addressed and identify
 **Description**:
 Apply final refinements, execute generator for v3, and **HUMAN manually updates** strategy document with lessons learned.
 
-**Command**: `/refine-generator product_vision_generator`
+**Command**: `/refine product_vision_generator`
 
 **Context Requirements**:
 - All from TASK-006
 - `/feedback/product_vision_v2_critique.md`
-- `/docs/context_engineering_strategy_v1.md`
 
 **Success Criteria**:
 - [ ] Generator prompt finalized (version 1.2)
 - [ ] Vision v3 meets all validation criteria
-- [ ] Epic generator prompt production-ready
-- [ ] **HUMAN**: Strategy doc Section 8.2 manually updated with patterns
 - [ ] Human approval obtained for v3
 
 **Output Artifacts**:
-- `/prompts/product_vision_generator.xml` (final)
+- `/prompts/product_vision_generator_v3.xml` (final)
 - `/artifacts/product_vision_v3.md` (approved)
-- `/prompts/epic_generator.xml` (final)
-- `/docs/context_engineering_strategy_v1.md` (manually updated by human)
 
 ---
 
@@ -268,7 +218,7 @@ Apply final refinements, execute generator for v3, and **HUMAN manually updates*
 **Description**:
 Execute Epic Generator in standalone context to decompose Product Vision into Epic documents.
 
-**Command**: `/execute-generator TASK-009`
+**Command**: `/generate TASK-009`
 
 **Context Requirements**:
 - `/CLAUDE.md`
@@ -353,7 +303,7 @@ Final critique and refinement cycle for Epic Generator, **HUMAN manually updates
 **Description**:
 Execute PRD Generator for first epic in standalone context.
 
-**Command**: `/execute-generator TASK-012`
+**Command**: `/generate TASK-012`
 
 **Context Requirements**:
 - `/CLAUDE.md`
@@ -416,7 +366,7 @@ Complete 3-iteration refinement cycle for PRD, **HUMAN manually updates** strate
 **Description**:
 Execute Backlog Story Generator for first high-level story from PRD.
 
-**Command**: `/execute-generator TASK-014`
+**Command**: `/generate TASK-014`
 
 **Context Requirements**:
 - `/CLAUDE.md`

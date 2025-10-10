@@ -238,7 +238,7 @@ Implement automated Chain-of-Verification (research Section 2.4) for artifact cr
 Phase 1 requires human to:
 1. Review artifact v1
 2. Write structured critique in `/feedback/{artifact}_v1_critique.md`
-3. Run refine-generator
+3. Run refine
 4. Repeat for v2, v3
 
 Chain-of-Verification (CoVe) automates steps 1-2, allowing human to focus on approval/rejection rather than detailed critique writing.
@@ -255,7 +255,7 @@ Chain-of-Verification (CoVe) automates steps 1-2, allowing human to focus on app
    - Output: Structured critique file matching human format
 
 2. **Integration with Refine-Generator**:
-   - Update `/.claude/commands/refine-generator.md`
+   - Update `/.claude/commands/refine.md`
    - New workflow:
      - After artifact v1 generated → automatically invoke critique agent
      - Generate `/feedback/{artifact}_v1_critique.md`
@@ -287,7 +287,7 @@ Chain-of-Verification (CoVe) automates steps 1-2, allowing human to focus on app
 
 **Files to Create/Update**:
 - `/prompts/artifact_critique_agent.xml`
-- `/.claude/commands/refine-generator.md` (update workflow)
+- `/.claude/commands/refine.md` (update workflow)
 - `/docs/context_engineering_strategy_v1.md` (Section 6.3 update)
 
 ---

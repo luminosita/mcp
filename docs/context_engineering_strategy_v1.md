@@ -48,12 +48,11 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 - `/docs/context_engineering_strategy_v1.md` (this document)
 - `/TODO.md` (master task list with dependencies)
 - `/CLAUDE.md` (root orchestration guide)
-- `/.claude/commands/execute-generator.md` (universal executor)
-- `/.claude/commands/refine-generator.md` (iteration orchestrator)
+- `/.claude/commands/generate.md` (universal executor)
+- `/.claude/commands/refine.md` (iteration orchestrator)
 - `/prompts/templates/*.xml` (extracted/generated templates)
 - `/prompts/templates/generator-schema-template.xml` (schema for all generators)
 - `/prompts/*_generator.xml` (generator prompts)
-- `/docs/product-idea.md` (initial CLI tool concept stub)
 - Product Vision, Epic, and PRD artifacts (v1, v2, v3)
 
 **Validation Criteria**:
@@ -102,63 +101,39 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 
 ```
 /
-├── .claude/
-│   └── commands/
-│       ├── execute-generator.md       # Universal executor (fixed)
-│       └── refine-generator.md        # Iteration orchestrator
-│
-├── docs/
-│   └── research/                                                     # research papers
-│       └── advanced_prompt_engineering/                              # Advanced prompt engineering research
-│           ├── advanced_prompt_engineering_software_docs_code_final.md   # Research (immutable)
-│           └── research_coverage_evaluation.md                       # Coverage evaluation
-│   ├── context_engineering_strategy_v1.md # This document
-│   └── product-idea.md                 # CLI tool initial concept
-│
-├── prompts/
-│   ├── CLAUDE-product-vision.md        # Specialized contexts (lazy-generated)
-│   ├── CLAUDE-epic.md
-│   ├── CLAUDE-prd.md
-│   ├── CLAUDE-backlog-story.md
-│   ├── [...additional specialized contexts...]
-│   │
-│   ├── templates/                      # XML-formatted templates
-│   │   ├── product-vision-template.xml
-│   │   ├── epic-template.xml
-│   │   ├── prd-template.xml
-│   │   ├── backlog-story-template.xml
-│   │   ├── adr-template.xml
-│   │   ├── tech-spec-template.xml
-│   │   └── user-story-template.xml
-│   │
-│   ├── product_vision_generator.xml    # Generator prompts
-│   ├── epic_generator.xml              # (created by prior generators)
-│   ├── prd_generator.xml
-│   ├── backlog_story_generator.xml
-│   └── [...cascade continues...]
-│
-├── artifacts/                          # All generated deliverables
-│   ├── product_vision_v{1-3}.md
-│   ├── epics/
-│   ├── prds/
-│   │   └── prd_{id}/
-│   │       ├── prd_v{1-3}.md
-│   │       └── TODO.md                 # High-level story tracking
-│   ├── backlog_stories/
-│   │   └── US-{prd_id}-{story_id}_{feature_name}/
-│   │       ├── backlog_story_v{1-3}.md
-│   │       └── TODO.md                 # Implementation task tracking
-│   ├── specs/
-│   ├── code/
-│   └── tests/
-│
-├── feedback/                           # Human critique logs
-│   ├── product_vision_v1_critique.md
-│   ├── product_vision_v2_critique.md
-│   └── [...per iteration...]
-│
-├── CLAUDE.md                           # Root orchestration
-└── TODO.md                             # Master Plan (single source of truth)
+   .claude/
+      commands/
+         generate.md       # Universal executor
+         refine.md        # Iteration orchestrator
+
+   docs/
+      context_engineering_strategy_v1.md           # Comprehensive methodology
+      sdlc_artifacts_comprehensive_guideline.md    # SDLC artifacts guideline               
+   prompts/
+      templates/                          # XML-formatted templates
+         {phase}-template_v{1-3}.md       ## SDLC artifacts templates 
+      {phase}_generator_v{1-3}.xml               # Generator prompts
+
+   artifacts/                              # All generated deliverables
+      product_vision_v{1-3}.md
+      epics/
+      prds/
+         prd_{id}/
+            prd_v{1-3}.md
+            TODO.md                        # High-level story tracking
+      backlog_stories/
+         US-{prd_id}-{story_id}_{feature_name}/
+            backlog_story_v{1-3}.md
+            TODO.md                        # Implementation task tracking
+      specs/
+      code/
+      tests/
+
+   feedback/                               # Human critique logs
+      {artifact}_v{N}_critique.md
+
+   CLAUDE.md                               # This file
+   TODO.md                                 # Master Plan (single source of truth)
 ```
 
 **Design Rationale**:
@@ -189,10 +164,9 @@ CLI tool development demonstration.
 ## Execution Instructions
 To execute a generator:
 1. Identify task in /TODO.md (e.g., TASK-002)
-2. Run: /execute-generator {task_id}
+2. Run: /generate {task_id}
 3. System loads:
    - /prompts/{task}_generator.xml
-   - /prompts/CLAUDE-{task}.md (auto-generates if missing)
    - Required templates from /prompts/templates/
 4. Review output in /artifacts/
 5. Provide feedback in /feedback/{artifact}_v{N}_critique.md
@@ -204,49 +178,6 @@ To execute a generator:
 ````
 
 *(Note: The "Current Phase" section was removed to simplify the root context file)*.
-
----
-
-### 4.2 Specialized CLAUDE.md (`/prompts/CLAUDE-{task}.md`)
-
-**Purpose**: Task-specific guidance and context, providing domain expertise for a specific SDLC phase.
-
-**Lifecycle**: Lazy-generated on first execution
-- Execute-generator checks if `/prompts/CLAUDE-{task}.md` exists
-- If missing: Prompts human for confirmation > Generates from template
-- If exists: Loads directly
-
-**Contents Template**:
-```markdown
-# Specialized Context: {Task Name}
-
-## Task-Specific Guidelines
-[Domain expertise for this SDLC phase]
-
-## Template Location
-Path: /prompts/templates/{task}-template.xml
-Validation: [Checklist for this template type]
-
-## Input Requirements
-Required files:
-- {upstream artifact path}
-- {template path}
-Optional: {additional context}
-
-## Output Specifications
-Terminal artifact: /artifacts/{path}/{name}_v{N}.md
-Next generator: /prompts/{next_task}_generator.xml
-
-## Common Pitfalls
-[Lessons learned from research document]
-
-## Example Outputs
-[Reference examples from Section 6.X of research]
-```
-
-**Boundary Definition**:
-- **Root CLAUDE.md**: Project navigation, universal standards
-- **Specialized CLAUDE.md**: Phase-specific templates, validation rules, examples
 
 ---
 
@@ -394,10 +325,9 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 **AI Actions** (Master Prompt):
 1. Extract templates from research document
 2. Generate folder structure
-3. Create universal executor (`execute-generator.xml`)
+3. Create universal executor (`generate.xml`)
 4. Generate first generator prompt (Product Vision)
-5. Create product idea stub (`/docs/product-idea.md`)
-6. Exit context with handoff instructions
+5. Exit context with handoff instructions
 
 ---
 
@@ -407,31 +337,25 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 
 **Human Actions**:
 1. Start new Claude Code session
-2. Run: `/execute-generator TASK-004`
-3. System prompts if `/prompts/CLAUDE-product-vision.md` missing
-4. Confirm generation of specialized CLAUDE.md
-5. Review `/artifacts/product_vision_v1.md`
-6. Create `/feedback/product_vision_v1_critique.md` with notes
-7. Run: `/refine-generator product_vision_generator`
-8. Repeat for v2, v3
-9. Approve final version
+2. Run: `/generate TASK-004`
+3. Confirm generation of specialized CLAUDE.md
+4. Review `/artifacts/product_vision_v1.md`
+5. Create `/feedback/product_vision_v1_critique.md` with notes
+6. Run: `/refine product_vision_generator`
+7. Repeat for v2, v3
+8. Approve final version
 
-**AI Actions** (execute-generator.xml):
+**AI Actions** (generate.xml):
 1. Parse TASK-004 from `/TODO.md`
-2. Check for `/prompts/CLAUDE-product-vision.md`
-   - If missing: Generate from template (with human approval)
-3. Load context:
+2. Load context:
    - `/CLAUDE.md`
-   - `/prompts/CLAUDE-product-vision.md`
    - `/prompts/product_vision_generator.xml`
    - `/prompts/templates/product-vision-template.xml`
-   - `/docs/product-idea.md`
-4. Execute generator
-5. Save outputs:
+3. Execute generator
+4. Save outputs:
    - `/artifacts/product_vision_v1.md`
-   - `/prompts/epic_generator.xml`
-6. Update `/CLAUDE.md` with current phase
-7. Report completion with validation checklist status
+5. Update `/CLAUDE.md` with current phase
+6. Report completion with validation checklist status
 
 ---
 
@@ -440,7 +364,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 **Iteration 1 > 2**:
 1. Human reviews v1 artifact
 2. Creates critique file: `/feedback/{artifact}_v1_critique.md`
-3. Runs: `/refine-generator {task}_generator`
+3. Runs: `/refine {task}_generator`
 4. System:
    - Loads generator + critique
    - Applies Self-Refine pattern (research Section 2.4)
@@ -477,7 +401,7 @@ Human checklist:
 
 **Human Actions**:
 1. Start new Claude Code session (C2)
-2. Run: `/execute-generator TASK-002`
+2. Run: `/generate TASK-002`
 3. When prompted for input artifact location, confirm:
    `/artifacts/product_vision_v3.md`
 4. Proceed with same iteration cycle (v1 > v2 > v3)
@@ -485,7 +409,6 @@ Human checklist:
 **AI Actions**:
 1. Load context:
    - `/CLAUDE.md`
-   - `/prompts/CLAUDE-epic.md` (lazy-generated if missing)
    - `/prompts/epic_generator.xml` (created in C1)
    - `/prompts/templates/epic-template.xml`
    - `/artifacts/product_vision_v3.md` (dependency)
@@ -506,14 +429,13 @@ Human checklist:
 
 **Human Actions**:
 1. Start new Claude Code session (C4)
-2. Run: `/execute-generator TASK-014`
+2. Run: `/generate TASK-014`
 3. When prompted for PRD location, confirm: `/artifacts/prds/prd_001/prd_v3.md`
 4. Proceed with iteration cycle (v1 > v2 > v3)
 
 **AI Actions**:
 1. Load context:
    - `/CLAUDE.md`
-   - `/prompts/CLAUDE-backlog-story.md` (lazy-generated if missing)
    - `/prompts/backlog_story_generator.xml` (created in C3)
    - `/prompts/templates/backlog-story-template.xml`
    - `/artifacts/prds/prd_001/prd_v3.md` (dependency)
@@ -547,7 +469,6 @@ Defined in `/TODO.md` for each task. Example:
 - [ ] Target users clearly defined
 - [ ] Epic generator prompt is syntactically valid XML
 - [ ] Flesch readability >60 (manual assessment)
-- [ ] Traceability: References product-idea.md
 ```
 
 ### 7.2 Framework-Level Metrics
@@ -596,7 +517,7 @@ ELSE prompt human for review
 ## 9. Maturity Roadmap
 
 ### 9.1 Current State (PoC Phase 1)
-- **Execution**: Human-triggered via `/execute-generator {task_id}`
+- **Execution**: Human-triggered via `/generate {task_id}`
 - **Iteration**: Manual critique files + human approval
 - **Quality Gates**: Checklist-based, subjective assessment
 

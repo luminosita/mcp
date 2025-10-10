@@ -124,7 +124,7 @@ Questions Needing Your Confirmation:
   - ✅ Research Prompt contains final research artifact validation checklist - 21-point validation checklist in output_format section
   - ✅ Research Prompt contains citation requirements - Dedicated citation_requirements section with inline format, references format, and quality checks
 
-  Research Artifact Template (research_artifact_template.md) Validation:
+  Research Artifact Template (research-artifact-template.md) Validation:
 
   - ✅ Research Artifact Template is in Markdown format
   - ✅ Research Artifact Template contains clear structure - Comprehensive 9-section structure plus appendices
@@ -161,7 +161,7 @@ Questions Needing Your Confirmation:
     - Mandatory citation requirements
     - 21-point validation checklist
     - Product category-specific guidance (CLI, SaaS, Infrastructure, AI/ML)
-  2. Research Artifact Template (Markdown): /Users/gianni/dev/sandbox/mcp/docs/research/research_generator/research_artifact_template.md
+  2. Research Artifact Template (Markdown): /Users/gianni/dev/sandbox/mcp/docs/research/research_generator/research-artifact-template.md
     - 9 main sections + 3 appendices
     - Comprehensive structure synthesized from all three existing research reports
     - Abundant placeholders for examples, code snippets, and citations

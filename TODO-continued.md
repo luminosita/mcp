@@ -151,13 +151,13 @@ Implement Chain-of-Verification pattern for automated artifact critique.
 **Success Criteria**:
 - [ ] Critique agent prompt created
 - [ ] Auto-generates structured feedback
-- [ ] Integrates with refine-generator command
+- [ ] Integrates with refine command
 - [ ] Human approval at 80% threshold
 - [ ] Documented in strategy
 
 **Output Artifacts**:
 - Critique agent implementation
-- Updated refine-generator command
+- Updated refine command
 - Strategy document update
 
 ---

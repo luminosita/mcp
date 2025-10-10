@@ -1,5 +1,5 @@
 ---
-name: refine-generator
+name: refine
 description: Refine generator prompt based on critique feedback and re-execute
 args:
   - name: generator_name
@@ -14,7 +14,7 @@ This command implements the Self-Refine pattern (research Section 2.4) to improv
 ## Usage
 
 ```bash
-/refine-generator product_vision_generator
+/refine product_vision_generator
 ```
 
 ## Workflow
@@ -93,7 +93,7 @@ Update generator XML:
 - Existing validations (don't remove, only add)
 
 ### Step 6: Re-Execute Generator
-Run the refined generator (/execute-generator command):
+Run the refined generator (/generate command):
 1. Load updated generator + all required context
 2. Execute generation
 3. Save new version artifact: `{artifact}_v{N+1}.md`
@@ -217,7 +217,7 @@ Proceed with v4 anyway? (requires justification)
 ---
 
 **Related Commands**:
-- `/execute-generator` - Initial generator execution
+- `/generate` - Initial generator execution
 
 **See Also**:
 - `/TODO.md` - Master task list

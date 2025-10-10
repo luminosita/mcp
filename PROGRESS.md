@@ -1,23 +1,31 @@
 # Progress Steps
-## Next Steps
+## Manual testing
 - [X] create missing SDLC templates
 - [X] create missing SDLC generator prompts
 - [X] SDLC Guide: 3.1.3 Gherkin format
 - [X] All Backlog story generators and templates -> Gherkin format, failback to Checklist
 - [X] Update CLAUDE.md folder structure
 - [X] No lazy generation of specialized CLAUDE.md files
-- [ ] Review CLAUDE.md
-- [ ] Review CLAUDE-product-vision.md
-- [ ] restructure research documents (use docs/research_restructuring_guidelines.md)
-- [ ] generate plan (TODO.md) based on sdlc_artifacts_guidelines.md
-- [ ] feedback/context_engineering_strategy_v1_critique_v3.md
-- [ ] rewrite TASK_003 based on critique_v3 file before execution
-- [ ] verify Claude context is in the task report
+- [X] research_generator should have product_idea.md (based on product_idea_template.md) as input
+- [ ] business_research_template in XML format
+- [ ] implementation_research_template in XML format
+- [ ] research-artifact-template in XML format
+- [X] Review CLAUDE.md
 - [X] extract product research prompt template
 - [X] define product research output template
 - [X] improve product research prompt template to include sections covered by specialized CLAUDE.md files in `claude-md` project
 - [X] base Product Vision Generator off of product research artifact instead of simple idea
 - [X] merge generator-schema-templates
+
+## Research documents restructuring
+- [ ] restructure research documents (use docs/research_restructuring_guidelines.md) (restructure @docs/research/shh/Secrets_Management_Solution_Research_Report_v2.md according to @docs/research_restructuring_guidelines.md)
+
+## Semi-automatic testing
+- [ ] feedback/context_engineering_strategy_v1_critique_v3.md
+- [ ] rewrite TASK_003 based on critique_v3 file before execution
+- [ ] Review execute-generator
+- [ ] verify Claude context is in the task report (execute-generator)
+- [ ] Review refine
 
 ## Open Questions
 ### PRD Generator
@@ -39,6 +47,8 @@
 - [ ] verify that all requests from CHAT.md are applied (or create AI report)
 - [ ] review all documents from the beginning
 - [ ] analyze all `claude-md` documents
+- [ ] review strategy document, if is still needed
+
 
 ## Finalization
 - [X] remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification

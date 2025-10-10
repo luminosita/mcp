@@ -65,7 +65,6 @@ This specialized context provides task-specific guidance for the **{Task Name}**
 
 **Mandatory Inputs**:
 - `/CLAUDE.md` (root orchestration)
-- `/prompts/CLAUDE-{task}.md` (this file)
 - `/prompts/{task}_generator.xml` (generator prompt)
 - `/prompts/templates/{task}-template.xml` (output structure)
 - `{upstream artifact path}` (dependency from prior phase)
@@ -214,8 +213,8 @@ Remember: At v3, HUMAN must manually update `/docs/context_engineering_strategy_
 
 ## Related Commands
 
-- `/execute-generator {TASK-ID}` - Execute this generator
-- `/refine-generator {task}_generator` - Refine based on critique
+- `/generate {TASK-ID}` - Execute this generator
+- `/refine {task}_generator` - Refine based on critique
 
 ---
 

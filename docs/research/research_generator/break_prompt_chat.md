@@ -152,7 +152,7 @@ The Challenge
 
   Current (Single):
   ├── research_prompt.xml (universal)
-  ├── research_artifact_template.md (comprehensive)
+  ├── research-artifact-template.md (comprehensive)
   └── [Product]_research_report.md (1200+ lines)
 
   New (2-Part):

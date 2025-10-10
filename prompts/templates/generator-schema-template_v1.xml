@@ -2,7 +2,7 @@
 <template>
   <metadata>
     <name>Generator_Prompt_Schema_Template</name>
-    <version>2.0</version>
+    <version>1.0</version>
     <source>Extracted from Context Engineering Framework</source>
     <purpose>Standard XML schema for all generator prompts</purpose>
   </metadata>

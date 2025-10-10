@@ -26,17 +26,17 @@ We are instructing LLM to "Research or infer 2-3 existing solutions in this spac
  
 ### Q5 Main CLAUDE.md
 
-- Q5a: In Step 3 of main CLAUDE.md, why do we use `/kickoff xecute-generator ...` instead of `/execute-generator ...`
+- Q5a: In Step 3 of main CLAUDE.md, why do we use `/kickoff xecute-generator ...` instead of `/generate ...`
 - Q5b: In Step 4, point 2, "If missing: Prompt human for confirmation > Generate from template". What template?
 - Q5c: In Step 6, "Update this file's Current Phase section". I think it is better to keep all updates and tracking within TODO.md file as a main tracking file. We should have instruction in main CLAUDE.md to check Current Phase section for the progress when we start new session.
-- Q5d: In Step 7, "/kickoff refine-generator {task}_generator". We should use `/refine-generator {task}_generator`
+- Q5d: In Step 7, "/refine {task}_generator". We should use `/refine {task}_generator`
 - Q5e: In `Key Research References", we keep references to strategy document and main research document. We should extract important information from those documents instead of keeping them as a constant reference and forcing AI agent to load them into context.
 
 ### Q6 6.3 Phase 3: Iteration & Refinement (strategy document)
 
 - Q6a: Where is the statement "Updates `/docs/context_engineering_strategy_v1.md` (lessons learned)" reflected as an instruction to AI agent? How does agent knows to apply these updates?
 
-### Q7: execute-generator prompt
+### Q7: generate prompt
 
 - Q7a: in Step 2, "- Determine specialized context file: `/prompts/CLAUDE-{phase}.md`". Where `phase` attribute/parameter comes from? I do not see `phase` listed in task metadata in `TODO.md`, if that is a source
 - Q7b: in Step 2, "**If approved**: Generate from template (see Section 4.2 of strategy doc)". We keep the reference to strategy doc. Is it better to just extract the template and reference it directly instead of loading the entire file.
@@ -45,12 +45,12 @@ We are instructing LLM to "Research or infer 2-3 existing solutions in this spac
 - Q7e: in "**See Also**", "- `/docs/context_engineering_strategy_v1.md` - Section 6.2", should we extract information instead of keep a reference to a big document.
 
 ## Remarks
-* Phase 1-4 of the strategy is PoC for the core principles listed in the Section 1 of the strategy document. We are executing prompts, validating results, refining and progressing through the workflow. That being the primary goal it seems find to keep references to strategy document or the main research document in files like CLAUDE.md, execute-generator prompt, refine-generator promtp, templates and others. Once we complete PoC we need to clean up all these files from those references in order to use the strategy on various other products.
-* Expected /.claude/commands/execute-generator.xml (XML format), found Markdown file format
-* Expected /.claude/commands/refine-generator.xml (XML format), found Markdown file format
+* Phase 1-4 of the strategy is PoC for the core principles listed in the Section 1 of the strategy document. We are executing prompts, validating results, refining and progressing through the workflow. That being the primary goal it seems find to keep references to strategy document or the main research document in files like CLAUDE.md, generate prompt, refine promtp, templates and others. Once we complete PoC we need to clean up all these files from those references in order to use the strategy on various other products.
+* Expected /.claude/commands/generate.xml (XML format), found Markdown file format
+* Expected /.claude/commands/refine.xml (XML format), found Markdown file format
 * Product-idea.md needs to be regenerated with a different idea outlined in @IDEA.md. Do not proceed with regeneration. Just specify a new task in `TODO.md`
 * Add checkboxes in `TODO.md` for task status tracking
-* Why do we use `/kickoff execute-generator ...` or `/kickoff refine-generator ...` instead of `/execute-generator ...` or `refine-generator ...`?
+* Why do we use `/generate ...` or `/refine ...` instead of `/generate ...` or `refine ...`?
 * Section 7.0 covers various metrics data. Where this data comes from?
 * Sync strategy document with `TODO.md`, task numbers are out of sync and some tasks are already completed. Keep tracking history/status as part of `TODO.md` file for easier reference when we instruct agent to `run the next TODO task`
 * Rename `TODO.md` → `PLAN.md`

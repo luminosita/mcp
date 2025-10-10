@@ -69,12 +69,12 @@
 
 ### 2.4 Self-Refine
 **Coverage**: ✅ Complete
-- Implemented in `/refine-generator` command
+- Implemented in `/refine` command
 - 3-iteration cycle (v1 → v2 → v3)
 - Human critique + generator update pattern
 
 **Implementation**:
-- `/.claude/commands/refine-generator.md`
+- `/.claude/commands/refine.md`
 - `/CLAUDE.md` Step 7
 
 ### 2.5 Chain-of-Verification (CoVe)
