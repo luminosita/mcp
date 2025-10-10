@@ -6,6 +6,8 @@
 - [X] All Backlog story generators and templates -> Gherkin format, failback to Checklist
 - [X] Update CLAUDE.md folder structure
 - [X] No lazy generation of specialized CLAUDE.md files
+- [ ] Review CLAUDE.md
+- [ ] Review CLAUDE-product-vision.md
 - [ ] restructure research documents (use docs/research_restructuring_guidelines.md)
 - [ ] generate plan (TODO.md) based on sdlc_artifacts_guidelines.md
 - [ ] feedback/context_engineering_strategy_v1_critique_v3.md
