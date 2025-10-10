@@ -13,6 +13,8 @@
 - [X] improve product research prompt template to include sections covered by specialized CLAUDE.md files in `claude-md` project
 - [ ] base Product Vision Generator off of product research artifact instead of simple idea
 - [ ] merge generator-schema-templates
+- [ ] SDLC Guide: 3.1.3 Gherkin format
+- [ ] All Backlog story generators and templates -> Gherkin format, failback to Checklist
 
 ## Open Questions
 ### PRD Generator

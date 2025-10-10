@@ -19,6 +19,12 @@
     <![CDATA[
 # Technical Specification: [Feature/System Name]
 
+## Metadata
+**Date:** [YYYY-MM-DD]
+**Status:** [Proposed | Accepted | Deprecated | Superseded]
+**Deciders:** [Names]
+**Technical Story:** [Ticket/Issue reference]
+
 ## Overview
 **Summary:** [One paragraph overview]
 **Related PRD:** [Link]

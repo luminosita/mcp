@@ -19,6 +19,7 @@
     <![CDATA[
 # ADR-[NUMBER]: [Decision Title]
 
+## Metadata
 **Date:** [YYYY-MM-DD]
 **Status:** [Proposed | Accepted | Deprecated | Superseded]
 **Deciders:** [Names]
