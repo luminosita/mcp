@@ -9,9 +9,9 @@
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
 **Current Status**: Bootstrap completed, ready for generator execution
-**Last Completed**: TASK-000 (Templates extracted and generated)
-**Next Task**: TASK-001 (Regenerate Product Idea from IDEA.md)
-**Completion**: 1/15 tasks (7%)
+**Last Completed**: TASK-002: Generate Product Vision Generator Prompt
+**Next Task**: TASK-003: Convert Research Templates into XML format
+**Completion**: 2/15 tasks (7%)
 
 ---
 
@@ -76,6 +76,33 @@ Create the first generator prompt that will produce Product Vision documents.
 - `/prompts/product_vision_generator.xml` ✅
 
 ---
+### TASK-003: Convert Research Templates into XML format
+**Priority**: Critical
+**Dependencies**: none
+**Estimated Time**: 45 minutes
+**Status**: ⏳ Pending
+
+**Description**:
+Convert Input Templates from Markdown into XML format. Use referenced file as an example
+
+**Input Templates**:
+- `prompts/templates/business_research_template.md`
+- `prompts/templates/implementation_research_template.md`
+- `prompts/templates/research-artifact-template.md`
+
+**References**:
+- `prompts/templates/adr-template.xml` (ADR Template)
+
+**Success Criteria**:
+- [ ] business_research_template converted into a valid XML file format 
+- [ ] implementation_research_template converted into a valid XML file format 
+- [ ] research-artifact-template converted into a valid XML file format 
+
+**Output Artifacts**:
+- `prompts/templates/business_research_template.xml`
+- `prompts/templates/implementation_research_template.xml`
+- `prompts/templates/research-artifact-template.xml`
+---
 
 ## Phase 1.1: Generator Execution & Iteration
 
@@ -95,23 +122,6 @@ Execute Product Vision Generator in standalone context to produce first iteratio
 - Business Research - `docs/research/mcp/AI_Agent_MCP_Server_business_research.md`
 
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### TASK-005: Critique Product Vision v1
 **Priority**: High
@@ -451,7 +461,3 @@ Generate comprehensive Phase 1 completion report documenting framework viability
 - ⚠️ Issues Found
 
 ---
-
-**Last Updated**: 2025-10-07
-**Current Phase**: Phase 1 - Bootstrap & Foundation
-**Next Task**: TASK-001 (Regenerate Product Idea from IDEA.md)

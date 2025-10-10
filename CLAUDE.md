@@ -54,6 +54,12 @@
 - Check task `Context:` field in TODO.md
 - If "New session CX required", start clean session
 
+## Instructions for TODO.md Tasks
+Upon completion, update relevant task status in `/TODO.md`:
+- Mark current task checkbox as complete
+- Update task status notes
+- Add entry to task completion log if applicable
+
 ## Commands Reference
 
 ### Primary Commands

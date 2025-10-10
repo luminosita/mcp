@@ -63,12 +63,6 @@ Action Required:
 3. If refinement needed, run: /refine product_vision_generator
 ```
 
-### Step 4: Update TODO.md
-Update relevant task status in `/TODO.md`:
-- Mark current task checkbox as complete (if final version v3)
-- Update task status notes
-- Add entry to task completion log if applicable
-
 ## Error Handling
 
 ### Error: Task ID Not Found
