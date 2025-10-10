@@ -5,7 +5,7 @@
 - [ ] SDLC Guide: 3.1.3 Gherkin format
 - [ ] All Backlog story generators and templates -> Gherkin format, failback to Checklist
 - [ ] Update CLAUDE.md folder structure
-- [ ] restructure research documents (use /prompts/research_restructuring_guidelines.md)
+- [ ] restructure research documents (use docs/research_restructuring_guidelines.md)
 - [ ] generate plan (TODO.md) based on sdlc_artifacts_guidelines.md
 - [ ] feedback/context_engineering_strategy_v1_critique_v3.md
 - [ ] rewrite TASK_003 based on critique_v3 file before execution

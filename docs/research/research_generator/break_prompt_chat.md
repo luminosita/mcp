@@ -775,5 +775,5 @@ D. Minor Enhancements - Research Requirement: For Category 4 (minor enhancements
 IMPORTANT:
 - Additional output required: guideline document providing AI context and instructions to use newly created business and implementation prompts and templates to restructure existing monolith research artifacts
 - Additional tasks to be performed after restructuring of research prompt, template:
-    - Create additional plan to update `docs/research/backlog/sdlc_artifacts_comprehensive_guideline.md` with the findings from this session
+    - Create additional plan to update `docs/sdlc_artifacts_comprehensive_guideline.md` with the findings from this session
     - Ask clarifing questions and proceed with the update only after confirmation

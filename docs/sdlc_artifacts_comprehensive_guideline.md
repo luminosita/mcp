@@ -2480,7 +2480,7 @@ PRD Creation:
 
 **Existing Research:** Some products may have comprehensive (monolithic) research artifacts created before split architecture.
 
-**Migration Guideline:** `prompts/research_restructuring_guidelines.md`
+**Migration Guideline:** `docs/research_restructuring_guidelines.md`
 
 **Migration Process:**
 1. Load existing monolithic research

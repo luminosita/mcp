@@ -1,7 +1,7 @@
 # Update Plan: sdlc_artifacts_comprehensive_guideline.md
 
 ## Document Metadata
-- **Target Document:** `docs/research/backlog/sdlc_artifacts_comprehensive_guideline.md`
+- **Target Document:** `docs/sdlc_artifacts_comprehensive_guideline.md`
 - **Current Version:** 1.0
 - **Proposed Version:** 1.1
 - **Date:** 2025-10-10
@@ -658,7 +658,7 @@ PRD Creation:
 
 **Existing Research:** Some products may have comprehensive (monolithic) research artifacts created before split architecture.
 
-**Migration Guideline:** `prompts/research_restructuring_guidelines.md`
+**Migration Guideline:** `docs/research_restructuring_guidelines.md`
 
 **Migration Process:**
 1. Load existing monolithic research
