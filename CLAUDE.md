@@ -10,7 +10,7 @@
          refine.md        # Iteration orchestrator
 
    docs/
-      context_engineering_strategy_v1.md           # Comprehensive methodology
+      context_engineering_strategy_v{1-3}.md           # Comprehensive methodology
       sdlc_artifacts_comprehensive_guideline.md    # SDLC artifacts guideline               
    prompts/
       templates/                          # XML-formatted templates
@@ -67,7 +67,7 @@ Research Phase (Root)
 Vision Phase
 └── Product Vision Generator
     ├── Input: docs/research/mcp/AI_Agent_MCP_Server_business_research.md
-    └── Output: artifacts/product_vision_v{1-3}.md
+    └── Output: artifacts/product_vision_v{N}.md
 
 ↓
 
@@ -86,7 +86,7 @@ Strategic Phase
 
 Requirements Phase (Transition - bridges business and technical)
 └── PRD Generator
-    ├── Primary Input: artifacts/epics/epic_{id}_v3.md (approved)
+    ├── Primary Input: artifacts/epics/epic_{id}_v{N}.md (approved)
     ├── Secondary Input 1: docs/research/mcp/AI_Agent_MCP_Server_business_research.md (optional - market validation)
     ├── Secondary Input 2: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md (optional - technical feasibility)
     └── Output: artifacts/prds/prd_{id}/prd_v{1-3}.md
@@ -95,7 +95,7 @@ Requirements Phase (Transition - bridges business and technical)
 
 Story Phase
 └── Backlog Story Generator
-    ├── Primary Input: artifacts/prds/prd_{id}/prd_v3.md (approved)
+    ├── Primary Input: artifacts/prds/prd_{id}/prd_v{N}.md (approved)
     ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md (optional)
     └── Output: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v{1-3}.md
 
@@ -103,7 +103,7 @@ Story Phase
 
 Technical Phase
 ├── Spike Generator (Optional - triggered by [REQUIRES SPIKE] marker)
-│   ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v3.md (question marked [REQUIRES SPIKE])
+│   ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v{N}.md (question marked [REQUIRES SPIKE])
 │   ├── Alternative Input: artifacts/specs/tech_specs/tech_spec_{id}_v{N}.md (Open Questions)
 │   ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md (optional - baseline data)
 │   ├── Output: artifacts/spikes/SPIKE-{XXX}_v1.md
@@ -111,13 +111,13 @@ Technical Phase
 │   └── Purpose: Time-boxed investigation to reduce technical uncertainty before implementation
 │
 ├── ADR Generator
-│   ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v3.md (approved)
+│   ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v{N}.md (approved)
 │   ├── Optional Input: artifacts/spikes/SPIKE-{XXX}_v1.md (if spike completed - provides findings and evidence)
 │   ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md
 │   └── Output: artifacts/specs/adrs/adr_{id}_v{1-3}.md
 │
 └── Technical Spec Generator
-    ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v3.md (approved)
+    ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v{N}.md (approved)
     ├── Optional Input: artifacts/spikes/SPIKE-{XXX}_v1.md (if spike completed - provides implementation details)
     ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md
     └── Output: artifacts/specs/tech_specs/tech_spec_{id}_v{1-3}.md
