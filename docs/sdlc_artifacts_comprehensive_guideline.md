@@ -370,7 +370,85 @@ This ensures:
 
 ---
 
-### 1.6 Implementation Task
+### 1.6 Spike
+
+**Also known as:** Technical Spike, Investigation Spike, Research Spike
+
+**Definition:** Time-boxed technical investigation (1-3 days max) to reduce uncertainty before implementation.
+
+**Characteristics:**
+- **Time Horizon:** 1-3 days maximum (strictly time-boxed)
+- **Scope:** Focused investigation answering specific technical question
+- **Purpose:** Gather evidence (benchmarks, prototypes, documentation) to inform technical decisions
+- **Output:** Research findings and recommendation, NOT production code
+- **Trigger:** Backlog Story or Tech Spec Open Question marked [REQUIRES SPIKE]
+- **Ownership:** Individual developer or small team (1-2 people)
+
+**Common Spike Types:**
+- **Performance/Benchmark Spikes:** "Does Redis meet our latency requirements?"
+- **Feasibility Spikes:** "Can we integrate with third-party API?"
+- **Technology Evaluation Spikes:** "Which caching library better suits our needs?"
+- **Complexity Assessment Spikes:** "How difficult is this data migration?"
+
+**Examples:**
+- "Benchmark Redis vs Memcached for notification preferences caching"
+- "Prototype Stripe API integration to assess webhook reliability"
+- "Investigate database index strategies for preference lookup performance"
+- "Evaluate circuit breaker pattern complexity for notification service"
+
+**Spike Workflow:**
+```
+Backlog Story [REQUIRES SPIKE]
+    ↓
+Spike Investigation (1-3 days, time-boxed)
+    ├─ Findings documented at /artifacts/spikes/SPIKE-XXX_v1.md
+    ├─ Evidence collected (benchmarks, prototypes, documentation)
+    └─ Recommendation provided
+    ↓
+Inform Downstream Artifacts:
+    ├─ ADR (if significant decision with alternatives analysis needed)
+    ├─ Tech Spec (if implementation details clarified)
+    └─ Backlog Story (update with findings and revised estimate)
+```
+
+**Key Sections:**
+- **Investigation Goal:** Specific question to answer with success criteria
+- **Time Box:** 1-3 days maximum (hard limit)
+- **Investigation Approach:** Methods (prototype, benchmark, documentation review, code analysis)
+- **Findings:** Evidence-based discoveries with data (benchmarks, code samples, documentation)
+- **Recommendation:** Clear, actionable suggestion based on findings
+- **Confidence Level:** High/Medium/Low based on evidence quality
+- **Next Steps:** Create ADR, update Tech Spec, update Backlog Story estimate
+
+**Strategic Value:**
+- Reduces technical risk before committing to implementation approach
+- Provides evidence-based decision-making (not speculation)
+- Prevents analysis paralysis through strict time-boxing
+- Maintains clear traceability from question → investigation → decision
+- Enables informed story estimation after uncertainty resolved
+
+**Relationship to Other Artifacts:**
+- **Triggered By:** Backlog Story Open Questions marked [REQUIRES SPIKE] or Tech Spec uncertainties
+- **Informs:** ADR (major decisions), Tech Spec (implementation details), Backlog Story (updated estimates)
+- **References:** Implementation Research (baseline expectations, patterns)
+- **Documented At:** /artifacts/spikes/SPIKE-XXX_v1.md
+
+**When NOT to Use Spike:**
+- Simple questions answerable by Tech Lead consultation (use [REQUIRES TECH LEAD])
+- Major architectural decisions (create ADR directly if alternatives already known)
+- Questions answerable through quick documentation review (<2 hours)
+- Minor library choices with negligible consequences (decide in sprint planning)
+
+**Time-Box Enforcement:**
+Spike time box is HARD LIMIT. If investigation incomplete at time box expiration:
+- Document current findings even if incomplete
+- State remaining unknowns clearly
+- Recommend follow-up spike if needed (with explicit approval)
+- Do NOT extend time box without Tech Lead approval
+
+---
+
+### 1.7 Implementation Task
 
 **Also known as:** Technical Task, Sub-task
 
@@ -396,7 +474,7 @@ This ensures:
 
 ---
 
-### 1.7 Product Requirements Document (PRD)
+### 1.8 Product Requirements Document (PRD)
 
 **Definition:** A strategic document capturing the "what" and "why" of a product or feature, not the "how."
 
@@ -426,13 +504,13 @@ This ensures:
 
 ---
 
-### 1.8 SDLC Phases: Business vs Implementation
+### 1.9 SDLC Phases: Business vs Implementation
 
 **Definition:** SDLC artifacts separate into two distinct planning phases with different focus and information needs.
 
 ---
 
-#### 1.8.1 Business Phase (Strategic Planning)
+#### 1.9.1 Business Phase (Strategic Planning)
 
 **Focus:** Market opportunity, user needs, competitive positioning, product strategy
 
@@ -463,7 +541,7 @@ Initiative: "Increase mobile app engagement by 20%"
 
 ---
 
-#### 1.8.2 Implementation Phase (Technical Execution)
+#### 1.9.2 Implementation Phase (Technical Execution)
 
 **Focus:** Architecture, technology, implementation patterns, code
 
@@ -493,7 +571,7 @@ Backlog Story: "Implement push notification preferences API"
 
 ---
 
-#### 1.8.3 Bridge Artifact: PRD
+#### 1.9.3 Bridge Artifact: PRD
 
 **Definition:** PRD sits at the boundary between Business and Implementation phases, requiring input from BOTH research types.
 

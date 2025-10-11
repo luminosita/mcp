@@ -93,7 +93,7 @@
 ### Phase 5
     * Backlog product
     * make all product management artifact related and trackable
-        * PRD has multiple sections, each sections should be linked to something within sub-artifact (Functional req from PRD is linked to functional req of user story). This gives are a clear pictures of general requirement coverage (analogus to Code coverage with tests)
+        * PRD has multiple sections, each sections should be linked to something within sub-artifact (Functional req from PRD is linked to functional req of user story). This gives a clear pictures of general requirement coverage (analogus to Code coverage with tests)
     * Backlog event should trigger re-indexing of document repository items within RAG system 
         * adding of a new User Story, can add new feature in PRD, which shell trigger PRD re-index
 ### Phase 6
