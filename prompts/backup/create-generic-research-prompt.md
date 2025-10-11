@@ -94,7 +94,7 @@ Establish a clear and comprehensive research prompt and research artifact templa
     - `prompts/templates/tech-spec-template.xml`            #tech spec template
 
 ## OUTPUT
-- Save Research Generator Prompt to `prompts/research_generator.md`
+- Save Research Generator Prompt to `prompts/research-generator.md`
 - Save Research Artifact Template to `prompts/templates/research-artifact-template.md`
 
 ## CITATION REQUIREMENTS

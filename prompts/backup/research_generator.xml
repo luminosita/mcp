@@ -7,7 +7,7 @@
     <depends_on>Human inputs: product idea, problem overview, target users, key capabilities, constraints, product references</depends_on>
     <generated_by>Context Engineering Framework - Research Analysis Synthesis</generated_by>
     <date>2025-10-09</date>
-    <status>OBSOLETE - replaced by `prompts/business_research_generator.xml` and `prompts/implementation_research_generator.xml`</status>
+    <status>OBSOLETE - replaced by `prompts/business-research-generator.xml` and `prompts/implementation-research-generator.xml`</status>
   </metadata>
 
   <system_role>

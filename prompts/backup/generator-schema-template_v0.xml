@@ -100,7 +100,7 @@
         - Include research instructions if applicable
         - Ensure next generator produces both terminal artifact AND subsequent generator
       </guidance>
-      <output_path>[/prompts/next_phase_generator.xml]</output_path>
+      <output_path>[/prompts/next-phase-generator.xml]</output_path>
     </step>
 
     <step priority="[N]">
@@ -122,8 +122,8 @@
       </validation_checklist>
     </terminal_artifact>
 
-    <next_generator>
-      <path>[/prompts/next_phase_generator.xml]</path>
+    <next-generator>
+      <path>[/prompts/next-phase-generator.xml]</path>
       <validation>
         <criterion>Must be valid XML with proper structure</criterion>
         <criterion>Includes metadata section with version, dependencies</criterion>
@@ -133,7 +133,7 @@
         <criterion>Specifies dual outputs: terminal artifact + subsequent generator</criterion>
         <criterion>Includes validation checklist for quality assurance</criterion>
       </validation>
-    </next_generator>
+    </next-generator>
   </output_format>
 
   <traceability>

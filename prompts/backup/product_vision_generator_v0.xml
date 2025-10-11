@@ -7,7 +7,7 @@
     <depends_on>/docs/product-idea.md</depends_on>
     <generated_by>Master Prompt (Bootstrap Phase)</generated_by>
     <date>2025-10-07</date>
-    <status>OBSOLETE - replaced by `prompts/product_vision_generator.xml`</status>
+    <status>OBSOLETE - replaced by `prompts/product-vision-generator.xml`</status>
   </metadata>
 
   <system_role>
@@ -154,9 +154,9 @@
         - Follow generator prompt XML schema template at /prompts/templates/generator-schema-template.xml
         - Epic generator should reference product vision as input
         - Include instructions for epic decomposition logic and feature-specific research
-        - Ensure epic generator produces both epic documents AND prd_generator.xml
+        - Ensure epic generator produces both epic documents AND prd-generator.xml
       </guidance>
-      <output_path>/prompts/epic_generator.xml</output_path>
+      <output_path>/prompts/epic-generator.xml</output_path>
     </step>
 
     <step priority="13">
@@ -184,18 +184,18 @@
       </validation_checklist>
     </terminal_artifact>
 
-    <next_generator>
-      <path>/prompts/epic_generator.xml</path>
+    <next-generator>
+      <path>/prompts/epic-generator.xml</path>
       <validation>
         <criterion>Must be valid XML with proper structure</criterion>
         <criterion>Includes metadata section with version, dependencies</criterion>
         <criterion>System role defines Epic decomposition expert persona</criterion>
         <criterion>References epic-template.xml and product_vision_v3.md (final version)</criterion>
         <criterion>Instructions include logic for decomposing vision into 3-5 epics</criterion>
-        <criterion>Specifies dual outputs: epic documents + prd_generator.xml</criterion>
+        <criterion>Specifies dual outputs: epic documents + prd-generator.xml</criterion>
         <criterion>Includes validation checklist for epic quality</criterion>
       </validation>
-    </next_generator>
+    </next-generator>
   </output_format>
 
   <traceability>
