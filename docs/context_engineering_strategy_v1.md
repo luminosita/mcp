@@ -51,7 +51,7 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 - `/.claude/commands/generate.md` (universal executor)
 - `/.claude/commands/refine.md` (iteration orchestrator)
 - `/prompts/templates/*.xml` (extracted/generated templates)
-- `/prompts/templates/generator-schema-template.xml` (schema for all generators)
+- `/prompts/templates/generator-schema.xml` (schema for all generators)
 - `/prompts/*_generator.xml` (generator prompts)
 - Product Vision, Epic, and PRD artifacts (v1, v2, v3)
 

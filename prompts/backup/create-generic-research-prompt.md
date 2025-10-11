@@ -19,7 +19,7 @@ Establish a clear and comprehensive research prompt and research artifact templa
     - `backlog_prompt.md` -> `Backlog Solution Implementation Guidelines.md`
     - `mcp_prompt.md` -> `AI Agent MCP Server Implementation Report.md`
     - `shh_prompt.md` -> `Secrets Management Solution Research Report.md`
-- Do a deep analysis of the existing generator prompt template (`generator-schema-template_v2.xml`)
+- Do a deep analysis of the existing generator prompt template (`generator-schema.xml`)
 - Do a deep analysis of SDLC phases artifacts templates to clarify the requirements for each SDLC phase
 - Synthesize sophisticated research artifact structure based on gathered information
 
@@ -42,7 +42,7 @@ Establish a clear and comprehensive research prompt and research artifact templa
 - Research Prompt must produce the research plan and wait for the confirmation
 - Research Prompt must contain final research artifact validation checklist 
 - Research Prompt must contain instructions to generate final research artifact with all research citations following `CITATION REQUIREMENTS`
-- Research Prompt must follow `generator-schema-template_v2.xml`. Add sections if required.
+- Research Prompt must follow `generator-schema.xml`. Add sections if required.
 - Research Prompt must instruct formulation of overall architecture recommendation
 - Research Prompt must instruct AI Research Agent to perform deep analysis of the existing products in the market and referenced products suggested by humans:
     - capabilities
@@ -68,7 +68,7 @@ Establish a clear and comprehensive research prompt and research artifact templa
 ## VALIDATION CHECKLIST
 - [ ] Research Prompt is in XML format
 - [ ] Research Artifact Template is in Markdown format
-- [ ] Reserch Prompt follows `generator-schema-template_v2.xml`
+- [ ] Reserch Prompt follows `generator-schema.xml`
 - [ ] Research Prompt contains human input validation and clarification instructions
 - [ ] Research Prompt contains anti-hallucation guardrails
 - [ ] Research Prompt contains final research artifact validation checklist
@@ -84,7 +84,7 @@ Establish a clear and comprehensive research prompt and research artifact templa
 - `docs/research/mcp/AI Agent MCP Server Implementation Report.md`        #mcp server research artifact 
 - `docs/research/shh/shh_prompt.md`                                       #prompt used for secrets management research
 - `docs/research/shh/Secrets Management Solution Research Report.md`      #secrets management research artifact 
-- `prompts/templates/generator-schema-template_v2.xml`                    #existing generator prompt template
+- `prompts/templates/generator-schema.xml`                    #existing generator prompt template
 - SDLC phases artifacts templates:
     - `prompts/templates/product-vision-template.xml`       #product vision template
     - `prompts/templates/epic-template.xml`                 #epic template

@@ -151,7 +151,7 @@
       <action>Create Epic Generator Prompt</action>
       <purpose>Generate the next-level prompt for decomposing vision into epics</purpose>
       <guidance>
-        - Follow generator prompt XML schema template at /prompts/templates/generator-schema-template.xml
+        - Follow generator prompt XML schema template at /prompts/templates/generator-schema.xml
         - Epic generator should reference product vision as input
         - Include instructions for epic decomposition logic and feature-specific research
         - Ensure epic generator produces both epic documents AND prd-generator.xml

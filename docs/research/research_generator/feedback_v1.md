@@ -117,7 +117,7 @@ Questions Needing Your Confirmation:
   Research Prompt (research_prompt.xml) Validation:
 
   - ✅ Research Prompt is in XML format
-  - ✅ Research Prompt follows generator-schema-template_v2.xml - includes all required sections: metadata, system_role, task_context, anti_hallucination_guidelines, instructions, output_format, traceability,
+  - ✅ Research Prompt follows generator-schema.xml - includes all required sections: metadata, system_role, task_context, anti_hallucination_guidelines, instructions, output_format, traceability,
   validation, quality_guidance, examples
   - ✅ Research Prompt contains human input validation and clarification instructions - Step 1 requires collection and validation of all human inputs with explicit clarification loop
   - ✅ Research Prompt contains anti-hallucination guardrails - Comprehensive anti_hallucination_guidelines section plus anti-hallucination subsections in each instruction step
@@ -155,7 +155,7 @@ Questions Needing Your Confirmation:
   Deliverables:
 
   1. Research Generator Prompt (XML): /Users/gianni/dev/sandbox/mcp/docs/research/research-generator/research_prompt.xml
-    - Follows generator-schema-template_v2.xml structure
+    - Follows generator-schema.xml structure
     - 10-step workflow with human validation gates
     - Comprehensive anti-hallucination guardrails
     - Mandatory citation requirements

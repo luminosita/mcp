@@ -33,7 +33,7 @@
 - **Output Format**: Defined in `<output_format>` with validation
 
 **Implementation**:
-- `/prompts/templates/generator-schema-template.xml`
+- `/prompts/templates/generator-schema.xml`
 - `/prompts/product-vision-generator.xml`
 
 ### 1.2 XML Formatting for Structured Outputs
@@ -94,7 +94,7 @@
 - Generate clarifying questions: Guided in anti-hallucination guidelines
 
 **Implementation**:
-- `/prompts/templates/generator-schema-template.xml` - `<anti_hallucination_guidelines>`
+- `/prompts/templates/generator-schema.xml` - `<anti_hallucination_guidelines>`
 - `/prompts/product-vision-generator.xml` - `<anti_hallucination_guidelines>`
 
 ### 3.2 Grounding and Source Tracing

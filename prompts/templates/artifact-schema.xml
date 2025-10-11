@@ -230,7 +230,7 @@
   </usage_notes>
 
   <related_schemas>
-    <schema path="/prompts/templates/generator-schema-template_v1.xml">
+    <schema path="/prompts/templates/generator-schema.xml">
       Standard schema for generator prompts that create artifacts from this template
     </schema>
   </related_schemas>

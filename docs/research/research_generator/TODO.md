@@ -7,7 +7,7 @@
 - [X] Backlog product prompt (backlog_prompt.md)
 - [X] MCP Server product prompt (mcp_prompt.md)
 - [X] Universal Secret Management product prompt (shh_prompt.md)
-- [X] Generator Prompt Template (generator-schema-template_v2.xml)
+- [X] Generator Prompt Template (generator-schema.xml)
 - [X] Specialized CLAUDE.md files sections for research
 
 - [X] Research artifacts??? A: point to sections from the final research, which are great and try to figure out instruction

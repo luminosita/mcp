@@ -5,7 +5,7 @@
     <version>1.0</version>
     <source>Extracted from Context Engineering Framework</source>
     <purpose>Standard XML schema for all generator prompts</purpose>
-    <status>OBSOLETE - replaced by `prompts/templates/generator-schema-template_v2.xml`</status>
+    <status>OBSOLETE - replaced by `prompts/templates/generator-schema.xml`</status>
   </metadata>
 
   <instructions>
@@ -94,7 +94,7 @@
       <action>[Create next-level generator prompt]</action>
       <purpose>[Generate the next SDLC phase prompt]</purpose>
       <guidance>
-        - Follow this generator prompt XML schema template at /prompts/templates/generator-schema-template.xml
+        - Follow this generator prompt XML schema template at /prompts/templates/generator-schema.xml
         - Next generator should reference current artifact as input
         - Include specific instructions for next phase logic
         - Include research instructions if applicable
