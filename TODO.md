@@ -50,7 +50,7 @@ Extract templates from research document (Section 6.1-6.4) and convert to XML fo
 - `/prompts/templates/adr-template.xml` ✅
 - `/prompts/templates/tech-spec-template.xml` ✅
 - `/prompts/templates/backlog-story-template.xml` ✅
-- `/prompts/templates/generator-schema-template.xml` ✅
+- `/prompts/templates/generator-schema.xml` ✅
 
 ---
 
@@ -324,7 +324,7 @@ Generate comprehensive Phase 1 completion report documenting framework viability
 - [ ] At least 5 patterns documented
 - [ ] Framework viability assessment complete
 - [ ] Recommendations for Phase 2 MCP Server project
-- [ ] All templates from final strategy document removed and replaced with extracted file references (e.g., prompts/templates/generator-schema-template.xml, prompts/templates/specialized-claude-template.md)
+- [ ] All templates from final strategy document removed and replaced with extracted file references (e.g., prompts/templates/generator-schema.xml, prompts/templates/specialized-claude-template.md)
 - [ ] Section 6 of final strategy document Synced with TODO.md file
 - [ ] **HUMAN**: Final strategy document update with Phase 1 summary
 

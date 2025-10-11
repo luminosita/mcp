@@ -2459,7 +2459,7 @@ Answer: deferred
 
   On Q4 (Epic Generator XML Schema):
 
-  Q4.1: Should I extract the XML schema template from strategy doc and create a standalone /prompts/templates/generator-schema-template.xml file that all generators reference?
+  Q4.1: Should I extract the XML schema template from strategy doc and create a standalone /prompts/templates/generator-schema.xml file that all generators reference?
 
   On Q5a-d (Command Names):
 
@@ -2559,11 +2559,11 @@ Answer: deferred
   2. Product Vision Generator
   - Added research step for competitive landscape (step 8)
   - Marked constraints as [CUSTOMIZE PER PRODUCT]
-  - Updated reference to generator-schema-template.xml
+  - Updated reference to generator-schema.xml
   - Added instruction to infer additional product capabilities from research
 
   3. Generator Schema Template (NEW)
-  - Created /prompts/templates/generator-schema-template.xml
+  - Created /prompts/templates/generator-schema.xml
   - Comprehensive XML schema for all future generators
   - Includes all required sections with detailed documentation
   - Referenced by all generators for consistency
@@ -2675,7 +2675,7 @@ Answer: deferred
   Q1: Anti-Hallucination Guardrails ✅
 
   - Read: Section 3 of research document for comprehensive guidelines
-  - Added to /prompts/templates/generator-schema-template.xml:
+  - Added to /prompts/templates/generator-schema.xml:
     - Complete <anti_hallucination_guidelines> section with 6 categories
     - <anti_hallucination> sub-elements in instruction steps
   - Added to /prompts/product-vision-generator.xml:
@@ -2715,7 +2715,7 @@ Answer: deferred
   Modified (4 files):
   1. /CLAUDE.md - Added template reference, expanded Self-Refine, added documentation note
   2. /prompts/product-vision-generator.xml - Removed constraints, added anti-hallucination guidelines
-  3. /prompts/templates/generator-schema-template.xml - Added comprehensive anti-hallucination section
+  3. /prompts/templates/generator-schema.xml - Added comprehensive anti-hallucination section
   4. /docs/context_engineering_strategy_v1.md - Fixed /kickoff references and .xml extensions
   5. /TODO.md - Added Task Type attribute to execute-generator tasks
 
