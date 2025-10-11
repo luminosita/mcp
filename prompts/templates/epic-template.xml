@@ -2,9 +2,11 @@
 <template>
   <metadata>
     <name>Epic_Template</name>
-    <version>1.0</version>
+    <version>1.2</version>
     <source>Generated based on industry best practices and Context Engineering framework</source>
     <sdlc_phase>Epic</sdlc_phase>
+    <last_updated>2025-10-11</last_updated>
+    <changes>v1.2: Added explicit guidance for Open Questions to maintain business-level focus only</changes>
   </metadata>
 
   <instructions>
@@ -12,8 +14,9 @@
     <guideline>Each epic should deliver standalone user value</guideline>
     <guideline>Epics should be sized for 2-3 month implementation</guideline>
     <guideline>Include clear acceptance criteria at epic level</guideline>
-    <guideline>Define dependencies between epics</guideline>
+    <guideline>Define dependencies between epics at business level only</guideline>
     <guideline>Link to parent product vision</guideline>
+    <guideline>STRATEGIC FOCUS: Epics describe WHAT and WHY, not HOW. No technical implementation details.</guideline>
   </instructions>
 
   <structure format="markdown">
@@ -82,26 +85,20 @@ As [user persona], I need [capability] so that [business value].
 | [Metric 1] | [Goal] | [How measured] |
 | [Metric 2] | [Goal] | [How measured] |
 
-## Technical Considerations
+## Dependencies & Risks (Business Level)
 
-### Architecture Impact
-[High-level technical changes required]
-
-### Dependencies
-**Technical Dependencies:**
-- [System/service dependency 1]
-- [External API/library dependency 2]
-
-**Epic Dependencies:**
+### Epic Dependencies
 - **Depends On:** [EPIC-XXX: Must complete first]
 - **Blocks:** [EPIC-YYY: This epic must complete first]
 
-### Risks & Mitigations
+### Business Risks & Mitigations
 
 | Risk | Likelihood | Impact | Mitigation Strategy |
 |------|------------|--------|-------------------|
-| [Risk 1] | High/Med/Low | High/Med/Low | [Strategy] |
-| [Risk 2] | High/Med/Low | High/Med/Low | [Strategy] |
+| [Business/Market Risk 1] | High/Med/Low | High/Med/Low | [Strategy] |
+| [Adoption/User Risk 2] | High/Med/Low | High/Med/Low | [Strategy] |
+
+**Note:** Technical dependencies, architecture decisions, and implementation risks are deferred to PRD phase (transition phase where technical research is introduced).
 
 ## Effort Estimation
 - **Complexity:** [Low/Medium/High]
@@ -126,8 +123,33 @@ As [user persona], I need [capability] so that [business value].
 - [ ] Success metrics baseline captured
 
 ## Open Questions
-- [Question 1]
-- [Question 2]
+
+**IMPORTANT: Include ONLY business-level questions. Technical questions belong in PRD phase and beyond.**
+
+Business questions focus on:
+- Market priorities and user segments
+- Business model and pricing
+- Regulatory/compliance requirements
+- Strategic timing and resource allocation
+
+✅ **Examples of ACCEPTABLE questions:**
+- "Should we prioritize enterprise or SMB customers in the initial release?"
+- "Are there data privacy regulations specific to our target markets?"
+- "What is the acceptable customer acquisition cost for this feature?"
+- "Should we target mobile or desktop users first?"
+
+❌ **Examples of UNACCEPTABLE questions (technical - belong in PRD/Tech Spec/ADR):**
+- "Should we use OAuth2 or SAML for authentication?"
+- "What database should we use for storage?"
+- "Should the API be REST or GraphQL?"
+- "Which cloud provider should host this?"
+
+**If no business questions exist, state:** "No open business questions at this time. Technical decisions will be addressed in PRD phase."
+
+---
+
+- [Business Question 1]
+- [Business Question 2]
 
 ## Related Documents
 - Product Vision: [Link]

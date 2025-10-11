@@ -2,11 +2,11 @@
 <generator_prompt>
   <metadata>
     <name>Epic_Generator</name>
-    <version>1.0</version>
+    <version>1.2</version>
     <sdlc_phase>Epic</sdlc_phase>
     <depends_on>/artifacts/product_vision_v[N].md OR /artifacts/initiatives/[initiative_id]_v[N].md</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
-    <date>2025-10-10</date>
+    <date>2025-10-11</date>
   </metadata>
 
   <system_role>
@@ -30,9 +30,12 @@
       - User-focused with clear business impact
       - Implementation-agnostic at this level
       - Traceable to parent vision or initiative
+      - Strategic phase artifact: Business value only, no technical implementation details
+
+      IMPORTANT: Epics are STRATEGIC PHASE documents. Do NOT include technical implementation details, specific technologies, or technical architecture decisions. These belong in PRD phase (transition) and later technical phases.
 
       Reference: SDLC Artifacts Comprehensive Guideline v1.1, Section 1.2 (Epic Definition)
-      Reference: Business Research (for user pain points, market gaps, competitive analysis)
+      Reference: Business Research ONLY (for user pain points, market gaps, competitive analysis)
     </background>
 
     <input_artifacts>
@@ -79,8 +82,10 @@
     <guideline category="assumptions">When decomposing capability into high-level stories, mark preliminary story list as [PRELIMINARY - to be refined in PRD phase].</guideline>
     <guideline category="uncertainty">If input lacks specific user personas or pain points, reference generally but note as [TO BE DETAILED IN PRD].</guideline>
     <guideline category="verification">For success metrics, derive from parent vision/initiative metrics. If metrics unavailable, propose reasonable metrics marked as [PROPOSED].</guideline>
-    <guideline category="confidence">Identify dependencies and risks based on product context. Mark speculative dependencies as [POTENTIAL - requires validation].</guideline>
+    <guideline category="confidence">Dependencies and risks should be described at BUSINESS LEVEL only (e.g., "Depends on user authentication epic", "Risk: Market adoption timing"). Do NOT include technical dependencies or technical risks.</guideline>
     <guideline category="scope">Stay at epic level. Do not define detailed user stories or technical implementation—those belong in PRD and Backlog Story phases.</guideline>
+    <guideline category="strategic_focus">NEVER include specific technologies, technical architecture decisions, or implementation details. Epics are strategic documents focused on WHAT and WHY, not HOW. Technical details belong in PRD phase and beyond.</guideline>
+    <guideline category="open_questions">Open Questions section must contain ONLY business-level questions (market, users, business model, priorities). NEVER include technical questions (architecture, implementation, technology choices). If technical uncertainties exist, note that "technical decisions will be addressed in PRD phase" without listing specific technical questions.</guideline>
   </anti_hallucination_guidelines>
 
   <instructions>
@@ -174,12 +179,14 @@
     </step>
 
     <step priority="11">
-      <action>Identify Technical Considerations</action>
+      <action>Identify Business-Level Dependencies and Risks</action>
       <guidance>
-        - High-level architecture impact (no detailed design)
-        - Technical dependencies (systems, services, APIs)
-        - Epic dependencies (what must complete first)
-        - Risks at epic level with mitigation strategies
+        - Epic dependencies (what must complete first at business level)
+        - Business risks with mitigation strategies (market, adoption, user acceptance)
+        - Keep at strategic level - NO technical dependencies or technical risks
+        - Example dependency: "Depends on User Authentication Epic completion"
+        - Example risk: "Risk: Market adoption may be slow if pricing not competitive"
+        - DO NOT include: Technical architecture, specific technologies, API dependencies
       </guidance>
     </step>
 
@@ -194,6 +201,27 @@
     </step>
 
     <step priority="13">
+      <action>Identify Open Questions (Business-Level Only)</action>
+      <guidance>
+        - List unresolved business questions that need stakeholder input
+        - Focus on strategic and business concerns only (market, users, business model, priorities)
+        - EXCLUDE technical questions (architecture, implementation, technology choices)
+        - Technical questions belong in PRD phase and beyond
+        - Examples of ACCEPTABLE questions:
+          * "What is the priority order for target user segments?"
+          * "Are there regulatory compliance requirements for this market?"
+          * "What is the acceptable timeline for ROI achievement?"
+          * "Should we prioritize mobile or desktop users first?"
+        - Examples of UNACCEPTABLE questions (technical):
+          * "Which authentication protocol should we use?" (PRD/Tech Spec)
+          * "What database technology is best?" (Technical Spec)
+          * "Should we use REST or GraphQL APIs?" (ADR)
+          * "What cloud provider should host this?" (Technical Spec)
+      </guidance>
+      <anti_hallucination>Only include business-level questions. If technical uncertainties exist, note generally that "technical decisions will be addressed in PRD phase" but do not list specific technical questions.</anti_hallucination>
+    </step>
+
+    <step priority="14">
       <action>Define Milestones</action>
       <guidance>
         - 3 milestones spread across epic timeline
@@ -202,13 +230,13 @@
       </guidance>
     </step>
 
-    <step priority="14">
+    <step priority="15">
       <action>Generate epic document</action>
       <output_path>/artifacts/epics/[epic_id]_v1.md</output_path>
       <format>Markdown following epic-template.xml structure</format>
     </step>
 
-    <step priority="15">
+    <step priority="16">
       <action>Validate output against checklist</action>
       <reference>See validation_checklist below</reference>
     </step>
@@ -226,12 +254,13 @@
         <criterion>3-5 high-level user stories listed</criterion>
         <criterion>Epic-level acceptance criteria defined (Given/When/Then)</criterion>
         <criterion>Success metrics established with targets and measurement methods</criterion>
-        <criterion>Technical dependencies and risks identified</criterion>
+        <criterion>Business-level dependencies and risks identified (NO technical details)</criterion>
         <criterion>Effort estimation provided (SP range, duration, team size)</criterion>
         <criterion>Milestones defined across epic timeline</criterion>
+        <criterion>Open Questions are business-level only (NO technical questions)</criterion>
         <criterion>Traceability: References to Product Vision or Initiative present</criterion>
         <criterion>Readability: Accessible to cross-functional team</criterion>
-        <criterion>Implementation-agnostic: No detailed technical design at this level</criterion>
+        <criterion>Strategic focus maintained: No specific technologies or technical implementation details</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -253,10 +282,12 @@
       - [ ] High-level stories provide epic decomposition preview
       - [ ] Acceptance criteria focus on user outcomes (not technical implementation)
       - [ ] Success metrics link to parent initiative OKRs (if applicable)
-      - [ ] Dependencies and risks identified with mitigation
+      - [ ] Business-level dependencies and risks identified (NO technical details)
+      - [ ] Open Questions are business-level only (NO technical questions about architecture, implementation, or technology)
       - [ ] Readability: Language appropriate for product team and stakeholders
       - [ ] Traceability: Clear references to parent artifact sections
-      - [ ] No detailed implementation specified (stays at epic abstraction level)
+      - [ ] Strategic focus maintained: No specific technologies or implementation details
+      - [ ] Document uses Business Research only (not Implementation Research)
     </self_check>
   </validation>
 
@@ -275,6 +306,24 @@
 
     <guideline category="traceability">
       Every epic goal traces to vision capability or initiative objective. Use format: "Per Product Vision Capability X, this epic delivers..."
+    </guideline>
+
+    <guideline category="strategic_focus">
+      Epics are STRATEGIC PHASE documents. Maintain focus on WHAT (capabilities) and WHY (business value), never HOW (technical implementation). Avoid specific technologies, architecture decisions, or technical details. Use Business Research only; Implementation Research is for PRD phase and beyond.
+    </guideline>
+
+    <guideline category="open_questions">
+      Open Questions must be business-level only. Focus on strategic uncertainties (market priorities, user segments, business model, regulatory requirements, timing). NEVER include technical questions (architecture, implementation, technology choices). Technical uncertainties are addressed in PRD phase and beyond. If no business questions exist, state "No open business questions at this time. Technical decisions will be addressed in PRD phase."
+
+      Examples of GOOD open questions:
+      - "Should we prioritize enterprise or SMB customers in the initial release?"
+      - "Are there data privacy regulations specific to our target markets?"
+      - "What is the acceptable customer acquisition cost for this feature?"
+
+      Examples of BAD open questions (technical):
+      - "Should we use OAuth2 or SAML for authentication?" (belongs in PRD/ADR)
+      - "What database should we use for storage?" (belongs in Technical Spec)
+      - "Should the API be REST or GraphQL?" (belongs in ADR)
     </guideline>
   </quality_guidance>
 

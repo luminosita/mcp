@@ -49,6 +49,9 @@ Parse critique file for:
 3. Minor issues (nice-to-have improvements)
 
 ### Step 4: Generate Refinement Plan
+
+**IMPORTANT** Refinement plan must include generator AND optional artifact template refinements
+
 Create structured plan addressing each issue:
 
 ```markdown
