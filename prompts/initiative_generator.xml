@@ -2,11 +2,11 @@
 <generator_prompt>
   <metadata>
     <name>Initiative_Generator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <sdlc_phase>Initiative</sdlc_phase>
     <depends_on>/artifacts/product_vision_v[N].md</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
-    <date>2025-10-10</date>
+    <date>2025-10-11</date>
   </metadata>
 
   <system_role>
@@ -116,6 +116,7 @@
         - Assign rough timeline per epic (quarters)
         - Note epic owners if known, otherwise mark [TBD]
         - Maintain epic-level abstraction (no detailed requirements)
+        - Do NOT include status or tracking columns (e.g., "Planned", "In Progress"). Initiatives are strategic documents, not tracking tools. Status belongs in TODO.md or project management systems.
       </guidance>
     </step>
 
@@ -191,6 +192,7 @@
         <criterion>Strategic objective is clear and aligns with organizational goals</criterion>
         <criterion>3-5 Key Results defined with baseline, target, and due date</criterion>
         <criterion>Supporting epics mapped with rough timelines</criterion>
+        <criterion>Supporting epics table excludes status/tracking columns</criterion>
         <criterion>Budget and FTE allocation estimated and justified</criterion>
         <criterion>Risks identified with mitigation strategies</criterion>
         <criterion>Governance structure defined (steering committee, review cadence)</criterion>
@@ -240,6 +242,10 @@
 
     <guideline category="traceability">
       Every initiative goal should trace back to Product Vision. Use format: "Per Product Vision Section X, [capability/goal]..."
+    </guideline>
+
+    <guideline category="artifact_scope">
+      Initiatives are strategic planning documents, not tracking tools. Do not include status columns, progress indicators, or completion tracking. Those belong in TODO.md or project management systems. Focus on strategic definition: what, why, when, who, and how much.
     </guideline>
   </quality_guidance>
 

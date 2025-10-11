@@ -23,7 +23,6 @@
 
 ## Metadata
 - **Initiative ID:** INIT-[XXX]
-- **Status:** [Draft/Approved/In Progress/Completed/Cancelled]
 - **Priority:** [Strategic/High/Medium]
 - **Owner:** [Executive Sponsor Name & Title]
 - **Business Unit:** [Product/Engineering/Sales/etc.]
@@ -74,11 +73,11 @@
 
 ### Supporting Epics
 
-| Epic | Description | Status | Owner | Est. Timeline |
-|------|-------------|--------|-------|---------------|
-| [EPIC-001] | [Brief description] | [Status] | [Owner] | [Q1 2025] |
-| [EPIC-002] | [Brief description] | [Status] | [Owner] | [Q2 2025] |
-| [EPIC-003] | [Brief description] | [Status] | [Owner] | [Q2-Q3 2025] |
+| Epic | Description | Owner | Est. Timeline |
+|------|-------------|-------|---------------|
+| [EPIC-001] | [Brief description] | [Owner] | [Q1 2025] |
+| [EPIC-002] | [Brief description] | [Owner] | [Q2 2025] |
+| [EPIC-003] | [Brief description] | [Owner] | [Q2-Q3 2025] |
 
 ### In Scope
 - [Strategic capability 1]

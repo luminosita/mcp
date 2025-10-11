@@ -21,10 +21,12 @@ This command implements the Self-Refine pattern (research Section 2.4) to improv
 
 ### Step 1: Identify Current Iteration
 - Locate generator: `/prompts/{generator_name}.xml`
-- Read `<version>` metadata tag
-- Determine current version (e.g., `1.1`)
-- Calculate next version (e.g., `1.2`)
-- Identify current artifact version (v1 or v2) based on generator version
+- Locate artifact template: `/prompts/templates/{artifact}-template.xml`
+  - Derive artifact from generator_name (e.g., product_vision_generator → product-vision)
+- Read generator `<version>` metadata tag
+- Read artifact template `<version>` metadata tag
+- Determine current versions (e.g., `1.1`)
+- Calculate next versions (e.g., `1.2`)
 
 ### Step 2: Load Critique Feedback
 - Determine critique file path: `/feedback/{artifact}_v{N}_critique.md`
@@ -50,12 +52,23 @@ Parse critique file for:
 Create structured plan addressing each issue:
 
 ```markdown
-## Refinement Plan for {generator_name} v{next_version}
+## Refinement Plan for {generator_name} v{generator_next_version}
 
 ### Issue 1: [Description from critique]
 **Severity**: Critical
 **Current Behavior**: [What generator does now]
 **Proposed Fix**: [Specific change to generator prompt]
+**Expected Improvement**: [How artifact v{N+1} will be better]
+
+### Issue 2: [Description]
+...
+
+## Refinement Plan for {artifact} Template v{artifact_template_next_version}
+
+### Issue 1: [Description from critique]
+**Severity**: Critical
+**Current Behavior**: [What artifact template defines now]
+**Proposed Fix**: [Specific change to artifact template]
 **Expected Improvement**: [How artifact v{N+1} will be better]
 
 ### Issue 2: [Description]
@@ -68,7 +81,7 @@ Refinement Plan Generated
 -----------------------
 Found 5 issues: 2 Critical, 2 Major, 1 Minor
 
-Proposed changes to {generator_name}:
+Proposed changes to {generator_name} and {artifact} template:
 1. Add explicit instruction for quantified pain points in problem statement
 2. Include SMART criteria validation checklist in output_format section
 3. Enhance examples with concrete metrics
@@ -78,12 +91,12 @@ Proposed changes to {generator_name}:
 Proceed with these refinements? (y/n)
 ```
 
-### Step 5: Apply Refinements
+### Step 5: Apply Generator Refinements
 Update generator XML:
 
 **Updated Sections**:
-- `<metadata><version>`: Increment to next version
-- `<instructions>`: Add/modify steps based on refinement plan
+- `<metadata><version>`: Increment to next generator version
+- `<instructions>`: Add/modify steps based on generator refinement plan
 - `<output_format><validation_checklist>`: Add new validation criteria
 - `<examples>` (if applicable): Enhance with better exemplars
 
@@ -92,14 +105,26 @@ Update generator XML:
 - Core structure and logic
 - Existing validations (don't remove, only add)
 
-### Step 6: Re-Execute Generator
+### Step 6: Apply Template Refinements
+Update artifact template XML:
+
+**Updated Sections**:
+- `<metadata><version>`: Increment to next artifact template version
+- `<instructions>`: Add/modify steps based on template refinement plan
+- `<output_format><validation_checklist>`: Add new validation criteria
+- `<examples>` (if applicable): Enhance with better exemplars
+
+**Preserve**:
+- Core structure and logic
+- Existing validations (don't remove, only add)
+
+### Step 7: Re-Execute Generator
 Run the refined generator (/generate command):
 1. Load updated generator + all required context
 2. Execute generation
 3. Save new version artifact: `{artifact}_v{N+1}.md`
-4. Save updated next-level generator (if applicable)
 
-### Step 7: Compare Versions
+### Step 8: Compare Versions
 Generate comparison report:
 
 ```markdown
@@ -162,6 +187,14 @@ ERROR: Generator /prompts/{generator_name}.xml does not exist
 Available generators:
 - product_vision_generator.xml
 - epic_generator.xml
+```
+
+### Error: Artifact Template Not Found
+```
+ERROR: Generator /prompts/{artifact}-template.xml does not exist
+Available artifact templates:
+- product-vision-template.xml
+- epic-template.xml
 ```
 
 ### Error: Critique File Missing
