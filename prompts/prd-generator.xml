@@ -2,11 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>PRD_Generator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <sdlc_phase>PRD</sdlc_phase>
     <depends_on>/artifacts/epics/[epic_id]_v[N].md, [Business Research], [Implementation Research]</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
-    <date>2025-10-10</date>
+    <date>2025-10-11</date>
+    <changes>v1.1: Added explicit step for Open Questions with guidance on bridge artifact nature (business + strategic technical questions)</changes>
   </metadata>
 
   <system_role>
@@ -227,12 +228,47 @@
     </step>
 
     <step priority="15">
+      <action>Identify Open Questions (Business + Technical)</action>
+      <guidance>
+        PRD is a BRIDGE ARTIFACT. Open Questions can include BOTH business and technical uncertainties, but with clear boundaries:
+
+        **INCLUDE in PRD Open Questions:**
+        - Unresolved business questions from Epic (if any)
+        - Product/technical trade-off questions requiring PM + Tech Lead discussion
+        - High-level technical approach questions (architecture patterns, integration strategies)
+        - Technical feasibility questions that impact product decisions
+        - Questions affecting requirements definition or scope
+
+        **DEFER to ADR/Tech Spec phases:**
+        - Specific implementation details (algorithms, data structures)
+        - Granular technology choices (library selection, specific patterns)
+        - Low-level architecture decisions not affecting product requirements
+        - Questions that can be answered during implementation
+
+        **Examples of PRD-APPROPRIATE questions:**
+        - "Should we prioritize offline-first capability or real-time sync in V1?" (product/technical trade-off)
+        - "What authentication approach balances user experience with security requirements?" (strategic technical decision)
+        - "How should we handle data migration from the legacy system?" (affects timeline and user impact)
+        - "Should we build or integrate with third-party service for [capability]?" (build vs. buy decision)
+
+        **Examples of DEFER questions (for ADR/Tech Spec):**
+        - "Should we use Redis or Memcached for caching?" (specific technology choice - ADR)
+        - "What specific encryption algorithm for data at rest?" (implementation detail - Tech Spec)
+        - "Should we use singleton or factory pattern for [component]?" (low-level design - Tech Spec)
+        - "What specific logging library should we use?" (implementation detail - Tech Spec)
+
+        If no open questions exist, state: "No open questions at this time. Technical implementation details will be addressed in ADR and Technical Specification phases."
+      </guidance>
+      <anti_hallucination>Only include questions that genuinely require stakeholder input or product-level decisions. Do not fabricate questions for completeness. Mark questions as [BUSINESS] or [TECHNICAL] for clarity.</anti_hallucination>
+    </step>
+
+    <step priority="16">
       <action>Generate PRD document</action>
       <output_path>/artifacts/prds/[prd_id]/prd_v1.md</output_path>
       <format>Markdown following prd-template.xml structure</format>
     </step>
 
-    <step priority="16">
+    <step priority="17">
       <action>Validate output against checklist</action>
       <reference>See validation_checklist below</reference>
     </step>
@@ -253,6 +289,7 @@
         <criterion>User personas detailed (from Business Research)</criterion>
         <criterion>User journeys mapped for major features</criterion>
         <criterion>Risks identified with likelihood, impact, mitigation</criterion>
+        <criterion>Open Questions appropriate for PRD phase (business + strategic technical), with implementation details deferred to ADR/Tech Spec</criterion>
         <criterion>Traceability: References to Epic, Business Research, Implementation Research present</criterion>
         <criterion>Readability: Accessible to cross-functional team (product, design, engineering)</criterion>
         <criterion>Bridge artifact: Clear separation between business requirements and technical NFRs</criterion>
@@ -281,6 +318,7 @@
       - [ ] Success metrics link to Epic success metrics and initiative OKRs
       - [ ] User personas detailed with demographics, goals, pain points
       - [ ] Dependencies clearly separated: system, external, technical, business
+      - [ ] Open Questions appropriate for PRD (business + strategic technical only, not implementation details)
       - [ ] Readability: Language appropriate for product, design, and engineering
       - [ ] Traceability: Clear references to Epic, Business Research §X, Implementation Research §Y
       - [ ] Bridge artifact: PM owns business sections, Tech Lead contributes technical NFRs
@@ -302,6 +340,26 @@
 
     <guideline category="traceability">
       Every requirement traces to either Business Research (functional, business NFRs) or Implementation Research (technical NFRs). Use format: "Per Business Research §3.2, [requirement]" or "Per Implementation Research §5.1, performance target p99 &lt; 200ms"
+    </guideline>
+
+    <guideline category="open_questions">
+      PRD as bridge artifact accepts BOTH business and strategic technical questions, but maintains clear boundaries. Include questions requiring PM + Tech Lead collaboration or affecting product decisions. Defer implementation details to ADR/Tech Spec phases. Mark each question as [BUSINESS] or [TECHNICAL] for clarity.
+
+      **INCLUDE - Product/Technical Trade-offs:**
+      - "Should we prioritize offline-first capability or real-time sync in V1?" (affects user experience and architecture)
+      - "What authentication approach balances user experience with security requirements?" (affects NFRs and user flows)
+      - "Should we build or integrate with third-party service for notifications?" (build vs. buy affects timeline, cost, features)
+
+      **INCLUDE - Business Questions from Epic:**
+      - Unresolved business questions escalated from Epic phase
+      - Strategic market or user segment questions affecting requirements
+
+      **DEFER - Implementation Details:**
+      - "Should we use Redis or Memcached for caching?" (specific technology choice - ADR)
+      - "What specific encryption algorithm for data at rest?" (implementation detail - Tech Spec)
+      - "Should we use repository or active record pattern?" (low-level design - Tech Spec)
+
+      If no questions exist, state: "No open questions at this time. Technical implementation details will be addressed in ADR and Technical Specification phases."
     </guideline>
   </quality_guidance>
 

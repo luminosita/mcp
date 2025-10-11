@@ -6,7 +6,7 @@
     <source>Generated based on industry best practices and Context Engineering framework</source>
     <sdlc_phase>Epic</sdlc_phase>
     <last_updated>2025-10-11</last_updated>
-    <changes>v1.2: Added explicit guidance for Open Questions to maintain business-level focus only</changes>
+    <changes>v1.2: Enhanced Open Questions section to exclude technical questions AND product/technical trade-offs (defer both to PRD phase where PM + Tech Lead collaborate)</changes>
   </metadata>
 
   <instructions>
@@ -124,27 +124,40 @@ As [user persona], I need [capability] so that [business value].
 
 ## Open Questions
 
-**IMPORTANT: Include ONLY business-level questions. Technical questions belong in PRD phase and beyond.**
+**IMPORTANT: Include ONLY business-level questions. Technical questions and product/technical trade-offs belong in PRD phase.**
 
-Business questions focus on:
+**Epic Open Questions focus on:**
 - Market priorities and user segments
 - Business model and pricing
 - Regulatory/compliance requirements
 - Strategic timing and resource allocation
 
-✅ **Examples of ACCEPTABLE questions:**
+**EXCLUDE from Epic (defer to PRD phase):**
+- Technical questions (architecture, implementation, technology choices)
+- Product/technical trade-offs (requiring PM + Tech Lead collaboration)
+
+---
+
+✅ **Examples of ACCEPTABLE questions (business-only):**
 - "Should we prioritize enterprise or SMB customers in the initial release?"
 - "Are there data privacy regulations specific to our target markets?"
 - "What is the acceptable customer acquisition cost for this feature?"
 - "Should we target mobile or desktop users first?"
 
-❌ **Examples of UNACCEPTABLE questions (technical - belong in PRD/Tech Spec/ADR):**
+❌ **Examples of UNACCEPTABLE questions - Technical (defer to PRD/Tech Spec/ADR):**
 - "Should we use OAuth2 or SAML for authentication?"
 - "What database should we use for storage?"
 - "Should the API be REST or GraphQL?"
 - "Which cloud provider should host this?"
 
-**If no business questions exist, state:** "No open business questions at this time. Technical decisions will be addressed in PRD phase."
+❌ **Examples of UNACCEPTABLE questions - Product/Technical Trade-offs (defer to PRD - PM + Tech Lead):**
+- "Should we prioritize offline-first capability or real-time sync in V1?"
+- "What authentication approach balances user experience with security requirements?"
+- "Should we build or integrate with third-party service for notifications?"
+
+---
+
+**If no business questions exist, state:** "No open business questions at this time. Technical decisions and product/technical trade-offs will be addressed in PRD phase."
 
 ---
 

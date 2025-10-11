@@ -7,6 +7,7 @@
     <depends_on>/artifacts/product_vision_v[N].md OR /artifacts/initiatives/[initiative_id]_v[N].md</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
     <date>2025-10-11</date>
+    <changes>v1.2: Added explicit Open Questions step with guidance to exclude technical questions AND product/technical trade-offs (defer both to PRD phase)</changes>
   </metadata>
 
   <system_role>
@@ -85,7 +86,7 @@
     <guideline category="confidence">Dependencies and risks should be described at BUSINESS LEVEL only (e.g., "Depends on user authentication epic", "Risk: Market adoption timing"). Do NOT include technical dependencies or technical risks.</guideline>
     <guideline category="scope">Stay at epic level. Do not define detailed user stories or technical implementation—those belong in PRD and Backlog Story phases.</guideline>
     <guideline category="strategic_focus">NEVER include specific technologies, technical architecture decisions, or implementation details. Epics are strategic documents focused on WHAT and WHY, not HOW. Technical details belong in PRD phase and beyond.</guideline>
-    <guideline category="open_questions">Open Questions section must contain ONLY business-level questions (market, users, business model, priorities). NEVER include technical questions (architecture, implementation, technology choices). If technical uncertainties exist, note that "technical decisions will be addressed in PRD phase" without listing specific technical questions.</guideline>
+    <guideline category="open_questions">Open Questions section must contain ONLY business-level questions (market, users, business model, priorities). NEVER include technical questions (architecture, implementation, technology choices) or product/technical trade-off questions (requiring PM + Tech Lead collaboration). If technical uncertainties or product/technical trade-offs exist, note that "technical decisions and product/technical trade-offs will be addressed in PRD phase" without listing specific questions.</guideline>
   </anti_hallucination_guidelines>
 
   <instructions>
@@ -206,19 +207,27 @@
         - List unresolved business questions that need stakeholder input
         - Focus on strategic and business concerns only (market, users, business model, priorities)
         - EXCLUDE technical questions (architecture, implementation, technology choices)
-        - Technical questions belong in PRD phase and beyond
-        - Examples of ACCEPTABLE questions:
+        - EXCLUDE product/technical trade-off questions (these require PM + Tech Lead collaboration in PRD phase)
+        - Technical questions and product/technical trade-offs belong in PRD phase where PM and Tech Lead collaborate
+
+        - Examples of ACCEPTABLE questions (business-only):
           * "What is the priority order for target user segments?"
           * "Are there regulatory compliance requirements for this market?"
           * "What is the acceptable timeline for ROI achievement?"
           * "Should we prioritize mobile or desktop users first?"
-        - Examples of UNACCEPTABLE questions (technical):
+
+        - Examples of UNACCEPTABLE questions - Technical (defer to PRD/ADR/Tech Spec):
           * "Which authentication protocol should we use?" (PRD/Tech Spec)
           * "What database technology is best?" (Technical Spec)
           * "Should we use REST or GraphQL APIs?" (ADR)
           * "What cloud provider should host this?" (Technical Spec)
+
+        - Examples of UNACCEPTABLE questions - Product/Technical Trade-offs (defer to PRD):
+          * "Should we prioritize offline-first capability or real-time sync in V1?" (PRD - PM + Tech Lead)
+          * "What authentication approach balances user experience with security?" (PRD - PM + Tech Lead)
+          * "Should we build or integrate with third-party service for notifications?" (PRD - PM + Tech Lead)
       </guidance>
-      <anti_hallucination>Only include business-level questions. If technical uncertainties exist, note generally that "technical decisions will be addressed in PRD phase" but do not list specific technical questions.</anti_hallucination>
+      <anti_hallucination>Only include business-level questions. EXCLUDE product/technical trade-off questions that require PM + Tech Lead discussion—these belong in PRD phase. If technical uncertainties or trade-offs exist, note generally that "technical decisions and product/technical trade-offs will be addressed in PRD phase" but do not list specific questions.</anti_hallucination>
     </step>
 
     <step priority="14">
@@ -313,17 +322,22 @@
     </guideline>
 
     <guideline category="open_questions">
-      Open Questions must be business-level only. Focus on strategic uncertainties (market priorities, user segments, business model, regulatory requirements, timing). NEVER include technical questions (architecture, implementation, technology choices). Technical uncertainties are addressed in PRD phase and beyond. If no business questions exist, state "No open business questions at this time. Technical decisions will be addressed in PRD phase."
+      Open Questions must be business-level only. Focus on strategic uncertainties (market priorities, user segments, business model, regulatory requirements, timing). NEVER include technical questions (architecture, implementation, technology choices) or product/technical trade-off questions (requiring PM + Tech Lead collaboration). Technical uncertainties and product/technical trade-offs are addressed in PRD phase where PM and Tech Lead collaborate. If no business questions exist, state "No open business questions at this time. Technical decisions and product/technical trade-offs will be addressed in PRD phase."
 
-      Examples of GOOD open questions:
+      Examples of GOOD open questions (business-only):
       - "Should we prioritize enterprise or SMB customers in the initial release?"
       - "Are there data privacy regulations specific to our target markets?"
       - "What is the acceptable customer acquisition cost for this feature?"
 
-      Examples of BAD open questions (technical):
+      Examples of BAD open questions - Technical (defer to PRD/ADR/Tech Spec):
       - "Should we use OAuth2 or SAML for authentication?" (belongs in PRD/ADR)
       - "What database should we use for storage?" (belongs in Technical Spec)
       - "Should the API be REST or GraphQL?" (belongs in ADR)
+
+      Examples of BAD open questions - Product/Technical Trade-offs (defer to PRD - PM + Tech Lead):
+      - "Should we prioritize offline-first capability or real-time sync in V1?" (belongs in PRD)
+      - "What authentication approach balances user experience with security?" (belongs in PRD)
+      - "Should we build or integrate with third-party service for notifications?" (belongs in PRD)
     </guideline>
   </quality_guidance>
 

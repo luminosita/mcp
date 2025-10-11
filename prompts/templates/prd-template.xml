@@ -2,10 +2,12 @@
 <template>
   <metadata>
     <name>Product_Requirements_Document_Template</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
     <sdlc_phase>PRD</sdlc_phase>
     <note>PRDs use numbering scheme: PRD-XXX (e.g., PRD-003). File naming: prd_XXX_feature_name_vN.md (e.g., prd_003_jwt_authentication_v3.md)</note>
+    <last_updated>2025-10-11</last_updated>
+    <changes>v1.2: Enhanced Open Questions section with guidance on bridge artifact nature (business + strategic technical questions, implementation details deferred to ADR/Tech Spec)</changes>
   </metadata>
 
   <instructions>
@@ -88,8 +90,57 @@
 - Phase 2: [dates] - [deliverables]
 
 ## Open Questions
-- [Question 1]
-- [Question 2]
+
+**PRD is a BRIDGE ARTIFACT: Include both business and strategic technical questions, but defer implementation details to later phases.**
+
+**✅ INCLUDE in PRD Open Questions:**
+
+1. **Business Questions (from Epic or new):**
+   - Market priorities and user segment questions
+   - Business model and pricing questions
+   - Regulatory/compliance uncertainties
+   - Strategic timing and resource allocation
+
+2. **Product/Technical Trade-offs (PM + Tech Lead discussion):**
+   - Questions balancing user experience with technical constraints
+   - Build vs. buy decisions affecting timeline and features
+   - Architecture approach questions affecting product decisions
+   - Technical feasibility questions impacting requirements or scope
+
+**❌ DEFER to ADR/Tech Spec phases:**
+- Specific implementation details (algorithms, data structures, patterns)
+- Granular technology choices (library selection, specific tools)
+- Low-level architecture decisions not affecting product requirements
+- Questions answerable during implementation without stakeholder input
+
+---
+
+**Examples of PRD-APPROPRIATE questions:**
+
+[BUSINESS] "Should we prioritize enterprise customers or SMB users in the initial release?"
+
+[TECHNICAL] "Should we prioritize offline-first capability or real-time sync in V1?" (affects user experience and architecture)
+
+[TECHNICAL] "What authentication approach balances user experience with security requirements?" (affects NFRs and user flows)
+
+[TECHNICAL] "Should we build notification infrastructure or integrate with third-party service?" (build vs. buy decision)
+
+---
+
+**Examples of questions to DEFER (for ADR/Tech Spec):**
+
+- "Should we use Redis or Memcached for caching?" (specific technology choice - ADR)
+- "What specific encryption algorithm for data at rest?" (implementation detail - Tech Spec)
+- "Should we use repository or active record pattern?" (low-level design - Tech Spec)
+
+---
+
+**If no open questions exist, state:** "No open questions at this time. Technical implementation details will be addressed in ADR and Technical Specification phases."
+
+---
+
+- [Question 1 - mark as [BUSINESS] or [TECHNICAL]]
+- [Question 2 - mark as [BUSINESS] or [TECHNICAL]]
 
 ## Appendix
 [Additional context, research data]
