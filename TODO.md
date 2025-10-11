@@ -230,7 +230,7 @@ Apply final refinements, execute generator for v3, and **HUMAN manually updates*
 
 ### TASK-008: Execute Initiative Generator v1
 **Priority**: Critical
-**Dependencies**: TASK-004 (Product Vision v1)
+**Dependencies**: TASK-007a (Product Vision v3 approved) - **Currently executed with v1 at risk**
 **Estimated Time**: 20 minutes
 **Status**: ✅ Completed
 **Context**: New session C2 required
@@ -238,11 +238,15 @@ Apply final refinements, execute generator for v3, and **HUMAN manually updates*
 **Description**:
 Execute Initiative Generator in standalone context to decompose Product Vision into Initiative documents.
 
+**Production Requirement**: Should use approved Product Vision v3 as input
+**Current State**: Executed with Product Vision v1 (Draft) - acceptable for PoC, risk of rework if Vision changes in v2/v3
+
 **Command**: `/generate TASK-008`
 
 **Input Artifacts:**
-- Primary: `/artifacts/product_vision_v1.md`
-- Secondary: `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md`
+- Primary: `/artifacts/product_vision_v3.md` (approved) - **Production requirement**
+- Primary (Current): `/artifacts/product_vision_v1.md` (Draft) - **Used for PoC**
+- Secondary (optional): `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md`
 
 **Completion Notes:**
 - Initiative INIT-001 generated: `/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v1.md`
@@ -257,7 +261,7 @@ Execute Initiative Generator in standalone context to decompose Product Vision i
 
 ### TASK-009: Execute Epic Generator v1
 **Priority**: Critical
-**Dependencies**: TASK-004 (Product Vision v1)
+**Dependencies**: TASK-007a (Product Vision v3 approved) - **Currently executed with v1 at risk**
 **Estimated Time**: 20 minutes
 **Status**: ✅ Completed
 **Context**: New session C3 required
@@ -265,11 +269,15 @@ Execute Initiative Generator in standalone context to decompose Product Vision i
 **Description**:
 Execute Epic Generator in standalone context to decompose Product Vision into Epic documents.
 
+**Production Requirement**: Should use approved Product Vision v3 as input
+**Current State**: Executed with Product Vision v1 (Draft) - acceptable for PoC, risk of rework if Vision changes in v2/v3
+
 **Command**: `/generate TASK-009`
 
 **Input Artifacts:**
-- Primary: `/artifacts/product_vision_v1.md`
-- Secondary: `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md` (optional)
+- Primary: `/artifacts/product_vision_v3.md` (approved) - **Production requirement**
+- Primary (Current): `/artifacts/product_vision_v1.md` (Draft) - **Used for PoC**
+- Secondary (optional): `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md`
 
 **Completion Notes:**
 - 5 epics generated from Product Vision key capabilities

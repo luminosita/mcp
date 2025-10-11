@@ -156,7 +156,10 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2025-10-07
+**Document Version**: 1.1
+**Last Updated**: 2025-10-11
 **Maintained By**: Context Engineering PoC Team
-**Next Review**: n/a
+**Next Review**: End of Phase 1
+
+**Related Documents:**
+- `/docs/framework_validation_gaps.md` - Known validation gaps and production requirements
