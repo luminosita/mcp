@@ -21,9 +21,13 @@
 
   <structure format="markdown">
     <![CDATA[
-**Title:** [Enhanced ticket title]
-**Type:** Feature
-**Priority:** [High/Medium/Low with brief justification]
+# User Story: [Backlog User Story Title]
+
+## Metadata
+- **Story ID:** US-[xxx]
+- **Title:** [Enhanced ticket title]
+- **Type:** Feature
+- **Priority:** [High/Medium/Low with brief justification]
 
 ## User Story
 As [role], I want [feature], so that [benefit].

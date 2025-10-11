@@ -20,10 +20,10 @@
 # ADR-[NUMBER]: [Decision Title]
 
 ## Metadata
-**Date:** [YYYY-MM-DD]
-**Status:** [Proposed | Accepted | Deprecated | Superseded]
-**Deciders:** [Names]
-**Technical Story:** [Ticket/Issue reference]
+- **Date:** [YYYY-MM-DD]
+- **Status:** [Proposed | Accepted | Deprecated | Superseded]
+- **Deciders:** [Names]
+- **Technical Story:** [Ticket/Issue reference]
 
 ## Context
 What is the issue we're addressing?

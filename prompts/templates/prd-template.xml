@@ -22,13 +22,14 @@
 
   <structure format="markdown">
     <![CDATA[
-# [Product/Feature Name]
+# PRD: [Product/Feature Name]
 
-## Document Metadata
-- Author: [name]
-- Date: [date]
-- Version: [version]
-- Status: [Draft/Review/Approved]
+## Metadata
+- **PRD ID:** PRD-[XXX]
+- **Author:** [name]
+- **Date:** [date]
+- **Version:** [version]
+- **Status:** [Draft/Review/Approved]
 
 ## Executive Summary
 [2-3 paragraph overview: problem, solution, impact]
