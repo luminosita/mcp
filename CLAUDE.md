@@ -47,6 +47,81 @@
 
 ---
 
+## SDLC Generators Input Dependency Tree
+
+**Root Product:** AI Agent MCP Server
+
+```
+Research Phase (Root)
+├── Business Research
+│   └── docs/research/mcp/AI_Agent_MCP_Server_business_research.md
+└── Implementation Research
+    └── docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md
+
+↓
+
+Vision Phase
+└── Product Vision Generator
+    ├── Input: docs/research/mcp/AI_Agent_MCP_Server_business_research.md
+    └── Output: artifacts/product_vision_v{1-3}.md
+
+↓
+
+Strategic Phase
+├── Initiative Generator
+│   ├── Primary Input: artifacts/product_vision_v{N}.md (approved)
+│   ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_business_research.md (optional)
+│   └── Output: artifacts/initiatives/initiative_{id}_v{1-3}.md
+│
+└── Epic Generator
+    ├── Primary Input: artifacts/product_vision_v{N}.md (approved)
+    ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_business_research.md (optional)
+    └── Output: artifacts/epics/epic_{id}_v{1-3}.md
+
+↓
+
+Requirements Phase (Transition - bridges business and technical)
+└── PRD Generator
+    ├── Primary Input: artifacts/epics/epic_{id}_v3.md (approved)
+    ├── Secondary Input 1: docs/research/mcp/AI_Agent_MCP_Server_business_research.md (optional - market validation)
+    ├── Secondary Input 2: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md (optional - technical feasibility)
+    └── Output: artifacts/prds/prd_{id}/prd_v{1-3}.md
+
+↓
+
+Story Phase
+└── Backlog Story Generator
+    ├── Primary Input: artifacts/prds/prd_{id}/prd_v3.md (approved)
+    ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md (optional)
+    └── Output: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v{1-3}.md
+
+↓
+
+Technical Phase
+├── ADR Generator
+│   ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v3.md (approved)
+│   ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md
+│   └── Output: artifacts/specs/adr_{id}_v{1-3}.md
+│
+└── Technical Spec Generator
+    ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v3.md (approved)
+    ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md
+    └── Output: artifacts/specs/tech_spec_{id}_v{1-3}.md
+```
+
+**Key Principles:**
+- **Business Research** flows into all business-phase artifacts (Vision, Initiative, Epic)
+- **Implementation Research** flows into technical-phase artifacts (Backlog Story, ADR, Tech Spec)
+- **PRD is unique**: Transition phase artifact that may use BOTH research documents:
+  - Business Research (optional): Market validation, competitive positioning, business metrics
+  - Implementation Research (optional): Technical feasibility, architecture constraints, NFRs
+- Each generator produces v1, v2, v3 iterations through feedback cycles
+- Approved v3 artifacts become inputs to downstream generators
+- Generators are stateless; all context from input artifacts only
+- Secondary inputs are OPTIONAL: Load when enrichment needed, not by default
+
+---
+
 ## Generate Command Instructions
 
 ### Start New Context (if required)**
