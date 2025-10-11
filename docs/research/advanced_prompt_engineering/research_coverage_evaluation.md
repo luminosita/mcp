@@ -34,7 +34,7 @@
 
 **Implementation**:
 - `/prompts/templates/generator-schema-template.xml`
-- `/prompts/product_vision_generator.xml`
+- `/prompts/product-vision-generator.xml`
 
 ### 1.2 XML Formatting for Structured Outputs
 **Coverage**: ✅ Complete
@@ -95,7 +95,7 @@
 
 **Implementation**:
 - `/prompts/templates/generator-schema-template.xml` - `<anti_hallucination_guidelines>`
-- `/prompts/product_vision_generator.xml` - `<anti_hallucination_guidelines>`
+- `/prompts/product-vision-generator.xml` - `<anti_hallucination_guidelines>`
 
 ### 3.2 Grounding and Source Tracing
 **Coverage**: ✅ Complete

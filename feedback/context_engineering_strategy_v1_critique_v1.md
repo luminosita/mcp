@@ -11,7 +11,7 @@
 We are instructing LLM to "Research or infer 2-3 existing solutions in this space". 
 
 - Q2a: Should we instruct LLM to research and suggest additional product capabilities for the review or just rely on the product idea document input for capabilities? 
-- Q2b: Do we want to do that part within epic generator prompt? If yes, I do not see any research instructions as part of `<step priority="12">` nor in `<next_generator>` section.
+- Q2b: Do we want to do that part within epic generator prompt? If yes, I do not see any research instructions as part of `<step priority="12">` nor in `<next-generator>` section.
 - Q2c: Product vision creation is an iterative research-based process. How can we achieve this if we do not instruct LLM to do a research on important areas. Please disregard this part, if it is implied that LLMs will do a research by default if they miss information, regardless of our instructions. Do we need to specify `deep reasearch` or `deep thinking` instructions in that case.
 
 

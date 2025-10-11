@@ -22,14 +22,14 @@ This command executes a generator prompt based on the task ID specified in `/TOD
 ### Step 1: Parse Task from TODO.md
 - Locate task by ID in `/TODO.md`
 - Extract task metadata:
-  - Generator prompt path
+  - Generator name
   - Input artifacts (dependencies)
 
 ### Step 2: Load Context & Validate Inputs
 Required files for execution:
 1. `/CLAUDE.md` (root orchestration)
-2. `/prompts/{task_name}_generator.xml` (the generator to execute)
-  - Derive task_name from generator prompt filename (e.g., product_vision_generator.xml → product-vision)
+2. `/prompts/{generator_name}_generator.xml` (the generator to execute)
+  - Derive generator_name from generator name metadata
 3. Input artifacts (from task dependencies, e.g., `/artifacts/product_vision_v3.md`)
 
 **Context Validation**:
@@ -71,7 +71,7 @@ AI Context Report:
 Action Required:
 1. Review artifact at /artifacts/product_vision_v1.md
 2. Create critique file: /feedback/product_vision_v1_critique.md
-3. If refinement needed, run: /refine product_vision_generator
+3. If refinement needed, run: /refine product-vision-generator
 ```
 
 ## Error Handling
@@ -110,7 +110,7 @@ if upstream artifact changes significantly during refinement.
 
 ### Error: Generator File Not Found
 ```
-ERROR: Generator /prompts/product_vision_generator.xml does not exist
+ERROR: Generator /prompts/product-vision-generator.xml does not exist
 This generator should be created by TASK-002.
 Complete TASK-002 first or create generator manually.
 ```

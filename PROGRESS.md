@@ -6,7 +6,7 @@
 - [X] All Backlog story generators and templates -> Gherkin format, failback to Checklist
 - [X] Update CLAUDE.md folder structure
 - [X] No lazy generation of specialized CLAUDE.md files
-- [X] research_generator should have product_idea.md (based on product_idea_template.md) as input
+- [X] research-generator should have product_idea.md (based on product_idea_template.md) as input
 - [X] business_research_template in XML format
 - [X] implementation_research_template in XML format
 - [X] research-artifact-template in XML format
@@ -55,7 +55,7 @@
 
 ## Finalization
 - [X] remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification
-- [X] remove next_generator instructions, keep only reference to next_generator to be invoked in the report
+- [X] remove next-generator instructions, keep only reference to next-generator to be invoked in the report
 - [ ] strategy doc update
 - [ ] GRADUATION.md review
 

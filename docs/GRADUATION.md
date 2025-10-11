@@ -145,7 +145,7 @@ Common technical patterns emerge across backlog stories (e.g., authentication en
 - `/docs/tech_spec_reuse_patterns.md`
 - `/artifacts/shared_tech_specs/` (directory)
 - `/artifacts/shared_tech_specs/catalog.md` (index)
-- `/prompts/tech_spec_generator.xml` (update with catalog check)
+- `/prompts/tech-spec-generator.xml` (update with catalog check)
 
 ---
 

@@ -29,7 +29,7 @@ The Challenge
   - Or keep one master template with clear "skip if business-only" / "skip if implementation-only" markers?
 
   6. Prompt Strategy - Separate prompts or conditional logic?
-  - Create business_research_generator.xml + implementation_research_generator.xml?
+  - Create business-research-generator.xml + implementation-research-generator.xml?
   - Or single prompt with research_phase parameter (business|implementation|full)?
 
   Please answer these questions so I can create a precise, actionable plan that matches your vision.
@@ -141,7 +141,7 @@ The Challenge
   - Entirely new templates (business_research_template.md, implementation_research_template.md)
 
   6. Prompt Strategy - Separate prompts or conditional logic?
-  - Create business_research_generator.xml + implementation_research_generator.xml
+  - Create business-research-generator.xml + implementation-research-generator.xml
 
 ⏺ Split Plan for Research Artifacts
 
@@ -156,11 +156,11 @@ The Challenge
   └── [Product]_research_report.md (1200+ lines)
 
   New (2-Part):
-  ├── business_research_generator.xml
+  ├── business-research-generator.xml
   ├── business_research_template.md
   ├── [Product]_business_research.md (focused on market/strategy)
   │
-  ├── implementation_research_generator.xml
+  ├── implementation-research-generator.xml
   ├── implementation_research_template.md
   └── [Product]_implementation_research.md (focused on tech/architecture)
 
@@ -280,14 +280,14 @@ The Challenge
   - Minimal market/competitive content (just enough for context)
   - Appendix: Technology-specific considerations (CLI patterns, SaaS architecture, AI/ML infrastructure)
 
-  3. business_research_generator.xml
+  3. business-research-generator.xml
 
   - Steps focused on: Market research, competitive intelligence, user persona validation, strategic positioning
   - Anti-hallucination: Verify market claims, competitor features, user pain points
   - Validation checklist: Business criteria (market size validated, positioning clear, roadmap phases justified)
   - Output path: docs/research/[product_name]_business_research.md
 
-  4. implementation_research_generator.xml
+  4. implementation-research-generator.xml
 
   - Steps focused on: Technology stack evaluation, architecture pattern analysis, security/observability best practices, pitfall documentation
   - Anti-hallucination: Verify technology benchmarks, framework capabilities, code examples are syntactically correct
@@ -299,7 +299,7 @@ The Challenge
 
   I will create these 4 files in sequence, ensuring:
 
-  1. No overwrites (all new files in docs/research/research_generator/)
+  1. No overwrites (all new files in docs/research/research-generator/)
   2. Self-contained documents (each phase has complete context)
   3. Focused content (business avoids tech details, implementation avoids market analysis)
   4. Limited overlap (same facts appear only when essential for understanding)

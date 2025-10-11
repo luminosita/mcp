@@ -15,7 +15,7 @@ Primary idea of Research Artifact is to be the primary source of truth for creat
 - Proceed with the split only after the plan confirmation
 
 ## OUTPUT
-- Save documents in `docs/research/research_generator`
+- Save documents in `docs/research/research-generator`
 - No overwrites of existing files
 
 ## INPUT

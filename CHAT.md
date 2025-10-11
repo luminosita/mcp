@@ -165,17 +165,17 @@ Gap Analysis Report: Context Engineering Proof-of-Concept
 
   Option A (Minimal):
   /CLAUDE.md (root orchestration)
-  /prompts/product_vision_generator.xml (the prompt to execute)
+  /prompts/product-vision-generator.xml (the prompt to execute)
 
   Option B (With Research):
   /CLAUDE.md (root)
-  /prompts/product_vision_generator.xml
+  /prompts/product-vision-generator.xml
   /docs/advanced_prompt_engineering_software_docs_code_final.md (research doc)
   /prompts/CLAUDE.md (specialized instructions for prompt execution)
 
   Option C (Cumulative):
   /CLAUDE.md (root)
-  /prompts/product_vision_generator.xml
+  /prompts/product-vision-generator.xml
   /docs/advanced_prompt_engineering_software_docs_code_final.md
   /context/previous_outputs/ (all artifacts from prior tasks)
 
@@ -192,7 +192,7 @@ Gap Analysis Report: Context Engineering Proof-of-Concept
   Option A (Manual):
   1. This session generates /TODO.md with task list
   2. Human user manually starts new Claude Code session
-  3. User provides /prompts/task_N_generator.xml as input
+  3. User provides /prompts/task-N-generator.xml as input
   4. Repeat for each task
 
   Option B (Semi-Automated):
@@ -283,7 +283,7 @@ Gap Analysis Report: Context Engineering Proof-of-Concept
     - /TODO.md (task sequence with dependencies)
     - /CLAUDE.md (root orchestration instructions)
     - /docs/context_engineering_strategy.md (the core methodology)
-    - /prompts/product_vision_generator.xml (first meta-prompt as example)
+    - /prompts/product-vision-generator.xml (first meta-prompt as example)
   3. Present for approval before exiting this context
   4. Provide instructions for launching first standalone task context
 
@@ -318,7 +318,7 @@ Depth model should be SDLC-aligned: One level per phase (Vision → Epic → PRD
 Q2: Prompt Storage & Retrieval Strategy
 New Option:
   /CLAUDE.md (root)
-  /prompts/product_vision_generator.xml
+  /prompts/product-vision-generator.xml
   /prompts/CLAUDE-product-vision.md (specialized instructions for prompt execution)
   /prompts/templates/product-vision-template.xml (product vision template, generated or extracted from the main research document)
   /docs/product-idea.md (first draft of product idea, outlining input required by product vision generator prompt)
@@ -402,7 +402,7 @@ Scenario Example:
 
   Q6: Generator Prompt Output Format
 
-  When product_vision_generator.xml executes, it must output two distinct artifacts:
+  When product-vision-generator.xml executes, it must output two distinct artifacts:
 
   Scenario A (Single-file output):
   <output>
@@ -411,18 +411,18 @@ Scenario Example:
       [... full vision document ...]
     </product_vision_document>
 
-    <epic_generator_prompt>
+    <epic-generator_prompt>
       <system_role>You are Epic decomposition specialist...</system_role>
       [... full next-level generator prompt ...]
-    </epic_generator_prompt>
+    </epic-generator_prompt>
   </output>
 
   Scenario B (Separate file instructions):
   Generator outputs:
   1. /artifacts/product_vision_v1.md
-  2. /prompts/epic_generator.xml
+  2. /prompts/epic-generator.xml
 
-  Then prints: "Next step: Execute /kickoff execute-generator epic_generator"
+  Then prints: "Next step: Execute /kickoff execute-generator epic-generator"
 
   Question 6a: Which output pattern should generators use?
 
@@ -477,7 +477,7 @@ Scenario Example:
   Scenario A (Human-triggered):
   1. Human reviews Vision v1
   2. Human writes critique notes in /feedback/vision_v1_critique.md
-  3. Human runs: /kickoff refine-generator product_vision_generator
+  3. Human runs: /kickoff refine-generator product-vision-generator
   4. System reads critique, updates PVP, re-executes
 
   Scenario B (Self-critique automated):
@@ -507,13 +507,13 @@ Scenario Example:
   Question 9a: Does "task" = "generator execution" or "document generation"?
 
   Interpretation A (Generator = Task):
-  - Context C1 executes product_vision_generator.xml
+  - Context C1 executes product-vision-generator.xml
   - C1 outputs: Vision Doc + Epic Generator Prompt
   - C1 terminates
-  - New Context C2 executes epic_generator.xml
+  - New Context C2 executes epic-generator.xml
 
   Interpretation B (Document = Task):
-  - Context C1a executes product_vision_generator.xml → outputs Vision Doc only
+  - Context C1a executes product-vision-generator.xml → outputs Vision Doc only
   - Context C1b executes same generator with different instructions → outputs Epic Generator Prompt only
   - Context C2 executes Epic Generator...
 
@@ -537,8 +537,8 @@ Scenario Example:
   [... etc ...]
 
   ## Phase 2: Generator Creation
-  - [ ] Create product_vision_generator.xml
-  - [ ] Create epic_generator.xml
+  - [ ] Create product-vision-generator.xml
+  - [ ] Create epic-generator.xml
   [... etc ...]
 
   ## Phase 3: Execution & Iteration
@@ -550,10 +550,10 @@ Scenario Example:
   # Master Plan v1.0
 
   ## Execution Sequence
-  1. RUN: /kickoff execute-generator product_vision_generator
+  1. RUN: /kickoff execute-generator product-vision-generator
   2. WAIT_FOR_HUMAN_APPROVAL: Review /artifacts/product_vision_v1.md
-  3. IF_APPROVED: RUN /kickoff execute-generator epic_generator
-  4. ELSE: RUN /kickoff refine-generator product_vision_generator
+  3. IF_APPROVED: RUN /kickoff execute-generator epic-generator
+  4. ELSE: RUN /kickoff refine-generator product-vision-generator
   [... state machine logic ...]
 
   Option C (Dependency Graph):
@@ -663,7 +663,7 @@ Scenario Example:
     - /docs/context_engineering_strategy.md (comprehensive workflow)
     - /.claude/commands/execute-generator.xml (universal executor from Q3)
     - /prompts/templates/ (extracted templates from Q7)
-    - /prompts/product_vision_generator.xml (first generator as exemplar)
+    - /prompts/product-vision-generator.xml (first generator as exemplar)
     - /docs/product-idea.md (stub for CLI tool idea)
   3. Present complete artifact set for approval
   4. Exit this context with handoff instructions for C1 execution
@@ -792,7 +792,7 @@ Answer:
 
   4. Generator Prompts
 
-  - ✅ /prompts/product_vision_generator.xml - First exemplar (3,200 lines, comprehensive)
+  - ✅ /prompts/product-vision-generator.xml - First exemplar (3,200 lines, comprehensive)
 
   5. Folder Structure
 
@@ -845,7 +845,7 @@ Answer:
   - Command: /kickoff execute-generator TASK-003
   - Expected Outputs:
     - /artifacts/product_vision_v1.md
-    - /prompts/epic_generator.xml
+    - /prompts/epic-generator.xml
 
   Validation Status
 
@@ -866,7 +866,7 @@ Answer:
 
   Priority 2 (Important):
   3. /CLAUDE.md - Execution guide
-  4. /prompts/product_vision_generator.xml - First generator exemplar
+  4. /prompts/product-vision-generator.xml - First generator exemplar
   5. /docs/product-idea.md - CLI tool concept
 
   Priority 3 (Reference):
@@ -1024,32 +1024,32 @@ story, as defined in our strategy and in the user story template, contains imple
 
   Updated Cascade
 
-  C1: product_vision_generator
+  C1: product-vision-generator
       ↓ outputs
-  Product Vision + epic_generator
+  Product Vision + epic-generator
 
-  C2: epic_generator
+  C2: epic-generator
       ↓ outputs
-  Epics + prd_generator
+  Epics + prd-generator
 
-  C3: prd_generator
+  C3: prd-generator
       ↓ outputs
-  PRD (with high-level stories/requirements) + backlog_story_generator
+  PRD (with high-level stories/requirements) + backlog-story-generator
 
-  C4: backlog_story_generator
+  C4: backlog-story-generator
       ↓ outputs
-  Detailed Backlog User Stories (with embedded implementation tasks) + tech_spec_generator
+  Detailed Backlog User Stories (with embedded implementation tasks) + tech-spec-generator
 
-  C5: tech_spec_generator + adr_generator
+  C5: tech-spec-generator + adr-generator
       ↓ outputs
-  Tech Specs + ADRs + code_generator
+  Tech Specs + ADRs + code-generator
 
-  C6: code_generator
+  C6: code-generator
       ↓ context: Backlog User Story + Tech Spec + ADR
       ↓ outputs
-  Implementation Code + test_generator
+  Implementation Code + test-generator
 
-  Key change: Added backlog_story_generator as separate phase between PRD and Tech Spec.
+  Key change: Added backlog-story-generator as separate phase between PRD and Tech Spec.
 
   ---
   Action Required
@@ -1124,7 +1124,7 @@ Answer: both sections are `Functional Requirements`. Please update `user-story-t
 ---
 Proposed Revision needs corrections:
 - C6 is currently out of the scope. We will handle that section separately. Focus of this context is document generation realm.
-- C5 should output Tech Specs + ADRs, without code_generator
+- C5 should output Tech Specs + ADRs, without code-generator
 
 **CRITICAL** Analyze my response, and perform clarification loop by potentially asking questions until clear strategy/workflow is established
 
@@ -1178,21 +1178,21 @@ Proposed Revision needs corrections:
   Option A (One generator execution per high-level story):
   PRD with 5 high-level stories
     ↓
-  Run: backlog_story_generator for story #1 → outputs 1 backlog story
-  Run: backlog_story_generator for story #2 → outputs 1 backlog story
-  Run: backlog_story_generator for story #3 → outputs 1 backlog story
+  Run: backlog-story-generator for story #1 → outputs 1 backlog story
+  Run: backlog-story-generator for story #2 → outputs 1 backlog story
+  Run: backlog-story-generator for story #3 → outputs 1 backlog story
   [etc...]
 
   Option B (One generator execution processes all):
   PRD with 5 high-level stories
     ↓
-  Run: backlog_story_generator once → outputs 5 backlog stories (1 per high-level story)
+  Run: backlog-story-generator once → outputs 5 backlog stories (1 per high-level story)
 
   Option C (1:N relationship - one high-level story can spawn multiple backlog stories):
   PRD with 5 high-level stories
     ↓
-  Run: backlog_story_generator for story #1 → outputs 3 detailed backlog stories
-  Run: backlog_story_generator for story #2 → outputs 2 detailed backlog stories
+  Run: backlog-story-generator for story #1 → outputs 3 detailed backlog stories
+  Run: backlog-story-generator for story #2 → outputs 2 detailed backlog stories
   [etc...]
   Total: 12 backlog stories from 5 high-level stories
 
@@ -1318,34 +1318,34 @@ Proposed Revision needs corrections:
   Q5: Tech Spec and ADR Generator Relationship
 
   You said:
-  "C5 should output Tech Specs + ADRs, without code_generator"
+  "C5 should output Tech Specs + ADRs, without code-generator"
 
   Question 5a: Are Tech Spec and ADR generated together or separately?
 
   Option A (Single generator, dual outputs):
-  C5: tech_and_adr_generator.xml
+  C5: tech_and_adr-generator.xml
       ↓
   Inputs: Backlog User Story
   Outputs: Tech Spec + ADR(s) + [nothing - end of doc realm]
 
   Option B (Parallel generators):
-  C5a: tech_spec_generator.xml
+  C5a: tech-spec-generator.xml
       ↓
   Inputs: Backlog User Story
   Outputs: Tech Spec
 
-  C5b: adr_generator.xml
+  C5b: adr-generator.xml
       ↓
   Inputs: Backlog User Story + Tech Spec (from C5a)
   Outputs: ADR(s)
 
   Option C (Sequential, ADR first):
-  C5a: adr_generator.xml
+  C5a: adr-generator.xml
       ↓
   Inputs: Backlog User Story
   Outputs: ADR(s) + Tech Spec Generator
 
-  C5b: tech_spec_generator.xml
+  C5b: tech-spec-generator.xml
       ↓
   Inputs: Backlog User Story + ADR(s)
   Outputs: Tech Spec
@@ -1425,22 +1425,22 @@ Proposed Revision needs corrections:
   Q8: Generator Outputs at End of Document Realm
 
   You clarified:
-  "C5 should output Tech Specs + ADRs, without code_generator"
+  "C5 should output Tech Specs + ADRs, without code-generator"
 
   Question: Since C5 is the last step in document generation realm, do Tech Spec/ADR generators output:
 
   Option A (No next-level generator):
-  tech_spec_generator.xml outputs:
+  tech-spec-generator.xml outputs:
   - Tech Spec v3.md
   - (nothing else - end of chain)
 
   Option B (Placeholder/stub for future code generation):
-  tech_spec_generator.xml outputs:
+  tech-spec-generator.xml outputs:
   - Tech Spec v3.md
-  - code_generator_stub.xml (empty/commented for Phase 2)
+  - code-generator_stub.xml (empty/commented for Phase 2)
 
   Option C (Documentation that code gen is next):
-  tech_spec_generator.xml outputs:
+  tech-spec-generator.xml outputs:
   - Tech Spec v3.md
   - implementation_context.md (lists: backlog story, tech spec, ADRs for code gen)
 
@@ -1451,19 +1451,19 @@ Proposed Revision needs corrections:
 
   C1: Product Vision Generator
       Input: product-idea.md
-      Output: product_vision_v3.md + epic_generator.xml
+      Output: product_vision_v3.md + epic-generator.xml
 
   C2: Epic Generator
       Input: product_vision_v3.md
-      Output: epic_001_v3.md ... epic_00N_v3.md + prd_generator.xml
+      Output: epic_001_v3.md ... epic_00N_v3.md + prd-generator.xml
 
   C3: PRD Generator
       Input: epic_001_v3.md
-      Output: prd_v3.md (with high-level user stories + ☐ checkboxes) + backlog_story_generator.xml
+      Output: prd_v3.md (with high-level user stories + ☐ checkboxes) + backlog-story-generator.xml
 
   C4: Backlog Story Generator (per high-level story)
       Input: prd_v3.md (specific high-level story)
-      Output: backlog_story_v3.md (with impl. task ☐ checkboxes) + tech_spec_generator.xml + adr_generator.xml
+      Output: backlog_story_v3.md (with impl. task ☐ checkboxes) + tech-spec-generator.xml + adr-generator.xml
 
   C5: Tech Spec + ADR Generators (details TBD from Q5)
       Input: backlog_story_v3.md
@@ -1488,7 +1488,7 @@ Proposed Revision needs corrections:
     - Add non-functional requirements section (if Q6b confirmed)
     - Update PRD template with high-level story tracking checkboxes
   4. Create New Generator Exemplar:
-    - /prompts/backlog_story_generator.xml (first example of 1:N or 1:1 generation)
+    - /prompts/backlog-story-generator.xml (first example of 1:N or 1:1 generation)
   5. Update Mermaid Diagram (your original Q1 response concept)
   6. Update CLAUDE.md:
     - Revise cascade description (line 14)
@@ -1511,8 +1511,8 @@ Q1: Backlog Story Generator Invocation Pattern
 
 Answer: Option B + Option C
 **Explanation**: 
-- backlog_story_generator should process multiple high-level user stories coming from the same PRD. Backlog story generator requires access to PRD to properly generate backlog user stories.  
-- one high-level user story can spawn multiple backlog stories. backlog_story_generator can do a deep analysis and research and decide to have multiple backlog stories for a corresponding high-level story
+- backlog-story-generator should process multiple high-level user stories coming from the same PRD. Backlog story generator requires access to PRD to properly generate backlog user stories.  
+- one high-level user story can spawn multiple backlog stories. backlog-story-generator can do a deep analysis and research and decide to have multiple backlog stories for a corresponding high-level story
 - there is a case of minor changes (enhancements, bug fixes, etc) where we want to generate backlog user story but we do not have a full PRD for it. That is also a valid use case
 
 ---
@@ -1621,20 +1621,20 @@ Proposed Revised Cascade
 My corrections:
 C1: Product Vision Generator
     Input: product-idea.md
-    Output: product_vision_v3.md + epic_generator.xml
+    Output: product_vision_v3.md + epic-generator.xml
 
 C2: Epic Generator
     Input: product_vision_v3.md
-    Output: epic_001_v3.md ... epic_00N_v3.md + prd_generator.xml
+    Output: epic_001_v3.md ... epic_00N_v3.md + prd-generator.xml
 
 C3: PRD Generator
     Input: epic_001_v3.md
-    Output: prd_v3.md (with high-level user stories) + backlog_story_generator.xml
+    Output: prd_v3.md (with high-level user stories) + backlog-story-generator.xml
     **Change**:  ☐ checkboxes are placed in TODO.md file in PRD subfolder
 
 C4: Backlog Story Generator (per high-level story)
     Input: prd_v3.md (specific high-level story)
-    Output: backlog_story_v3.md (with impl. task) + tech_spec_generator + adr_generator
+    Output: backlog_story_v3.md (with impl. task) + tech-spec-generator + adr-generator
     **Changes**:  
     - ☐ checkboxes are placed in TODO.md file in Backlog story subfolder
     - PRD as input for backlog story generator as most likely, but optional for minor changes. specific high-level story is required.
@@ -1669,27 +1669,27 @@ C5: Tech Spec + ADR Generators (details TBD from Q5)
 
   Finalized Cascade
 
-  C1: product_vision_generator
+  C1: product-vision-generator
       ↓
-  product_vision_v3.md + epic_generator.xml
+  product_vision_v3.md + epic-generator.xml
 
-  C2: epic_generator
+  C2: epic-generator
       ↓
-  epic_001_v3.md ... epic_00N_v3.md + prd_generator.xml
+  epic_001_v3.md ... epic_00N_v3.md + prd-generator.xml
 
-  C3: prd_generator (per epic)
+  C3: prd-generator (per epic)
       ↓
-  prd_v3.md + TODO.md (tracks high-level stories) + backlog_story_generator.xml
+  prd_v3.md + TODO.md (tracks high-level stories) + backlog-story-generator.xml
 
-  C4: backlog_story_generator
+  C4: backlog-story-generator
       ↓ (processes multiple high-level stories from PRD, can split 1:N)
-  backlog_story_v3.md + TODO.md (tracks impl tasks) + adr_generator.xml
+  backlog_story_v3.md + TODO.md (tracks impl tasks) + adr-generator.xml
 
-  C5a: adr_generator (optional, clarification loop)
+  C5a: adr-generator (optional, clarification loop)
       ↓
-  adr_001.md ... adr_00N.md + tech_spec_generator.xml
+  adr_001.md ... adr_00N.md + tech-spec-generator.xml
 
-  C5b: tech_spec_generator
+  C5b: tech-spec-generator
       ↓
   tech_spec_v3.md + TODO.md (implementation context with references)
   [END OF DOCUMENT GENERATION REALM]
@@ -1776,7 +1776,7 @@ C5: Tech Spec + ADR Generators (details TBD from Q5)
 
   Question 2b: When high-level story US-01 spawns 3 backlog stories, how/when is TODO.md updated?
   - Manually by human after reviewing backlog stories?
-  - Automatically by backlog_story_generator as final step?
+  - Automatically by backlog-story-generator as final step?
 
   ---
   Q3: Backlog Story Generator Input Specification
@@ -1790,7 +1790,7 @@ C5: Tech Spec + ADR Generators (details TBD from Q5)
   /kickoff execute-generator TASK-008 --story-id=US-02
 
   Option B (Human pastes story into generator context):
-  # In backlog_story_generator.xml execution context
+  # In backlog-story-generator.xml execution context
 
   <input_artifacts>
     <artifact path="/artifacts/prds/epic_001/prd_v3.md" type="prd">
@@ -1824,7 +1824,7 @@ C5: Tech Spec + ADR Generators (details TBD from Q5)
   **Context**: Enhancement request from user feedback
 
   Option B (Direct prompt without PRD):
-  Human runs: /kickoff execute-generator backlog_story_generator
+  Human runs: /kickoff execute-generator backlog-story-generator
   Provides story inline: "As developer, I want CLI to support --verbose flag"
   Generator creates backlog story without PRD reference
 
@@ -1839,7 +1839,7 @@ C5: Tech Spec + ADR Generators (details TBD from Q5)
   Question 4a: Where does ADR suggestion happen?
 
   Option A (Backlog Story Generator suggests ADRs):
-  backlog_story_generator.xml execution:
+  backlog-story-generator.xml execution:
   1. Generate backlog story content
   2. Analyze if architectural decisions needed
   3. Output in backlog_story_v1.md:
@@ -1852,40 +1852,40 @@ C5: Tech Spec + ADR Generators (details TBD from Q5)
        - Recommendation: JWT (stateless, scales better)
      - [ ] Use existing ADR-005: Database connection pooling
 
-  4. Generate adr_generator.xml with guidance for suggested ADRs
+  4. Generate adr-generator.xml with guidance for suggested ADRs
 
   Option B (Separate ADR analysis step):
   After backlog story v3 approved:
   Human runs: /kickoff analyze-adr-needs backlog_story_v3.md
   System outputs ADR recommendations
   Human confirms which to generate
-  System generates adr_generator.xml with confirmed ADRs
+  System generates adr-generator.xml with confirmed ADRs
 
   Option C (ADR generator does analysis):
-  adr_generator.xml execution:
+  adr-generator.xml execution:
   1. Read backlog story
   2. Identify decision points (clarification loop)
   3. Prompt human: "Found 3 decision points. Generate ADRs for which? [1,2,3/all/none]"
   4. Human confirms
   5. Generate selected ADRs
 
-  Which option? (This affects whether adr_generator is always created or conditionally)
+  Which option? (This affects whether adr-generator is always created or conditionally)
 
-  Question 4b: If no ADRs needed, does backlog story generator still output adr_generator.xml?
+  Question 4b: If no ADRs needed, does backlog story generator still output adr-generator.xml?
 
   Option A (Always generate, may be no-op):
-  adr_generator.xml exists but contains:
+  adr-generator.xml exists but contains:
   <instructions>
     No architectural decisions required for this backlog story.
-    Proceed directly to tech_spec_generator.xml
+    Proceed directly to tech-spec-generator.xml
   </instructions>
 
   Option B (Conditional output):
-  backlog_story_generator.xml outputs:
+  backlog-story-generator.xml outputs:
   - backlog_story_v3.md
   - TODO.md
-  - adr_generator.xml (ONLY if ADRs needed)
-  - tech_spec_generator.xml (if no ADRs needed)
+  - adr-generator.xml (ONLY if ADRs needed)
+  - tech-spec-generator.xml (if no ADRs needed)
 
   Which approach?
 
@@ -2097,7 +2097,7 @@ C5: Tech Spec + ADR Generators (details TBD from Q5)
   1. Q1: PRD subfolder structure (Option A vs B)
   2. Q2: TODO.md format for high-level stories (Option A/B/C) + update mechanism
   3. Q3: Backlog generator input specification (how to target specific story) + minor change input format
-  4. Q4: ADR clarification loop location (where suggestion happens) + conditional adr_generator output
+  4. Q4: ADR clarification loop location (where suggestion happens) + conditional adr-generator output
   5. Q5: Implementation context TODO.md format validation
   6. Q6: GRADUATION.md location + initial content validation
   7. Q7: Folder structure questions (remove /specs folder?, create /code /tests now?)
@@ -2142,7 +2142,7 @@ Answer: clarified in answer for question 3b
 Q4: ADR Generator Clarification Loop
 Question 4a: Where does ADR suggestion happen?
 Answer: Option A
-Question 4b: If no ADRs needed, does backlog story generator still output adr_generator.xml?
+Question 4b: If no ADRs needed, does backlog story generator still output adr-generator.xml?
 Answer: Option A
 
 **Rationale**: Better for consistency of folder structure
@@ -2222,32 +2222,32 @@ Answer: deferred
 
   Cascade (Document Generation Realm)
 
-  C1: product_vision_generator
+  C1: product-vision-generator
       Input: /docs/product-idea.md
-      Output: product_vision_v3.md + epic_generator.xml
+      Output: product_vision_v3.md + epic-generator.xml
 
-  C2: epic_generator
+  C2: epic-generator
       Input: product_vision_v3.md
-      Output: epic_001_v3.md ... epic_00N_v3.md + prd_generator.xml
+      Output: epic_001_v3.md ... epic_00N_v3.md + prd-generator.xml
 
-  C3: prd_generator (per epic)
+  C3: prd-generator (per epic)
       Input: epic_001_v3.md
       Output: /artifacts/prds/prd_XXX_feature_name/prd_v3.md
               /artifacts/prds/prd_XXX_feature_name/TODO.md (tracks high-level stories)
-              backlog_story_generator.xml
+              backlog-story-generator.xml
 
-  C4: backlog_story_generator (processes multiple high-level stories)
+  C4: backlog-story-generator (processes multiple high-level stories)
       Input: prd_v3.md + --story-id=US-XX (via PRD-XXX reference)
       Output: /artifacts/backlog_stories/US-XX-YY_feature/backlog_story_v3.md
               /artifacts/backlog_stories/US-XX-YY_feature/TODO.md (tracks impl tasks)
-              adr_generator.xml
+              adr-generator.xml
 
-  C5a: adr_generator (optional, clarification loop)
+  C5a: adr-generator (optional, clarification loop)
       Input: backlog_story_v3.md
       Output: /artifacts/backlog_stories/US-XX-YY_feature/adr_001.md ... adr_00N.md
-              tech_spec_generator.xml
+              tech-spec-generator.xml
 
-  C5b: tech_spec_generator
+  C5b: tech-spec-generator
       Input: backlog_story_v3.md + adr_00N.md
       Output: /artifacts/backlog_stories/US-XX-YY_feature/tech_spec_v3.md
               /artifacts/backlog_stories/US-XX-YY_feature/implementation_context_TODO.md
@@ -2277,7 +2277,7 @@ Answer: deferred
   │   │   ├── backlog-story-template.xml (RENAMED + UPDATED)
   │   │   ├── adr-template.xml
   │   │   └── tech-spec-template.xml
-  │   └── product_vision_generator.xml
+  │   └── product-vision-generator.xml
   │
   ├── artifacts/
   │   ├── product_vision_v{1-3}.md
@@ -2320,14 +2320,14 @@ Answer: deferred
 
   **Context Setup**:
   - /CLAUDE.md + /prompts/CLAUDE-backlog-story.md
-  - /prompts/backlog_story_generator.xml
+  - /prompts/backlog-story-generator.xml
   - /prompts/templates/backlog-story-template.xml
   - /artifacts/prds/prd_XXX/prd_v3.md
 
   **Outputs**:
   - /artifacts/backlog_stories/US-XX-YY_feature/backlog_story_v3.md
   - /artifacts/backlog_stories/US-XX-YY_feature/TODO.md
-  - /prompts/adr_generator.xml
+  - /prompts/adr-generator.xml
 
   Section 3: Folder Structure Standard - Update with new structure (show above)
 
@@ -2356,7 +2356,7 @@ Answer: deferred
   **Context Requirements**:
   - /CLAUDE.md
   - /prompts/CLAUDE-backlog-story.md (lazy-generate if missing)
-  - /prompts/backlog_story_generator.xml
+  - /prompts/backlog-story-generator.xml
   - /prompts/templates/backlog-story-template.xml
   - /artifacts/prds/prd_001/prd_v3.md
 
@@ -2374,7 +2374,7 @@ Answer: deferred
   **Output Artifacts**:
   - /artifacts/backlog_stories/US-01-01_feature/backlog_story_v1.md
   - /artifacts/backlog_stories/US-01-01_feature/TODO.md
-  - /prompts/adr_generator.xml
+  - /prompts/adr-generator.xml
 
   Renumber: TASK-014 → TASK-015, etc.
 
@@ -2416,7 +2416,7 @@ Answer: deferred
   5. ADR Generation: Optional, clarification loop, backlog generator suggests ADRs
   6. Tech Spec Context: implementation_context_TODO.md has references only (not full content)
   7. Graduation Tasks: Tracked in /docs/GRADUATION.md, not /TODO.md
-  8. Document Realm End: Tech Spec + ADR (no code_generator in this phase)
+  8. Document Realm End: Tech Spec + ADR (no code-generator in this phase)
 
   ---
   Next Session Action Items
@@ -2424,7 +2424,7 @@ Answer: deferred
   1. Apply strategy document updates (Sections 2.3, 3, 6, Glossary)
   2. Apply TODO.md updates (insert TASK-014+, renumber)
   3. Apply CLAUDE.md updates (cascade, folder structure, TODO.md section)
-  4. Create backlog_story_generator.xml exemplar
+  4. Create backlog-story-generator.xml exemplar
   5. Execute TASK-003 (Product Vision Generator v1) to start validation
 
   ---
@@ -2651,7 +2651,7 @@ Answer: deferred
 
   C2: Constraints Evaluation ✅
 
-  - Removed: Entire <constraints> section from product_vision_generator.xml
+  - Removed: Entire <constraints> section from product-vision-generator.xml
   - Empty placeholders provided no value and were removed per Option C
 
   C3: Self-Refine Pattern Clarity ✅
@@ -2678,7 +2678,7 @@ Answer: deferred
   - Added to /prompts/templates/generator-schema-template.xml:
     - Complete <anti_hallucination_guidelines> section with 6 categories
     - <anti_hallucination> sub-elements in instruction steps
-  - Added to /prompts/product_vision_generator.xml:
+  - Added to /prompts/product-vision-generator.xml:
     - Phase-specific <anti_hallucination_guidelines> with 6 guidelines
     - Covers grounding, assumptions, research, metrics, uncertainty, scope
 
@@ -2714,7 +2714,7 @@ Answer: deferred
 
   Modified (4 files):
   1. /CLAUDE.md - Added template reference, expanded Self-Refine, added documentation note
-  2. /prompts/product_vision_generator.xml - Removed constraints, added anti-hallucination guidelines
+  2. /prompts/product-vision-generator.xml - Removed constraints, added anti-hallucination guidelines
   3. /prompts/templates/generator-schema-template.xml - Added comprehensive anti-hallucination section
   4. /docs/context_engineering_strategy_v1.md - Fixed /kickoff references and .xml extensions
   5. /TODO.md - Added Task Type attribute to execute-generator tasks

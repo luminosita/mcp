@@ -2313,7 +2313,7 @@ Use this decision tree to select the appropriate strategy:
 
 **File Pattern:** `[Product]_business_research.md`
 **Template:** `prompts/templates/business_research_template.md`
-**Generator:** `prompts/business_research_generator.xml`
+**Generator:** `prompts/business-research-generator.xml`
 
 **Focus:**
 - Market dynamics, competitive positioning
@@ -2356,7 +2356,7 @@ Use this decision tree to select the appropriate strategy:
 
 **File Pattern:** `[Product]_implementation_research.md`
 **Template:** `prompts/templates/implementation_research_template.md`
-**Generator:** `prompts/implementation_research_generator.xml`
+**Generator:** `prompts/implementation-research-generator.xml`
 
 **Focus:**
 - Architecture patterns, technology stack

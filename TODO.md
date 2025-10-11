@@ -73,7 +73,7 @@ Create the first generator prompt that will produce Product Vision documents.
 - [x] Valid XML syntax
 
 **Output Artifacts**:
-- `/prompts/product_vision_generator.xml` ✅
+- `/prompts/product-vision-generator.xml` ✅
 
 ---
 ### TASK-003: Convert Research Templates into XML format
@@ -112,6 +112,7 @@ Convert Input Templates from Markdown into XML format. Use referenced file as an
 **Estimated Time**: 20 minutes
 **Status**: ✅ Completed
 **Context**: New session C1 required
+**Generator Name**: product-vision
 
 **Description**:
 Execute Product Vision Generator in standalone context to produce first iteration of Product Vision document.
@@ -138,6 +139,7 @@ Execute Product Vision Generator in standalone context to produce first iteratio
 **Estimated Time**: 20 minutes
 **Status**: ✅ Completed
 **Context**: New session C2 required
+**Generator Name**: initiative
 
 **Description**:
 Execute Initiative Generator in standalone context to decompose Product Vision into Initiative documents.
@@ -169,6 +171,7 @@ Execute Initiative Generator in standalone context to decompose Product Vision i
 **Estimated Time**: 20 minutes
 **Status**: ✅ Completed
 **Context**: New session C3 required
+**Generator Name**: epic
 
 **Description**:
 Execute Epic Generator in standalone context to decompose Product Vision into Epic documents.
@@ -196,6 +199,11 @@ Execute Epic Generator in standalone context to decompose Product Vision into Ep
 
 ---
 
+
+
+
+
+
 ## Phase 1.3: PRD Generation
 
 ### TASK-012: Execute PRD Generator v1 (Epic 001)
@@ -204,6 +212,8 @@ Execute Epic Generator in standalone context to decompose Product Vision into Ep
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session C3 required
+**Generator Name**: prd
+
 
 **Description**:
 Execute PRD Generator for first epic in standalone context.
@@ -213,7 +223,7 @@ Execute PRD Generator for first epic in standalone context.
 **Context Requirements**:
 - `/CLAUDE.md`
 - `/prompts/CLAUDE-prd.md` (lazy-generate if missing)
-- `/prompts/prd_generator.xml`
+- `/prompts/prd-generator.xml`
 - `/prompts/templates/prd-template.xml`
 - `/artifacts/epics/epic_001_v3.md`
 
@@ -229,7 +239,7 @@ Execute PRD Generator for first epic in standalone context.
 **Output Artifacts**:
 - `/artifacts/prds/prd_001/prd_v1.md`
 - `/artifacts/prds/prd_001/TODO.md` (high-level story tracking)
-- `/prompts/backlog_story_generator.xml`
+- `/prompts/backlog-story-generator.xml`
 
 ---
 
@@ -256,7 +266,7 @@ Complete 3-iteration refinement cycle for PRD, **HUMAN manually updates** strate
 - `/artifacts/prds/prd_001/prd_v2.md`
 - `/artifacts/prds/prd_001/prd_v3.md` (approved)
 - `/artifacts/prds/prd_001/TODO.md` (updated with stories)
-- `/prompts/backlog_story_generator.xml` (final)
+- `/prompts/backlog-story-generator.xml` (final)
 - `/docs/context_engineering_strategy_v1.md` (manually updated by human)
 
 ---
@@ -276,7 +286,7 @@ Execute Backlog Story Generator for first high-level story from PRD.
 **Context Requirements**:
 - `/CLAUDE.md`
 - `/prompts/CLAUDE-backlog-story.md` (lazy-generate if missing)
-- `/prompts/backlog_story_generator.xml`
+- `/prompts/backlog-story-generator.xml`
 - `/prompts/templates/backlog-story-template.xml`
 - `/artifacts/prds/prd_001/prd_v3.md`
 - `/artifacts/prds/prd_001/TODO.md`
@@ -295,7 +305,7 @@ Execute Backlog Story Generator for first high-level story from PRD.
 **Output Artifacts**:
 - `/artifacts/backlog_stories/US-01-01_{feature}/backlog_story_v1.md`
 - `/artifacts/backlog_stories/US-01-01_{feature}/TODO.md`
-- `/prompts/adr_generator.xml`
+- `/prompts/adr-generator.xml`
 
 ---
 

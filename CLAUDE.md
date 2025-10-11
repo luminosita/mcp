@@ -149,7 +149,7 @@ Upon completion, update relevant task status in `/TODO.md`:
 - Strategy document: Semantic versioning `vX.Y`
 
 **File Naming Conventions**:
-- Generators: `{phase}_generator.xml` (e.g., `product_vision_generator.xml`)
+- Generators: `{phase}-generator.xml` (e.g., `product-vision-generator.xml`)
 - Templates: `{artifact-type}-template.xml` (e.g., `prd-template.xml`)
 - Artifacts: `{artifact}_v{N}.md` or `{epic_id}_{artifact}_v{N}.md`
 - Backlog Stories: `US-{prd_id}-{story_id}_{feature_name}/` subfolders

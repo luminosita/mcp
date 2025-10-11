@@ -3,7 +3,7 @@ name: refine
 description: Refine generator prompt based on critique feedback and re-execute
 args:
   - name: generator_name
-    description: Generator name without .xml extension (e.g., product_vision_generator)
+    description: Generator name without "-generator.xml" suffix (e.g., product-vision)
     required: true
 ---
 
@@ -14,15 +14,15 @@ This command implements the Self-Refine pattern (research Section 2.4) to improv
 ## Usage
 
 ```bash
-/refine product_vision_generator
+/refine product-vision
 ```
 
 ## Workflow
 
 ### Step 1: Identify Current Iteration
-- Locate generator: `/prompts/{generator_name}.xml`
+- Locate generator: `/prompts/{generator_name}-generator.xml`
 - Locate artifact template: `/prompts/templates/{artifact}-template.xml`
-  - Derive artifact from generator_name (e.g., product_vision_generator → product-vision)
+  - Artifact is the same as generator_name (e.g., product-vision -> product-vision)
 - Read generator `<version>` metadata tag
 - Read artifact template `<version>` metadata tag
 - Determine current versions (e.g., `1.1`)
@@ -189,10 +189,10 @@ Implement three-step workflow:
 
 ### Error: Generator Not Found
 ```
-ERROR: Generator /prompts/{generator_name}.xml does not exist
+ERROR: Generator /prompts/{generator_name}-generator.xml does not exist
 Available generators:
-- product_vision_generator.xml
-- epic_generator.xml
+- product-vision-generator.xml
+- epic-generator.xml
 ```
 
 ### Error: Artifact Template Not Found

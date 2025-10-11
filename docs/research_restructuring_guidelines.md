@@ -10,7 +10,7 @@
 
 ## Overview
 
-This document provides instructions for restructuring existing comprehensive research artifacts (created with `research_generator.xml` and `research-artifact-template.md`) into the new 2-part split:
+This document provides instructions for restructuring existing comprehensive research artifacts (created with `research-generator.xml` and `research-artifact-template.md`) into the new 2-part split:
 
 1. **Business Research**: Market analysis, user needs, competitive positioning, strategic recommendations
 2. **Implementation Research**: Architecture, technology stack, code patterns, implementation pitfalls

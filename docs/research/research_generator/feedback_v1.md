@@ -154,14 +154,14 @@ Questions Needing Your Confirmation:
 
   Deliverables:
 
-  1. Research Generator Prompt (XML): /Users/gianni/dev/sandbox/mcp/docs/research/research_generator/research_prompt.xml
+  1. Research Generator Prompt (XML): /Users/gianni/dev/sandbox/mcp/docs/research/research-generator/research_prompt.xml
     - Follows generator-schema-template_v2.xml structure
     - 10-step workflow with human validation gates
     - Comprehensive anti-hallucination guardrails
     - Mandatory citation requirements
     - 21-point validation checklist
     - Product category-specific guidance (CLI, SaaS, Infrastructure, AI/ML)
-  2. Research Artifact Template (Markdown): /Users/gianni/dev/sandbox/mcp/docs/research/research_generator/research-artifact-template.md
+  2. Research Artifact Template (Markdown): /Users/gianni/dev/sandbox/mcp/docs/research/research-generator/research-artifact-template.md
     - 9 main sections + 3 appendices
     - Comprehensive structure synthesized from all three existing research reports
     - Abundant placeholders for examples, code snippets, and citations

@@ -23,7 +23,7 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 ### 1.3 Recursive Generation Chains
 - Generator outputs dual artifacts:
   1. Terminal deliverable (e.g., Product Vision Document v1.md)
-  2. Next-level generator prompt (e.g., epic_generator.xml)
+  2. Next-level generator prompt (e.g., epic-generator.xml)
 - Chain depth: SDLC-aligned (Vision > Epic > PRD > Story > ADR+Spec > Code > Test)
 
 ### 1.4 Progressive Automation Maturity
@@ -227,7 +227,7 @@ All generator prompts follow this XML schema:
       Generate {terminal_artifact} following template structure
     </step>
     <step priority="4">
-      Create next-level generator prompt: {next_generator}.xml
+      Create next-level generator prompt: {next-generator}.xml
     </step>
     <step priority="5">
       Validate outputs against checklist
@@ -242,10 +242,10 @@ All generator prompts follow this XML schema:
       </validation_checklist>
     </terminal_artifact>
 
-    <next_generator>
+    <next-generator>
       <path>/prompts/{next_task}_generator.xml</path>
       <validation>Must be valid XML, include all required sections</validation>
-    </next_generator>
+    </next-generator>
   </output_format>
 
   <validation>
@@ -319,7 +319,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
    - `/TODO.md`
    - `/CLAUDE.md`
    - `/prompts/templates/*.xml`
-   - `/prompts/product_vision_generator.xml`
+   - `/prompts/product-vision-generator.xml`
 4. Approve to proceed to Phase 2
 
 **AI Actions** (Master Prompt):
@@ -341,7 +341,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 3. Confirm generation of specialized CLAUDE.md
 4. Review `/artifacts/product_vision_v1.md`
 5. Create `/feedback/product_vision_v1_critique.md` with notes
-6. Run: `/refine product_vision_generator`
+6. Run: `/refine product-vision-generator`
 7. Repeat for v2, v3
 8. Approve final version
 
@@ -349,7 +349,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 1. Parse TASK-004 from `/TODO.md`
 2. Load context:
    - `/CLAUDE.md`
-   - `/prompts/product_vision_generator.xml`
+   - `/prompts/product-vision-generator.xml`
    - `/prompts/templates/product-vision-template.xml`
 3. Execute generator
 4. Save outputs:
@@ -409,13 +409,13 @@ Human checklist:
 **AI Actions**:
 1. Load context:
    - `/CLAUDE.md`
-   - `/prompts/epic_generator.xml` (created in C1)
+   - `/prompts/epic-generator.xml` (created in C1)
    - `/prompts/templates/epic-template.xml`
    - `/artifacts/product_vision_v3.md` (dependency)
 2. Execute generator
 3. Save outputs:
    - `/artifacts/epics/epic_001_v1.md` ... `epic_00N_v1.md`
-   - `/prompts/prd_generator.xml`
+   - `/prompts/prd-generator.xml`
 4. Iterate (v1 > v2 > v3) per epic
 5. Update `/CLAUDE.md` with phase progression
 
@@ -436,7 +436,7 @@ Human checklist:
 **AI Actions**:
 1. Load context:
    - `/CLAUDE.md`
-   - `/prompts/backlog_story_generator.xml` (created in C3)
+   - `/prompts/backlog-story-generator.xml` (created in C3)
    - `/prompts/templates/backlog-story-template.xml`
    - `/artifacts/prds/prd_001/prd_v3.md` (dependency)
    - `/artifacts/prds/prd_001/TODO.md` (story status tracking)
@@ -444,7 +444,7 @@ Human checklist:
 3. Save outputs:
    - `/artifacts/backlog_stories/US-01-01_feature/backlog_story_v1.md`
    - `/artifacts/backlog_stories/US-01-01_feature/TODO.md`
-   - `/prompts/adr_generator.xml`
+   - `/prompts/adr-generator.xml`
 4. Iterate (v1 > v2 > v3)
 5. Update `/CLAUDE.md` with phase progression
 6. Update `/artifacts/prds/prd_001/TODO.md` to mark story as processed
