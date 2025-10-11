@@ -2,10 +2,12 @@
 <template>
   <metadata>
     <name>High_Level_User_Story_Template</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>High-Level User Story</sdlc_phase>
     <alias>Capability Story, Parent Story, Feature (in Strategy 1)</alias>
+    <last_updated>2025-10-11</last_updated>
+    <changes>v1.1: Enhanced Open Questions section with comprehensive guidance on user/UX/functional questions, clear boundaries with other phases, and examples</changes>
   </metadata>
 
   <instructions>
@@ -173,8 +175,43 @@
 | [Usability risk] | High/Med/Low | [Strategy] |
 
 ### Open Questions
-- [Question 1 about user behavior or requirements]
-- [Question 2 about scope or priority]
+
+**High-Level Story Open Questions focus on USER/UX/FUNCTIONAL uncertainties needing validation before backlog refinement.**
+
+**✅ INCLUDE - User/UX/Functional Questions:**
+- User behavior or preference uncertainties (requires user research/validation)
+- UX design questions (requires design input or usability testing)
+- Functional requirement clarifications from stakeholders
+- Scope or priority questions (requires product owner decision)
+- User workflow ambiguities
+
+**❌ EXCLUDE - Other Phase Questions:**
+- Business questions (market, business model) → Epic/PRD
+- Product/technical trade-offs → PRD
+- Implementation uncertainties → Backlog Story
+- Technical decisions → ADR/Tech Spec
+
+---
+
+**Examples of appropriate questions:**
+- "Do users prefer category toggles or dropdown for notification preferences?" [REQUIRES UX DESIGN]
+- "Should notification settings be in profile or dedicated settings page?" [REQUIRES UX RESEARCH]
+- "What is the priority order for notification categories?" [REQUIRES PRODUCT OWNER]
+- "Do we need bulk enable/disable all option?" [REQUIRES PRODUCT OWNER]
+
+**Examples of questions for other phases:**
+- ❌ "Should we prioritize enterprise or SMB users?" (Epic/PRD)
+- ❌ "What API endpoint structure?" (Backlog Story)
+- ❌ "Should we use Redis or PostgreSQL?" (ADR)
+
+---
+
+**If no open questions exist, state:** "No open UX or functional questions at this time. Implementation uncertainties will be captured during backlog refinement."
+
+---
+
+- [User/UX Question 1 - mark as [REQUIRES UX RESEARCH/DESIGN] or [REQUIRES PRODUCT OWNER]]
+- [Functional Question 2]
 
 ## Definition of Ready (Before Backlog Refinement)
 

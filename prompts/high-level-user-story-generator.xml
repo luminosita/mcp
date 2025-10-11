@@ -2,11 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>High_Level_User_Story_Generator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <sdlc_phase>High_Level_Story</sdlc_phase>
     <depends_on>/artifacts/epics/[epic_id]_v[N].md OR /artifacts/prds/[prd_id]/prd_v[N].md, [Business Research]</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
-    <date>2025-10-10</date>
+    <date>2025-10-11</date>
+    <changes>v1.1: Added Open Questions step with user/UX/functional focus, enhanced validation checklist, and added quality guidance for open questions section</changes>
   </metadata>
 
   <system_role>
@@ -178,6 +179,42 @@
     </step>
 
     <step priority="11">
+      <action>Identify Open Questions (User/UX/Functional Only)</action>
+      <guidance>
+        High-Level User Story Open Questions focus on USER EXPERIENCE and FUNCTIONAL uncertainties that need validation before backlog refinement. These are non-technical questions about user behavior, UX design, and functional requirements.
+
+        **INCLUDE in High-Level User Story Open Questions:**
+        - User behavior or preference uncertainties requiring user research/validation
+        - UX design questions requiring design input or usability testing
+        - Functional requirement clarifications from stakeholders
+        - Scope or priority questions requiring product owner decision
+        - User workflow ambiguities
+
+        **EXCLUDE (belong in other phases):**
+        - Business questions (market, business model) - Epic/PRD phase
+        - Product/technical trade-offs - PRD phase
+        - Implementation uncertainties - Backlog Story phase
+        - Technical decisions - ADR/Tech Spec phases
+
+        **Examples of High-Level Story-APPROPRIATE questions:**
+        - "Do users prefer category toggles or dropdown for notification preferences?" [REQUIRES UX DESIGN]
+        - "Should notification settings be in profile or a dedicated settings page?" [REQUIRES UX RESEARCH]
+        - "What is the priority order for notification categories?" [REQUIRES PRODUCT OWNER]
+        - "Do we need bulk enable/disable all option, or just individual toggles?" [REQUIRES PRODUCT OWNER]
+        - "Should we show notification count/preview on settings page?" [REQUIRES UX DESIGN]
+
+        **Examples of questions for OTHER phases:**
+        - ❌ "Should we prioritize enterprise or SMB users?" (Epic/PRD - business question)
+        - ❌ "Should we use push notifications or in-app only?" (PRD - product/technical trade-off)
+        - ❌ "What API endpoint structure for preference updates?" (Backlog Story - implementation)
+        - ❌ "Should we use Redis or PostgreSQL for preferences?" (ADR - major technical decision)
+
+        If no open questions exist, state: "No open UX or functional questions at this time. Implementation uncertainties will be captured during backlog refinement."
+      </guidance>
+      <anti_hallucination>Only include genuine user/UX/functional uncertainties requiring validation or stakeholder input before backlog refinement. Do not include technical implementation questions. Mark questions that require user research as [REQUIRES USER RESEARCH] and questions requiring design input as [REQUIRES UX DESIGN].</anti_hallucination>
+    </step>
+
+    <step priority="12">
       <action>Identify Dependencies</action>
       <guidance>
         - User story dependencies (other high-level stories)
@@ -186,7 +223,7 @@
       </guidance>
     </step>
 
-    <step priority="12">
+    <step priority="13">
       <action>Define User-Facing Non-Functional Requirements</action>
       <guidance>
         **ONLY USER-FACING NFRs:**
@@ -199,13 +236,13 @@
       </guidance>
     </step>
 
-    <step priority="13">
+    <step priority="14">
       <action>Generate high-level user story document</action>
       <output_path>/artifacts/high_level_stories/[hls_id]_v1.md</output_path>
       <format>Markdown following high-level-user-story-template.xml structure</format>
     </step>
 
-    <step priority="14">
+    <step priority="15">
       <action>Validate output against checklist</action>
       <reference>See validation_checklist below</reference>
     </step>
@@ -225,6 +262,7 @@
         <criterion>Primary user flow mapped (step-by-step happy path)</criterion>
         <criterion>Acceptance criteria use Given/When/Then format</criterion>
         <criterion>Decomposition strategy provided (3-5 backlog stories estimated)</criterion>
+        <criterion>Open Questions appropriate for high-level story phase (user/UX/functional only, not implementation)</criterion>
         <criterion>Only user-facing NFRs included (NO technical performance targets)</criterion>
         <criterion>Traceability: References to Epic/PRD and Business Research present</criterion>
         <criterion>Readability: Accessible to product team and stakeholders</criterion>
@@ -273,6 +311,20 @@
 
     <guideline category="traceability">
       Every user goal traces to Epic/PRD user story or Business Research user need. Use format: "Per PRD User Story 3, [goal]..." or "Per Business Research §3.2 - UX Gap: [need]"
+    </guideline>
+
+    <guideline category="open_questions">
+      High-Level Story Open Questions focus on user/UX/functional uncertainties requiring validation before backlog refinement. These are non-technical questions about user behavior, UX design, and functional clarity. Mark questions requiring user research [REQUIRES USER RESEARCH] and questions requiring design input [REQUIRES UX DESIGN].
+
+      **High-Level Story questions (user/UX focused):**
+      - "Do users prefer toggles or dropdown for preferences?" [REQUIRES UX DESIGN]
+      - "Should settings be in profile or dedicated page?" [REQUIRES UX RESEARCH]
+      - "What's the priority order for categories?" [REQUIRES PRODUCT OWNER]
+
+      **NOT High-Level Story questions (technical):**
+      - "What API structure?" (Backlog Story question)
+      - "Should we use Redis?" (ADR question)
+      - "Should we build or buy notifications?" (PRD question)
     </guideline>
   </quality_guidance>
 

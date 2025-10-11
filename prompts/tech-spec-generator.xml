@@ -2,11 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Tech_Spec_Generator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <sdlc_phase>Technical_Design</sdlc_phase>
     <depends_on>/artifacts/backlog_stories/[us_id]_v[N].md, [Implementation Research], [ADRs]</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
-    <date>2025-10-10</date>
+    <date>2025-10-11</date>
+    <changes>v1.1: Added Open Questions step with implementation-level guidance, validation checklist criterion, and quality guidance section clarifying boundaries with PRD/ADR phases</changes>
   </metadata>
 
   <system_role>
@@ -65,8 +66,44 @@
     <step priority="8"><action>Document Error Handling Strategy</action></step>
     <step priority="9"><action>Add Code Examples from Implementation Research</action></step>
     <step priority="10"><action>Define Testing Strategy</action></step>
-    <step priority="11"><action>Generate Tech Spec at /artifacts/tech_specs/[spec_id]_v1.md</action></step>
-    <step priority="12"><action>Validate output against checklist</action></step>
+    <step priority="11">
+      <action>Identify Open Questions (Implementation-Level Only)</action>
+      <guidance>
+        Tech Spec Open Questions focus on IMPLEMENTATION DETAILS that require resolution during development. These are granular technical questions that remain after PRD and ADR phases.
+
+        **INCLUDE in Tech Spec Open Questions:**
+        - Low-level implementation details needing team discussion
+        - Granular technology/library choices not covered by ADRs
+        - Implementation approach questions for specific components
+        - Performance optimization strategies
+        - Testing approach details
+        - Component-level design pattern choices
+
+        **EXCLUDE (already addressed in earlier phases):**
+        - Product/technical trade-offs (addressed in PRD)
+        - Major architectural decisions (addressed in ADR)
+        - Business questions (addressed in Epic/PRD)
+        - Significant technology choices requiring alternatives analysis (ADR)
+
+        **Examples of Tech Spec-APPROPRIATE questions:**
+        - "Should we use Joi or Yup for request validation?"
+        - "What pagination strategy for the user list endpoint: cursor or offset?"
+        - "Should we implement retry logic with exponential backoff or fixed delay?"
+        - "What's the optimal batch size for bulk operations?"
+        - "Should we use async/await or promise chaining for this workflow?"
+
+        **Examples of questions ALREADY ADDRESSED in earlier phases:**
+        - "Should we use Redis or Memcached for caching?" (ADR decision)
+        - "Should we prioritize offline-first or real-time sync?" (PRD decision)
+        - "Should we build or buy notification service?" (PRD decision)
+        - "REST vs. GraphQL for API layer?" (ADR decision)
+
+        If no open questions exist, state: "No open implementation questions at this time. All technical decisions addressed in PRD and ADRs."
+      </guidance>
+      <anti_hallucination>Only include genuine implementation uncertainties requiring team discussion or spike resolution. Reference relevant ADRs that have already resolved major decisions. Do not re-open questions already decided in PRD or ADR phases. Distinguish between ADR-worthy questions (requiring alternatives analysis with pros/cons) and Tech Spec questions (implementation details).</anti_hallucination>
+    </step>
+    <step priority="12"><action>Generate Tech Spec at /artifacts/tech_specs/[spec_id]_v1.md</action></step>
+    <step priority="13"><action>Validate output against checklist</action></step>
   </instructions>
 
   <output_format>
@@ -79,6 +116,7 @@
         <criterion>Error handling strategy documented</criterion>
         <criterion>Code examples included (adapted from Implementation Research §8)</criterion>
         <criterion>Testing strategy defined (unit, integration tests)</criterion>
+        <criterion>Open Questions appropriate for implementation phase (granular details, not re-opening PRD/ADR decisions)</criterion>
         <criterion>References to Implementation Research §X and ADRs present</criterion>
       </validation_checklist>
     </terminal_artifact>
@@ -89,4 +127,28 @@
     <template>/prompts/templates/tech-spec-template.xml</template>
     <research_reference>Implementation Research - §4 Implementation Patterns, §5 Architecture, §6 Pitfalls, §8 Code Examples</research_reference>
   </traceability>
+
+  <quality_guidance>
+    <guideline category="scope">
+      Tech Specs define HOW to implement components in detail (APIs, data models, component interactions, implementation patterns). Focus on providing concrete implementation guidance that developers can follow. Reference ADRs for major architectural decisions already made. Do not re-decide questions already addressed in ADRs or PRD.
+    </guideline>
+
+    <guideline category="open_questions">
+      Tech Spec Open Questions are implementation-level details that may need team discussion or spike resolution. These are granular questions below the level of ADRs. If a question is significant enough to require alternatives analysis with pros/cons and major consequences, it belongs in an ADR, not Tech Spec.
+
+      **Tech Spec questions (granular, implementation-level):**
+      - "Should we use Joi or Yup for request validation?" (minor library choice)
+      - "What pagination strategy: cursor or offset?" (implementation detail)
+      - "Async/await or promise chaining?" (coding style choice)
+
+      **ADR questions (significant, requiring alternatives analysis):**
+      - "Redis vs. Memcached for caching?" (major technology choice with consequences)
+      - "REST vs. GraphQL for API layer?" (architecture pattern decision)
+      - "PostgreSQL vs. MongoDB?" (major infrastructure decision)
+    </guideline>
+
+    <guideline category="traceability">
+      Reference relevant ADRs that have resolved major decisions affecting this component. Example: "Per ADR-003 (Caching Strategy), we will use Redis for session storage. This spec details the implementation approach."
+    </guideline>
+  </quality_guidance>
 </generator_prompt>

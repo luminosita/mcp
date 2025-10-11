@@ -2,10 +2,12 @@
 <template>
   <metadata>
     <name>Backlog_Story_Template</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <source>Section 6.4 of advanced_prompt_engineering_software_docs_code_final.md (lines 1063-1112), enhanced for Context Engineering Framework</source>
     <sdlc_phase>Backlog_Story</sdlc_phase>
     <note>This template is for DETAILED backlog user stories, not high-level stories in PRDs</note>
+    <last_updated>2025-10-11</last_updated>
+    <changes>v1.2: Added comprehensive Open Questions & Implementation Uncertainties section with question type markers (REQUIRES SPIKE, REQUIRES ADR, REQUIRES TECH LEAD, BLOCKED BY) and clear examples distinguishing backlog story questions from other phase questions</changes>
   </metadata>
 
   <instructions>
@@ -97,6 +99,39 @@ As [role], I want [feature], so that [benefit].
 **Estimated Story Points:** [Fibonacci: 1, 2, 3, 5, 8, 13]
 **Dependencies:** [References to other stories or technical requirements]
 **Related PRD Section:** [Link to PRD section]
+
+## Open Questions & Implementation Uncertainties
+
+**Backlog Story Open Questions capture IMPLEMENTATION uncertainties needing resolution during sprint.**
+
+**Question Types:**
+- [REQUIRES SPIKE] - Time-boxed investigation needed
+- [REQUIRES ADR] - Significant technical decision (may need alternatives analysis)
+- [REQUIRES TECH LEAD] - Senior technical input needed
+- [BLOCKED BY] - External dependency
+
+---
+
+**Examples of appropriate questions:**
+- "Should we use Joi or Yup for request validation?" [REQUIRES TECH LEAD]
+- "What's optimal database index strategy?" [REQUIRES SPIKE]
+- "Does caching improve performance enough to justify complexity?" [REQUIRES SPIKE]
+- "How to handle race conditions for concurrent updates?" [REQUIRES TECH LEAD]
+
+**Examples of questions for other phases:**
+- ❌ "Should settings be in profile or dedicated page?" (High-Level Story - UX)
+- ❌ "Should we use Redis or PostgreSQL?" (ADR - major decision)
+
+---
+
+**If no open questions exist, state:** "No open implementation questions. All technical approaches clear from Implementation Research and PRD."
+
+---
+
+- [Implementation Question 1 with marker]
+- [Implementation Question 2 with marker]
+
+**Note:** Questions marked [REQUIRES ADR] should trigger ADR creation before implementation begins.
     ]]>
   </structure>
 

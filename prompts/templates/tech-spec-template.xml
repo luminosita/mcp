@@ -2,9 +2,11 @@
 <template>
   <metadata>
     <name>Technical_Specification_Template</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <source>Section 6.3 of advanced_prompt_engineering_software_docs_code_final.md (lines 905-1016)</source>
     <sdlc_phase>Technical_Design</sdlc_phase>
+    <last_updated>2025-10-11</last_updated>
+    <changes>v1.1: Enhanced Open Questions section with comprehensive guidance on implementation-level questions, clear boundaries with PRD/ADR phases, and examples</changes>
   </metadata>
 
   <instructions>
@@ -126,7 +128,45 @@ interface User {
 - [Task 4]
 
 ## Open Questions
-- [Question 1]
+
+**Tech Spec Open Questions focus on IMPLEMENTATION-LEVEL details that require resolution during development.**
+
+**✅ INCLUDE - Implementation Details:**
+- Low-level technology/library choices not covered by ADRs
+- Implementation approach questions for specific components
+- Performance optimization strategies
+- Testing approach details
+- Component-level design pattern choices
+- Minor technical decisions requiring team discussion or spike
+
+**❌ EXCLUDE - Already Addressed in Earlier Phases:**
+- Product/technical trade-offs (PRD phase)
+- Major architectural decisions requiring alternatives analysis (ADR phase)
+- Business questions (Epic/PRD phases)
+- Significant technology choices with major consequences (ADR phase)
+
+---
+
+**Examples of Tech Spec-APPROPRIATE questions:**
+- "Should we use Joi or Yup for request validation?"
+- "What pagination strategy for the user list endpoint: cursor or offset?"
+- "Should we implement retry logic with exponential backoff or fixed delay?"
+- "What's the optimal batch size for bulk operations?"
+- "Should we use async/await or promise chaining for this workflow?"
+
+**Examples of questions already addressed (don't repeat):**
+- ❌ "Should we use Redis or Memcached for caching?" (ADR decision)
+- ❌ "Should we prioritize offline-first or real-time sync?" (PRD decision)
+- ❌ "REST vs. GraphQL for API layer?" (ADR decision)
+
+---
+
+**If no open questions exist, state:** "No open implementation questions at this time. All technical decisions addressed in PRD and ADRs."
+
+---
+
+- [Implementation Question 1]
+- [Implementation Question 2]
 
 ## References
 - [Documentation links]

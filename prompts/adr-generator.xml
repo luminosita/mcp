@@ -2,11 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>ADR_Generator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <sdlc_phase>Architecture</sdlc_phase>
     <depends_on>/artifacts/backlog_stories/[us_id]_v[N].md OR Technical Spike, [Implementation Research]</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
-    <date>2025-10-10</date>
+    <date>2025-10-11</date>
+    <changes>v1.1: Enhanced background with PRD context (questions deferred from PRD), added decision source identification step, and quality guidance section clarifying ADR vs Tech Spec boundaries</changes>
   </metadata>
 
   <system_role>
@@ -23,10 +24,19 @@
       - Alternatives Considered: Options evaluated
       - Consequences: Trade-offs and implications
 
+      **ADRs address questions deferred from PRD phase**, including:
+      - Specific technology choices (e.g., "Redis vs. Memcached for caching")
+      - Architecture pattern decisions (e.g., "Microservices vs. Monolithic")
+      - Major technical trade-offs requiring alternatives analysis
+      - Infrastructure and platform decisions
+      - Significant technology choices with major consequences (cost, performance, maintainability)
+
+      **ADRs distinguish from Tech Specs**: ADRs require alternatives analysis with pros/cons for significant decisions. Minor implementation details (library choices, pagination strategies) belong in Tech Specs.
+
       ADRs use **Implementation Research** for:
-      - Technology landscape analysis
-      - Architecture patterns and anti-patterns
-      - Performance benchmarks and trade-offs
+      - Technology landscape analysis (§2)
+      - Architecture patterns and anti-patterns (§5, §6)
+      - Performance benchmarks and trade-offs (§8)
       - Implementation guidance
 
       Reference: SDLC Artifacts Comprehensive Guideline v1.1, Section 1.8.2 (Implementation Phase)
@@ -59,12 +69,29 @@
     <step priority="1"><action>Load Backlog Story or Technical Spike</action></step>
     <step priority="2"><action>Load Implementation Research</action></step>
     <step priority="3"><action>Load template from /prompts/templates/adr-template.xml</action></step>
-    <step priority="4"><action>Define Decision Context</action></step>
-    <step priority="5"><action>Evaluate Alternatives (2-4 options from Implementation Research)</action></step>
-    <step priority="6"><action>Document Decision with Rationale</action></step>
-    <step priority="7"><action>Analyze Consequences (positive and negative)</action></step>
-    <step priority="8"><action>Generate ADR document at /artifacts/adrs/[adr_id]_v1.md</action></step>
-    <step priority="9"><action>Validate output against checklist</action></step>
+    <step priority="4">
+      <action>Identify Decision Source and Context</action>
+      <guidance>
+        Determine where this decision need originated and establish traceability:
+        - Was it deferred from PRD Open Questions? (Reference PRD ID and question)
+        - Was it identified during Backlog Story technical analysis? (Reference US ID)
+        - Is it addressing a technical spike result? (Reference spike outcome)
+        - Is it a prerequisite architectural decision for implementation?
+
+        Document the source for traceability in the ADR Context section.
+
+        **Example Context statements:**
+        - "This decision addresses an open question from PRD-001: 'Should we use Redis or Memcached for session caching?'"
+        - "During analysis of US-001-003, the need for a distributed caching strategy was identified."
+        - "Technical spike SPIKE-042 evaluated caching solutions; this ADR documents the decision."
+      </guidance>
+    </step>
+    <step priority="5"><action>Define Decision Drivers</action></step>
+    <step priority="6"><action>Evaluate Alternatives (2-4 options from Implementation Research)</action></step>
+    <step priority="7"><action>Document Decision with Rationale</action></step>
+    <step priority="8"><action>Analyze Consequences (positive and negative)</action></step>
+    <step priority="9"><action>Generate ADR document at /artifacts/adrs/[adr_id]_v1.md</action></step>
+    <step priority="10"><action>Validate output against checklist</action></step>
   </instructions>
 
   <output_format>
@@ -85,4 +112,38 @@
     <template>/prompts/templates/adr-template.xml</template>
     <research_reference>Implementation Research - §2 Technology Landscape, §5 Architecture &amp; Tech Stack, §6 Pitfalls, §8 Benchmarks</research_reference>
   </traceability>
+
+  <quality_guidance>
+    <guideline category="scope">
+      ADRs document MAJOR technical decisions requiring alternatives analysis. Focus on decisions with significant consequences (cost, performance, maintainability, team expertise, vendor lock-in). Minor implementation details that don't require pros/cons analysis belong in Tech Specs.
+    </guideline>
+
+    <guideline category="decision_criteria">
+      **ADR-worthy decisions (require alternatives analysis):**
+      - "Redis vs. Memcached for caching" (specific technology choice with trade-offs)
+      - "REST vs. GraphQL for API layer" (architecture pattern with consequences)
+      - "PostgreSQL vs. MongoDB for primary datastore" (major infrastructure decision)
+      - "Microservices vs. Monolithic architecture" (fundamental architectural approach)
+      - "AWS vs. GCP vs. Azure" (platform decision with significant implications)
+
+      **NOT ADR-worthy (belong in Tech Spec):**
+      - "Joi vs. Yup for validation" (minor library choice, negligible consequences)
+      - "Cursor vs. offset pagination" (implementation detail, easily reversible)
+      - "Async/await vs. promise chaining" (coding style preference)
+    </guideline>
+
+    <guideline category="alternatives_analysis">
+      Each ADR must evaluate 2-4 alternatives with:
+      - Clear pros and cons for each option
+      - Decision drivers (performance, cost, team expertise, etc.)
+      - Consequences (positive, negative, neutral)
+      - Rationale for chosen option
+
+      Use Implementation Research to ground alternatives in data (benchmarks, industry patterns, anti-patterns).
+    </guideline>
+
+    <guideline category="traceability">
+      ADRs often address questions deferred from PRD Open Questions. Reference the source PRD and specific question for traceability. Example: "This ADR addresses PRD-001 Open Question: 'Should we use Redis or Memcached for session caching?'"
+    </guideline>
+  </quality_guidance>
 </generator_prompt>

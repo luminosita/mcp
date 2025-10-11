@@ -2,11 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Backlog_Story_Generator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <sdlc_phase>Backlog_Story</sdlc_phase>
     <depends_on>/artifacts/high_level_stories/[hls_id]_v[N].md, [Implementation Research]</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
-    <date>2025-10-10</date>
+    <date>2025-10-11</date>
+    <changes>v1.1: Added Open Questions step (step 13) with implementation uncertainty focus, enhanced validation checklist, and added quality guidance section clarifying boundaries with High-Level Story, ADR, and Tech Spec phases</changes>
   </metadata>
 
   <system_role>
@@ -165,7 +166,7 @@
         - API endpoints (if applicable): Method, path, request/response schemas
         - Database schema changes (if applicable): Tables, columns, indexes
         - Dependencies: Libraries, services, APIs required
-        - Performance targets from PRD (if applicable): p99 < 200ms
+        - Performance targets from PRD (if applicable): p99 &lt; 200ms
         - Security requirements: Authentication, authorization, encryption
       </guidance>
     </step>
@@ -201,6 +202,42 @@
     </step>
 
     <step priority="13">
+      <action>Identify Open Questions and Implementation Uncertainties</action>
+      <guidance>
+        Backlog Story Open Questions capture IMPLEMENTATION UNCERTAINTIES that need resolution during sprint execution. These may trigger spikes, ADRs, or tech lead consultation.
+
+        **INCLUDE in Backlog Story Open Questions:**
+        - Implementation approach uncertainties requiring spike or tech lead input
+        - Questions that might trigger ADR (if significant technical decision)
+        - Performance testing questions or optimization strategies
+        - Integration questions with external systems
+        - Library/framework choice questions (if not ADR-worthy)
+        - Testing strategy uncertainties
+
+        **Mark question type clearly:**
+        - [REQUIRES SPIKE] - needs time-boxed investigation
+        - [REQUIRES ADR] - significant technical decision with alternatives
+        - [REQUIRES TECH LEAD] - needs senior technical input
+        - [BLOCKED BY] - waiting on external dependency
+
+        **Examples of Backlog Story-APPROPRIATE questions:**
+        - "Should we use Joi or Yup for request validation?" [REQUIRES TECH LEAD]
+        - "What's the optimal database index strategy for preference queries?" [REQUIRES SPIKE]
+        - "Does Redis caching improve preference lookup enough to justify complexity?" [REQUIRES SPIKE - performance testing]
+        - "How should we handle race conditions for concurrent preference updates?" [REQUIRES TECH LEAD or SPIKE]
+        - "Is the notification service API reliable enough, or do we need circuit breaker?" [REQUIRES SPIKE - may trigger ADR]
+
+        **Examples of questions ALREADY ADDRESSED (don't include):**
+        - ❌ "Should notification settings be in profile or dedicated page?" (High-Level Story - UX question)
+        - ❌ "Should we use Redis or PostgreSQL for caching?" (Should have ADR already)
+        - ❌ "Do users prefer toggles or dropdown?" (High-Level Story - UX question)
+
+        If no open questions exist, state: "No open implementation questions. All technical approaches clear from Implementation Research and PRD."
+      </guidance>
+      <anti_hallucination>Only include genuine implementation uncertainties that cannot be resolved without investigation, spike, or ADR. If a question is significant enough to require ADR (major decision with alternatives analysis), mark it [REQUIRES ADR] and note it should be addressed before implementation. Do not re-ask questions already addressed in earlier phases.</anti_hallucination>
+    </step>
+
+    <step priority="14">
       <action>Add Traceability References</action>
       <guidance>
         - Parent High-Level Story: [HLS-XXX]
@@ -210,13 +247,13 @@
       </guidance>
     </step>
 
-    <step priority="14">
+    <step priority="15">
       <action>Generate backlog story document</action>
       <output_path>/artifacts/backlog_stories/[us_id]_v1.md</output_path>
       <format>Markdown following backlog-story-template.xml structure</format>
     </step>
 
-    <step priority="15">
+    <step priority="16">
       <action>Validate output against checklist</action>
       <reference>See validation_checklist below</reference>
     </step>
@@ -235,6 +272,7 @@
         <criterion>Story points estimated (1-5 SP typical)</criterion>
         <criterion>Testing strategy defined (unit, integration, manual)</criterion>
         <criterion>Dependencies identified (story, technical, team)</criterion>
+        <criterion>Open Questions capture implementation uncertainties with clear markers ([REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD])</criterion>
         <criterion>Traceability: References to High-Level Story, PRD, Implementation Research present</criterion>
         <criterion>Implementation-adjacent: Hints at approach without prescribing exact code</criterion>
         <criterion>Sprint-ready: Can be completed in 1 sprint by team</criterion>
@@ -283,6 +321,22 @@
     <guideline category="traceability">
       Every technical note should reference Implementation Research. Format: "ref: Implementation Research §4.3 - REST API Pattern" or "Consider pattern from Implementation Research §6.1"
     </guideline>
+
+    <guideline category="open_questions">
+      Backlog Story Open Questions capture implementation uncertainties that may need spikes, ADRs, or tech lead consultation. Use clear markers: [REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD]. If a question is significant enough for ADR (major decision with alternatives), create ADR before implementation. Minor implementation details can be resolved during sprint.
+
+      **Backlog Story questions (implementation uncertainties):**
+      - "Joi vs. Yup for validation?" [REQUIRES TECH LEAD] - minor choice
+      - "Optimal index strategy?" [REQUIRES SPIKE] - needs investigation
+      - "Need circuit breaker pattern?" [REQUIRES SPIKE, may become ADR] - performance/reliability
+
+      **ADR territory (don't include, trigger ADR instead):**
+      - "Redis vs. PostgreSQL for caching?" - Should already have ADR
+      - "REST vs. GraphQL?" - Should already have ADR from PRD phase
+
+      **High-Level Story territory (don't re-ask):**
+      - "Should settings be in profile or dedicated page?" - UX question from High-Level Story
+    </guideline>
   </quality_guidance>
 
   <examples>
@@ -328,7 +382,7 @@
       Scenario 4: Performance requirement
       Given 100 concurrent requests to the endpoint
       When all requests are processed
-      Then p99 response time is < 200ms
+      Then p99 response time is &lt; 200ms
 
       Good (Checklist Format - Fallback):
       **Acceptance Criteria:**
@@ -337,7 +391,7 @@
       - [ ] Endpoint returns 400 Bad Request for invalid category names with error message listing valid categories
       - [ ] Endpoint returns 200 OK with updated preference object on success
       - [ ] Preferences persist to PostgreSQL notifications_preferences table
-      - [ ] Endpoint response time p99 < 200ms under 100 concurrent requests
+      - [ ] Endpoint response time p99 &lt; 200ms under 100 concurrent requests
       - [ ] Unit tests cover happy path, invalid userId, invalid category, and database errors
       - [ ] Integration test verifies end-to-end preference save and retrieval
 
