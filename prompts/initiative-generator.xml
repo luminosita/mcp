@@ -2,7 +2,7 @@
 <generator_prompt>
   <metadata>
     <name>Initiative_Generator</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <sdlc_phase>Initiative</sdlc_phase>
     <depends_on>/artifacts/product_vision_v[N].md</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
@@ -111,7 +111,16 @@
     <step priority="5">
       <action>Map vision capabilities to supporting epics</action>
       <guidance>
-        - Each key capability from Product Vision becomes an Epic
+        - **CRITICAL: Check if this is a greenfield/new project**: If the initiative represents a new project or product from scratch (not an enhancement to existing system), you MUST include Epic-000 as the first epic
+        - **Epic-000: Project Foundation &amp; Bootstrap** (required for new projects only):
+          - Repository structure and scaffolding
+          - Core framework/architecture setup
+          - Development environment configuration
+          - CI/CD pipeline foundation
+          - SDLC workflow setup (CLAUDE.md, TODO.md structure)
+          - Main entry point and core application skeleton
+          - Timeline: Typically Q1 or first 4-6 weeks
+        - Each key capability from Product Vision becomes an Epic (Epic-001, Epic-002, etc.)
         - Provide brief epic descriptions (1-2 sentences)
         - Assign rough timeline per epic (quarters)
         - Note epic owners if known, otherwise mark [TBD]
@@ -192,6 +201,7 @@
         <criterion>Strategic objective is clear and aligns with organizational goals</criterion>
         <criterion>3-5 Key Results defined with baseline, target, and due date</criterion>
         <criterion>Supporting epics mapped with rough timelines</criterion>
+        <criterion>If greenfield/new project, includes Epic-000 for project foundation and bootstrap</criterion>
         <criterion>Supporting epics table excludes status/tracking columns</criterion>
         <criterion>Budget and FTE allocation estimated and justified</criterion>
         <criterion>Risks identified with mitigation strategies</criterion>
@@ -217,6 +227,7 @@
       - [ ] Initiative document has all required template sections
       - [ ] Strategic objective aligns with Product Vision statement
       - [ ] Key Results are SMART and measurable
+      - [ ] If greenfield project, Epic-000 (Project Foundation) is included with appropriate timeline
       - [ ] Supporting epics trace back to Product Vision capabilities
       - [ ] Resource estimates are realistic and justified
       - [ ] Governance structure is complete with decision authority
