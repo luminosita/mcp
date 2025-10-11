@@ -2,11 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Initiative_Generator</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <sdlc_phase>Initiative</sdlc_phase>
     <depends_on>/artifacts/product_vision_v[N].md</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
     <date>2025-10-11</date>
+    <changes>v1.3: Added Open Questions step (step 11) with strategic/resource focus, enhanced validation checklist, and added quality guidance section clarifying boundaries with Epic/PRD/Story phases</changes>
   </metadata>
 
   <system_role>
@@ -182,12 +183,55 @@
     </step>
 
     <step priority="11">
+      <action>Identify Open Questions (Strategic &amp; Resource Level)</action>
+      <guidance>
+        Initiative-level Open Questions focus on STRATEGIC EXECUTION and RESOURCE ALLOCATION uncertainties that require executive or portfolio-level decision-making.
+
+        **INCLUDE in Initiative Open Questions:**
+        - Executive approval questions (budget, headcount, strategic direction)
+        - Resource allocation and FTE availability questions
+        - Initiative sequencing and portfolio prioritization
+        - Organizational alignment and stakeholder buy-in
+        - Major assumptions requiring validation (market timing, regulatory changes)
+        - Cross-initiative dependencies and conflicts
+
+        **Mark question type clearly:**
+        - [REQUIRES EXECUTIVE DECISION] - needs C-level or VP approval
+        - [REQUIRES PORTFOLIO PLANNING] - affects multiple initiatives or roadmap sequencing
+        - [REQUIRES RESOURCE PLANNING] - FTE, budget, or team allocation decision
+        - [REQUIRES ORGANIZATIONAL ALIGNMENT] - requires stakeholder consensus
+
+        **EXCLUDE (belong in other phases):**
+        - Tactical business questions (market segments, pricing) - Epic phase
+        - Product/technical trade-offs - PRD phase
+        - User/UX questions - High-Level Story phase
+        - Implementation questions - Backlog Story and below
+
+        **Examples of Initiative-APPROPRIATE questions:**
+        - "What is the approved budget range for this initiative: $500K-$1M or $1M-$2M?" [REQUIRES EXECUTIVE DECISION]
+        - "Should we sequence this initiative before Platform Modernization (Q2-Q3) or after (Q4-Q1)?" [REQUIRES PORTFOLIO PLANNING]
+        - "Do we have 3-4 FTE available in Q2, or do we need to hire contractors?" [REQUIRES RESOURCE PLANNING]
+        - "Does this initiative align with the CEO's strategic priority for enterprise market expansion?" [REQUIRES ORGANIZATIONAL ALIGNMENT]
+        - "Should we target SMB or Enterprise segment first given sales team capacity?" [REQUIRES STRATEGIC DECISION]
+
+        **Examples of questions for OTHER phases:**
+        - ❌ "What pricing model should we use?" (Epic - business question)
+        - ❌ "Should we build or buy notification service?" (PRD - product/technical trade-off)
+        - ❌ "Should settings be in profile page?" (High-Level Story - UX question)
+        - ❌ "What API structure?" (Backlog Story - implementation)
+
+        If no open questions exist, state: "No strategic or resource questions at this time. All executive approvals and resource allocations confirmed."
+      </guidance>
+      <anti_hallucination>Only include genuine strategic or resource uncertainties requiring executive, portfolio, or organizational decision-making. Do not include operational or tactical questions. Mark all questions with appropriate urgency markers.</anti_hallucination>
+    </step>
+
+    <step priority="12">
       <action>Generate initiative document</action>
       <output_path>/artifacts/initiatives/[initiative_id]_v1.md</output_path>
       <format>Markdown following initiative-template.xml structure</format>
     </step>
 
-    <step priority="12">
+    <step priority="13">
       <action>Validate output against checklist</action>
       <reference>See validation_checklist below</reference>
     </step>
@@ -207,6 +251,7 @@
         <criterion>Risks identified with mitigation strategies</criterion>
         <criterion>Governance structure defined (steering committee, review cadence)</criterion>
         <criterion>Milestones established across 3 phases</criterion>
+        <criterion>Open Questions appropriate for initiative phase (strategic/resource level, not tactical or implementation)</criterion>
         <criterion>Traceability: References to Product Vision present</criterion>
         <criterion>Readability: Appropriate for executive audience</criterion>
         <criterion>All [CUSTOMIZE PER PRODUCT] placeholders replaced with specific values</criterion>
@@ -257,6 +302,22 @@
 
     <guideline category="artifact_scope">
       Initiatives are strategic planning documents, not tracking tools. Do not include status columns, progress indicators, or completion tracking. Those belong in TODO.md or project management systems. Focus on strategic definition: what, why, when, who, and how much.
+    </guideline>
+
+    <guideline category="open_questions">
+      Initiative Open Questions focus on STRATEGIC EXECUTION and RESOURCE ALLOCATION requiring executive or portfolio-level decision-making. These are strategic uncertainties about budget, resources, sequencing, and organizational alignment. Mark questions requiring executive approval [REQUIRES EXECUTIVE DECISION] and resource planning [REQUIRES RESOURCE PLANNING].
+
+      **Initiative questions (strategic/resource focused):**
+      - "What is the approved budget range: $500K-$1M or $1M-$2M?" [REQUIRES EXECUTIVE DECISION]
+      - "Should we sequence this before Platform Modernization (Q2-Q3)?" [REQUIRES PORTFOLIO PLANNING]
+      - "Do we have 3-4 FTE available in Q2?" [REQUIRES RESOURCE PLANNING]
+      - "Does this align with CEO's strategic priority?" [REQUIRES ORGANIZATIONAL ALIGNMENT]
+
+      **NOT Initiative questions (tactical/operational):**
+      - "What pricing model?" (Epic question - tactical business)
+      - "Should we build or buy?" (PRD question - product/technical trade-off)
+      - "Should settings be in profile?" (High-Level Story - UX question)
+      - "What API structure?" (Backlog Story - implementation)
     </guideline>
   </quality_guidance>
 

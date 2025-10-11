@@ -2,9 +2,11 @@
 <template>
   <metadata>
     <name>Initiative_Template</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>Initiative</sdlc_phase>
+    <last_updated>2025-10-11</last_updated>
+    <changes>v1.1: Enhanced Open Questions section with comprehensive guidance on strategic/resource questions, question type markers (REQUIRES EXECUTIVE DECISION, REQUIRES PORTFOLIO PLANNING, etc.), and clear examples distinguishing initiative questions from other phase questions</changes>
   </metadata>
 
   <instructions>
@@ -210,9 +212,71 @@
 ## Open Questions & Assumptions
 
 ### Open Questions
-- [Strategic question 1]
-- [Resource question 2]
-- [Market question 3]
+
+**Initiative Open Questions focus on STRATEGIC EXECUTION and RESOURCE ALLOCATION uncertainties requiring executive or portfolio-level decision-making.**
+
+**✅ INCLUDE in Initiative Open Questions:**
+
+1. **Executive Approval Questions:**
+   - Budget range, headcount approvals, strategic direction
+   - C-level or VP-level decisions
+
+2. **Resource Allocation Questions:**
+   - FTE availability and team assignments
+   - Contractor hiring needs
+   - Budget allocation across teams/quarters
+
+3. **Portfolio & Sequencing Questions:**
+   - Initiative prioritization and dependencies
+   - Roadmap sequencing decisions
+   - Cross-initiative resource conflicts
+
+4. **Organizational Alignment Questions:**
+   - Stakeholder buy-in and consensus
+   - Executive sponsor commitment
+   - Cross-functional collaboration agreements
+
+5. **Strategic Assumptions Requiring Validation:**
+   - Market timing assumptions
+   - Regulatory changes
+   - Competitive landscape shifts
+
+**❌ EXCLUDE from Initiative (belong in other phases):**
+- Tactical business questions (market segments, pricing) → Epic phase
+- Product/technical trade-offs → PRD phase
+- User/UX questions → High-Level Story phase
+- Implementation questions → Backlog Story and below
+
+---
+
+**Question Markers:**
+- [REQUIRES EXECUTIVE DECISION] - needs C-level or VP approval
+- [REQUIRES PORTFOLIO PLANNING] - affects multiple initiatives or roadmap
+- [REQUIRES RESOURCE PLANNING] - FTE, budget, or team allocation
+- [REQUIRES ORGANIZATIONAL ALIGNMENT] - requires stakeholder consensus
+- [REQUIRES STRATEGIC DECISION] - major strategic choice
+
+---
+
+**Examples of Initiative-APPROPRIATE questions:**
+- "What is the approved budget range for this initiative: $500K-$1M or $1M-$2M?" [REQUIRES EXECUTIVE DECISION]
+- "Should we sequence this initiative before Platform Modernization (Q2-Q3) or after (Q4-Q1)?" [REQUIRES PORTFOLIO PLANNING]
+- "Do we have 3-4 FTE available in Q2, or do we need to hire contractors?" [REQUIRES RESOURCE PLANNING]
+- "Does this initiative align with the CEO's strategic priority for enterprise market expansion?" [REQUIRES ORGANIZATIONAL ALIGNMENT]
+
+**Examples of questions for OTHER phases:**
+- ❌ "What pricing model should we use?" (Epic - business question)
+- ❌ "Should we build or buy notification service?" (PRD - product/technical trade-off)
+- ❌ "Should settings be in profile page?" (High-Level Story - UX question)
+
+---
+
+**If no open questions exist, state:** "No strategic or resource questions at this time. All executive approvals and resource allocations confirmed."
+
+---
+
+- [Strategic/Resource Question 1 with marker]
+- [Strategic/Resource Question 2 with marker]
 
 ### Key Assumptions
 - [Assumption 1: Market condition or constraint]

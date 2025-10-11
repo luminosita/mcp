@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Artifact_Template_Schema</name>
+    <version>1.0</version>
+    <source>Extracted from Context Engineering Framework artifact templates</source>
+    <purpose>Standard XML schema for all artifact templates</purpose>
+    <date>2025-10-11</date>
+  </metadata>
+
+  <instructions>
+    <guideline>All artifact templates must follow this XML structure</guideline>
+    <guideline>Each template defines the structure and format for a specific SDLC artifact</guideline>
+    <guideline>Templates use CDATA blocks to preserve markdown formatting</guideline>
+    <guideline>Metadata section tracks identity, version, and provenance</guideline>
+    <guideline>Instructions provide guidelines for completing the artifact</guideline>
+    <guideline>Structure section defines the actual artifact format (usually markdown)</guideline>
+    <guideline>Examples demonstrate good practices and common patterns</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# [Artifact Title]
+
+## Metadata
+- **[Field 1]:** [Value]
+- **[Field 2]:** [Value]
+- **[Field 3]:** [Value]
+
+## [Section 1: Context/Goal/Problem]
+[Description of what this section captures]
+
+[Template fields and structure]
+
+## [Section 2: Analysis/Approach/Design]
+[Description of what this section captures]
+
+[Template fields and structure]
+
+## [Section 3: Solution/Decision/Implementation]
+[Description of what this section captures]
+
+[Template fields and structure]
+
+## [Section 4: Validation/Acceptance/Outcomes]
+[Description of what this section captures]
+
+[Template fields and structure]
+
+## [Section 5: References/Traceability]
+[Links to parent artifacts, related decisions, documentation]
+
+[Template fields and structure]
+    ]]>
+  </structure>
+
+  <key_elements>
+    <element name="metadata">
+      <description>Tracks template identity, version, source, and change history</description>
+      <required_fields>name, version, source, sdlc_phase</required_fields>
+      <optional_fields>alias, last_updated, changes, note</optional_fields>
+      <note>Version should increment when template structure changes</note>
+    </element>
+
+    <element name="instructions">
+      <description>Guidelines for completing the artifact following this template</description>
+      <must_include>Key requirements, format standards, quality expectations, traceability needs</must_include>
+      <note>Instructions guide users in filling out the template correctly</note>
+    </element>
+
+    <element name="structure">
+      <description>Defines the actual artifact format (usually markdown in CDATA block)</description>
+      <format_attribute>Typically "markdown" but can be "yaml", "json", "code", etc.</format_attribute>
+      <cdata_usage>Use CDATA block to preserve formatting and special characters</cdata_usage>
+      <sections>Common sections include: Metadata, Context/Goal, Analysis/Design, Solution/Implementation, Validation, Traceability/References</sections>
+      <placeholders>Use [brackets] for placeholder values users should replace</placeholders>
+    </element>
+
+    <element name="examples">
+      <description>Concrete examples demonstrating template usage and best practices</description>
+      <purpose>Shows good practices, common patterns, and quality standards in action</purpose>
+      <source_attribute>Document where example comes from (research section, real project, etc.)</source_attribute>
+      <completeness>Examples can be complete artifacts or focused excerpts highlighting key patterns</completeness>
+    </element>
+  </key_elements>
+
+  <template_patterns>
+    <pattern name="Metadata Section">
+      <description>Standard metadata at top of every artifact</description>
+      <common_fields>
+        - ID: Unique identifier (e.g., ADR-001, US-042, SPIKE-015)
+        - Title: Descriptive name
+        - Status: Current state (Draft, In Progress, Complete, Accepted, etc.)
+        - Date: Creation or last updated date
+        - Author/Owner: Responsible person
+        - Parent: Link to parent artifact (traceability)
+      </common_fields>
+    </pattern>
+
+    <pattern name="Context/Problem Section">
+      <description>Establishes why artifact exists and what problem it addresses</description>
+      <purpose>Provides background, constraints, and problem statement</purpose>
+      <examples>
+        - ADR: "Context" section explaining architectural issue
+        - Spike: "Investigation Goal" explaining question to answer
+        - Backlog Story: "Description" explaining user need
+      </examples>
+    </pattern>
+
+    <pattern name="Analysis/Exploration Section">
+      <description>Documents investigation, alternatives, or approach</description>
+      <purpose>Shows thinking process and options considered</purpose>
+      <examples>
+        - ADR: "Considered Options" with pros/cons analysis
+        - Spike: "Investigation Approach" and "Findings"
+        - Tech Spec: "Design" and "Technical Approach"
+      </examples>
+    </pattern>
+
+    <pattern name="Solution/Decision Section">
+      <description>Documents what was decided, built, or recommended</description>
+      <purpose>Provides clear outcome or deliverable</purpose>
+      <examples>
+        - ADR: "Decision Outcome" with chosen option and rationale
+        - Spike: "Recommendation" with suggested approach
+        - Backlog Story: "Acceptance Criteria" defining done
+      </examples>
+    </pattern>
+
+    <pattern name="Validation Section">
+      <description>Defines how to verify correctness or completion</description>
+      <purpose>Provides checkable criteria for quality assurance</purpose>
+      <examples>
+        - ADR: "Validation" checklist for decision confirmation
+        - Spike: "Success Criteria" for investigation completeness
+        - Backlog Story: "Acceptance Criteria" and "Definition of Done"
+      </examples>
+    </pattern>
+
+    <pattern name="Traceability Section">
+      <description>Links to parent artifacts, related decisions, and downstream artifacts</description>
+      <purpose>Maintains clear artifact relationships and decision history</purpose>
+      <examples>
+        - "Related Decisions" linking to other ADRs
+        - "Parent Story" linking backlog story to high-level story
+        - "Informs" showing downstream artifacts created from this one
+      </examples>
+    </pattern>
+
+    <pattern name="Open Questions/Uncertainties Section">
+      <description>Captures unresolved items requiring clarification or investigation</description>
+      <purpose>Identifies blockers, uncertainties, and follow-up needs</purpose>
+      <markers>[REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD], [BLOCKED BY], [CLARIFY BEFORE START]</markers>
+      <examples>
+        - Backlog Story: "Open Questions &amp; Implementation Uncertainties"
+        - Tech Spec: "Open Questions"
+        - Initiative: "Open Questions &amp; Assumptions"
+      </examples>
+    </pattern>
+  </template_patterns>
+
+  <formatting_standards>
+    <standard name="CDATA Usage">
+      <description>Always wrap markdown content in CDATA blocks</description>
+      <reason>Preserves formatting, special characters, and prevents XML parsing issues</reason>
+      <syntax><![CDATA[
+<structure format="markdown">
+  <![CDATA[
+  # Markdown content here
+  Preserves **formatting** and [links](url)
+  ]]]]><![CDATA[>
+</structure>
+      ]]></syntax>
+    </standard>
+
+    <standard name="Placeholder Conventions">
+      <description>Use consistent placeholder format for values to be filled</description>
+      <conventions>
+        - [XXX] for numeric IDs (e.g., US-[XXX])
+        - [Value] for single value (e.g., **Status:** [Value])
+        - [Description] for text content
+        - [YYYY-MM-DD] for dates
+        - Use descriptive names: [Feature Name], [User Role], [Metric]
+      </conventions>
+    </standard>
+
+    <standard name="Section Headers">
+      <description>Use consistent markdown header levels</description>
+      <hierarchy>
+        - # for artifact title (H1)
+        - ## for major sections (H2)
+        - ### for subsections (H3)
+        - #### for sub-subsections (H4) - use sparingly
+      </hierarchy>
+    </standard>
+
+    <standard name="Lists and Tables">
+      <description>Use markdown lists and tables consistently</description>
+      <lists>
+        - Unordered lists with - (dash)
+        - Ordered lists with numbers (1. 2. 3.)
+        - Checklist items with - [ ] or - [x]
+      </lists>
+      <tables>Use markdown table syntax with proper alignment for structured data</tables>
+    </standard>
+  </formatting_standards>
+
+  <quality_checklist>
+    <check>Metadata complete with all required fields</check>
+    <check>Instructions provide clear guidance for completing artifact</check>
+    <check>Structure section uses CDATA block for markdown content</check>
+    <check>All placeholder values use [bracket] notation</check>
+    <check>Section headers follow hierarchy standards (H1 → H2 → H3)</check>
+    <check>Examples demonstrate good practices and common patterns</check>
+    <check>Template includes traceability section for artifact relationships</check>
+    <check>Template appropriate for SDLC phase (strategic vs tactical detail level)</check>
+    <check>Validation or acceptance criteria section included (where applicable)</check>
+    <check>Open Questions section included with appropriate phase-level guidance (where applicable)</check>
+  </quality_checklist>
+
+  <usage_notes>
+    <note>When creating a new artifact template, copy this structure and fill in phase-specific details</note>
+    <note>Strategic artifacts (Vision, Initiative, Epic) focus on WHAT/WHY, avoid technical HOW</note>
+    <note>Implementation artifacts (Backlog Story, Spike, Tech Spec, Task) include technical HOW</note>
+    <note>Bridge artifacts (PRD, High-Level Story) balance user perspective with implementation hints</note>
+    <note>Decision artifacts (ADR) require alternatives analysis with pros/cons</note>
+    <note>Investigation artifacts (Spike) are time-boxed and evidence-focused</note>
+    <note>All templates should support Context Engineering Framework v1.1 principles</note>
+    <note>Version templates when structure changes; document changes in metadata</note>
+  </usage_notes>
+
+  <related_schemas>
+    <schema path="/prompts/templates/generator-schema-template_v1.xml">
+      Standard schema for generator prompts that create artifacts from this template
+    </schema>
+  </related_schemas>
+</template>

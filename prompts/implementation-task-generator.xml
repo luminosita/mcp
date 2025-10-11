@@ -2,11 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Implementation_Task_Generator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <sdlc_phase>Implementation_Task</sdlc_phase>
     <depends_on>/artifacts/backlog_stories/[us_id]_v[N].md, [Tech Spec], [Implementation Research]</depends_on>
     <generated_by>Context Engineering Framework v1.1</generated_by>
-    <date>2025-10-10</date>
+    <date>2025-10-11</date>
+    <changes>v1.1: Added Task-Level Uncertainties step (step 11) with granular implementation blocker focus, enhanced validation checklist, and added quality guidance section clarifying boundaries with Backlog Story/Tech Spec/ADR phases</changes>
   </metadata>
 
   <system_role>
@@ -63,8 +64,52 @@
     <step priority="8"><action>Define Task Acceptance Criteria</action></step>
     <step priority="9"><action>Estimate Hours (1-16 hours)</action></step>
     <step priority="10"><action>Define Testing Requirements</action></step>
-    <step priority="11"><action>Generate Task at /artifacts/implementation_tasks/[task_id]_v1.md</action></step>
-    <step priority="12"><action>Validate output against checklist</action></step>
+    <step priority="11">
+      <action>Identify Task-Level Uncertainties</action>
+      <guidance>
+        Task-level uncertainties are GRANULAR IMPLEMENTATION BLOCKERS or clarifications needed before starting or during task execution. These are the smallest-grain questions at the implementation level.
+
+        **INCLUDE in Task Uncertainties:**
+        - Specific function or method-level clarifications
+        - Edge case handling questions for specific code paths
+        - Granular technical choices not covered in Tech Spec
+        - Existing code reuse questions (which utility function to use)
+        - Specific error handling or logging approach
+        - Transaction vs single-query decision for specific operation
+        - Null/undefined handling for specific parameters
+        - Synchronous vs asynchronous decision for specific operation
+
+        **Mark uncertainty type clearly:**
+        - [CLARIFY BEFORE START] - must resolve before beginning task
+        - [BLOCKED BY] - external dependency blocking task
+        - [NEEDS PAIR PROGRAMMING] - complex area requiring collaboration
+        - [TECH DEBT] - workaround needed due to existing code constraints
+
+        **EXCLUDE (belong in higher phases):**
+        - Library or framework choices (Backlog Story or Tech Spec)
+        - API design questions (Backlog Story or Tech Spec)
+        - Architecture decisions (ADR)
+        - Product/UX questions (High-Level Story or PRD)
+
+        **Examples of Task-APPROPRIATE uncertainties:**
+        - "Do we handle null userId in validateUser(), or assume caller validates?" [CLARIFY BEFORE START]
+        - "Should error logging be synchronous (console.error) or async (Winston)?" [CLARIFY BEFORE START]
+        - "Which existing utility should we reuse: validateEmail() or validateInput()?" [CLARIFY BEFORE START]
+        - "Does preference update require database transaction, or single UPDATE query?" [CLARIFY BEFORE START]
+        - "Waiting for TASK-042 to complete user service refactor before starting" [BLOCKED BY]
+        - "Complex authentication flow may need pair programming session" [NEEDS PAIR PROGRAMMING]
+
+        **Examples of questions for OTHER phases:**
+        - ❌ "Should we use Joi or Yup for validation?" (Backlog Story question)
+        - ❌ "What API endpoint structure?" (Tech Spec/Backlog Story question)
+        - ❌ "Should we use Redis or Memcached?" (ADR question)
+
+        If no uncertainties exist, state: "No task-level uncertainties. Implementation approach clear from Tech Spec and Backlog Story."
+      </guidance>
+      <anti_hallucination>Only include genuine task-level blockers or clarifications. These should be granular implementation details, not architectural or product questions. If everything is clear from Tech Spec and Backlog Story, explicitly state no uncertainties.</anti_hallucination>
+    </step>
+    <step priority="12"><action>Generate Task at /artifacts/implementation_tasks/[task_id]_v1.md</action></step>
+    <step priority="13"><action>Validate output against checklist</action></step>
   </instructions>
 
   <output_format>
@@ -77,6 +122,7 @@
         <criterion>Task acceptance criteria defined</criterion>
         <criterion>Estimated hours (1-16 hours, typically 4-8)</criterion>
         <criterion>Testing requirements specified</criterion>
+        <criterion>Task-level uncertainties appropriate (granular implementation blockers, not architecture/product questions)</criterion>
         <criterion>References to Implementation Research §X present (if applicable)</criterion>
       </validation_checklist>
     </terminal_artifact>
@@ -87,4 +133,37 @@
     <template>/prompts/templates/implementation-task-template.xml</template>
     <research_reference>Implementation Research - §4 Patterns, §6 Anti-patterns, §8 Code Examples</research_reference>
   </traceability>
+
+  <quality_guidance>
+    <guideline category="granularity">
+      Tasks must be smallest trackable units (1-16 hours, ideally 4-8 hours). If task scope exceeds 2 days, decompose further. Each task should modify 1-3 files for a single, focused change.
+    </guideline>
+
+    <guideline category="clarity">
+      Write for developer audience. Be specific about file paths, function names, and code changes. Provide pseudo-code or code examples from Implementation Research §8 when helpful.
+    </guideline>
+
+    <guideline category="actionability">
+      Task must be immediately actionable. Developer should know exactly what files to modify, what functions to create/update, and what tests to write. Avoid vague descriptions.
+    </guideline>
+
+    <guideline category="traceability">
+      Every task traces to Backlog Story acceptance criteria or Tech Spec component. Use format: "Per Backlog Story AC #2, [requirement]..." or "Per Tech Spec §3.2, [component]..."
+    </guideline>
+
+    <guideline category="task_uncertainties">
+      Task-level uncertainties are GRANULAR IMPLEMENTATION BLOCKERS or clarifications needed before/during task execution. These are the smallest-grain questions at implementation level (function-level decisions, edge case handling, code reuse). Mark blockers [CLARIFY BEFORE START] and dependencies [BLOCKED BY].
+
+      **Task uncertainties (granular/function-level):**
+      - "Do we handle null userId in validateUser()?" [CLARIFY BEFORE START]
+      - "Should error logging be sync (console.error) or async (Winston)?" [CLARIFY BEFORE START]
+      - "Which utility to reuse: validateEmail() or validateInput()?" [CLARIFY BEFORE START]
+      - "Waiting for TASK-042 user service refactor" [BLOCKED BY]
+
+      **NOT Task uncertainties (higher-level):**
+      - "Should we use Joi or Yup?" (Backlog Story)
+      - "What API structure?" (Tech Spec/Backlog Story)
+      - "Should we use Redis?" (ADR)
+    </guideline>
+  </quality_guidance>
 </generator_prompt>

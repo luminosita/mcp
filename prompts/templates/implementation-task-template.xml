@@ -2,10 +2,12 @@
 <template>
   <metadata>
     <name>Implementation_Task_Template</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>Implementation Task</sdlc_phase>
     <alias>Technical Task, Sub-task</alias>
+    <last_updated>2025-10-11</last_updated>
+    <changes>v1.1: Enhanced Task-Level Uncertainties &amp; Blockers section in Risk &amp; Complexity Notes with comprehensive guidance, uncertainty markers (CLARIFY BEFORE START, BLOCKED BY, NEEDS PAIR PROGRAMMING, TECH DEBT), and clear examples distinguishing task-level from story-level questions</changes>
   </metadata>
 
   <instructions>
@@ -25,7 +27,7 @@
 
 ## Metadata
 - **Task ID:** TASK-[XXX]
-- **Parent Story:** [US-XXX: Story Title]
+- **Story ID:** US-[XXX]
 - **Status:** [To Do/In Progress/In Review/Done]
 - **Priority:** [Critical/High/Medium/Low]
 - **Assigned To:** [Developer Name]
@@ -183,9 +185,55 @@
 - [Strategy for risk 1]
 - [Strategy for risk 2]
 
-**Unknown/Unclear Items:**
-- [Item 1: To be clarified before starting]
-- [Item 2: May require spike or research]
+**Task-Level Uncertainties & Blockers:**
+
+**Implementation Task uncertainties are GRANULAR IMPLEMENTATION BLOCKERS or clarifications needed before starting or during task execution.**
+
+**✅ INCLUDE - Task-Level Uncertainties:**
+- Specific function or method-level clarifications
+- Edge case handling for specific code paths
+- Granular technical choices not covered in Tech Spec
+- Existing code reuse questions (which utility to use)
+- Specific error handling or logging approach
+- Transaction vs single-query for specific operation
+- Null/undefined handling for specific parameters
+- Synchronous vs asynchronous for specific operation
+
+**❌ EXCLUDE - Higher-Phase Questions:**
+- Library/framework choices → Backlog Story or Tech Spec
+- API design questions → Backlog Story or Tech Spec
+- Architecture decisions → ADR
+- Product/UX questions → High-Level Story or PRD
+
+---
+
+**Uncertainty Markers:**
+- [CLARIFY BEFORE START] - must resolve before beginning task
+- [BLOCKED BY] - external dependency blocking task
+- [NEEDS PAIR PROGRAMMING] - complex area requiring collaboration
+- [TECH DEBT] - workaround needed due to existing code constraints
+
+---
+
+**Examples of Task-APPROPRIATE uncertainties:**
+- "Do we handle null userId in validateUser(), or assume caller validates?" [CLARIFY BEFORE START]
+- "Should error logging be synchronous (console.error) or async (Winston)?" [CLARIFY BEFORE START]
+- "Which utility to reuse: validateEmail() or validateInput()?" [CLARIFY BEFORE START]
+- "Waiting for TASK-042 to complete user service refactor" [BLOCKED BY]
+
+**Examples for OTHER phases:**
+- ❌ "Should we use Joi or Yup?" (Backlog Story)
+- ❌ "What API structure?" (Tech Spec/Backlog Story)
+- ❌ "Should we use Redis?" (ADR)
+
+---
+
+**If no uncertainties exist, state:** "No task-level uncertainties. Implementation approach clear from Tech Spec and Backlog Story."
+
+---
+
+- [Task-level uncertainty 1 with marker]
+- [Task-level uncertainty 2 with marker]
 
 ## Definition of Done (Task Level)
 

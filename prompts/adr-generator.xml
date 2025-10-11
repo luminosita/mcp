@@ -45,6 +45,13 @@
     <input_artifacts>
       <artifact path="/artifacts/backlog_stories/[us_id]_v[N].md" type="backlog_story">
         Backlog Story contains technical notes identifying need for architectural decision.
+        May contain Open Questions marked [REQUIRES ADR].
+      </artifact>
+
+      <artifact path="/artifacts/spikes/[spike_id]_v[N].md" type="spike">
+        Spike contains investigation findings and recommendation from time-boxed technical investigation.
+        ADRs often document decisions informed by spike findings.
+        Spike provides evidence (benchmarks, prototypes, documentation) to support alternatives analysis.
       </artifact>
 
       <artifact path="[Implementation Research]" type="implementation_research">
@@ -60,13 +67,22 @@
   </task_context>
 
   <anti_hallucination_guidelines>
-    <guideline category="grounding">Base decision context on Backlog Story technical requirements. Base alternatives on Implementation Research §2 and §5.</guideline>
-    <guideline category="verification">For performance claims and benchmarks, reference Implementation Research §8. Cite specific sections.</guideline>
+    <guideline category="grounding">Base decision context on Backlog Story technical requirements. Base alternatives on Implementation Research §2 and §5. If Spike available, use spike findings for decision context and evidence.</guideline>
+    <guideline category="verification">For performance claims and benchmarks, reference Spike findings (if available) or Implementation Research §8. Cite specific sections. Use actual spike benchmark data when available.</guideline>
     <guideline category="scope">ADR documents decision and rationale. Do NOT provide detailed implementation—that belongs in Tech Specs.</guideline>
   </anti_hallucination_guidelines>
 
   <instructions>
-    <step priority="1"><action>Load Backlog Story or Technical Spike</action></step>
+    <step priority="1">
+      <action>Load Backlog Story and/or Spike (if available)</action>
+      <purpose>Understand decision context and gather evidence</purpose>
+      <anti_hallucination>
+        - If ADR triggered by Backlog Story [REQUIRES ADR] marker, load story from /artifacts/backlog_stories/[us_id]_v[N].md
+        - If Spike completed, load from /artifacts/spikes/[spike_id]_v[N].md for findings and recommendation
+        - Spike provides evidence (benchmarks, prototypes) to support alternatives analysis
+        - Extract decision context, alternatives considered, and evidence from spike findings
+      </anti_hallucination>
+    </step>
     <step priority="2"><action>Load Implementation Research</action></step>
     <step priority="3"><action>Load template from /prompts/templates/adr-template.xml</action></step>
     <step priority="4">
@@ -74,16 +90,22 @@
       <guidance>
         Determine where this decision need originated and establish traceability:
         - Was it deferred from PRD Open Questions? (Reference PRD ID and question)
-        - Was it identified during Backlog Story technical analysis? (Reference US ID)
-        - Is it addressing a technical spike result? (Reference spike outcome)
+        - Was it identified during Backlog Story technical analysis? (Reference US ID, Open Question)
+        - Is it addressing a spike result? (Reference SPIKE-XXX at /artifacts/spikes/[spike_id]_v[N].md)
         - Is it a prerequisite architectural decision for implementation?
 
         Document the source for traceability in the ADR Context section.
 
         **Example Context statements:**
         - "This decision addresses an open question from PRD-001: 'Should we use Redis or Memcached for session caching?'"
-        - "During analysis of US-001-003, the need for a distributed caching strategy was identified."
-        - "Technical spike SPIKE-042 evaluated caching solutions; this ADR documents the decision."
+        - "During analysis of US-001-003, the need for a distributed caching strategy was identified (Open Questions, Question 2)."
+        - "Spike SPIKE-042 evaluated caching solutions; this ADR documents the decision based on spike findings and recommendation."
+
+        **If spike informs ADR:**
+        - Reference spike findings in Context section
+        - Use spike benchmark data in Detailed Analysis section
+        - Incorporate spike recommendation as one of the considered options
+        - Link to spike artifact: "Based on findings from SPIKE-042 (/artifacts/spikes/SPIKE-042_v1.md)"
       </guidance>
     </step>
     <step priority="5"><action>Define Decision Drivers</action></step>

@@ -2,9 +2,11 @@
 <template>
   <metadata>
     <name>Product_Vision_Template</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <source>Generated based on industry best practices and Context Engineering framework</source>
     <sdlc_phase>Vision</sdlc_phase>
+    <last_updated>2025-10-11</last_updated>
+    <changes>v1.1: Added Strategic Uncertainties subsection under Constraints & Assumptions to capture vision-level strategic uncertainties requiring market validation or executive alignment (minimal enhancement - Option A)</changes>
   </metadata>
 
   <instructions>
@@ -102,6 +104,26 @@
 ### Assumptions
 - [Assumption 1: e.g., user behavior, market conditions]
 - [Assumption 2]
+
+### Strategic Uncertainties
+**Vision-level strategic uncertainties requiring validation or stakeholder alignment.**
+
+**Note:** Product Vision is typically created after thorough Business Research. If significant uncertainties remain, consider whether Business Research needs additional validation or whether these questions belong in Initiative/Epic phases.
+
+**Appropriate for Vision-level (if needed):**
+- Market validation questions requiring further research
+- Strategic positioning questions requiring executive alignment
+- Organizational readiness questions
+
+**Examples:**
+- "Is there sufficient market demand to justify 2-year investment?" [REQUIRES MARKET VALIDATION]
+- "Does this vision align with company's 5-year strategic plan?" [REQUIRES EXECUTIVE ALIGNMENT]
+- "Is there organizational appetite for this level of innovation?" [REQUIRES LEADERSHIP INPUT]
+
+**If no strategic uncertainties, state:** "No strategic uncertainties. Vision is grounded in comprehensive Business Research and validated with stakeholders."
+
+- [Strategic uncertainty 1 with marker - if applicable]
+- [Strategic uncertainty 2 with marker - if applicable]
 
 ## Out of Scope
 [What this product explicitly will NOT do - important for focus]
