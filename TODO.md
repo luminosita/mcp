@@ -130,107 +130,11 @@ Execute Product Vision Generator in standalone context to produce first iteratio
 
 ---
 
-### TASK-005: Critique Product Vision v1
-**Priority**: High
-**Dependencies**: TASK-004
-**Estimated Time**: 15 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Human review of Product Vision v1 with structured critique focusing on completeness, clarity, actionability, traceability.
-
-**Success Criteria**:
-- [ ] Critique document created
-- [ ] Covers all 4 quality dimensions
-- [ ] Identifies specific improvement areas
-- [ ] Rates severity (minor/major/critical)
-- [ ] Provides actionable suggestions
-
-**Output Artifacts**:
-- `/feedback/product_vision_v1_critique.md`
-
----
-
-### TASK-006: Refine Product Vision Generator & Execute v2
-**Priority**: Critical
-**Dependencies**: TASK-005
-**Estimated Time**: 30 minutes
-**Status**: ⏳ Pending
-**Context**: Can reuse C1 or start new session
-
-**Description**:
-Apply Self-Refine pattern to update generator based on critique, then re-execute.
-
-**Command**: `/refine product_vision_generator`
-
-**Context Requirements**:
-- All from TASK-004
-- `/feedback/product_vision_v1_critique.md`
-
-**Success Criteria**:
-- [ ] Generator prompt updated with improvements
-- [ ] Changes address critique points
-- [ ] Version incremented (1.0 → 1.1)
-- [ ] Vision v2 shows measurable improvement
-
-**Output Artifacts**:
-- `/prompts/product_vision_generator_v2.xml` (updated)
-- `/artifacts/product_vision_v2.md`
-
----
-
-### TASK-007: Critique Product Vision v2
-**Priority**: High
-**Dependencies**: TASK-006
-**Estimated Time**: 15 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Second human review focusing on whether v1 critiques were addressed and identifying remaining gaps.
-
-**Success Criteria**:
-- [ ] Critique document created
-- [ ] Compares v1 vs v2 improvements
-- [ ] Identifies remaining issues
-- [ ] Notes patterns for strategy doc update
-
-**Output Artifacts**:
-- `/feedback/product_vision_v2_critique.md`
-
----
-
-### TASK-007a: Final Refinement & Execute v3 + Update Strategy
-**Priority**: Critical
-**Dependencies**: TASK-007
-**Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
-**Context**: Can reuse C1 or start new session
-
-**Description**:
-Apply final refinements, execute generator for v3, and **HUMAN manually updates** strategy document with lessons learned.
-
-**Command**: `/refine product_vision_generator`
-
-**Context Requirements**:
-- All from TASK-006
-- `/feedback/product_vision_v2_critique.md`
-
-**Success Criteria**:
-- [ ] Generator prompt finalized (version 1.2)
-- [ ] Vision v3 meets all validation criteria
-- [ ] Human approval obtained for v3
-
-**Output Artifacts**:
-- `/prompts/product_vision_generator_v3.xml` (final)
-- `/artifacts/product_vision_v3.md` (approved)
-
----
-
 ## Phase 1.2: Cascade to Initiative Generation
 
 ### TASK-008: Execute Initiative Generator v1
 **Priority**: Critical
-**Dependencies**: TASK-007a (Product Vision v3 approved) - **Currently executed with v1 at risk**
+**Dependencies**: None
 **Estimated Time**: 20 minutes
 **Status**: ✅ Completed
 **Context**: New session C2 required
@@ -261,7 +165,7 @@ Execute Initiative Generator in standalone context to decompose Product Vision i
 
 ### TASK-009: Execute Epic Generator v1
 **Priority**: Critical
-**Dependencies**: TASK-007a (Product Vision v3 approved) - **Currently executed with v1 at risk**
+**Dependencies**: None
 **Estimated Time**: 20 minutes
 **Status**: ✅ Completed
 **Context**: New session C3 required
@@ -289,54 +193,6 @@ Execute Epic Generator in standalone context to decompose Product Vision into Ep
 - All epics have complete scope, success metrics, user stories, acceptance criteria
 - Epic dependencies mapped (EPIC-003 blocks EPIC-001, EPIC-002)
 - Ready for human critique and PRD generation
-
----
-
-### TASK-010: Critique Epics v1 & Refine to v2
-**Priority**: High
-**Dependencies**: TASK-009
-**Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Human review of Epic documents, create critique, refine and execute v2.
-
-**Success Criteria**:
-- [ ] Critique document created
-- [ ] Validates epic decomposition logic
-- [ ] Checks for gaps/overlaps
-- [ ] Assesses priority ordering
-- [ ] Reviews PRD generator quality
-- [ ] Generator refined and v2 generated
-
-**Output Artifacts**:
-- `/feedback/epics_v1_critique.md`
-- `/prompts/epic_generator.xml` (updated)
-- `/artifacts/epics/epic_001_v2.md` through `epic_00N_v2.md`
-- `/prompts/prd_generator.xml` (updated)
-
----
-
-### TASK-011: Critique Epics v2 & Final Refinement
-**Priority**: High
-**Dependencies**: TASK-010
-**Estimated Time**: 30 minutes
-**Status**: ⏳ Pending
-
-**Description**:
-Final critique and refinement cycle for Epic Generator, **HUMAN manually updates** strategy document.
-
-**Success Criteria**:
-- [ ] Critique document created
-- [ ] Epic v3 approved
-- [ ] **HUMAN**: Strategy doc manually updated with Epic-specific patterns
-- [ ] PRD generator ready for next phase
-
-**Output Artifacts**:
-- `/feedback/epics_v2_critique.md`
-- `/artifacts/epics/epic_001_v3.md` through `epic_00N_v3.md` (approved)
-- `/prompts/prd_generator.xml` (final)
-- `/docs/context_engineering_strategy_v1.md` (manually updated by human)
 
 ---
 

@@ -119,10 +119,16 @@ Update artifact template XML:
 - Existing validations (don't remove, only add)
 
 ### Step 7: Re-Execute Generator
-Run the refined generator (/generate command):
+Evaluate refinements impact on the generated artifact, present the artifact refinement report to human and ASK human to decide to simply apply refinements to the artifact directly, or to regenerate the entire artifact
+
+If human decides to simply apply refinements, proceed to apply refinements, ignore the steps to regenerate artifact:
+1. Save new version artifact: `{artifact}_v{N+1}.md`
+
+If human decides to regenerate, only then run the refined generator (/generate command):
 1. Load updated generator + all required context
-2. Execute generation
-3. Save new version artifact: `{artifact}_v{N+1}.md`
+2. Load updated artifact template
+3. Execute generation
+4. Save new version artifact: `{artifact}_v{N+1}.md`
 
 ### Step 8: Compare Versions
 Generate comparison report:
