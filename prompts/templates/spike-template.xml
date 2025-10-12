@@ -227,6 +227,23 @@ If investigation is not complete within time box, stop and document findings wit
 **Spike Completed By:** [Name]
 **Reviewed By:** [Tech Lead Name]
 **Date Reviewed:** [YYYY-MM-DD]
+
+## Traceability Validation Checklist
+
+**Upstream Traceability:**
+- [ ] "Parent" field populated with valid Story ID (US-XXX) or Spec ID (SPEC-XXX)
+- [ ] Parent document has open question marked [REQUIRES SPIKE]
+- [ ] Investigation goal directly addresses the marked open question
+- [ ] Parent document is in appropriate status for spike work
+
+**Consistency Checks:**
+- [ ] Status value follows standardized format: Planned/In Progress/Completed
+- [ ] Spike ID follows standard format: SPIKE-XXX
+- [ ] Time box is 1-3 days maximum
+- [ ] All placeholder fields [brackets] have been filled in
+- [ ] Findings include data/evidence (not speculation)
+- [ ] Clear recommendation provided based on findings
+- [ ] Next steps identify which artifacts need updates (ADR, Tech Spec, parent story)
     ]]>
   </structure>
 

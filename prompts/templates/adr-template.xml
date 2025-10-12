@@ -112,6 +112,26 @@ What is the issue we're addressing?
 ## References
 - [Link to technical documentation]
 - [Link to benchmarks]
+
+## Traceability Validation Checklist
+
+**Upstream Traceability:**
+- [ ] "Parent Story ID" field populated with valid Story ID (US-XXX)
+- [ ] Parent story document is in appropriate status
+- [ ] "Informed By Spike" field populated if spike provided evidence
+- [ ] If spike referenced, spike document is in "Completed" status
+- [ ] "Informed By Implementation Research" field populated with valid document link
+- [ ] Implementation Research document is in "Finalized" status
+- [ ] All Implementation Research section references (§X.Y format) are valid
+- [ ] Research & Investigation Context section explains decision driver
+
+**Consistency Checks:**
+- [ ] Status value follows standardized format: Proposed/Accepted/Active/Deprecated/Superseded
+- [ ] ADR ID follows standard format: ADR-XXX
+- [ ] All placeholder fields [brackets] have been filled in
+- [ ] At least 2 options considered with pros/cons analysis
+- [ ] Decision rationale clearly explains why chosen option is preferred
+- [ ] Both positive and negative consequences documented
     ]]>
   </structure>
 

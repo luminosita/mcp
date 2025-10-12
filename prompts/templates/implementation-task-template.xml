@@ -289,6 +289,25 @@
 **Created Date:** [Date]
 **Completed Date:** [To be filled]
 **Actual Hours:** [To be filled]
+
+## Traceability Validation Checklist
+
+**Upstream Traceability:**
+- [ ] "Parent Story ID" field populated with valid Story ID (US-XXX)
+- [ ] Parent story document exists and is in appropriate status
+- [ ] Implementation Research referenced if applicable
+- [ ] If Implementation Research referenced, document is in "Finalized" status
+- [ ] All research section references (§X.Y format) are valid
+- [ ] Task aligns with parent story's technical requirements
+
+**Consistency Checks:**
+- [ ] Status value follows standardized format: To Do/In Progress/In Review/Done
+- [ ] Task ID follows standard format: TASK-XXX
+- [ ] All placeholder fields [brackets] have been filled in
+- [ ] Domain field specified (Frontend/Backend/API/Database/Testing/DevOps)
+- [ ] Estimated hours provided (1-16 hours maximum)
+- [ ] Acceptance criteria are specific and testable
+- [ ] Related Links section populated with parent story and relevant documents
     ]]>
   </structure>
 
