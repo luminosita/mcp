@@ -120,11 +120,9 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
       prds/
          prd_{id}/
             prd_v{1-3}.md
-            TODO.md                        # High-level story tracking
       backlog_stories/
          US-{prd_id}-{story_id}_{feature_name}/
             backlog_story_v{1-3}.md
-            TODO.md                        # Implementation task tracking
       specs/
       code/
       tests/
