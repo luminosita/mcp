@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>High_Level_User_Story_Template</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>High-Level User Story</sdlc_phase>
     <alias>Capability Story, Parent Story, Feature (in Strategy 1)</alias>
-    <last_updated>2025-10-11</last_updated>
-    <changes>v1.1: Enhanced Open Questions section with comprehensive guidance on user/UX/functional questions, clear boundaries with other phases, and examples</changes>
+    <last_updated>2025-10-12</last_updated>
+    <changes>v1.2: Phase 1 Metadata Refinement - Added Parent PRD field, PRD Section field, Functional Requirements field for FR mapping, and Parent Artifact Context section for traceability</changes>
   </metadata>
 
   <instructions>
@@ -30,9 +30,27 @@
 - **Status:** [Draft/Ready/In Progress/Completed]
 - **Priority:** [Critical/High/Medium/Low]
 - **Parent Epic:** [EPIC-XXX]
-- **Parent Feature:** [Feature name, if applicable]
+- **Parent PRD:** [PRD-XXX]
+- **PRD Section:** [Section X.Y - specific section this story addresses]
+- **Functional Requirements:** [FR-01, FR-02, FR-03]
 - **Owner:** [Product Owner Name]
 - **Target Release:** [Q1 2025 / Sprint 15-17]
+
+## Parent Artifact Context
+
+**Parent Epic:** [EPIC-XXX: Epic Title]
+- **Link:** [URL to Epic document v3]
+- **Epic Contribution:** [How this story contributes to epic completion]
+
+**Parent PRD:** [PRD-XXX: PRD Title]
+- **Link:** [URL to PRD document v3]
+- **PRD Section:** [Section X.Y that defines this story]
+- **Functional Requirements Coverage:**
+  - **FR-01:** [Requirement description from PRD]
+  - **FR-02:** [Requirement description from PRD]
+  - **FR-03:** [Requirement description from PRD]
+
+**User Persona Source:** [Business Research Appendix A - Persona Name]
 
 ## User Story Statement
 

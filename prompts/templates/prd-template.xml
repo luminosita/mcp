@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>Product_Requirements_Document_Template</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
     <sdlc_phase>PRD</sdlc_phase>
     <note>PRDs use numbering scheme: PRD-XXX (e.g., PRD-003). File naming: prd_XXX_feature_name_vN.md (e.g., prd_003_jwt_authentication_v3.md)</note>
-    <last_updated>2025-10-11</last_updated>
-    <changes>v1.2: Enhanced Open Questions section with guidance on bridge artifact nature (business + strategic technical questions, implementation details deferred to ADR/Tech Spec)</changes>
+    <last_updated>2025-10-12</last_updated>
+    <changes>v1.3: Phase 1 Metadata Refinement - Added Parent Epic field, optional Informed By Business Research and Implementation Research fields, Parent Artifact Context section, and Research References section for upstream traceability (downstream tracking deferred to backlog software)</changes>
   </metadata>
 
   <instructions>
@@ -30,6 +30,38 @@
 - **Date:** [date]
 - **Version:** [version]
 - **Status:** [Draft/Review/Approved]
+- **Parent Epic:** EPIC-[XXX]
+- **Informed By Business Research:** [Link - optional for market context]
+- **Informed By Implementation Research:** [Link - optional for technical feasibility]
+
+## Parent Artifact Context
+
+**Parent Epic:** [EPIC-XXX: Epic Title]
+- **Link:** [URL to Epic document v3]
+- **Epic Scope Coverage:** [Which portion of the epic this PRD addresses]
+- **Epic Acceptance Criteria Mapping:** [Which epic-level criteria this PRD satisfies]
+
+## Research References
+
+### Business Research (Optional - When Market Context Needed)
+**Document:** [Link to Business Research report]
+
+**Applied Insights:**
+- **§[X.Y]: [Section Title]:** [Insight relevant to PRD requirements]
+- **§[X.Y]: [Section Title]:** [Market data supporting business case]
+
+*Use when PRD requires market validation, competitive positioning, or business model context.*
+
+### Implementation Research (Optional - When Technical Feasibility Needed)
+**Document:** [Link to Implementation Research report]
+
+**Applied Insights:**
+- **§[X.Y]: [Section Title]:** [Technical feasibility insight]
+- **§[X.Y]: [Section Title]:** [Architecture pattern or constraint]
+
+*Use when PRD includes NFRs, technical constraints, or architecture considerations requiring research validation.*
+
+**Note:** PRD is a bridge artifact. Business Research is typically consumed at Epic level, and Implementation Research at Backlog Story level. Only reference research here when needed to inform requirements definition.
 
 ## Executive Summary
 [2-3 paragraph overview: problem, solution, impact]
@@ -142,6 +174,11 @@
 
 - [Question 1 - mark as [BUSINESS] or [TECHNICAL]]
 - [Question 2 - mark as [BUSINESS] or [TECHNICAL]]
+
+## Related Documents
+- **Parent Epic:** [EPIC-XXX Link]
+- **Business Research:** [Link - if referenced]
+- **Implementation Research:** [Link - if referenced]
 
 ## Appendix
 [Additional context, research data]

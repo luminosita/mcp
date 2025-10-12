@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Initiative_Template</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>Initiative</sdlc_phase>
-    <last_updated>2025-10-11</last_updated>
-    <changes>v1.1: Enhanced Open Questions section with comprehensive guidance on strategic/resource questions, question type markers (REQUIRES EXECUTIVE DECISION, REQUIRES PORTFOLIO PLANNING, etc.), and clear examples distinguishing initiative questions from other phase questions</changes>
+    <last_updated>2025-10-12</last_updated>
+    <changes>v1.2: Phase 1 Metadata Refinement - Added Parent Product Vision field, Informed By Business Research field, Vision Alignment section, and Business Research References section for traceability</changes>
   </metadata>
 
   <instructions>
@@ -31,7 +31,9 @@
 - **Business Unit:** [Product/Engineering/Sales/etc.]
 - **Time Horizon:** [Q1-Q3 2025]
 - **Budget:** $[Amount]
+- **Parent Product Vision:** VIS-[XXX]
 - **Related Strategy Doc:** [Link to portfolio/business strategy]
+- **Informed By Business Research:** [Link to Business Research document]
 
 ## Strategic Objective
 
@@ -71,6 +73,24 @@
 - **Customers:** [How customers benefit]
 - **Business:** [Revenue, cost, efficiency impact]
 - **Teams:** [Internal capability improvements]
+
+## Vision Alignment
+
+**Parent Product Vision:** [VIS-XXX: Vision Title]
+- **Link:** [URL to Product Vision document v3]
+- **Vision Alignment:** [How this initiative directly implements the vision]
+
+## Business Research References
+
+**Primary Research Document:** [Link to Business Research report]
+
+**Strategic Insights Applied:**
+- **Market Opportunity (§2.1):** [Specific market segment or opportunity]
+- **Competitive Positioning (§5.1):** [How this initiative supports positioning]
+- **Roadmap Phase (§5.5):** [Which roadmap phase this initiative maps to]
+
+**Business Justification:**
+[Reference specific business research findings that justify investment in this initiative]
 
 ## Scope & Approach
 

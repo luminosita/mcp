@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Epic_Template</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <source>Generated based on industry best practices and Context Engineering framework</source>
     <sdlc_phase>Epic</sdlc_phase>
-    <last_updated>2025-10-11</last_updated>
-    <changes>v1.2: Enhanced Open Questions section to exclude technical questions AND product/technical trade-offs (defer both to PRD phase where PM + Tech Lead collaborate)</changes>
+    <last_updated>2025-10-12</last_updated>
+    <changes>v1.3: Phase 1 Metadata Refinement - Renamed Product Vision to Parent Product Vision, added Parent Initiative field, added Informed By Business Research field, added Parent Artifact Context section, and Business Research References section for upstream traceability (downstream tracking deferred to backlog software)</changes>
   </metadata>
 
   <instructions>
@@ -27,12 +27,24 @@
 - **Epic ID:** EPIC-[XXX]
 - **Status:** [Draft/Planned/In Progress/Completed]
 - **Priority:** [Critical/High/Medium/Low]
-- **Product Vision:** [Link to product vision document]
+- **Parent Product Vision:** VIS-[XXX]
+- **Parent Initiative:** INIT-[XXX] (if part of initiative)
 - **Owner:** [Name]
 - **Target Release:** [Q1 2025]
+- **Informed By Business Research:** [Link to Business Research document]
 
 ## Epic Statement
 As [user persona], I need [capability] so that [business value].
+
+## Parent Artifact Context
+
+**Parent Product Vision:** [VIS-XXX: Vision Title]
+- **Link:** [URL to Product Vision document v3]
+- **Vision Capability:** [Which key capability from vision this epic implements]
+
+**Parent Initiative:** [INIT-XXX: Initiative Title] (if applicable)
+- **Link:** [URL to Initiative document]
+- **Initiative Contribution:** [How this epic contributes to initiative OKRs]
 
 ## Business Value
 [Clear articulation of why this epic matters]
@@ -47,6 +59,18 @@ As [user persona], I need [capability] so that [business value].
 
 ## Problem Being Solved
 [Specific problem this epic addresses from product vision]
+
+## Business Research References
+
+**Primary Research Document:** [Link to Business Research report]
+
+**Market Insights Applied:**
+- **Gap Analysis (§3.1):** [Specific gap this epic addresses]
+- **Capability Recommendation (§4.1):** [Which recommended capability this implements]
+- **User Persona (§Appendix A):** [Target persona from research]
+
+**Competitive Context:**
+[Reference competitive analysis from business research that justifies this epic's approach]
 
 ## Scope
 
@@ -165,10 +189,12 @@ As [user persona], I need [capability] so that [business value].
 - [Business Question 2]
 
 ## Related Documents
-- Product Vision: [Link]
-- Related ADRs: [Links]
-- Technical Specs: [Links]
-- User Research: [Links]
+- **Parent Product Vision:** [VIS-XXX Link]
+- **Parent Initiative:** [INIT-XXX Link] (if applicable)
+- **Business Research:** [Link with specific sections referenced]
+- **Related ADRs:** [Links]
+- **Technical Specs:** [Links]
+- **User Research:** [Links]
     ]]>
   </structure>
 
