@@ -4,12 +4,13 @@
 - [X] Move researches to artifacts/researches and update references
 - [X] Rename product_vision_v1.md to proper naming format, move it to product_visions, and update references
 - [X] File/folder structures for artifacts
-- [ ] Revise sub TODO.md (tracking)
-    - [ ] Verify the references of those TODO.md files
-    - [ ] Drop sub TODO.md files
+- [X] Revise sub TODO.md (tracking)
+    - [X] Verify the references of those TODO.md files
+    - [X] Drop sub TODO.md files
 
 ## Validation
 - [ ] Move tracebility generator validation checks to a proper section
+    - [ ] Review generators for paths in tracebility sections
 - [ ] Generator output file paths
 - [ ] Read all generated epics
 - [ ] Read all restructured research docs (business and implementation)
