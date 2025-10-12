@@ -17,11 +17,11 @@
 
   <structure format="markdown">
     <![CDATA[
-# ADR-[NUMBER]: [Decision Title]
+# ADR-[XXX]: [Decision Title]
 
 ## Metadata
 - **Date:** [YYYY-MM-DD]
-- **Status:** [Proposed | Accepted | Deprecated | Superseded]
+- **Status:** [Proposed | Accepted | Active | Deprecated | Superseded]
 - **Deciders:** [Names]
 - **Parent Story ID:** US-[XXX]
 - **Informed By Spike:** SPIKE-[XXX] (if spike provided evidence)

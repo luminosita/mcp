@@ -26,9 +26,10 @@
 # User Story: [Backlog User Story Title]
 
 ## Metadata
-- **Story ID:** US-[xxx]
+- **Story ID:** US-[XXX]
 - **Title:** [Enhanced ticket title]
 - **Type:** Feature
+- **Status:** [Backlog/Ready/In Progress/In Review/Done]
 - **Priority:** [High/Medium/Low with brief justification]
 
 ## User Story

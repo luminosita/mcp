@@ -27,7 +27,7 @@
 
 ## Metadata
 - **Task ID:** TASK-[XXX]
-- **Story ID:** US-[XXX]
+- **Parent Story ID:** US-[XXX]
 - **Status:** [To Do/In Progress/In Review/Done]
 - **Priority:** [Critical/High/Medium/Low]
 - **Assigned To:** [Developer Name]
@@ -298,7 +298,7 @@
 
       ## Metadata
       - **Task ID:** TASK-042
-      - **Parent Story:** US-015: Enable Google Sign-Up
+      - **Parent Story ID:** US-015
       - **Status:** In Progress
       - **Assigned To:** Jane Doe
       - **Sprint:** Sprint 12
