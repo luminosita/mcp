@@ -16,7 +16,6 @@
     <guideline>Success metrics must be SMART (Specific, Measurable, Achievable, Relevant, Time-bound)</guideline>
     <guideline>Problem statement must include quantified pain points with data</guideline>
     <guideline>All acceptance criteria must be testable</guideline>
-    <guideline>High-level user stories in functional requirements will be tracked in separate TODO.md file in PRD subfolder</guideline>
     <guideline>Each high-level user story should reference specific functional requirements (FR-XX)</guideline>
   </instructions>
 

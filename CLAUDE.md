@@ -15,8 +15,8 @@
          refine.md         # Iteration orchestrator
 
    docs/
-      context_engineering_strategy_v{N}.md           # Comprehensive methodology
       sdlc_artifacts_comprehensive_guideline.md       # SDLC artifacts guideline               
+      refinements/                                    # Refinement plans
    prompts/
       templates/                                # XML-formatted templates
          {artifact-type}-template_v{N}.md       # SDLC artifacts templates 
@@ -58,7 +58,6 @@
 - Max 3 levels deep (prevents navigation complexity)
 - Versioned outputs (v1, v2, v3) prevent overwriting during iterations
 - Feedback folder supports human-in-loop refinement
-- TODO.md files track progress without modifying frozen artifacts
 
 ---
 

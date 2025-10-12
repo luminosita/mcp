@@ -17,7 +17,6 @@
     <guideline>List functional requirements covered from parent PRD</guideline>
     <guideline>Define non-functional requirements (performance, security, scalability, etc.)</guideline>
     <guideline>List technical requirements covering frontend, backend, database changes</guideline>
-    <guideline>Implementation tasks will be tracked in separate TODO.md file in story subfolder</guideline>
     <guideline>Ensure all acceptance criteria are testable</guideline>
   </instructions>
 
@@ -61,8 +60,6 @@ As [role], I want [feature], so that [benefit].
 **Performance Considerations:**
 - **§[X.Y]: [Performance Pattern]:** [Target metrics and approach]
 
-*Implementation tasks (in TODO.md) should reference specific research sections for detailed guidance.*
-
 ## Functional Requirements
 - [User-facing feature 1]
 - [User-facing feature 2]
@@ -81,8 +78,6 @@ As [role], I want [feature], so that [benefit].
 - [Backend task 1]
 - [Database change 1]
 - [Additional technical considerations]
-
-**Note:** Detailed implementation tasks with estimates, dependencies, and status tracking are maintained in `TODO.md` file in this story's subfolder.
 
 ## Acceptance Criteria
 
