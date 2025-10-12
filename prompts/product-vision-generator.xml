@@ -43,7 +43,7 @@
     </background>
 
     <input_artifacts>
-      <artifact path="[Business Research]" type="business_research">
+      <artifact required="true" type="business_research">
         Business Research provides:
         - §1: Problem Space Analysis (user pain points, market impact)
         - §2: Market &amp; Competitive Landscape (competitors, business models, value propositions)
@@ -187,19 +187,47 @@
 
     <step priority="13">
       <action>Generate Product Vision document</action>
-      <output_path>/artifacts/product_vision_v1.md</output_path>
       <format>Markdown following product-vision-template.xml structure</format>
+      <guidance>
+        - Follow complete template structure
+        - Ensure Vision ID is assigned (VIS-XXX format)
+        - Include "Informed By Business Research" field with document link
+        - Add Business Research References section with § citations
+        - Do NOT include validation checklist in artifact (checklist is for generator validation only)
+      </guidance>
     </step>
 
     <step priority="14">
-      <action>Validate output against checklist</action>
+      <action>Internal validation using traceability checklist</action>
+      <guidance>
+        IMPORTANT: This checklist is for generator internal validation only. DO NOT include this checklist in the generated artifact.
+
+        Verify the generated artifact meets these requirements:
+
+        Upstream Traceability:
+          * "Informed By Business Research" field populated with valid document link
+          * Business Research document is in "Finalized" status
+          * All Business Research section references (§X.Y format) are valid
+          * Key insights from research are clearly applied to vision
+
+        Consistency Checks:
+          * Status value follows standardized format: Draft/In Review/Approved
+          * Vision ID follows standard format: VIS-XXX
+          * All placeholder fields [brackets] have been filled in
+          * Success metrics are SMART (Specific, Measurable, Achievable, Relevant, Time-bound)
+
+        If any item fails validation, regenerate the artifact to fix the issue.
+      </guidance>
+    </step>
+
+    <step priority="15">
+      <action>Final validation against template</action>
       <reference>See validation_checklist below</reference>
     </step>
   </instructions>
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/product_vision_v1.md</path>
       <format>Markdown following product-vision-template.xml structure</format>
       <validation_checklist>
         <criterion>Problem statement extracted from Business Research §1 with at least 3 quantified pain points</criterion>

@@ -42,17 +42,17 @@
     </background>
 
     <input_artifacts>
-      <artifact path="/artifacts/backlog_stories/[us_id]_v[N].md" type="backlog_story">
+      <artifact required="true" type="backlog_story">
         Backlog Story contains Open Questions section with questions marked [REQUIRES SPIKE].
         Extract the specific question to investigate and context from technical notes.
       </artifact>
 
-      <artifact path="/artifacts/tech_specs/[spec_id]_v[N].md" type="tech_spec">
+      <artifact required="true" type="tech_spec">
         Tech Spec may contain Open Questions requiring spike investigation.
         Extract the specific question and technical context.
       </artifact>
 
-      <artifact path="[Implementation Research - optional]" type="implementation_research">
+      <artifact required="false" type="implementation_research">
         Implementation Research provides (OPTIONAL):
         - §2: Technology Landscape Analysis (competitor approaches)
         - §4: Implementation Patterns (recommended approaches)
@@ -164,7 +164,6 @@
 
     <step priority="10">
       <action>Generate spike document</action>
-      <output_path>/artifacts/spikes/[spike_id]_v1.md</output_path>
       <format>Markdown following spike-template.xml structure</format>
     </step>
 
@@ -176,7 +175,6 @@
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/spikes/[spike_id]_v1.md</path>
       <format>Markdown following spike-template.xml structure</format>
       <validation_checklist>
         <criterion>Spike question clearly stated and traced to parent artifact</criterion>

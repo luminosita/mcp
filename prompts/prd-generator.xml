@@ -39,7 +39,7 @@
     </background>
 
     <input_artifacts>
-      <artifact path="/artifacts/epics/[epic_id]_v[N].md" type="epic">
+      <artifact required="true" type="epic">
         Epic contains:
         - Epic statement and business value
         - Problem being solved
@@ -51,7 +51,7 @@
         Use as strategic foundation for PRD.
       </artifact>
 
-      <artifact path="[Business Research]" type="business_research">
+      <artifact required="true" type="business_research">
         Business Research provides (BUSINESS PERSPECTIVE):
         - Market analysis and competitive landscape
         - User pain points and needs (quantified)
@@ -63,7 +63,7 @@
         Use for functional requirements, business context, user workflows, business-level NFRs.
       </artifact>
 
-      <artifact path="[Implementation Research]" type="implementation_research">
+      <artifact required="true" type="implementation_research">
         Implementation Research provides (TECHNICAL PERSPECTIVE):
         - Technology stack analysis
         - Architecture patterns
@@ -264,19 +264,55 @@
 
     <step priority="16">
       <action>Generate PRD document</action>
-      <output_path>/artifacts/prds/[prd_id]/prd_v1.md</output_path>
       <format>Markdown following prd-template.xml structure</format>
+      <guidance>
+        - Follow complete template structure
+        - Ensure PRD ID is assigned (PRD-XXX format)
+        - Include "Parent Epic" field with Epic ID (EPIC-XXX)
+        - Include "Informed By Business Research" field (optional - when market context needed)
+        - Include "Informed By Implementation Research" field (optional - when technical feasibility needed)
+        - Add Parent Artifact Context section explaining PRD's coverage of epic scope
+        - Add Research References section (Business and/or Implementation) if referenced
+        - Do NOT include validation checklist in artifact (checklist is for generator validation only)
+      </guidance>
     </step>
 
     <step priority="17">
-      <action>Validate output against checklist</action>
+      <action>Internal validation using traceability checklist</action>
+      <guidance>
+        IMPORTANT: This checklist is for generator internal validation only. DO NOT include this checklist in the generated artifact.
+
+        Verify the generated artifact meets these requirements:
+
+        Upstream Traceability:
+          * "Parent Epic" field populated with valid Epic ID (EPIC-XXX)
+          * Parent Epic document is in "Approved" or "Planned" status
+          * Parent Artifact Context section explains PRD's coverage of epic scope
+          * Research fields populated when PRD requires market or technical context
+          * If Business Research referenced, document is in "Finalized" status
+          * If Implementation Research referenced, document is in "Finalized" status
+          * All research section references (§X.Y format) are valid
+
+        Consistency Checks:
+          * Status value follows standardized format: Draft/In Review/Approved
+          * PRD ID follows standard format: PRD-XXX
+          * All placeholder fields [brackets] have been filled in
+          * All functional requirements have unique FR-XX identifiers
+          * Success metrics are measurable and time-bound
+          * Acceptance criteria are testable
+
+        If any item fails validation, regenerate the artifact to fix the issue.
+      </guidance>
+    </step>
+
+    <step priority="18">
+      <action>Final validation against template and checklist</action>
       <reference>See validation_checklist below</reference>
     </step>
   </instructions>
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/prds/[prd_id]/prd_v1.md</path>
       <format>Markdown following prd-template.xml structure</format>
       <validation_checklist>
         <criterion>Objective and vision clearly articulated</criterion>

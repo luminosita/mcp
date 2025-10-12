@@ -120,10 +120,10 @@ Execute Product Vision Generator in standalone context to produce first iteratio
 **Command**: `/generate TASK-004`
 
 **Input artifacts**:
-- Business Research - `docs/research/mcp/AI_Agent_MCP_Server_business_research.md`
+- Business Research - `artifacts/research/AI_Agent_MCP_Server_business_research.md`
 
 **Completion Notes**:
-- Product Vision v1 generated: `/artifacts/product_vision_v1.md`
+- Product Vision v1 generated: `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 - All template sections populated with content extracted from business research
 - Traceability maintained with §X section references throughout
 - Business-focused (WHAT/WHY), implementation-agnostic per guidelines
@@ -151,8 +151,8 @@ Execute Initiative Generator in standalone context to decompose Product Vision i
 
 **Input Artifacts:**
 - Primary: `/artifacts/product_vision_v3.md` (approved) - **Production requirement**
-- Primary (Current): `/artifacts/product_vision_v1.md` (Draft) - **Used for PoC**
-- Secondary (optional): `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md`
+- Primary (Current): `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md` (Draft) - **Used for PoC**
+- Secondary (optional): `/artifacts/research/AI_Agent_MCP_Server_business_research.md`
 
 **Completion Notes:**
 - Initiative INIT-001 generated: `/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v1.md`
@@ -183,8 +183,8 @@ Execute Epic Generator in standalone context to decompose Product Vision into Ep
 
 **Input Artifacts:**
 - Primary: `/artifacts/product_vision_v3.md` (approved) - **Production requirement**
-- Primary (Current): `/artifacts/product_vision_v1.md` (Draft) - **Used for PoC**
-- Secondary (optional): `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md`
+- Primary (Current): `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md` (Draft) - **Used for PoC**
+- Secondary (optional): `/artifacts/research/AI_Agent_MCP_Server_business_research.md`
 
 **Completion Notes:**
 - 5 epics generated from Product Vision key capabilities

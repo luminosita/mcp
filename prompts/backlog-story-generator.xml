@@ -40,7 +40,7 @@
     </background>
 
     <input_artifacts>
-      <artifact path="/artifacts/high_level_stories/[hls_id]_v[N].md" type="high_level_story">
+      <artifact required="true" type="high_level_story">
         High-Level Story contains:
         - User story statement and user context
         - Primary user flow and acceptance criteria
@@ -50,7 +50,7 @@
         Select one backlog story from decomposition plan to develop in detail.
       </artifact>
 
-      <artifact path="[Implementation Research]" type="implementation_research">
+      <artifact required="true" type="implementation_research">
         Implementation Research provides (TECHNICAL PERSPECTIVE):
         - Architecture patterns and technology stack
         - Implementation capabilities with code examples (§4)
@@ -61,7 +61,7 @@
         Use for technical guidance, pattern references, and implementation best practices.
       </artifact>
 
-      <artifact path="[PRD - Optional]" type="prd">
+      <artifact required="false" type="prd">
         PRD provides (if needed for context):
         - Detailed functional requirements
         - Technical NFRs
@@ -249,19 +249,56 @@
 
     <step priority="15">
       <action>Generate backlog story document</action>
-      <output_path>/artifacts/backlog_stories/[us_id]_v1.md</output_path>
       <format>Markdown following backlog-story-template.xml structure</format>
+      <guidance>
+        - Follow complete template structure
+        - Ensure Story ID is assigned (US-XXX format)
+        - Include "Parent PRD" field with PRD ID (PRD-XXX)
+        - Include "Parent High-Level Story" field (HLS-XX or standalone)
+        - Include "Functional Requirements Covered" field listing FR-XX from PRD
+        - Include "Informed By Implementation Research" field with document link
+        - Add Implementation Research References section with § citations
+        - Do NOT include validation checklist in artifact (checklist is for generator validation only)
+      </guidance>
     </step>
 
     <step priority="16">
-      <action>Validate output against checklist</action>
+      <action>Internal validation using traceability checklist</action>
+      <guidance>
+        IMPORTANT: This checklist is for generator internal validation only. DO NOT include this checklist in the generated artifact.
+
+        Verify the generated artifact meets these requirements:
+
+        Upstream Traceability:
+          * "Parent PRD" field populated with valid PRD ID (PRD-XXX)
+          * "Parent High-Level Story" field populated (HLS-XX or standalone)
+          * "Functional Requirements Covered" lists all FR-XX from PRD
+          * "Informed By Implementation Research" field populated with valid document link
+          * Parent PRD document is in "Approved" status
+          * Implementation Research document is in "Finalized" status
+          * All Implementation Research section references (§X.Y format) are valid
+          * Technical patterns from research are applied appropriately
+
+        Consistency Checks:
+          * Status value follows standardized format: Backlog/Ready/In Progress/In Review/Done
+          * Story ID follows standard format: US-XXX
+          * All placeholder fields [brackets] have been filled in
+          * User story follows format: "As [role], I want [feature], so that [benefit]"
+          * Acceptance criteria are testable (Given-When-Then format preferred)
+          * Story points estimated and sprint assigned
+
+        If any item fails validation, regenerate the artifact to fix the issue.
+      </guidance>
+    </step>
+
+    <step priority="17">
+      <action>Final validation against template and checklist</action>
       <reference>See validation_checklist below</reference>
     </step>
   </instructions>
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/backlog_stories/[us_id]_v1.md</path>
       <format>Markdown following backlog-story-template.xml structure</format>
       <validation_checklist>
         <criterion>Story title is action-oriented and specific</criterion>

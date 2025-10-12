@@ -4,7 +4,7 @@
 - **Epic ID:** EPIC-005
 - **Status:** Draft
 - **Priority:** High (Should-have for V1, accelerates adoption)
-- **Product Vision:** `/artifacts/product_vision_v1.md`
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 - **Initiative:** INIT-001 - Production-Ready AI Agent Infrastructure
 - **Owner:** [DevOps Lead]
 - **Target Release:** Q3 2025 (Months 5-7)
@@ -371,9 +371,9 @@ CI/CD automation is common use case for development agents. Addresses integratio
 ## Related Documents
 
 **Source Documents:**
-- **Product Vision:** `/artifacts/product_vision_v1.md` (Capability #3: Automated Deployment Configuration)
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md` (Capability #3: Automated Deployment Configuration)
 - **Initiative:** `/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v1.md` (Epic-005 in supporting epics)
-- **Business Research:** `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md` (§1.1 Pain Point 1: Integration Fragmentation, §4.1 Capability 3)
+- **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (§1.1 Pain Point 1: Integration Fragmentation, §4.1 Capability 3)
 
 **Technical References:** [To be created during PRD phase]
 - ADR: Template Engine Selection

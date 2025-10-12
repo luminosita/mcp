@@ -4,7 +4,7 @@
 - **Epic ID:** EPIC-001
 - **Status:** Draft
 - **Priority:** Critical (Must-have for MVP)
-- **Product Vision:** `/artifacts/product_vision_v1.md`
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 - **Initiative:** INIT-001 - Production-Ready AI Agent Infrastructure
 - **Owner:** [PM Lead]
 - **Target Release:** Q1-Q2 2025 (Months 1-6)
@@ -341,9 +341,9 @@ Project management integration consistently identified as high-value capability 
 ## Related Documents
 
 **Source Documents:**
-- **Product Vision:** `/artifacts/product_vision_v1.md` (Capability #1: Project Management Integration)
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md` (Capability #1: Project Management Integration)
 - **Initiative:** `/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v1.md` (Epic-001 in supporting epics)
-- **Business Research:** `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md` (§1.1 Pain Point 2, §4.1 Capability 1)
+- **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (§1.1 Pain Point 2, §4.1 Capability 1)
 
 **Technical References:** [To be created during PRD phase]
 - ADR: OAuth 2.0 Implementation Strategy

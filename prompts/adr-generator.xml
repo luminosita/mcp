@@ -43,18 +43,18 @@
     </background>
 
     <input_artifacts>
-      <artifact path="/artifacts/backlog_stories/[us_id]_v[N].md" type="backlog_story">
+      <artifact required="true" type="backlog_story">
         Backlog Story contains technical notes identifying need for architectural decision.
         May contain Open Questions marked [REQUIRES ADR].
       </artifact>
 
-      <artifact path="/artifacts/spikes/[spike_id]_v[N].md" type="spike">
+      <artifact required="false" type="spike">
         Spike contains investigation findings and recommendation from time-boxed technical investigation.
         ADRs often document decisions informed by spike findings.
         Spike provides evidence (benchmarks, prototypes, documentation) to support alternatives analysis.
       </artifact>
 
-      <artifact path="[Implementation Research]" type="implementation_research">
+      <artifact required="false" type="implementation_research">
         Implementation Research provides:
         - §2: Technology Landscape Analysis (competitor tech stacks, patterns)
         - §5: Architecture &amp; Technology Stack (recommendations with versions)
@@ -118,7 +118,6 @@
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/adrs/[adr_id]_v1.md</path>
       <validation_checklist>
         <criterion>Decision context clearly stated</criterion>
         <criterion>2-4 alternatives evaluated with pros/cons</criterion>

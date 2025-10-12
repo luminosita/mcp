@@ -57,7 +57,7 @@ Required files for execution:
 
 **Report Results**:
 ```
-✅ Terminal Artifact: /artifacts/product_vision_v1.md
+✅ Terminal Artifact: /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
 
 Validation Status:
 ✅ Status set to "Draft" in metadata
@@ -69,7 +69,7 @@ AI Context Report:
 [RUN `/context` COMMAND AND PASTE OUTPUT HERE]
 
 Action Required:
-1. Review artifact at /artifacts/product_vision_v1.md
+1. Review artifact at /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
 2. Create critique file: /feedback/product_vision_v1_critique.md
 3. If refinement needed, run: /refine product-vision-generator
 ```
@@ -93,7 +93,7 @@ Complete prerequisite tasks first:
 ```
 ERROR: Input artifact has invalid status for production use
 Required: Status = "Approved"
-Found: Status = "Draft" in /artifacts/product_vision_v1.md
+Found: Status = "Draft" in /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
 
 This artifact requires critique and refinement before use as input.
 

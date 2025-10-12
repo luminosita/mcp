@@ -180,7 +180,7 @@
 
     <element name="output_format">
       <description>Specifications for both terminal artifact</description>
-      <must_include>Paths, formats, validation checklists for both outputs</must_include>
+      <must_include>Formats, validation checklists for the output</must_include>
     </element>
 
     <element name="traceability">

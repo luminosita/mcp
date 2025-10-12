@@ -40,7 +40,7 @@
     </background>
 
     <input_artifacts>
-      <artifact path="/artifacts/product_vision_v[N].md" type="product_vision">
+      <artifact required="true" type="product_vision">
         Product Vision contains:
         - Vision statement and problem statement
         - Target users and personas
@@ -50,7 +50,7 @@
         Extract one capability to expand into detailed epic.
       </artifact>
 
-      <artifact path="/artifacts/initiatives/[initiative_id]_v[N].md" type="initiative">
+      <artifact required="true" type="initiative">
         Initiative contains:
         - Strategic objective and OKRs
         - Supporting epics list with rough descriptions
@@ -59,7 +59,7 @@
         Select one supporting epic to develop in detail.
       </artifact>
 
-      <artifact path="[Business Research]" type="business_research">
+      <artifact required="false" type="business_research">
         Business Research provides:
         - Market analysis and competitive landscape
         - User pain points and needs (quantified)
@@ -241,19 +241,54 @@
 
     <step priority="15">
       <action>Generate epic document</action>
-      <output_path>/artifacts/epics/[epic_id]_v1.md</output_path>
       <format>Markdown following epic-template.xml structure</format>
+      <guidance>
+        - Follow complete template structure
+        - Ensure Epic ID is assigned (EPIC-XXX format)
+        - Include "Parent Product Vision" field with Vision ID (VIS-XXX)
+        - Include "Parent Initiative" field with Initiative ID (INIT-XXX) if applicable
+        - Include "Informed By Business Research" field with document link
+        - Add Parent Artifact Context section explaining epic's contribution to vision/initiative
+        - Add Business Research References section with § citations
+        - Do NOT include validation checklist in artifact (checklist is for generator validation only)
+      </guidance>
     </step>
 
     <step priority="16">
-      <action>Validate output against checklist</action>
+      <action>Internal validation using traceability checklist</action>
+      <guidance>
+        IMPORTANT: This checklist is for generator internal validation only. DO NOT include this checklist in the generated artifact.
+
+        Verify the generated artifact meets these requirements:
+
+        Upstream Traceability:
+          * "Parent Product Vision" field populated with valid Vision ID (VIS-XXX)
+          * Parent Product Vision document is in "Approved" status
+          * "Parent Initiative" field populated (if epic is part of an initiative)
+          * "Informed By Business Research" field populated with valid document link
+          * Business Research document is in "Finalized" status
+          * All Business Research section references (§X.Y format) are valid
+          * Parent Artifact Context section explains epic's contribution to vision/initiative
+
+        Consistency Checks:
+          * Status value follows standardized format: Draft/In Review/Approved/Planned/In Progress/Completed
+          * Epic ID follows standard format: EPIC-XXX
+          * All placeholder fields [brackets] have been filled in
+          * Epic statement follows "As [user], I need [capability], so that [business value]" format
+          * Acceptance criteria are business-focused (not technical implementation details)
+
+        If any item fails validation, regenerate the artifact to fix the issue.
+      </guidance>
+    </step>
+
+    <step priority="17">
+      <action>Final validation against template and checklist</action>
       <reference>See validation_checklist below</reference>
     </step>
   </instructions>
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/epics/[epic_id]_v1.md</path>
       <format>Markdown following epic-template.xml structure</format>
       <validation_checklist>
         <criterion>Epic statement is clear and user-focused</criterion>

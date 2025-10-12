@@ -418,7 +418,6 @@
     <step priority="9">
       <action>Generate comprehensive implementation research artifact</action>
       <purpose>Create final deliverable following implementation template</purpose>
-      <output_path>`docs/research/[product_name]/[product_name]_implementation_research.md`</output_path>
       <details>
         Follow `implementation_research_template.md` structure exactly.
 
@@ -464,7 +463,6 @@
 
   <output_format>
     <terminal_artifact>
-      <path>`docs/research/[product_name]/[product_name]_implementation_research.md`</path>
       <format>Markdown following `implementation_research_template.md` structure</format>
       <validation_checklist>
         <criterion>Human inputs collected and validated</criterion>

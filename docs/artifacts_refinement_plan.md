@@ -79,7 +79,7 @@
 **Duration:** 30 minutes
 **Impact:** Foundation for all downstream artifacts
 
-**Artifact:** `/artifacts/product_vision_v1.md`
+**Artifact:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 
 **Changes Required:**
 
@@ -91,14 +91,14 @@
    - **Date:** 2025-10-11
    - **Version:** 1.0
    - **Status:** Approved
-   - **Informed By Business Research:** /docs/research/mcp/AI_Agent_MCP_Server_business_research.md
+   - **Informed By Business Research:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
    ```
 
 2. **Add Business Research References Section** (after Strategic Alignment)
    ```markdown
    ## Business Research References
 
-   **Primary Research Document:** [docs/research/mcp/AI_Agent_MCP_Server_business_research.md]
+   **Primary Research Document:** [artifacts/research/AI_Agent_MCP_Server_business_research.md]
 
    **Key Insights Applied:**
    - **Market Positioning (§5.1):** MCP standardization creates infrastructure market opportunity
@@ -162,7 +162,7 @@
    - **Budget:** $850K-$1.25M [ESTIMATED]
    - **Parent Product Vision:** VIS-001  <!-- ADD NEW -->
    - **Related Strategy Doc:** [Link to organizational AI/ML strategy]
-   - **Informed By Business Research:** /docs/research/mcp/AI_Agent_MCP_Server_business_research.md  <!-- ADD NEW -->
+   - **Informed By Business Research:** /artifacts/research/AI_Agent_MCP_Server_business_research.md  <!-- ADD NEW -->
    ```
 
 2. **Add Vision Alignment Section** (before Business Goals & OKRs)
@@ -170,7 +170,7 @@
    ## Vision Alignment
 
    **Parent Product Vision:** [VIS-001: AI Agent MCP Server]
-   - **Link:** `/artifacts/product_vision_v1.md`
+   - **Link:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
    - **Vision Alignment:** This initiative directly implements the vision by establishing production-ready infrastructure for the three core capabilities: (1) eliminating integration fragmentation through MCP, (2) enabling secure organizational knowledge access, and (3) creating consistent agent capabilities across platforms.
    ```
 
@@ -178,7 +178,7 @@
    ```markdown
    ## Business Research References
 
-   **Primary Research Document:** [docs/research/mcp/AI_Agent_MCP_Server_business_research.md]
+   **Primary Research Document:** [artifacts/research/AI_Agent_MCP_Server_business_research.md]
 
    **Strategic Insights Applied:**
    - **Market Opportunity (§2.1):** 12-18 month window before major platform vendors bundle competitive offerings
@@ -236,7 +236,7 @@
    - **Parent Initiative:** INIT-001 (Production-Ready AI Agent Infrastructure)  <!-- STANDARDIZE -->
    - **Owner:** [Name]
    - **Target Release:** [Date]
-   - **Informed By Business Research:** /docs/research/mcp/AI_Agent_MCP_Server_business_research.md  <!-- ADD NEW -->
+   - **Informed By Business Research:** /artifacts/research/AI_Agent_MCP_Server_business_research.md  <!-- ADD NEW -->
    ```
 
 2. **Add Parent Artifact Context Section** (after Epic Statement)
@@ -244,7 +244,7 @@
    ## Parent Artifact Context
 
    **Parent Product Vision:** [VIS-001: AI Agent MCP Server]
-   - **Link:** `/artifacts/product_vision_v1.md`
+   - **Link:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
    - **Vision Capability:** [Which key capability from vision this epic implements - map to specific capability]
 
    **Parent Initiative:** [INIT-001: Production-Ready AI Agent Infrastructure]
@@ -256,7 +256,7 @@
    ```markdown
    ## Business Research References
 
-   **Primary Research Document:** [docs/research/mcp/AI_Agent_MCP_Server_business_research.md]
+   **Primary Research Document:** [artifacts/research/AI_Agent_MCP_Server_business_research.md]
 
    **Market Insights Applied:**
    - **Gap Analysis (§3.1):** [Specific gap this epic addresses]
@@ -352,7 +352,7 @@
 ## Research Document References
 
 **Business Research:**
-- **File:** `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md`
+- **File:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md`
 - **Status:** Finalized
 - **Key Sections:**
   - §1.1: Problem Statement (Integration fragmentation, context barriers)
@@ -365,7 +365,7 @@
   - §Appendix A: User Personas
 
 **Implementation Research:**
-- **File:** `/docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md`
+- **File:** `/artifacts/research/AI_Agent_MCP_Server_implementation_research.md`
 - **Status:** Finalized
 - **Note:** Will be referenced when PRDs and Backlog Stories are created
 
@@ -437,8 +437,8 @@
 2. **Research Reference Validation**
    ```bash
    # Verify research documents exist
-   ls docs/research/mcp/AI_Agent_MCP_Server_business_research.md
-   ls docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md
+   ls artifacts/research/AI_Agent_MCP_Server_business_research.md
+   ls artifacts/research/AI_Agent_MCP_Server_implementation_research.md
    ```
 
 3. **Section Reference Validation**

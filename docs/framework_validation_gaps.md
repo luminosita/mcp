@@ -152,7 +152,7 @@ def is_research_artifact(artifact_path: str) -> bool:
 
 # Usage example
 try:
-    validate_artifact_status_strict('/artifacts/product_vision_v1.md')
+    validate_artifact_status_strict('/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md')
     print("✅ Artifact validation passed")
 except ArtifactValidationError as e:
     print(str(e))
@@ -257,7 +257,7 @@ def validate_artifact_status_warning(
 # Usage example
 try:
     validation_passed = validate_artifact_status_warning(
-        '/artifacts/product_vision_v1.md',
+        '/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md',
         allow_override=True  # Set to False for stricter validation
     )
 

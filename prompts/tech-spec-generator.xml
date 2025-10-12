@@ -35,15 +35,15 @@
     </background>
 
     <input_artifacts>
-      <artifact path="/artifacts/backlog_stories/[us_id]_v[N].md" type="backlog_story">
+      <artifact required="true" type="backlog_story">
         Backlog Story contains requirements, acceptance criteria, technical notes.
       </artifact>
 
-      <artifact path="[Implementation Research]" type="implementation_research">
+      <artifact required="true" type="implementation_research">
         Implementation Research provides patterns, code examples, and technical guidance.
       </artifact>
 
-      <artifact path="[ADRs]" type="adr">
+      <artifact required="true" type="adr">
         ADRs document architectural decisions affecting this component.
       </artifact>
     </input_artifacts>
@@ -108,7 +108,6 @@
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/tech_specs/[spec_id]_v1.md</path>
       <validation_checklist>
         <criterion>Component architecture designed</criterion>
         <criterion>API contracts specified (endpoints, request/response schemas)</criterion>

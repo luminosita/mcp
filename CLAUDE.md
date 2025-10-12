@@ -1,5 +1,10 @@
 # Context Engineering Framework - Root Orchestration
 
+## General
+
+**Product Name:** AI_Agent_MCP_Server
+**Documentation Product Name:** AI Agent MCP Server
+
 ## Folder Structure
 
 ```
@@ -7,34 +12,40 @@
    .claude/
       commands/
          generate.md       # Universal executor
-         refine.md        # Iteration orchestrator
+         refine.md         # Iteration orchestrator
 
    docs/
-      context_engineering_strategy_v{1-3}.md           # Comprehensive methodology
-      sdlc_artifacts_comprehensive_guideline.md    # SDLC artifacts guideline               
+      context_engineering_strategy_v{N}.md           # Comprehensive methodology
+      sdlc_artifacts_comprehensive_guideline.md       # SDLC artifacts guideline               
    prompts/
-      templates/                          # XML-formatted templates
-         {phase}-template_v{1-3}.md       ## SDLC artifacts templates 
-      {phase}_generator_v{1-3}.xml               # Generator prompts
+      templates/                                # XML-formatted templates
+         {artifact-type}-template_v{N}.md       # SDLC artifacts templates 
+      {artifact-type}_generator_v{N}.xml        # Generator prompts
 
-   artifacts/                              # All generated deliverables
-      product_vision_v{1-3}.md
-      epics/
-      prds/
-         prd_{id}/
-            prd_v{1-3}.md
-            TODO.md                        # High-level story tracking
-      backlog_stories/
-         US-{prd_id}-{story_id}_{feature_name}/
-            backlog_story_v{1-3}.md
-            TODO.md                        # Implementation task tracking
-      spikes/                              # Time-boxed technical investigations
-         SPIKE-{XXX}_v{1-3}.md
-      specs/
-         adrs/                             # Architecture Decision Records
-         tech_specs/                       # Technical Specifications
-      code/
-      tests/
+   artifacts/                                         # All generated deliverables
+      research/                                       # Research artifacts
+         {product_name}_business_research.md          # Business Research
+         {product_name}_implementation_research.md    # Implementation Research
+      product_visions/                                # Product Visions
+         VIS-{XXX}_product_vision_v{N}.md
+      initiatives/                                    # Initiatives
+         INIT-{XXX}_initiative_v{N}.md
+      epics/                                          # Epics
+         EPIC-{XXX}_epic_v{N}.md
+      prds/                                           # PRDs
+         PRD-{XXX}_prd_v{N}.md
+      hls/                                            # High-level user stories  
+         HLS-{XXX}_story_v{N}.md                      
+      backlog_stories/                                # Backlog user stories  
+         US-{XXX}_story_v{N}.md
+      spikes/                                         # Time-boxed technical investigations
+         SPIKE-{XXX}_v{N}.md
+      adrs/                                           # Architecture Decision Records
+         ADR-{XXX}_v{N}.md
+      tech_specs/                                     # Technical Specifications
+         SPEC-{XXX}_v{N}.md
+      tasks/                                          # Implementation Tasks
+         TASK-{XXX}_v{N}.md
 
    feedback/                               # Human critique logs
       {artifact}_v{N}_critique.md
@@ -53,74 +64,75 @@
 
 ## SDLC Generators Input Dependency Tree
 
-**Root Product:** AI Agent MCP Server
-
 ```
 Research Phase (Root)
 ├── Business Research
-│   └── docs/research/mcp/AI_Agent_MCP_Server_business_research.md
+│   └── artifacts/research/{product_name}_business_research.md
 └── Implementation Research
-    └── docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md
+    └── artifacts/research/{product_name}_implementation_research.md
 
 ↓
 
 Vision Phase
 └── Product Vision Generator
-    ├── Input: docs/research/mcp/AI_Agent_MCP_Server_business_research.md
-    └── Output: artifacts/product_vision_v{N}.md
+    ├── Input: artifacts/research/{product_name}_business_research.md
+    └── Output: artifacts/product_visions/VIS-{XXX}_product_vision_v{N}.md
 
 ↓
 
 Strategic Phase
 ├── Initiative Generator
-│   ├── Primary Input: artifacts/product_vision_v{N}.md (approved)
-│   ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_business_research.md (optional)
-│   └── Output: artifacts/initiatives/initiative_{id}_v{1-3}.md
+│   ├── Primary Input: artifacts/product_visions/VIS-{XXX}_product_vision_v{N}.md (approved)
+│   ├── Secondary Input: artifacts/research/{product_name}_business_research.md (optional)
+│   └── Output: artifacts/initiatives/INIT-{XXX}_initiative_v{N}.md
 │
 └── Epic Generator
-    ├── Primary Input: artifacts/product_vision_v{N}.md (approved)
-    ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_business_research.md (optional)
-    └── Output: artifacts/epics/epic_{id}_v{1-3}.md
+    ├── Primary Input: artifacts/product_visions/VIS-{XXX}_product_vision_v{N}.md (approved)
+    ├── Secondary Input: artifacts/research/{product_name}_business_research.md (optional)
+    └── Output: artifacts/epics/EPIC-{XXX}_epic_v{N}.md
 
 ↓
 
 Requirements Phase (Transition - bridges business and technical)
 └── PRD Generator
-    ├── Primary Input: artifacts/epics/epic_{id}_v{N}.md (approved)
-    ├── Secondary Input 1: docs/research/mcp/AI_Agent_MCP_Server_business_research.md (optional - market validation)
-    ├── Secondary Input 2: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md (optional - technical feasibility)
-    └── Output: artifacts/prds/prd_{id}/prd_v{1-3}.md
-
+    ├── Primary Input: artifacts/epics/EPIC-{XXX}_epic_v{N}.md (approved)
+    ├── Secondary Input 1: artifacts/research/{product_name}_business_research.md (optional - market validation)
+    ├── Secondary Input 2: artifacts/research/{product_name}_implementation_research.md (optional - technical feasibility)
+    └── Output: artifacts/prds/PRD-{XXX}_prd_v{N}.md
+└── High-level Story Generator
+    ├── Primary Input: artifacts/prds/PRD-{XXX}_prd_v{N}.md (approved)
+    ├── Secondary Input: artifacts/research/{product_name}_business_research.md (optional)
+    └── Output: artifacts/hls/HLS-{XXX}_story_v{N}.md
 ↓
 
 Story Phase
 └── Backlog Story Generator
-    ├── Primary Input: artifacts/prds/prd_{id}/prd_v{N}.md (approved)
-    ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md (optional)
-    └── Output: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v{1-3}.md
+    ├── Primary Input: artifacts/prds/PRD-{XXX}_prd_v{N}.md (approved)
+    ├── Secondary Input: artifacts/research/{product_name}_implementation_research.md (optional)
+    └── Output: artifacts/backlog_stories/US-{XXX}_story_v{N}.md
 
 ↓
 
 Technical Phase
 ├── Spike Generator (Optional - triggered by [REQUIRES SPIKE] marker)
-│   ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v{N}.md (question marked [REQUIRES SPIKE])
+│   ├── Primary Input: artifacts/backlog_stories/US-{XXX}_story_v{N}.md (question marked [REQUIRES SPIKE])
 │   ├── Alternative Input: artifacts/specs/tech_specs/SPEC-{XXX}_v{N}.md (Open Questions)
-│   ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md (optional - baseline data)
+│   ├── Secondary Input: artifacts/research/{product_name}_implementation_research.md (optional - baseline data)
 │   ├── Output: artifacts/spikes/SPIKE-{XXX}_v1.md
 │   ├── Time Box: 1-3 days maximum (strictly enforced)
 │   └── Purpose: Time-boxed investigation to reduce technical uncertainty before implementation
 │
 ├── ADR Generator
-│   ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v{N}.md (approved)
+│   ├── Primary Input: artifacts/backlog_stories/US-{XXX}_story_v{N}.md
 │   ├── Optional Input: artifacts/spikes/SPIKE-{XXX}_v1.md (if spike completed - provides findings and evidence)
-│   ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md
-│   └── Output: artifacts/specs/adrs/ADR-{XXX}_v{1-3}.md
+│   ├── Secondary Input: artifacts/research/{product_name}_implementation_research.md
+│   └── Output: artifacts/specs/adrs/ADR-{XXX}_v{N}.md
 │
 └── Technical Spec Generator
-    ├── Primary Input: artifacts/backlog_stories/US-{prd_id}-{story_id}_{feature}/backlog_story_v{N}.md (approved)
+    ├── Primary Input: artifacts/backlog_stories/US-{XXX}_story_v{N}.md
     ├── Optional Input: artifacts/spikes/SPIKE-{XXX}_v1.md (if spike completed - provides implementation details)
-    ├── Secondary Input: docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md
-    └── Output: artifacts/specs/tech_specs/SPEC-{XXX}_v{1-3}.md
+    ├── Secondary Input: artifacts/research/{product_name}_implementation_research.md
+    └── Output: artifacts/specs/tech_specs/SPEC-{XXX}_v{N}.md
 ```
 
 **Key Principles:**
@@ -275,19 +287,21 @@ Upon completion, update relevant task status in `/TODO.md`:
 | Implementation Task | TASK-XXX | TASK-567 |
 
 **File Naming Conventions**:
-- Generators: `{phase}-generator.xml` (e.g., `product-vision-generator.xml`, `spike-generator.xml`)
+- Generators: `{artifact-type}-generator.xml` (e.g., `product-vision-generator.xml`, `spike-generator.xml`)
 - Templates: `{artifact-type}-template.xml` (e.g., `prd-template.xml`, `spike-template.xml`)
-- Artifacts: `{artifact}_v{N}.md` or `{epic_id}_{artifact}_v{N}.md`
-- Product Vision: `VIS-{XXX}_product_vision_v{N}.md`
-- Initiatives: `INIT-{XXX}_initiative_v{N}.md`
-- Epics: `EPIC-{XXX}_epic_v{N}.md`
-- PRDs: `PRD-{XXX}_prd_v{N}.md` in `prds/prd_{XXX}/` subfolder
-- High-Level Stories: `HLS-{XXX}_story_v{N}.md`
-- Backlog Stories: `US-{XXX}_story_v{N}.md` in `backlog_stories/US-{XXX}_{feature_name}/` subfolder
-- Spikes: `SPIKE-{XXX}_v{N}.md` (e.g., `SPIKE-042_v1.md`)
-- ADRs: `ADR-{XXX}_v{N}.md` (e.g., `ADR-008_v1.md`)
-- Tech Specs: `SPEC-{XXX}_v{N}.md` (e.g., `SPEC-015_v1.md`)
-- Implementation Tasks: `TASK-{XXX}_v{N}.md`
+- Artifacts (artifact types):
+   - Business Research: `{product_name}_business_research.md`
+   - Implementation Research: `{product_name}_implementation_research.md`
+   - Product Vision: `VIS-{XXX}_product_vision_v{N}.md`
+   - Initiatives: `INIT-{XXX}_initiative_v{N}.md`
+   - Epics: `EPIC-{XXX}_epic_v{N}.md`
+   - PRDs: `PRD-{XXX}_prd_v{N}.md` in `prds/prd_{XXX}/` subfolder
+   - High-Level Stories: `HLS-{XXX}_story_v{N}.md`
+   - Backlog Stories: `US-{XXX}_story_v{N}.md` in `backlog_stories/US-{XXX}_{feature_name}/` subfolder
+   - Spikes: `SPIKE-{XXX}_v{N}.md` (e.g., `SPIKE-042_v1.md`)
+   - ADRs: `ADR-{XXX}_v{N}.md` (e.g., `ADR-008_v1.md`)
+   - Tech Specs: `SPEC-{XXX}_v{N}.md` (e.g., `SPEC-015_v1.md`)
+   - Implementation Tasks: `TASK-{XXX}_v{N}.md`
 
 **Status Value Standards**:
 - Research (Business/Implementation): Draft → In Review → Finalized

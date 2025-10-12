@@ -40,7 +40,7 @@
     </background>
 
     <input_artifacts>
-      <artifact path="/artifacts/epics/[epic_id]_v[N].md" type="epic">
+      <artifact required="true" type="epic">
         Epic contains:
         - High-level user stories (preliminary list)
         - Epic scope and acceptance criteria
@@ -49,7 +49,7 @@
         Select one high-level story from Epic to develop in detail.
       </artifact>
 
-      <artifact path="/artifacts/prds/[prd_id]/prd_v[N].md" type="prd">
+      <artifact required="true" type="prd">
         PRD contains:
         - Detailed user stories and use cases
         - User personas and journeys
@@ -59,7 +59,7 @@
         Select one user story cluster from PRD to develop as high-level story.
       </artifact>
 
-      <artifact path="[Business Research]" type="business_research">
+      <artifact required="true" type="business_research">
         Business Research provides (BUSINESS PERSPECTIVE ONLY):
         - User pain points and workflows
         - UX gaps and user needs
@@ -238,7 +238,6 @@
 
     <step priority="14">
       <action>Generate high-level user story document</action>
-      <output_path>/artifacts/high_level_stories/[hls_id]_v1.md</output_path>
       <format>Markdown following high-level-user-story-template.xml structure</format>
     </step>
 
@@ -250,7 +249,6 @@
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/high_level_stories/[hls_id]_v1.md</path>
       <format>Markdown following high-level-user-story-template.xml structure</format>
       <validation_checklist>
         <criterion>User story statement uses standard format (As a/I want/So that)</criterion>

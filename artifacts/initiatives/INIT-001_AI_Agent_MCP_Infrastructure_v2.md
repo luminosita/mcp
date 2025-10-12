@@ -551,9 +551,9 @@ This initiative aligns with organizational strategic pillars:
 ## Related Documents
 
 **Source Documents:**
-- **Product Vision:** `/artifacts/product_vision_v1.md` (primary source for this initiative)
-- **Business Research:** `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md` (market analysis, competitive landscape, strategic recommendations)
-- **Implementation Research:** `/docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md` (technical feasibility, architecture patterns)
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md` (primary source for this initiative)
+- **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (market analysis, competitive landscape, strategic recommendations)
+- **Implementation Research:** `/artifacts/research/AI_Agent_MCP_Server_implementation_research.md` (technical feasibility, architecture patterns)
 
 **Supporting Epics:** [To be created]
 - `/artifacts/epics/EPIC-001_project_management_integration_v1.md`

@@ -1,6 +1,6 @@
 ✅ TASK-004 Complete: Product Vision v1 Generated
 
-Terminal Artifact: /artifacts/product_vision_v1.md (468 lines)
+Terminal Artifact: /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md (468 lines)
 
 Validation Status
 
@@ -165,7 +165,7 @@ Next Task Options:
 2. TASK-005: Critique Product Vision v1 (iterate on vision before proceeding)
 
 Artifacts Ready for Review:
-- Product Vision v1 (/artifacts/product_vision_v1.md)
+- Product Vision v1 (/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md)
 - Initiative v1 (/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v1.md)
 - 5 Epics v1 (/artifacts/epics/EPIC-00[1-5]_*.md)
 

@@ -1,27 +1,27 @@
 # Progress Steps
-## Bootstrap
-- [X] create missing SDLC templates
-- [X] create missing SDLC generator prompts
-- [X] SDLC Guide: 3.1.3 Gherkin format
-- [X] All Backlog story generators and templates -> Gherkin format, failback to Checklist
-- [X] Update CLAUDE.md folder structure
-- [X] No lazy generation of specialized CLAUDE.md files
-- [X] research-generator should have product_idea.md (based on product_idea_template.md) as input
-- [X] business_research_template in XML format
-- [X] implementation_research_template in XML format
-- [X] research-artifact-template in XML format
-- [X] Review CLAUDE.md
-- [X] extract product research prompt template
-- [X] define product research output template
-- [X] improve product research prompt template to include sections covered by specialized CLAUDE.md files in `claude-md` project
-- [X] base Product Vision Generator off of product research artifact instead of simple idea
-- [X] merge generator-schema-templates
 
-## Manual testing
-- [X] Test Product Vision Generator
-- [X] Perform refinement cycle
-## Research documents restructuring
-- [X] restructure research documents (use docs/research_restructuring_guidelines.md) (restructure @docs/research/rag/Rag_2_0_detailed_analysis_v2.md.md according to @docs/research_restructuring_guidelines.md. Use appropriate tools because of output token limit of 32k)
+## CLAUDE.md
+- [X] Move researches to artifacts/researches and update references
+- [X] Rename product_vision_v1.md to proper naming format, move it to product_visions, and update references
+- [X] File/folder structures for artifacts
+- [ ] Revise sub TODO.md (tracking)
+    - [ ] Verify the references of those TODO.md files
+    - [ ] Drop sub TODO.md files
+
+## Validation
+- [ ] Move tracebility generator validation checks to a proper section
+- [ ] Generator output file paths
+- [ ] Read all generated epics
+- [ ] Read all restructured research docs (business and implementation)
+- [ ] Read all generators and templates (file paths removed, no validation duplications, defragmented validation instructions)
+- [ ] Check output file name for generators
+- [ ] Remove all paths from generators and templates. Keep it only in CLAUDE.md (input, output)
+- [ ] Evaluation related to required/optional input data for generators
+- [ ] Remove Tracibility Checklists from templates (validate existance in generators)
+
+## PRD Validation
+- [ ] Technical Consideration sections were removed from Epics and saved into `artifacts/technical_considerations_from_epic.md`
+    - [ ] Validate that these sections are generated in PRDs and compare the content
 
 ## Semi-automatic testing
 - [ ] feedback/context_engineering_strategy_v1_critique_v3.md

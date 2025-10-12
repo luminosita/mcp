@@ -4,9 +4,11 @@
 - **Epic ID:** EPIC-000
 - **Status:** Draft
 - **Priority:** Critical
-- **Product Vision:** [AI Agent MCP Infrastructure - INIT-001](/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md)
+- **Parent Product Vision:** VIS-001
+- **Parent Initiative:** INIT-001 (Production-Ready AI Agent Infrastructure)
 - **Owner:** Tech Lead
 - **Target Release:** Q1 2025 (Weeks 1-4)
+- **Informed By Business Research:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
 
 ## Epic Statement
 As a development team member, I need standardized production-ready project infrastructure so that I can start building features immediately without setup friction and deploy with confidence.
@@ -173,7 +175,7 @@ These foundational gaps directly impact INIT-001's strategic objective to "deplo
 
 ## Related Documents
 - **Initiative:** [INIT-001: Production-Ready AI Agent Infrastructure](/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md)
-- **Business Research:** [AI Agent MCP Server Business Research](/docs/research/mcp/AI_Agent_MCP_Server_business_research.md) - §3.1 Gap 1 (Production Deployment Patterns)
+- **Business Research:** [AI Agent MCP Server Business Research](/artifacts/research/AI_Agent_MCP_Server_business_research.md) - §3.1 Gap 1 (Production Deployment Patterns)
 - **Roadmap Context:** INIT-001 §6 Milestones & Timeline - Phase 1 MVP Foundation (Months 1-3)
 - **Supporting Epics (Blocked by EPIC-000):**
   - EPIC-001: Project Management Integration [to be created]

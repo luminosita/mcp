@@ -10,7 +10,7 @@
 - **Budget:** \$850K-\$1.25M [ESTIMATED]
 - **Parent Product Vision:** VIS-001
 - **Related Strategy Doc:** [Link to organizational AI/ML strategy]
-- **Informed By Business Research:** /docs/research/mcp/AI_Agent_MCP_Server_business_research.md
+- **Informed By Business Research:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
 
 ---
 
@@ -41,14 +41,14 @@ This initiative positions the organization as thought leader in production AI ag
 ## Vision Alignment
 
 **Parent Product Vision:** [VIS-001: AI Agent MCP Server]
-- **Link:** `/artifacts/product_vision_v1.md`
+- **Link:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 - **Vision Alignment:** This initiative directly implements the product vision by establishing production-ready infrastructure for all three core capabilities: (1) eliminating integration fragmentation through standardized MCP implementation, (2) enabling secure organizational knowledge access via semantic search integration, and (3) creating consistent agent capabilities across platforms through comprehensive tool ecosystem and enterprise security patterns.
 
 ---
 
 ## Business Research References
 
-**Primary Research Document:** /docs/research/mcp/AI_Agent_MCP_Server_business_research.md
+**Primary Research Document:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
 
 **Strategic Insights Applied:**
 - **Market Opportunity (§2.1):** Protocol standardization creates 12-18 month first-mover window before major platform vendors bundle competitive offerings, enabling establishment as reference architecture
@@ -586,9 +586,9 @@ This initiative aligns with organizational strategic pillars:
 ## Related Documents
 
 **Source Documents:**
-- **Product Vision:** `/artifacts/product_vision_v1.md` (primary source for this initiative)
-- **Business Research:** `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md` (market analysis, competitive landscape, strategic recommendations)
-- **Implementation Research:** `/docs/research/mcp/AI_Agent_MCP_Server_implementation_research.md` (technical feasibility, architecture patterns)
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md` (primary source for this initiative)
+- **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (market analysis, competitive landscape, strategic recommendations)
+- **Implementation Research:** `/artifacts/research/AI_Agent_MCP_Server_implementation_research.md` (technical feasibility, architecture patterns)
 
 **Supporting Epics:** [To be created]
 - `/artifacts/epics/EPIC-000_project_foundation_bootstrap_v1.md`

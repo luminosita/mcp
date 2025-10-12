@@ -339,7 +339,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
 1. Start new Claude Code session
 2. Run: `/generate TASK-004`
 3. Confirm generation of specialized CLAUDE.md
-4. Review `/artifacts/product_vision_v1.md`
+4. Review `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 5. Create `/feedback/product_vision_v1_critique.md` with notes
 6. Run: `/refine product-vision-generator`
 7. Repeat for v2, v3
@@ -353,7 +353,7 @@ Templates extracted from research document (Section 6.1-6.4) converted to:
    - `/prompts/templates/product-vision-template.xml`
 3. Execute generator
 4. Save outputs:
-   - `/artifacts/product_vision_v1.md`
+   - `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 5. Update `/CLAUDE.md` with current phase
 6. Report completion with validation checklist status
 

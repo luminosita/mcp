@@ -4,7 +4,7 @@
 - **Epic ID:** EPIC-004
 - **Status:** Draft
 - **Priority:** Critical (Must-have for MVP, enables production confidence)
-- **Product Vision:** `/artifacts/product_vision_v1.md`
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 - **Initiative:** INIT-001 - Production-Ready AI Agent Infrastructure
 - **Owner:** [DevOps Lead]
 - **Target Release:** Q2-Q3 2025 (Months 4-7)
@@ -378,9 +378,9 @@ Comprehensive production deployment blueprints with reference implementations fo
 ## Related Documents
 
 **Source Documents:**
-- **Product Vision:** `/artifacts/product_vision_v1.md` (Capability #5: Production-Ready Observability)
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md` (Capability #5: Production-Ready Observability)
 - **Initiative:** `/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v1.md` (Epic-004 in supporting epics)
-- **Business Research:** `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md` (§3.1 Gap 1: Production Deployment Guides)
+- **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (§3.1 Gap 1: Production Deployment Guides)
 
 **Technical References:** [To be created during PRD phase]
 - ADR: Observability Stack Selection (Prometheus, Grafana, Jaeger)

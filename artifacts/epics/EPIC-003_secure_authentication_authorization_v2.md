@@ -4,7 +4,7 @@
 - **Epic ID:** EPIC-003
 - **Status:** Draft
 - **Priority:** Critical (Must-have for MVP, blocks other epics)
-- **Product Vision:** `/artifacts/product_vision_v1.md`
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 - **Initiative:** INIT-001 - Production-Ready AI Agent Infrastructure
 - **Owner:** [Security Lead]
 - **Target Release:** Q2 2025 (Months 2-4, early to unblock dependent epics)
@@ -365,9 +365,9 @@ Security reference architecture with production-ready authentication middleware 
 ## Related Documents
 
 **Source Documents:**
-- **Product Vision:** `/artifacts/product_vision_v1.md` (Capability #4: Secure Authentication & Authorization)
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md` (Capability #4: Secure Authentication & Authorization)
 - **Initiative:** `/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v1.md` (Epic-003 in supporting epics)
-- **Business Research:** `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md` (§3.1 Gap 2: Enterprise Security Patterns)
+- **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (§3.1 Gap 2: Enterprise Security Patterns)
 
 **Technical References:** [To be created during PRD phase]
 - ADR: Authentication Method Selection (JWT, OAuth, API keys)

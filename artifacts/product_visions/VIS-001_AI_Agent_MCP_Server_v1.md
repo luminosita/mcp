@@ -6,7 +6,7 @@
 - **Date:** 2025-10-11
 - **Version:** 2.0
 - **Status:** Approved
-- **Informed By Business Research:** /docs/research/mcp/AI_Agent_MCP_Server_business_research.md
+- **Informed By Business Research:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
 
 ---
 
@@ -246,7 +246,7 @@ This product aligns with the industry-wide shift toward standardized AI agent in
 
 ## Business Research References
 
-**Primary Research Document:** /docs/research/mcp/AI_Agent_MCP_Server_business_research.md
+**Primary Research Document:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
 
 **Key Insights Applied:**
 - **Market Positioning (§5.1):** MCP standardization creates infrastructure market opportunity positioning as "Production-Ready AI Agent Infrastructure for Enterprise Development Teams" with 12-18 month first-mover window

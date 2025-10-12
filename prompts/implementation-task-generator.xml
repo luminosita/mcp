@@ -33,15 +33,15 @@
     </background>
 
     <input_artifacts>
-      <artifact path="/artifacts/backlog_stories/[us_id]_v[N].md" type="backlog_story">
+      <artifact required="true" type="backlog_story">
         Backlog Story contains acceptance criteria and technical notes for decomposition.
       </artifact>
 
-      <artifact path="[Tech Spec]" type="tech_spec">
+      <artifact required="true" type="tech_spec">
         Tech Spec provides component design, API contracts, data models.
       </artifact>
 
-      <artifact path="[Implementation Research]" type="implementation_research">
+      <artifact required="true" type="implementation_research">
         Implementation Research provides code examples and patterns.
       </artifact>
     </input_artifacts>
@@ -114,7 +114,6 @@
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/implementation_tasks/[task_id]_v1.md</path>
       <validation_checklist>
         <criterion>Task objective specific and granular</criterion>
         <criterion>Code changes specified (files to modify/create)</criterion>

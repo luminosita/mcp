@@ -407,7 +407,6 @@
     <step priority="9">
       <action>Generate comprehensive business research artifact</action>
       <purpose>Create final deliverable following business research template</purpose>
-      <output_path>`docs/research/[product_name]/[product_name]_business_research.md`</output_path>
       <details>
         Follow `business_research_template.md` structure exactly.
 
@@ -458,7 +457,6 @@
 
   <output_format>
     <terminal_artifact>
-      <path>`docs/research/[product_name]/[product_name]_business_research.md`</path>
       <format>Markdown following `business_research_template.md` structure</format>
       <validation_checklist>
         <criterion>Human inputs collected and validated before research began</criterion>

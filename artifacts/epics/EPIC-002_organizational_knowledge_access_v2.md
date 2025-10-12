@@ -4,7 +4,7 @@
 - **Epic ID:** EPIC-002
 - **Status:** Draft
 - **Priority:** Critical (Must-have for MVP)
-- **Product Vision:** `/artifacts/product_vision_v1.md`
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md`
 - **Initiative:** INIT-001 - Production-Ready AI Agent Infrastructure
 - **Owner:** [Engineering Lead]
 - **Target Release:** Q1-Q2 2025 (Months 1-6)
@@ -363,9 +363,9 @@ Knowledge access directly addresses context barrier by giving agents access to o
 ## Related Documents
 
 **Source Documents:**
-- **Product Vision:** `/artifacts/product_vision_v1.md` (Capability #2: Organizational Knowledge Access)
+- **Product Vision:** `/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md` (Capability #2: Organizational Knowledge Access)
 - **Initiative:** `/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v1.md` (Epic-002 in supporting epics)
-- **Business Research:** `/docs/research/mcp/AI_Agent_MCP_Server_business_research.md` (§1.1 Pain Point 2, §4.1 Capability 2)
+- **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (§1.1 Pain Point 2, §4.1 Capability 2)
 
 **Technical References:** [To be created during PRD phase]
 - ADR: Vector Database Selection (Qdrant vs. Weaviate vs. Pinecone)
