@@ -1,8 +1,12 @@
 # Comprehensive SDLC Artifacts Guideline
 
-**Version:** 1.1
-**Date:** 2025-10-10
+**Version:** 1.2
+**Date:** 2025-10-12
 **Purpose:** Strategic guideline for SDLC artifact creation, hierarchy, and relationships across different Agile scaling approaches
+
+**Recent Updates:**
+- v1.2 (2025-10-12): Added Section 1.10 - Metadata Standards and Traceability
+- v1.1 (2025-10-10): Initial comprehensive version
 
 ---
 

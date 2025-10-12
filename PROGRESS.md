@@ -18,10 +18,10 @@
 - [X] merge generator-schema-templates
 
 ## Manual testing
-- [ ] Test Product Vision Generator
-- [ ] Perform refinement cycle
+- [X] Test Product Vision Generator
+- [X] Perform refinement cycle
 ## Research documents restructuring
-- [ ] restructure research documents (use docs/research_restructuring_guidelines.md) (restructure @docs/research/rag/Rag_2_0_detailed_analysis_v2.md.md according to @docs/research_restructuring_guidelines.md. Use appropriate tools because of output token limit of 32k)
+- [X] restructure research documents (use docs/research_restructuring_guidelines.md) (restructure @docs/research/rag/Rag_2_0_detailed_analysis_v2.md.md according to @docs/research_restructuring_guidelines.md. Use appropriate tools because of output token limit of 32k)
 
 ## Semi-automatic testing
 - [ ] feedback/context_engineering_strategy_v1_critique_v3.md
