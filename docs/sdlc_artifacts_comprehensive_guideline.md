@@ -610,6 +610,167 @@ Backlog Story: "Implement push notification preferences API"
 
 ---
 
+### 1.10 Metadata Standards and Traceability
+
+#### 1.10.1 Core Metadata Fields
+
+All SDLC artifacts include standardized metadata fields to enable traceability and impact analysis.
+
+**Required Fields (All Artifacts):**
+- **[Artifact] ID:** Unique identifier with standardized prefix
+- **Status:** Standardized status value for artifact type
+- **Version:** Version number (vX for documents, X.Y for templates)
+- **Date:** Creation or last update date (YYYY-MM-DD)
+- **Owner/Author:** Responsible individual
+
+**Traceability Fields:**
+- **Parent [Artifact]:** Direct hierarchical parent (1 level up)
+- **Informed By [Research]:** Research document that informed this artifact
+- **Related [Artifact]:** Cross-references to peer or supporting artifacts
+
+#### 1.10.2 ID Prefix Standards
+
+| Artifact Type | Prefix | Example | Pattern |
+|---------------|--------|---------|------------|
+| Product Vision | VIS | VIS-001 | VIS-XXX |
+| Initiative | INIT | INIT-042 | INIT-XXX |
+| Epic | EPIC | EPIC-123 | EPIC-XXX |
+| PRD | PRD | PRD-005 | PRD-XXX |
+| High-Level Story | HLS | HLS-078 | HLS-XXX |
+| Backlog Story | US | US-234 | US-XXX |
+| Spike | SPIKE | SPIKE-042 | SPIKE-XXX |
+| ADR | ADR | ADR-008 | ADR-XXX |
+| Tech Spec | SPEC | SPEC-015 | SPEC-XXX |
+| Implementation Task | TASK | TASK-567 | TASK-XXX |
+
+**Research Artifacts:** No document IDs (use descriptive file names)
+
+#### 1.10.3 Status Value Standards
+
+**Research Artifacts (Business Research, Implementation Research):**
+- `Draft` - In progress, not ready for consumption
+- `In Review` - Under review by stakeholders
+- `Finalized` - Approved and ready to inform downstream artifacts
+
+**Strategic Artifacts (Vision, Initiative, Epic):**
+- `Draft` - Initial creation
+- `In Review` - Stakeholder review
+- `Approved` - Approved for execution
+- `Planned` - (Epic only) Approved and scheduled
+- `Active` - (Initiative only) Execution underway
+- `In Progress` - Work in progress
+- `Completed` - All success criteria met
+- `Cancelled` - (Initiative only) Terminated before completion
+
+**Requirements Artifacts (PRD, High-Level Story):**
+- `Draft` - Initial creation
+- `In Review` - Stakeholder review
+- `Approved` - Approved for breakdown
+- `Ready` - (Story only) Ready for sprint planning
+- `In Progress` - Breakdown or implementation underway
+- `Completed` - All requirements implemented
+
+**Implementation Artifacts (Backlog Story, Task):**
+- `Backlog` - Identified but not ready for sprint
+- `Ready` - Ready for sprint planning
+- `To Do` - (Task only) In sprint backlog
+- `In Progress` - Implementation underway
+- `In Review` - Code review or QA
+- `Done` - Accepted by product owner
+
+**Spike Artifacts:**
+- `Planned` - Investigation scheduled
+- `In Progress` - Investigation underway
+- `Completed` - Findings documented
+
+**Architecture Artifacts (ADR, Tech Spec):**
+- `Proposed` - Decision/design proposed
+- `Accepted` - Approved for implementation
+- `Active` - Currently in use
+- `Deprecated` - No longer recommended
+- `Superseded` - Replaced by newer decision/spec
+
+#### 1.10.4 Research Integration Guidelines
+
+**Business Research Integration:**
+
+Business Research informs **business-level artifacts** (strategic planning and user-facing requirements):
+- **Product Vision** - Market positioning, user personas, success metrics
+- **Initiative** - Strategic justification, market opportunity
+- **Epic** - Market gaps, capability recommendations, user needs
+- **PRD** (optional) - Market context, competitive positioning (when needed)
+- **High-Level Story** (optional) - User persona details (when needed)
+
+**Reference Format:**
+```markdown
+## Business Research References
+**Primary Research:** [Link to Business Research document]
+
+**Applied Insights:**
+- **§[X.Y]: [Section Title]:** [How insight applies]
+```
+
+**Implementation Research Integration:**
+
+Implementation Research informs **technical artifacts** (implementation planning and execution):
+- **PRD** (optional) - Technical feasibility, NFRs (when needed)
+- **Backlog Story** - Technical patterns, architecture context
+- **Spike** - Investigation baseline, existing patterns
+- **ADR** - Architecture patterns, technology comparisons
+- **Tech Spec** - Implementation patterns, code examples
+- **Implementation Task** - Detailed code examples, anti-patterns to avoid
+
+**Reference Format:**
+```markdown
+## Implementation Research References
+**Primary Research:** [Link to Implementation Research document]
+
+**Technical Patterns Applied:**
+- **§[X.Y]: [Pattern Name]:** [How pattern applies]
+  - **Code Example:** [Reference if applicable]
+```
+
+#### 1.10.5 Traceability Matrix
+
+**Complete Upstream/Downstream Relationships:**
+
+| Artifact | Parent | Informed By | Informs |
+|----------|--------|-------------|---------|
+| Business Research | None | None | Vision, Initiative, Epic, PRD, HLS |
+| Implementation Research | None | None | PRD, US, Spike, ADR, Spec, Task |
+| Product Vision | None | Business Research | Initiative, Epic | Initiative, Epic |
+| Product Vision | Business Research | Epic | Epic |
+| Epic | Product Vision, Initiative | Business Research | PRD, HLS |
+| PRD | Epic | Business Research, Impl Research | HLS, US |
+| High-Level Story | Epic, PRD | Business Research | US |
+| Backlog Story | PRD, HLS | Implementation Research | Technical artifacts |
+| Spike | US, Spec | Implementation Research | ADR, Spec |
+| ADR | US | Spike, Impl Research | Spec, Task |
+| Tech Spec | US, ADR | Spike, Impl Research | Task |
+| Task | US, Spec, ADR | Implementation Research | None | None |
+
+#### 1.10.6 Validation Best Practices
+
+**Before Marking Artifact as "Approved" or "Ready":**
+1. Verify all parent fields link to approved parent artifacts
+2. Confirm all research references point to finalized research documents
+3. Check that all section references (§X.Y) exist in referenced documents
+4. Update parent artifact's downstream tracking table (if applicable)
+
+**When Updating an Existing Artifact:**
+1. Review downstream artifacts table to identify affected children
+2. Notify owners of downstream artifacts about changes
+3. Update version number and status
+4. Add change log entry
+
+**Quarterly Traceability Audit:**
+1. Validate all artifact links are not broken
+2. Check that downstream tracking tables are current
+3. Verify research documents are referenced consistently
+4. Identify any orphaned artifacts (no parent references)
+
+---
+
 ## 2. Strategic Perspectives on Artifact Relationships
 
 ### 2.1 Strategic Perspective
