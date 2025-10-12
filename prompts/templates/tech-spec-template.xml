@@ -22,16 +22,45 @@
 # Technical Specification: [Feature/System Name]
 
 ## Metadata
-- **TechSpec ID:** TECH-SPEC-[XXX]
+- **TechSpec ID:** SPEC-[XXX]
 - **Date:** [YYYY-MM-DD]
 - **Status:** [Proposed | Accepted | Deprecated | Superseded]
 - **Deciders:** [Names]
-- **Story ID:** US-[XXX]
+- **Parent Story ID:** US-[XXX]
+- **Related PRD:** [Link]
+- **Related ADR:** [Link]
+- **Informed By Spike:** SPIKE-[XXX] (if spike provided implementation guidance)
+- **Informed By Implementation Research:** [Link to Implementation Research document]
 
 ## Overview
 **Summary:** [One paragraph overview]
 **Related PRD:** [Link]
 **Related ADR:** [Link]
+
+## Research & Investigation Context
+
+**Parent Backlog Story:** [US-XXX: Story Title]
+- **Link:** [URL to Backlog Story]
+
+**Informed By Spike:** [SPIKE-XXX: Spike Title] (if applicable)
+- **Link:** [URL to Spike document]
+- **Implementation Guidance:** [How spike findings shaped this technical spec]
+- **Key Decisions:** [Decisions made based on spike evidence]
+
+**Implementation Research References:**
+**Primary Research Document:** [Link to Implementation Research report]
+
+**Implementation Patterns Applied:**
+- **§[X.Y]: [Technical Capability]:** [Detailed implementation pattern]
+  - **Code Example Reference:** [Link to Appendix B example if applicable]
+- **§[X.Y]: [Security Implementation]:** [Security pattern applied]
+- **§[X.Y]: [Testing Strategy]:** [Testing approach from research]
+
+**Performance Targets:**
+- **§[X.Y]: [Performance Benchmarks]:** [Target metrics from research]
+
+**Observability:**
+- **§[X.Y]: [Monitoring Implementation]:** [Logging and metrics approach]
 
 ## Goals
 - [Technical goal 1]

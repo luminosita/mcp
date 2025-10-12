@@ -23,11 +23,34 @@
 - **Date:** [YYYY-MM-DD]
 - **Status:** [Proposed | Accepted | Deprecated | Superseded]
 - **Deciders:** [Names]
-- **Story ID:** US-[XXX]
+- **Parent Story ID:** US-[XXX]
+- **Informed By Spike:** SPIKE-[XXX] (if spike provided evidence)
+- **Informed By Implementation Research:** [Link to Implementation Research document]
 
 ## Context
 What is the issue we're addressing?
 [2-3 paragraphs explaining problem, constraints, forces at play]
+
+## Research & Investigation Context
+
+**Parent Backlog Story:** [US-XXX: Story Title]
+- **Link:** [URL to Backlog Story]
+- **Decision Driver:** [Why this decision was needed for the story]
+
+**Informed By Spike:** [SPIKE-XXX: Spike Title] (if applicable)
+- **Link:** [URL to Spike document]
+- **Key Findings:** [Summary of spike findings that informed this decision]
+- **Evidence Applied:** [Benchmarks, prototypes, or data from spike]
+
+**Implementation Research References:**
+**Primary Research Document:** [Link to Implementation Research report]
+
+**Relevant Patterns:**
+- **§[X.Y]: [Architecture Pattern]:** [How this pattern informs the decision]
+- **§[X.Y]: [Technology Stack]:** [Technology comparison from research]
+
+**Pitfalls Considered:**
+- **§[X.Y]: [Anti-Pattern]:** [Why alternatives were rejected based on research]
 
 ## Decision Drivers
 - [Driver 1: e.g., Performance requirements]

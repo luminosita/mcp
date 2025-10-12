@@ -117,8 +117,17 @@
 
 ### Implementation Research Reference
 [If applicable, reference Implementation Research sections]
-- **Reference:** Implementation Research §[X.Y] - [Pattern/Anti-pattern Name]
-- **Guidance:** [Specific guidance from research]
+- **Primary Research:** [Link to Implementation Research document]
+- **§[X.Y] - [Pattern Name]:** [Specific guidance from research]
+- **§[X.Y] - [Anti-Pattern]:** [Pitfall to avoid with explanation]
+- **Code Example:** [Link to Appendix B example if applicable]
+
+**Relevant Patterns for This Task:**
+- **§[X.Y]: [Specific Pattern]:** [How to apply in this task]
+- **§[X.Y]: [Testing Pattern]:** [Test strategy for this task]
+
+**Reference Implementation:**
+[Link to similar existing code in codebase OR research code example]
 
 ## Dependencies
 

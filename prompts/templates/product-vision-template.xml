@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Product_Vision_Template</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <source>Generated based on industry best practices and Context Engineering framework</source>
     <sdlc_phase>Vision</sdlc_phase>
-    <last_updated>2025-10-11</last_updated>
-    <changes>v1.1: Added Strategic Uncertainties subsection under Constraints & Assumptions to capture vision-level strategic uncertainties requiring market validation or executive alignment (minimal enhancement - Option A)</changes>
+    <last_updated>2025-10-12</last_updated>
+    <changes>v1.2: Phase 1 Metadata Refinement - Added Vision ID, Informed By Business Research field, and Business Research References section for upstream traceability (downstream tracking deferred to backlog software)</changes>
   </metadata>
 
   <instructions>
@@ -23,10 +23,12 @@
 # Product Vision: [Product Name]
 
 ## Metadata
+- **Vision ID:** VIS-[XXX]
 - **Author:** [name]
 - **Date:** [YYYY-MM-DD]
 - **Version:** [version]
 - **Status:** [Draft/Review/Approved]
+- **Informed By Business Research:** [Link to Business Research document]
 
 ## Executive Summary
 [2-3 paragraphs capturing the essence of the product vision: who it's for, what problem it solves, why it matters]
@@ -95,6 +97,19 @@
 ## Strategic Alignment
 [How this product aligns with broader organizational goals]
 
+## Business Research References
+
+**Primary Research Document:** [Link to Business Research report]
+
+**Key Insights Applied:**
+- **Market Positioning (§5.1):** [How positioning recommendation informs this vision]
+- **Target Users (§Appendix A):** [Which personas from research are primary focus]
+- **Success Metrics (§4.1):** [Which capability recommendations inform key features]
+
+**Market Data Supporting Vision:**
+- [Data point 1 from research with section reference]
+- [Data point 2 from research with section reference]
+
 ## Constraints & Assumptions
 
 ### Constraints
@@ -138,7 +153,8 @@
 - **Phase 3** (Q3): [Focus area]
 
 ## References
-[Links to market research, user studies, competitive analysis]
+- **Business Research:** [Link to Business Research report]
+- [Links to market research, user studies, competitive analysis]
     ]]>
   </structure>
 
