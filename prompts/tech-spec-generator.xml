@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Tech_Spec_Generator</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <sdlc_phase>Technical_Design</sdlc_phase>
-    <depends_on>Backlog Story, Implementation Research, ADRs (CLAUDE.md: Backlog Story, Implementation Research, and ADR paths)</depends_on>
-    <generated_by>Context Engineering Framework v1.4</generated_by>
-    <date>2025-10-11</date>
-    <changes>v1.2: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
+    <depends_on>Backlog Story (mandatory), Implementation Research (mandatory), Spike (conditional), ADR (conditional)</depends_on>
+    <generated_by>Context Engineering Framework v1.5</generated_by>
+    <date>2025-10-13</date>
+    <changes>v1.3: Replaced required attribute with classification system - Backlog Story and Implementation Research mandatory, Spike and ADR conditional (Issue #3)</changes>
   </metadata>
 
   <system_role>
@@ -35,16 +35,28 @@
     </background>
 
     <input_artifacts>
-      <artifact required="true" type="backlog_story">
+      <artifact classification="mandatory" type="backlog_story">
         Backlog Story contains requirements, acceptance criteria, technical notes.
+
+        **Classification**: MANDATORY - Generator cannot proceed without Backlog Story as primary source of requirements and technical context.
       </artifact>
 
-      <artifact required="true" type="implementation_research">
+      <artifact classification="mandatory" type="implementation_research">
         Implementation Research provides patterns, code examples, and technical guidance.
+
+        **Classification**: MANDATORY - Tech Specs require implementation patterns and code examples for concrete technical design. Without Implementation Research, spec lacks technical depth and guidance (~30-40% quality reduction).
       </artifact>
 
-      <artifact required="true" type="adr">
+      <artifact classification="conditional" type="spike">
+        Spike provides investigation findings and implementation details from time-boxed investigation.
+
+        **Classification**: CONDITIONAL - Load if spike completed and provides implementation approach details. Spike findings inform component design and implementation strategy.
+      </artifact>
+
+      <artifact classification="conditional" type="adr">
         ADRs document architectural decisions affecting this component.
+
+        **Classification**: CONDITIONAL - Load if relevant ADRs exist for this component. ADRs provide architectural constraints and technology decisions that Tech Spec must follow.
       </artifact>
     </input_artifacts>
   </task_context>

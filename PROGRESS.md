@@ -23,10 +23,11 @@
     - [ ] examples (Step 5, Step 6 -> Updated Sections)
 - [ ] create refinemenets plan for generated artifacts and apply
 - [X] apply Issue 1, PRD gen only
-- [ ] apply Issue 2, PRD only
-- [ ] apply Issue 3, all
+- [X] apply Issue 2, PRD only
+- [X] apply Issue 3, all
 - [ ] Validate that everything was applied
 - [ ] CLAUDE.md consolidation after generate and refine prompts refinement
+- [ ] Open Questions in EPIC-000 too techy
 
 ## PRD Validation
 - [ ] Technical Consideration sections were removed from Epics and saved into `artifacts/technical_considerations_from_epic.md`

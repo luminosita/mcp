@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>High_Level_User_Story_Generator</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <sdlc_phase>High_Level_Story</sdlc_phase>
-    <depends_on>Epic OR PRD, Business Research (CLAUDE.md: Epic, PRD, and Business Research paths)</depends_on>
-    <generated_by>Context Engineering Framework v1.4</generated_by>
-    <date>2025-10-11</date>
-    <changes>v1.2: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
+    <depends_on>Epic (mandatory, mutually exclusive with PRD) OR PRD (mandatory, mutually exclusive with Epic), Business Research (recommended)</depends_on>
+    <generated_by>Context Engineering Framework v1.5</generated_by>
+    <date>2025-10-13</date>
+    <changes>v1.3: Replaced required attribute with classification system - Epic OR PRD mandatory (mutually exclusive), Business Research recommended (Issue #3)</changes>
   </metadata>
 
   <system_role>
@@ -40,16 +40,18 @@
     </background>
 
     <input_artifacts>
-      <artifact required="true" type="epic">
+      <artifact classification="mandatory" mutually_exclusive_group="parent" type="epic">
         Epic contains:
         - High-level user stories (preliminary list)
         - Epic scope and acceptance criteria
         - User personas and success metrics
 
         Select one high-level story from Epic to develop in detail.
+
+        **Classification**: MANDATORY - One of Epic OR PRD must be provided (mutually exclusive). Generator cannot proceed without a parent artifact.
       </artifact>
 
-      <artifact required="true" type="prd">
+      <artifact classification="mandatory" mutually_exclusive_group="parent" type="prd">
         PRD contains:
         - Detailed user stories and use cases
         - User personas and journeys
@@ -57,9 +59,11 @@
         - Acceptance criteria
 
         Select one user story cluster from PRD to develop as high-level story.
+
+        **Classification**: MANDATORY - One of Epic OR PRD must be provided (mutually exclusive). Generator cannot proceed without a parent artifact.
       </artifact>
 
-      <artifact required="true" type="business_research">
+      <artifact classification="recommended" type="business_research">
         Business Research provides (BUSINESS PERSPECTIVE ONLY):
         - User pain points and workflows
         - UX gaps and user needs
@@ -67,6 +71,8 @@
         - User personas detailed
 
         Use to enrich user context, workflows, and functional requirements. DO NOT reference technical sections.
+
+        **Classification**: RECOMMENDED - Enriches High-Level Story with user context and workflows. Without it, story quality reduced by ~20-25%. Generator warns if not found but continues.
       </artifact>
     </input_artifacts>
 

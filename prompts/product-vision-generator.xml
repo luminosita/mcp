@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Product_Vision_Generator</name>
-    <version>2.1</version>
+    <version>2.2</version>
     <sdlc_phase>Vision</sdlc_phase>
-    <depends_on>Business Research (CLAUDE.md: Business Research path)</depends_on>
-    <generated_by>Context Engineering Framework v1.4</generated_by>
-    <date>2025-10-10</date>
-    <changes>v2.1: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
+    <depends_on>Business Research (mandatory)</depends_on>
+    <generated_by>Context Engineering Framework v1.5</generated_by>
+    <date>2025-10-13</date>
+    <changes>v2.2: Replaced required attribute with classification system - Business Research is mandatory (Issue #3)</changes>
   </metadata>
 
   <system_role>
@@ -44,7 +44,7 @@
     </background>
 
     <input_artifacts>
-      <artifact required="true" type="business_research">
+      <artifact classification="mandatory" type="business_research">
         Business Research provides:
         - §1: Problem Space Analysis (user pain points, market impact)
         - §2: Market &amp; Competitive Landscape (competitors, business models, value propositions)
@@ -56,6 +56,8 @@
         - §8: References (business citations)
 
         Your task is to synthesize this research into a compelling, actionable Product Vision.
+
+        **Classification**: MANDATORY - Generator cannot proceed without Business Research as only input. This is the foundational document for product vision.
       </artifact>
     </input_artifacts>
 

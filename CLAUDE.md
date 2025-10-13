@@ -137,18 +137,79 @@ Technical Phase
 **Key Principles:**
 - **Business Research** flows into all business-phase artifacts (Vision, Initiative, Epic)
 - **Implementation Research** flows into technical-phase artifacts (Backlog Story, Spike, ADR, Tech Spec)
-- **PRD is unique**: Transition phase artifact that may use BOTH research documents:
-  - Business Research (optional): Market validation, competitive positioning, business metrics
-  - Implementation Research (optional): Technical feasibility, architecture constraints, NFRs
+- **PRD is unique**: Transition phase artifact that may use BOTH research documents
 - **Spike is optional**: Only created when Backlog Story or Tech Spec has [REQUIRES SPIKE] marker
-  - Time-boxed investigation (1-3 days max) to reduce technical uncertainty
-  - Produces findings and recommendation (NOT production code)
-  - Informs ADR (if major decision) or Tech Spec (if implementation detail)
-  - Always updates parent Backlog Story with findings and revised estimate
 - Each generator produces v1, v2, v3 iterations through feedback cycles
 - Approved v3 artifacts become inputs to downstream generators
 - Generators are stateless; all context from input artifacts only
-- Secondary inputs are OPTIONAL: Load when enrichment needed, not by default
+
+---
+
+## Input Classification System
+
+All generator input artifacts use a `classification` attribute that defines loading behavior and quality impact.
+
+### Classification Tiers
+
+**MANDATORY** (`classification="mandatory"`):
+- **Definition**: Artifact MUST be loaded. Generator cannot proceed without it.
+- **Characteristics**:
+  - Direct parent in dependency chain (Primary Input)
+  - Contains core requirements for output artifact
+  - Blocking: Generator fails with error if not provided
+- **Load Behavior**: Load immediately, fail if not found
+- **Examples**: Epic for PRD, Product Vision for Initiative, High-Level Story for Backlog Story
+
+**RECOMMENDED** (`classification="recommended"`):
+- **Definition**: Artifact SHOULD be loaded to produce high-quality output, but generator can function without it.
+- **Characteristics**:
+  - Enriches output with additional context (Secondary Input)
+  - Absence causes quality degradation but not failure
+  - Generator notes when not loaded: "[WARN] Business Research not available - recommendations based on Epic only"
+  - Standard workflow includes these inputs; skipped only when explicitly unavailable
+- **Load Behavior**: Attempt to load, warn if not found, continue execution
+- **Quality Impact**: Output quality reduced by ~20-30% without recommended inputs
+- **Examples**: Business Research for PRD, Implementation Research for Backlog Story
+
+**CONDITIONAL** (`classification="conditional"`):
+- **Definition**: Artifact is loaded ONLY under specific conditions or when explicitly requested.
+- **Characteristics**:
+  - Loaded conditionally based on markers, flags, or specific scenarios
+  - Not loaded by default in standard workflow
+  - Presence/absence doesn't affect quality (provides alternative information path)
+- **Load Behavior**: Check condition first, load only if condition met, no warning if not loaded
+- **Conditions**:
+  - Spike results available → ADR/Tech Spec may load Spike findings
+  - Additional context needed → Backlog Story may load PRD (parent is HLS)
+  - Explicit marker in parent artifact (e.g., [LOAD_RESEARCH])
+- **Examples**: Spike for ADR (if spike completed), PRD for Backlog Story (if additional context needed)
+
+**MUTUALLY_EXCLUSIVE** (Special case):
+- **Definition**: Exactly ONE of N inputs must be provided.
+- **Attributes**: `classification="mandatory" mutually_exclusive_group="[group_name]"`
+- **Characteristics**:
+  - Generator validates exactly one input from group is provided
+  - Dependency tree shows "OR" relationship in metadata
+  - Fail if zero or multiple inputs from same group
+- **Validation**: At least one required, only one allowed per group
+- **Examples**:
+  - Epic accepts Product Vision OR Initiative (group="parent")
+  - High-Level Story accepts Epic OR PRD (group="parent")
+  - Spike accepts Backlog Story OR Tech Spec (group="source")
+
+### Migration from `required` Attribute
+
+**Old System (deprecated):**
+- `required="true"` - must load (ambiguous: includes both mandatory and recommended)
+- `required="false"` - optional (ambiguous: includes recommended, conditional, and truly optional)
+
+**New System (Issue #3):**
+- `classification="mandatory"` - must load (clear: generator fails without it)
+- `classification="recommended"` - should load (clear: warns but continues without it)
+- `classification="conditional"` - maybe load (clear: only loads if condition met)
+- `mutually_exclusive_group="name"` - one of N required (clear: validates exactly one)
+
+All generators updated to use `classification` attribute exclusively.
 
 ---
 
@@ -370,12 +431,13 @@ Generators reference these paths using the artifact type name (e.g., "Load templ
 
 ---
 
-**Document Version**: 1.4
+**Document Version**: 1.5
 **Last Updated**: 2025-10-13
 **Maintained By**: Context Engineering PoC Team
 **Next Review**: End of Phase 1
 
 **Version History:**
+- v1.5 (2025-10-13): Added Input Classification System - replaced ambiguous `required` attribute with clear `classification` tiers (Issue #3 - Input Classification)
 - v1.4 (2025-10-13): Added centralized Artifact Path Patterns section (Issue #2 - Path Consolidation)
 - v1.3 (2025-10-12): Standardized artifact IDs, file naming conventions, and status values across all templates
 - v1.2 (2025-10-11): Added Spike artifact to framework (time-boxed technical investigations)

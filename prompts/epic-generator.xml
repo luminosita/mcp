@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Epic_Generator</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <sdlc_phase>Epic</sdlc_phase>
-    <depends_on>Product Vision OR Initiative (CLAUDE.md: Product Vision and Initiative paths)</depends_on>
-    <generated_by>Context Engineering Framework v1.4</generated_by>
-    <date>2025-10-11</date>
-    <changes>v1.3: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
+    <depends_on>Product Vision (mandatory, mutually exclusive with Initiative) OR Initiative (mandatory, mutually exclusive with Product Vision), Business Research (recommended)</depends_on>
+    <generated_by>Context Engineering Framework v1.5</generated_by>
+    <date>2025-10-13</date>
+    <changes>v1.4: Replaced required attribute with classification system - Product Vision OR Initiative mandatory (mutually exclusive), Business Research recommended (Issue #3)</changes>
   </metadata>
 
   <system_role>
@@ -40,7 +40,7 @@
     </background>
 
     <input_artifacts>
-      <artifact required="true" type="product_vision">
+      <artifact classification="mandatory" mutually_exclusive_group="parent" type="product_vision">
         Product Vision contains:
         - Vision statement and problem statement
         - Target users and personas
@@ -48,18 +48,22 @@
         - Success metrics and goals
 
         Extract one capability to expand into detailed epic.
+
+        **Classification**: MANDATORY - One of Product Vision OR Initiative must be provided (mutually exclusive). Generator cannot proceed without a parent artifact.
       </artifact>
 
-      <artifact required="true" type="initiative">
+      <artifact classification="mandatory" mutually_exclusive_group="parent" type="initiative">
         Initiative contains:
         - Strategic objective and OKRs
         - Supporting epics list with rough descriptions
         - Business context and timing
 
         Select one supporting epic to develop in detail.
+
+        **Classification**: MANDATORY - One of Product Vision OR Initiative must be provided (mutually exclusive). Generator cannot proceed without a parent artifact.
       </artifact>
 
-      <artifact required="false" type="business_research">
+      <artifact classification="recommended" type="business_research">
         Business Research provides:
         - Market analysis and competitive landscape
         - User pain points and needs (quantified)
@@ -67,6 +71,8 @@
         - Product capabilities (WHAT/WHY, not HOW)
 
         Use to strengthen epic business value and user impact sections.
+
+        **Classification**: RECOMMENDED - Enriches Epic with market context and user pain points. Without it, Epic quality reduced by ~20-25%. Generator warns if not found but continues.
       </artifact>
     </input_artifacts>
 

@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Spike_Generator</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <sdlc_phase>Spike</sdlc_phase>
-    <depends_on>Backlog Story OR Technical Specification, Implementation Research (optional) (CLAUDE.md: Backlog Story, Tech Spec, and Implementation Research paths)</depends_on>
-    <generated_by>Context Engineering Framework v1.4</generated_by>
-    <date>2025-10-11</date>
-    <changes>v1.1: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
+    <depends_on>Backlog Story (mandatory, mutually exclusive with Tech Spec) OR Tech Spec (mandatory, mutually exclusive with Backlog Story), Implementation Research (recommended)</depends_on>
+    <generated_by>Context Engineering Framework v1.5</generated_by>
+    <date>2025-10-13</date>
+    <changes>v1.2: Replaced required attribute with classification system - Backlog Story OR Tech Spec mandatory (mutually exclusive), Implementation Research recommended (Issue #3)</changes>
   </metadata>
 
   <system_role>
@@ -43,23 +43,29 @@
     </background>
 
     <input_artifacts>
-      <artifact required="true" type="backlog_story">
+      <artifact classification="mandatory" mutually_exclusive_group="source" type="backlog_story">
         Backlog Story contains Open Questions section with questions marked [REQUIRES SPIKE].
         Extract the specific question to investigate and context from technical notes.
+
+        **Classification**: MANDATORY - One of Backlog Story OR Tech Spec must be provided (mutually exclusive) as source of spike question. Generator cannot proceed without a source artifact.
       </artifact>
 
-      <artifact required="true" type="tech_spec">
+      <artifact classification="mandatory" mutually_exclusive_group="source" type="tech_spec">
         Tech Spec may contain Open Questions requiring spike investigation.
         Extract the specific question and technical context.
+
+        **Classification**: MANDATORY - One of Backlog Story OR Tech Spec must be provided (mutually exclusive) as source of spike question. Generator cannot proceed without a source artifact.
       </artifact>
 
-      <artifact required="false" type="implementation_research">
-        Implementation Research provides (OPTIONAL):
+      <artifact classification="recommended" type="implementation_research">
+        Implementation Research provides:
         - §2: Technology Landscape Analysis (competitor approaches)
         - §4: Implementation Patterns (recommended approaches)
         - §8: Code Examples &amp; Benchmarks (baseline data)
 
         Use to inform investigation approach and baseline expectations.
+
+        **Classification**: RECOMMENDED - Enriches Spike investigation with baseline data and patterns. Without it, spike investigation lacks context (~20-25% quality reduction). Generator warns if not found but continues.
       </artifact>
     </input_artifacts>
 

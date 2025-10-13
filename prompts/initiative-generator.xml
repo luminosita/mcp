@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Initiative_Generator</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <sdlc_phase>Initiative</sdlc_phase>
-    <depends_on>Product Vision (CLAUDE.md: Product Vision path)</depends_on>
-    <generated_by>Context Engineering Framework v1.4</generated_by>
-    <date>2025-10-11</date>
-    <changes>v1.4: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
+    <depends_on>Product Vision (mandatory), Business Research (recommended)</depends_on>
+    <generated_by>Context Engineering Framework v1.5</generated_by>
+    <date>2025-10-13</date>
+    <changes>v1.5: Replaced required attribute with classification system - Product Vision mandatory, Business Research recommended (Issue #3)</changes>
   </metadata>
 
   <system_role>
@@ -36,7 +36,7 @@
     </background>
 
     <input_artifacts>
-      <artifact required="true" type="product_vision">
+      <artifact classification="mandatory" type="product_vision">
         Product Vision contains:
         - Vision statement and problem statement
         - Target users and personas
@@ -45,16 +45,20 @@
         - Market opportunity and competitive landscape
 
         Extract strategic objectives, success metrics, and capabilities to inform initiative structure.
+
+        **Classification**: MANDATORY - Generator cannot proceed without Product Vision as primary input for strategic planning.
       </artifact>
 
-      <artifact required="false" type="business_research">
-        If available, Business Research provides:
+      <artifact classification="recommended" type="business_research">
+        Business Research provides:
         - Market analysis and competitive positioning
         - User pain points and needs
         - Gap analysis from business perspective
         - Strategic recommendations
 
         Use to strengthen business case and market justification.
+
+        **Classification**: RECOMMENDED - Enriches Initiative with market context and competitive positioning. Without it, Initiative quality reduced by ~20-25% (based on Product Vision only). Generator warns if not found but continues.
       </artifact>
     </input_artifacts>
 

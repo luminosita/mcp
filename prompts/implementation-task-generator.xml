@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Implementation_Task_Generator</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <sdlc_phase>Implementation_Task</sdlc_phase>
-    <depends_on>Backlog Story, Technical Specification, Implementation Research (CLAUDE.md: Backlog Story, Tech Spec, and Implementation Research paths)</depends_on>
-    <generated_by>Context Engineering Framework v1.4</generated_by>
-    <date>2025-10-11</date>
-    <changes>v1.2: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
+    <depends_on>Backlog Story (mandatory), Tech Spec (mandatory), Implementation Research (recommended)</depends_on>
+    <generated_by>Context Engineering Framework v1.5</generated_by>
+    <date>2025-10-13</date>
+    <changes>v1.3: Replaced required attribute with classification system - Backlog Story and Tech Spec mandatory, Implementation Research recommended (Issue #3)</changes>
   </metadata>
 
   <system_role>
@@ -33,16 +33,22 @@
     </background>
 
     <input_artifacts>
-      <artifact required="true" type="backlog_story">
+      <artifact classification="mandatory" type="backlog_story">
         Backlog Story contains acceptance criteria and technical notes for decomposition.
+
+        **Classification**: MANDATORY - Generator cannot proceed without Backlog Story as primary source for task decomposition and acceptance criteria.
       </artifact>
 
-      <artifact required="true" type="tech_spec">
+      <artifact classification="mandatory" type="tech_spec">
         Tech Spec provides component design, API contracts, data models.
+
+        **Classification**: MANDATORY - Implementation Tasks require detailed technical specifications for concrete task definition. Without Tech Spec, tasks lack implementation guidance (~40-50% quality reduction).
       </artifact>
 
-      <artifact required="true" type="implementation_research">
+      <artifact classification="recommended" type="implementation_research">
         Implementation Research provides code examples and patterns.
+
+        **Classification**: RECOMMENDED - Enriches Implementation Tasks with code examples and implementation patterns. Without it, task guidance reduced by ~20-30% (lacks code references). Generator warns if not found but continues.
       </artifact>
     </input_artifacts>
   </task_context>

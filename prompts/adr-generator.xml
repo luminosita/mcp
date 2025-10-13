@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>ADR_Generator</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <sdlc_phase>Architecture</sdlc_phase>
-    <depends_on>Backlog Story OR Spike, Implementation Research (CLAUDE.md: Backlog Story, Spike, and Implementation Research paths)</depends_on>
-    <generated_by>Context Engineering Framework v1.4</generated_by>
-    <date>2025-10-11</date>
-    <changes>v1.2: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
+    <depends_on>Backlog Story (mandatory), Spike (conditional), Implementation Research (recommended)</depends_on>
+    <generated_by>Context Engineering Framework v1.5</generated_by>
+    <date>2025-10-13</date>
+    <changes>v1.3: Replaced required attribute with classification system - Backlog Story mandatory, Spike conditional, Implementation Research recommended (Issue #3)</changes>
   </metadata>
 
   <system_role>
@@ -43,18 +43,22 @@
     </background>
 
     <input_artifacts>
-      <artifact required="true" type="backlog_story">
+      <artifact classification="mandatory" type="backlog_story">
         Backlog Story contains technical notes identifying need for architectural decision.
         May contain Open Questions marked [REQUIRES ADR].
+
+        **Classification**: MANDATORY - Generator cannot proceed without Backlog Story as source of architectural decision requirement.
       </artifact>
 
-      <artifact required="false" type="spike">
+      <artifact classification="conditional" type="spike">
         Spike contains investigation findings and recommendation from time-boxed technical investigation.
         ADRs often document decisions informed by spike findings.
         Spike provides evidence (benchmarks, prototypes, documentation) to support alternatives analysis.
+
+        **Classification**: CONDITIONAL - Load if spike completed and provides findings to inform ADR decision. Spike evidence strengthens alternatives analysis with benchmark data and proof-of-concept results.
       </artifact>
 
-      <artifact required="false" type="implementation_research">
+      <artifact classification="recommended" type="implementation_research">
         Implementation Research provides:
         - §2: Technology Landscape Analysis (competitor tech stacks, patterns)
         - §5: Architecture &amp; Technology Stack (recommendations with versions)
@@ -62,6 +66,8 @@
         - §8: Code Examples &amp; Benchmarks
 
         Use for evaluating alternatives and documenting trade-offs.
+
+        **Classification**: RECOMMENDED - Enriches ADR with technology landscape and pattern analysis. Without it, alternatives analysis reduced by ~20-30% (lacks industry patterns and anti-patterns). Generator warns if not found but continues.
       </artifact>
     </input_artifacts>
   </task_context>
