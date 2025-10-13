@@ -77,8 +77,8 @@
       <action>Load Backlog Story and/or Spike (if available)</action>
       <purpose>Understand decision context and gather evidence</purpose>
       <anti_hallucination>
-        - If ADR triggered by Backlog Story [REQUIRES ADR] marker, load story from /artifacts/backlog_stories/[us_id]_v[N].md
-        - If Spike completed, load from /artifacts/spikes/[spike_id]_v[N].md for findings and recommendation
+        - If ADR triggered by Backlog Story [REQUIRES ADR] marker, load story (path per CLAUDE.md)
+        - If Spike completed, load spike (path per CLAUDE.md) for findings and recommendation
         - Spike provides evidence (benchmarks, prototypes) to support alternatives analysis
         - Extract decision context, alternatives considered, and evidence from spike findings
       </anti_hallucination>
@@ -91,7 +91,7 @@
         Determine where this decision need originated and establish traceability:
         - Was it deferred from PRD Open Questions? (Reference PRD ID and question)
         - Was it identified during Backlog Story technical analysis? (Reference US ID, Open Question)
-        - Is it addressing a spike result? (Reference SPIKE-XXX at /artifacts/spikes/[spike_id]_v[N].md)
+        - Is it addressing a spike result? (Reference SPIKE-XXX, path per CLAUDE.md)
         - Is it a prerequisite architectural decision for implementation?
 
         Document the source for traceability in the ADR Context section.
@@ -105,7 +105,7 @@
         - Reference spike findings in Context section
         - Use spike benchmark data in Detailed Analysis section
         - Incorporate spike recommendation as one of the considered options
-        - Link to spike artifact: "Based on findings from SPIKE-042 (/artifacts/spikes/SPIKE-042_v1.md)"
+        - Link to spike artifact using path from CLAUDE.md: "Based on findings from SPIKE-042"
       </guidance>
     </step>
     <step priority="5"><action>Define Decision Drivers</action></step>

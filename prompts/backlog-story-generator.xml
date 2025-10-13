@@ -82,7 +82,7 @@
   <anti_hallucination_guidelines>
     <guideline category="grounding">Base story scope on High-Level Story decomposition plan. Quote specific workflow steps when defining story boundaries.</guideline>
     <guideline category="assumptions">When suggesting implementation approach, reference Implementation Research patterns. Mark suggestions as [RECOMMENDED APPROACH] if not explicit in research.</guideline>
-    <guideline category="uncertainty">If Implementation Research lacks specific pattern, note as [REQUIRES SPIKE] in Open Questions rather than inventing approach. Spike will be documented at /artifacts/spikes/[spike_id]_v1.md.</guideline>
+    <guideline category="uncertainty">If Implementation Research lacks specific pattern, note as [REQUIRES SPIKE] in Open Questions rather than inventing approach. Spike path defined in CLAUDE.md Artifact Path Patterns section.</guideline>
     <guideline category="verification">For technical notes and implementation guidance, cite Implementation Research sections. Format: "ref: Implementation Research §4.3 - Pattern Name"</guideline>
     <guideline category="confidence">Identify areas requiring architecture decision. Mark as [REQUIRES ADR] for significant technical choices.</guideline>
     <guideline category="scope">Backlog story should be implementation-adjacent (hints at technical approach) but not prescriptive (exact implementation in tasks). Do NOT write code in backlog story—code goes in Implementation Tasks.</guideline>
@@ -336,7 +336,7 @@
     </guideline>
 
     <guideline category="actionability">
-      Story must be sprint-ready. Team should be able to estimate, plan, and execute without waiting for clarification. If unknowns exist, mark [REQUIRES SPIKE] or [REQUIRES ADR]. Spikes will be documented at /artifacts/spikes/SPIKE-XXX_v1.md; ADRs at /artifacts/adrs/ADR-XXX_v1.md.
+      Story must be sprint-ready. Team should be able to estimate, plan, and execute without waiting for clarification. If unknowns exist, mark [REQUIRES SPIKE] or [REQUIRES ADR]. Spike and ADR paths defined in CLAUDE.md Artifact Path Patterns section.
     </guideline>
 
     <guideline category="traceability">
@@ -346,9 +346,9 @@
     <guideline category="open_questions">
       Backlog Story Open Questions capture implementation uncertainties that may need spikes, ADRs, or tech lead consultation. Use clear markers: [REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD].
 
-      **Spike workflow:** Question marked [REQUIRES SPIKE] → Spike investigation (1-3 days, documented at /artifacts/spikes/SPIKE-XXX_v1.md) → Spike findings inform ADR (if major decision) or Tech Spec (if implementation detail) → Story estimate updated.
+      **Spike workflow:** Question marked [REQUIRES SPIKE] → Spike investigation (1-3 days, path per CLAUDE.md) → Spike findings inform ADR (if major decision) or Tech Spec (if implementation detail) → Story estimate updated.
 
-      **ADR workflow:** Question marked [REQUIRES ADR] → ADR created (documented at /artifacts/adrs/ADR-XXX_v1.md) before implementation begins.
+      **ADR workflow:** Question marked [REQUIRES ADR] → ADR created (path per CLAUDE.md) before implementation begins.
 
       **Backlog Story questions (implementation uncertainties):**
       - "Joi vs. Yup for validation?" [REQUIRES TECH LEAD] - minor choice
