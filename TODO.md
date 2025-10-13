@@ -8,10 +8,10 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: HLS-001 v2 created with feedback decisions; 4 additional HLS tasks added for complete PRD-000 coverage
-**Last Completed**: TASK-013: Execute High-level User Story Generator v1 (PRD-000 - HLS-001)
-**Next Task**: TASK-014 (Generate backlog stories from HLS-001) OR TASK-019/020/021/022 (Generate additional HLS stories) OR Update CLAUDE-tooling.md (critical gap from TASK-018)
-**Completion**: 12/22 tasks (55%)
+**Current Status**: US-001 v1 (Automated Setup Script) generated; 5 additional backlog stories pending from HLS-001; Critical tooling gaps identified in TASK-018
+**Last Completed**: TASK-014: Execute Backlog User Story Generator v1 (HLS-001 - US-001)
+**Next Task**: TASK-023 (Update CLAUDE-tooling.md - CRITICAL) OR TASK-024 through TASK-028 (Generate remaining backlog stories from HLS-001) OR TASK-019/020/021/022 (Generate additional HLS stories)
+**Completion**: 13/28 tasks (46%)
 
 ---
 
@@ -265,121 +265,35 @@ Execute High-level Story Generator for first PRD in standalone context.
 
 ## Phase 1.5: Backlog User Story Generation
 
-### TASK-014: Execute Backlog User Story Generator v1 (HLS-001)
+### TASK-014: Execute Backlog User Story Generator v1 (HLS-001 - US-001)
 **Priority**: Critical
 **Dependencies**: TASK-013
 **Estimated Time**: 25 minutes
-**Status**: ⏳ Pending
-**Context**: New session C3 required
-**Generator Name**: high-level-user-story
+**Status**: ✅ Completed
+**Context**: New session C4 required
+**Generator Name**: backlog-story
 
 **Description**:
-Execute Backlog Story Generator for first HLS in standalone context.
+Execute Backlog Story Generator for first backlog story from HLS-001 v2 decomposition.
 
 **Command**: `/generate TASK-014`
 
 **Input Data:**
-- HLS-001
+- HLS-001 v2 (Automated Development Environment Setup)
+- PRD-000 v2 (conditional context)
+- Implementation Research (recommended context)
 
----
-
-### TASK-019: Execute High-level User Story Generator v1 (PRD-000 - HLS-002)
-**Priority**: High
-**Dependencies**: TASK-013 (HLS-001 generated)
-**Estimated Time**: 25 minutes
-**Status**: ⏳ Pending
-**Context**: New session required
-**Generator Name**: high-level-user-story
-
-**Description**:
-Execute High-level Story Generator for CI/CD Pipeline Setup from PRD-000.
-
-**Command**: `/generate TASK-019`
-
-**Input Data:**
-- PRD-000
-- Focus: CI/CD Pipeline Setup (FR-04, FR-05, FR-06, FR-15, FR-16, FR-21)
-
-**Scope Guidance:**
-- User story: Automated build validation with CI/CD pipeline
-- Primary user flow: PRD-000 Section 6.1 Flow 2 (Feature Development Workflow - steps 6-9)
-- Target personas: Senior Backend Engineer, New Team Member
-- Epic acceptance criterion: Epic-000 Criterion 2 (Automated Build Success)
-
----
-
-### TASK-020: Execute High-level User Story Generator v1 (PRD-000 - HLS-003)
-**Priority**: High
-**Dependencies**: TASK-013 (HLS-001 generated)
-**Estimated Time**: 25 minutes
-**Status**: ⏳ Pending
-**Context**: New session required
-**Generator Name**: high-level-user-story
-
-**Description**:
-Execute High-level Story Generator for Application Skeleton Implementation from PRD-000.
-
-**Command**: `/generate TASK-020`
-
-**Input Data:**
-- PRD-000
-- Focus: Application Skeleton Implementation (FR-07, FR-08, FR-09)
-
-**Scope Guidance:**
-- User story: FastAPI application skeleton with example MCP tool
-- Primary user flow: Developer reviewing application patterns to implement first feature
-- Target personas: Senior Backend Engineer, New Team Member
-- Epic acceptance criterion: Epic-000 Criterion 3 (Framework Readiness)
-
----
-
-### TASK-021: Execute High-level User Story Generator v1 (PRD-000 - HLS-004)
-**Priority**: High
-**Dependencies**: TASK-013 (HLS-001 generated)
-**Estimated Time**: 25 minutes
-**Status**: ⏳ Pending
-**Context**: New session required
-**Generator Name**: high-level-user-story
-
-**Description**:
-Execute High-level Story Generator for Development Documentation & Workflow Standards from PRD-000.
-
-**Command**: `/generate TASK-021`
-
-**Input Data:**
-- PRD-000
-- Focus: Development Documentation & Workflow Standards (FR-10, FR-11, FR-12, FR-19)
-
-**Scope Guidance:**
-- User story: Comprehensive development workflow documentation enabling team collaboration
-- Primary user flow: PRD-000 Section 6.1 Flow 2 (Feature Development Workflow - understanding branching, code review, testing)
-- Target personas: New Team Member (primary), Technical Writer, Senior Backend Engineer
-- Epic acceptance criterion: Epic-000 Criterion 4 (Development Standards Clarity)
-
----
-
-### TASK-022: Execute High-level User Story Generator v1 (PRD-000 - HLS-005)
-**Priority**: Medium
-**Dependencies**: TASK-013 (HLS-001 generated)
-**Estimated Time**: 25 minutes
-**Status**: ⏳ Pending
-**Context**: New session required
-**Generator Name**: high-level-user-story
-
-**Description**:
-Execute High-level Story Generator for Containerized Deployment Configuration from PRD-000.
-
-**Command**: `/generate TASK-022`
-
-**Input Data:**
-- PRD-000
-- Focus: Containerized Deployment Configuration (FR-13, FR-14, FR-17, FR-18)
-
-**Scope Guidance:**
-- User story: Containerized deployment enabling production readiness
-- Primary user flow: Building and running application in Podman container for local development and production deployment
-- Target personas: Senior Backend Engineer, DevOps Engineer
-- Note: Foundation phase focuses on Containerfile creation; full K8s deployment deferred to EPIC-005 per Decision D5
+**Completion Notes:**
+- US-001 v1 generated: `/artifacts/backlog_stories/US-001_automated_setup_script_v1.md`
+- Story: Create Automated Setup Script (NuShell) with Interactive Prompts
+- Complexity: 6 SP (High - cross-platform requirements, comprehensive error handling)
+- Priority: Critical - Foundation enabler blocking all feature development
+- Coverage: FR-01, FR-03, FR-19, FR-20 from PRD-000 v2
+- Acceptance Criteria: 10 detailed Gherkin scenarios covering all platforms (macOS, Linux, WSL2) and edge cases
+- Technical Approach: NuShell for cross-platform scripting, uv package manager, interactive prompts with silent mode, verbose progress indicators
+- Dependencies: Blocked by US-002 (Repository Directory Structure must exist first)
+- Validation: 24/26 criteria passed (92%) - 2 warnings for parent PRD Draft status (acceptable for PoC)
+- Ready for implementation after US-002 completes
 
 ---
 
@@ -758,6 +672,278 @@ Systematic evaluation of specialized `/prompts/CLAUDE/CLAUDE-*.md` files to ensu
 
 **Output Artifacts:**
 - `/docs/specialized_claude_evaluation.md` - Comprehensive evaluation report
+
+---
+
+### TASK-019: Execute High-level User Story Generator v1 (PRD-000 - HLS-002)
+**Priority**: High
+**Dependencies**: TASK-013 (HLS-001 generated)
+**Estimated Time**: 25 minutes
+**Status**: ⏳ Pending
+**Context**: New session required
+**Generator Name**: high-level-user-story
+
+**Description**:
+Execute High-level Story Generator for CI/CD Pipeline Setup from PRD-000.
+
+**Command**: `/generate TASK-019`
+
+**Input Data:**
+- PRD-000
+- Focus: CI/CD Pipeline Setup (FR-04, FR-05, FR-06, FR-15, FR-16, FR-21)
+
+**Scope Guidance:**
+- User story: Automated build validation with CI/CD pipeline
+- Primary user flow: PRD-000 Section 6.1 Flow 2 (Feature Development Workflow - steps 6-9)
+- Target personas: Senior Backend Engineer, New Team Member
+- Epic acceptance criterion: Epic-000 Criterion 2 (Automated Build Success)
+
+---
+
+### TASK-020: Execute High-level User Story Generator v1 (PRD-000 - HLS-003)
+**Priority**: High
+**Dependencies**: TASK-013 (HLS-001 generated)
+**Estimated Time**: 25 minutes
+**Status**: ⏳ Pending
+**Context**: New session required
+**Generator Name**: high-level-user-story
+
+**Description**:
+Execute High-level Story Generator for Application Skeleton Implementation from PRD-000.
+
+**Command**: `/generate TASK-020`
+
+**Input Data:**
+- PRD-000
+- Focus: Application Skeleton Implementation (FR-07, FR-08, FR-09)
+
+**Scope Guidance:**
+- User story: FastAPI application skeleton with example MCP tool
+- Primary user flow: Developer reviewing application patterns to implement first feature
+- Target personas: Senior Backend Engineer, New Team Member
+- Epic acceptance criterion: Epic-000 Criterion 3 (Framework Readiness)
+
+---
+
+### TASK-021: Execute High-level User Story Generator v1 (PRD-000 - HLS-004)
+**Priority**: High
+**Dependencies**: TASK-013 (HLS-001 generated)
+**Estimated Time**: 25 minutes
+**Status**: ⏳ Pending
+**Context**: New session required
+**Generator Name**: high-level-user-story
+
+**Description**:
+Execute High-level Story Generator for Development Documentation & Workflow Standards from PRD-000.
+
+**Command**: `/generate TASK-021`
+
+**Input Data:**
+- PRD-000
+- Focus: Development Documentation & Workflow Standards (FR-10, FR-11, FR-12, FR-19)
+
+**Scope Guidance:**
+- User story: Comprehensive development workflow documentation enabling team collaboration
+- Primary user flow: PRD-000 Section 6.1 Flow 2 (Feature Development Workflow - understanding branching, code review, testing)
+- Target personas: New Team Member (primary), Technical Writer, Senior Backend Engineer
+- Epic acceptance criterion: Epic-000 Criterion 4 (Development Standards Clarity)
+
+---
+
+### TASK-022: Execute High-level User Story Generator v1 (PRD-000 - HLS-005)
+**Priority**: Medium
+**Dependencies**: TASK-013 (HLS-001 generated)
+**Estimated Time**: 25 minutes
+**Status**: ⏳ Pending
+**Context**: New session required
+**Generator Name**: high-level-user-story
+
+**Description**:
+Execute High-level Story Generator for Containerized Deployment Configuration from PRD-000.
+
+**Command**: `/generate TASK-022`
+
+**Input Data:**
+- PRD-000
+- Focus: Containerized Deployment Configuration (FR-13, FR-14, FR-17, FR-18)
+
+**Scope Guidance:**
+- User story: Containerized deployment enabling production readiness
+- Primary user flow: Building and running application in Podman container for local development and production deployment
+- Target personas: Senior Backend Engineer, DevOps Engineer
+- Note: Foundation phase focuses on Containerfile creation; full K8s deployment deferred to EPIC-005 per Decision D5
+
+---
+
+### TASK-023: Update CLAUDE-tooling.md with Missing PRD-000 v2 Tools
+**Priority**: CRITICAL
+**Dependencies**: TASK-018 (evaluation completed)
+**Estimated Time**: 2-3 hours
+**Status**: ⏳ Pending
+**Context**: Current session
+
+**Description**:
+Address critical gap identified in TASK-018 evaluation: CLAUDE-tooling.md is missing 4 new tools added in PRD-000 v2. These tools are required for PRD-000 implementation but lack documentation.
+
+**Missing Tools:**
+1. **Renovate** (FR-16, FR-21) - Automated dependency updates, security vulnerability detection
+2. **NuShell** (FR-19) - Cross-platform shell scripting (macOS, Linux, BSD, Windows)
+3. **Devbox** (FR-20, Decision D3) - Portable isolated dev environments
+4. **Podman** (FR-13, FR-17, Decision D2, D7) - Primary container runtime (Docker alternative)
+
+**Changes Required:**
+Add comprehensive sections for each tool following existing CLAUDE-tooling.md pattern:
+- Why? section (rationale, benefits)
+- Installation instructions
+- Configuration examples (renovate.json, devbox.json, Containerfile)
+- Command reference
+- Integration with existing workflow
+- Docker compatibility notes for Podman
+
+**Impact:** HIGH - Developers implementing US-001 through US-006 will need these tools
+
+**Success Criteria:**
+- [ ] Renovate section added with renovate.json configuration
+- [ ] NuShell section added with script examples replacing Bash
+- [ ] Devbox section added with devbox.json configuration and shell usage
+- [ ] Podman section added with Containerfile best practices and Docker compatibility
+- [ ] Complete Development Workflow section updated to include Devbox and Podman
+- [ ] Cross-references updated in CLAUDE-core.md if needed
+- [ ] All 4 tools validated against PRD-000 v2 requirements
+
+**Output Artifacts:**
+- Updated `/prompts/CLAUDE/CLAUDE-tooling.md`
+
+**Reference:**
+- Evaluation Report: `/docs/specialized_claude_evaluation.md` (Priority 1 recommendations)
+- PRD-000 v2: `/artifacts/prds/PRD-000_project_foundation_bootstrap_v2.md`
+
+---
+
+### TASK-024: Execute Backlog User Story Generator v1 (HLS-001 - US-002)
+**Priority**: Critical
+**Dependencies**: TASK-014 (US-001 generated)
+**Estimated Time**: 20 minutes
+**Status**: ⏳ Pending
+**Context**: New session C5 required
+**Generator Name**: backlog-story
+
+**Description**:
+Execute Backlog Story Generator for second backlog story from HLS-001 v2 decomposition.
+
+**Command**: `/generate TASK-024`
+
+**Input Data:**
+- HLS-001 v2 (Story #2: Establish Repository Directory Structure)
+- PRD-000 v2 (conditional context)
+- Implementation Research (recommended context)
+
+**Story Scope:**
+- Brief: Create standardized directory structure following Python src layout with appropriate subdirectories for code, tests, documentation, and configuration
+- Estimated: ~2 SP
+- Blocks: US-001 (setup script needs structure to populate)
+
+---
+
+### TASK-025: Execute Backlog User Story Generator v1 (HLS-001 - US-003)
+**Priority**: High
+**Dependencies**: TASK-014 (US-001 generated)
+**Estimated Time**: 20 minutes
+**Status**: ⏳ Pending
+**Context**: New session C6 required
+**Generator Name**: backlog-story
+
+**Description**:
+Execute Backlog Story Generator for third backlog story from HLS-001 v2 decomposition.
+
+**Command**: `/generate TASK-025`
+
+**Input Data:**
+- HLS-001 v2 (Story #3: Configure Devbox Isolated Environment)
+- PRD-000 v2 (conditional context)
+- Implementation Research (recommended context)
+
+**Story Scope:**
+- Brief: Create `devbox.json` configuration defining isolated development environment with Python 3.11+, Podman, uv, and all required system dependencies
+- Estimated: ~3 SP
+- Critical: Enables reproducible environments (Decision D3)
+
+---
+
+### TASK-026: Execute Backlog User Story Generator v1 (HLS-001 - US-004)
+**Priority**: High
+**Dependencies**: TASK-014 (US-001 generated)
+**Estimated Time**: 20 minutes
+**Status**: ⏳ Pending
+**Context**: New session C7 required
+**Generator Name**: backlog-story
+
+**Description**:
+Execute Backlog Story Generator for fourth backlog story from HLS-001 v2 decomposition.
+
+**Command**: `/generate TASK-026`
+
+**Input Data:**
+- HLS-001 v2 (Story #4: Implement VS Code IDE Configuration)
+- PRD-000 v2 (conditional context)
+- Implementation Research (recommended context)
+
+**Story Scope:**
+- Brief: Create VS Code workspace settings and extension recommendations for standardized IDE setup; integrate with setup script to configure IDE automatically based on user preference
+- Estimated: ~3 SP
+- From Decision: D1 (IDE setup with VS Code standardization)
+
+---
+
+### TASK-027: Execute Backlog User Story Generator v1 (HLS-001 - US-005)
+**Priority**: High
+**Dependencies**: TASK-014 (US-001 generated)
+**Estimated Time**: 20 minutes
+**Status**: ⏳ Pending
+**Context**: New session C8 required
+**Generator Name**: backlog-story
+
+**Description**:
+Execute Backlog Story Generator for fifth backlog story from HLS-001 v2 decomposition.
+
+**Command**: `/generate TASK-027`
+
+**Input Data:**
+- HLS-001 v2 (Story #5: Implement Environment Validation and Health Checks)
+- PRD-000 v2 (conditional context)
+- Implementation Research (recommended context)
+
+**Story Scope:**
+- Brief: Add validation steps to setup script verifying environment health, dependency installation, IDE configuration, and server startup capability
+- Estimated: ~3 SP
+- Validates: All setup components working correctly
+
+---
+
+### TASK-028: Execute Backlog User Story Generator v1 (HLS-001 - US-006)
+**Priority**: Medium
+**Dependencies**: TASK-014 (US-001 generated)
+**Estimated Time**: 20 minutes
+**Status**: ⏳ Pending
+**Context**: New session C9 required
+**Generator Name**: backlog-story
+
+**Description**:
+Execute Backlog Story Generator for sixth backlog story from HLS-001 v2 decomposition.
+
+**Command**: `/generate TASK-028`
+
+**Input Data:**
+- HLS-001 v2 (Story #6: Create Setup Documentation with Troubleshooting Guide)
+- PRD-000 v2 (conditional context)
+- Implementation Research (recommended context)
+
+**Story Scope:**
+- Brief: Write comprehensive setup documentation covering quick start instructions, interactive vs silent mode, IDE setup, platform-specific considerations, common errors, and troubleshooting steps
+- Estimated: ~3 SP
+- Deliverable: `docs/SETUP.md` with complete onboarding guidance
+
+---
 
 ## Task Status Legend
 

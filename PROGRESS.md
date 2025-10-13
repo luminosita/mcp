@@ -33,7 +33,7 @@
     - [X] Manual: Update 12 generator prompts to reference "Folder Structure" patterns
 - [X] Open Questions in EPIC-000 too techy
 
-## PRD Validation
+## FOR EVERY NEW PRD: Validation
 - [ ] Technical Consideration sections were removed from Epics and saved into `artifacts/technical_considerations_from_epic.md`
     - [ ] Validate that these sections are generated in PRDs and compare the content
     - [ ] Open Questions (technical) from all epics -> PRDs
