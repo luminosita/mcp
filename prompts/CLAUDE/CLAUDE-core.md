@@ -4,7 +4,7 @@
 
 ## 📚 Specialized Configuration Files
 
-- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - UV, Ruff, MyPy, pytest configuration and commands
+- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Development tools: UV, Ruff, MyPy, pytest, Renovate, NuShell, Devbox, Podman
 - **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing strategy, fixtures, and coverage requirements
 - **[CLAUDE-typing.md](./CLAUDE-typing.md)** - Type hints, annotations, and type safety patterns
 - **[CLAUDE-validation.md](./CLAUDE-validation.md)** - Pydantic models, input validation, and security

@@ -8,10 +8,10 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: US-001 v1 (Automated Setup Script) generated; 5 additional backlog stories pending from HLS-001; Critical tooling gaps identified in TASK-018
-**Last Completed**: TASK-014: Execute Backlog User Story Generator v1 (HLS-001 - US-001)
-**Next Task**: TASK-023 (Update CLAUDE-tooling.md - CRITICAL) OR TASK-024 through TASK-028 (Generate remaining backlog stories from HLS-001) OR TASK-019/020/021/022 (Generate additional HLS stories)
-**Completion**: 13/28 tasks (46%)
+**Current Status**: US-002 v1 (Repository Directory Structure) generated; Unblocks US-001 implementation; 4 additional backlog stories pending from HLS-001
+**Last Completed**: TASK-024: Execute Backlog User Story Generator v1 (HLS-001 - US-002)
+**Next Task**: TASK-025 through TASK-028 (Generate remaining backlog stories from HLS-001) OR Begin implementation of US-002 (foundation) OR TASK-019/020/021/022 (Generate additional HLS stories)
+**Completion**: 15/28 tasks (54%)
 
 ---
 
@@ -779,7 +779,7 @@ Execute High-level Story Generator for Containerized Deployment Configuration fr
 **Priority**: CRITICAL
 **Dependencies**: TASK-018 (evaluation completed)
 **Estimated Time**: 2-3 hours
-**Status**: ⏳ Pending
+**Status**: ✅ Completed
 **Context**: Current session
 
 **Description**:
@@ -803,16 +803,68 @@ Add comprehensive sections for each tool following existing CLAUDE-tooling.md pa
 **Impact:** HIGH - Developers implementing US-001 through US-006 will need these tools
 
 **Success Criteria:**
-- [ ] Renovate section added with renovate.json configuration
-- [ ] NuShell section added with script examples replacing Bash
-- [ ] Devbox section added with devbox.json configuration and shell usage
-- [ ] Podman section added with Containerfile best practices and Docker compatibility
-- [ ] Complete Development Workflow section updated to include Devbox and Podman
-- [ ] Cross-references updated in CLAUDE-core.md if needed
-- [ ] All 4 tools validated against PRD-000 v2 requirements
+- [x] Renovate section added with renovate.json configuration
+- [x] NuShell section added with script examples replacing Bash
+- [x] Devbox section added with devbox.json configuration and shell usage
+- [x] Podman section added with Containerfile best practices and Docker compatibility
+- [x] Complete Development Workflow section updated to include Devbox and Podman
+- [x] Cross-references updated in CLAUDE-core.md if needed
+- [x] All 4 tools validated against PRD-000 v2 requirements
+
+**Completion Notes:**
+- ✅ Added 706 lines of comprehensive documentation (596 → 1302 lines)
+- ✅ **Renovate section** (94 lines):
+  - renovate.json configuration with Python, GitHub Actions support
+  - Grouped updates, automerge policies, security alerts
+  - Best practices: schedule off-hours, group related updates
+- ✅ **NuShell section** (206 lines):
+  - Installation instructions (macOS, Linux, Windows, Devbox)
+  - Basic syntax examples (variables, loops, conditionals, error handling)
+  - Complete setup.nu script example matching US-001 requirements
+  - NuShell vs Bash comparison table
+  - Commands reference (file ops, data manipulation, HTTP)
+- ✅ **Devbox section** (125 lines):
+  - Installation and devbox.json configuration
+  - Complete example with Python 3.11, uv, podman, nushell, postgresql
+  - Shell scripts integration for common tasks
+  - Commands reference (add, remove, run, shell)
+  - Devbox vs Docker comparison table
+  - Best practices: commit lockfile, pin versions, use shell scripts
+- ✅ **Podman section** (225 lines):
+  - Installation (macOS, Linux, Devbox)
+  - Complete multi-stage Containerfile with non-root user, health checks
+  - Commands reference (build, run, logs, exec)
+  - podman-compose configuration example
+  - Podman vs Docker commands comparison table
+  - Docker compatibility notes (alias podman=docker)
+  - Best practices: multi-stage builds, rootless, layer caching
+- ✅ **Updated Complete Development Workflow**:
+  - Initial Setup with Devbox integration
+  - Daily Development with Devbox scripts
+  - Database Development with Podman containers
+  - Container Development with Podman build/run
+- ✅ **Updated Critical Tool Requirements**:
+  - Split into Core Development Tools and Environment & Deployment Tools
+  - Added requirements for Devbox, NuShell, Podman, Renovate
+- ✅ **Updated CLAUDE-core.md**:
+  - Line 7 updated to reflect complete tooling coverage
+- ✅ **Validation**:
+  - FR-16 (Renovate automation): ✅ Covered
+  - FR-19 (NuShell scripting): ✅ Covered with complete setup.nu example
+  - FR-20 (Devbox isolation): ✅ Covered with devbox.json example
+  - FR-13, FR-17 (Podman containers): ✅ Covered with Containerfile example
+  - Decision D2 (Organizational standards): ✅ Referenced in Podman section
+  - Decision D3 (Team optimization - Devbox): ✅ Covered comprehensively
+  - Decision D7 (Podman for database): ✅ Covered in workflow examples
 
 **Output Artifacts:**
-- Updated `/prompts/CLAUDE/CLAUDE-tooling.md`
+- Updated `/prompts/CLAUDE/CLAUDE-tooling.md` (+706 lines)
+- Updated `/prompts/CLAUDE/CLAUDE-core.md` (cross-reference updated)
+
+**Coverage Improvement:**
+- **Before:** 11/21 PRD-000 v2 requirements fully covered (52%)
+- **After:** 18/21 PRD-000 v2 requirements fully covered (86%)
+- **Gap Closed:** 7 critical requirements now documented
 
 **Reference:**
 - Evaluation Report: `/docs/specialized_claude_evaluation.md` (Priority 1 recommendations)
@@ -824,8 +876,8 @@ Add comprehensive sections for each tool following existing CLAUDE-tooling.md pa
 **Priority**: Critical
 **Dependencies**: TASK-014 (US-001 generated)
 **Estimated Time**: 20 minutes
-**Status**: ⏳ Pending
-**Context**: New session C5 required
+**Status**: ✅ Completed
+**Context**: Current session
 **Generator Name**: backlog-story
 
 **Description**:
@@ -842,6 +894,24 @@ Execute Backlog Story Generator for second backlog story from HLS-001 v2 decompo
 - Brief: Create standardized directory structure following Python src layout with appropriate subdirectories for code, tests, documentation, and configuration
 - Estimated: ~2 SP
 - Blocks: US-001 (setup script needs structure to populate)
+
+**Completion Notes:**
+- US-002 v1 generated: `/artifacts/backlog_stories/US-002_repository_directory_structure_v1.md`
+- Story: Establish Repository Directory Structure
+- Complexity: 2 SP (Low-Medium - straightforward directory creation)
+- Priority: Critical - Blocks US-001 (setup script requires structure to populate)
+- Coverage: FR-02 from PRD-000 v2
+- Acceptance Criteria: 8 detailed Gherkin scenarios covering structure completeness, Python src layout, test mirroring, configuration files, documentation, git tracking, preservation of existing directories, and CLAUDE-architecture.md compliance
+- Technical Specification: Complete directory tree structure with 35+ directories and file content templates
+- **Key Deliverables:**
+  - Python src layout: `src/ai_agent_mcp_server/` with 8 subdirectories (core, models, services, repositories, tools, api, utils)
+  - Test structure: `tests/` with unit, integration, e2e subdirectories mirroring source
+  - Documentation structure: `docs/` with placeholder files (CONTRIBUTING, SETUP, ARCHITECTURE, API)
+  - Configuration files: `.env.example`, `.gitignore`, `.dockerignore`
+  - Preserves existing: `artifacts/`, `prompts/`, `.claude/`, `feedback/`, `CLAUDE.md`, `TODO.md`
+- **Foundation Story:** No dependencies - this is the foundation that all other stories build upon
+- **Unblocks:** US-001 (setup script can now populate directories), US-004 (IDE configuration), US-006 (documentation)
+- Ready for immediate implementation
 
 ---
 
