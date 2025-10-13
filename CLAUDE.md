@@ -381,3 +381,23 @@ Upon completion, update relevant task status in `/TODO.md`:
 **Related Documents:**
 - `/docs/framework_validation_gaps.md` - Known validation gaps and production requirements
 - `/docs/sdlc_artifacts_comprehensive_guideline.md` - Section 1.10 covers Metadata Standards and Traceability
+
+---
+
+## Implementation Phase Instructions
+
+**When to use Implementation Phase instructions:**
+- Writing Python code, tests, documentation
+- Setting up development environment, CI/CD, tooling
+- Implementing features from PRDs/Backlog Stories
+- Coding tasks after planning phase completes
+
+**Implementation Configuration Files:**
+- **[CLAUDE-core.md](prompts/CLAUDE/CLAUDE-core.md)** - Main implementation guide and orchestration
+- **[CLAUDE-tooling.md](prompts/CLAUDE/CLAUDE-tooling.md)** - UV, Ruff, MyPy, pytest configuration
+- **[CLAUDE-testing.md](prompts/CLAUDE/CLAUDE-testing.md)** - Testing strategy, fixtures, coverage
+- **[CLAUDE-typing.md](prompts/CLAUDE/CLAUDE-typing.md)** - Type hints, annotations, type safety
+- **[CLAUDE-validation.md](prompts/CLAUDE/CLAUDE-validation.md)** - Pydantic models, input validation, security
+- **[CLAUDE-architecture.md](prompts/CLAUDE/CLAUDE-architecture.md)** - Project structure, modularity, design patterns
+
+**→ For implementation work, see [CLAUDE-core.md](prompts/CLAUDE/CLAUDE-core.md) which orchestrates all specialized configs.**

@@ -1,15 +1,4 @@
-# EPIC-000
-## Open Questions
-1. **Container Runtime Selection:** Do we standardize on Docker Desktop for local development, or support multiple container runtimes (Podman, Rancher Desktop)? [DECISION REQUIRED: Week 1]
-
-2. **Monorepo vs. Multi-Repo:** Should foundation support monorepo structure for all components, or separate repositories per major capability? [DECISION REQUIRED: Week 1]
-
-3. **CI/CD Platform:** Do we use GitHub Actions (if GitHub-hosted), GitLab CI, or alternative? Must align with organizational standards. [REQUIRES PLATFORM TEAM INPUT]
-
-4. **Python Version Policy:** What Python version range do we support (e.g., 3.10+, 3.11+ only)? Impacts dependency choices. [DECISION REQUIRED: Week 1]
-
-5. **Dependency Management Tool:** Do we use Poetry, pip-tools, or alternative for Python dependency management? [DECISION REQUIRED: Week 1]
-
+# EPIC-000 - DONE
 
 # EPIC-001
 ## Open Questions

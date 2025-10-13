@@ -8,10 +8,10 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: PRD-000 v1 generated, INIT-000 created, Generator architecture refined, Feedback received
-**Last Completed**: TASK-015: Refactor Initiative Generator to Handle INIT-000 (Foundation Initiative)
-**Next Task**: TASK-016 (Refine PRD-000 Based on Feedback) or TASK-017 (Restructure CLAUDE.md)
-**Completion**: 8/18 tasks (44%)
+**Current Status**: PRD-000 v2 generated with all feedback incorporated, CLAUDE.md restructured with implementation routing
+**Last Completed**: TASK-017: Add Implementation Routing to CLAUDE.md
+**Next Task**: TASK-013 (Execute High-level User Story Generator v1)
+**Completion**: 10/18 tasks (56%)
 
 ---
 
@@ -380,7 +380,7 @@ Initiative Generator:
 **Priority**: High
 **Dependencies**: TASK-012 (PRD-000 v1 must exist)
 **Estimated Time**: 45 minutes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed
 **Context**: Current session
 
 **Description**:
@@ -445,13 +445,25 @@ Incorporate feedback from `/feedback/PRD-000_v1_comments.md` into PRD-000 v2. Up
    - Update justifications based on feedback and specialized CLAUDE.md standards
 
 **Success Criteria:**
-- [ ] All feedback incorporated into PRD-000 v2
-- [ ] Technical Considerations aligned with specialized CLAUDE.md files
-- [ ] New tooling requirements (Renovate, NuShell, Devbox, Podman) documented
-- [ ] Open Questions answered and documented as decisions
-- [ ] Functional Requirements updated to reflect tooling changes
-- [ ] PRD-000 v2 generated at `/artifacts/prds/PRD-000_project_foundation_bootstrap_v2.md`
-- [ ] **EPIC-000 evaluated for alignment** - verify if parent epic needs updates based on PRD changes
+- [x] All feedback incorporated into PRD-000 v2
+- [x] Technical Considerations aligned with specialized CLAUDE.md files
+- [x] New tooling requirements (Renovate, NuShell, Devbox, Podman) documented
+- [x] Open Questions answered and documented as decisions
+- [x] Functional Requirements updated to reflect tooling changes
+- [x] PRD-000 v2 generated at `/artifacts/prds/PRD-000_project_foundation_bootstrap_v2.md`
+- [x] **EPIC-000 evaluated for alignment** - verify if parent epic needs updates based on PRD changes
+
+**Completion Notes:**
+- PRD-000 v2 generated with all feedback incorporated
+- Added "Decisions Made" section documenting all 7 stakeholder decisions (D1-D7)
+- Removed "Open Questions" section (all questions answered and documented)
+- Updated Technical Considerations to align with specialized CLAUDE.md standards (CLAUDE-core, CLAUDE-tooling, CLAUDE-testing, CLAUDE-typing, CLAUDE-validation, CLAUDE-architecture)
+- Added new tooling: Renovate (FR-16, FR-21), NuShell (FR-19), Devbox (FR-20)
+- Updated FR-13, FR-14, FR-17 to reference Podman as primary (Docker alternative)
+- Updated Dependencies section with new tooling
+- Updated Technology Stack Appendix with new tools and rationale
+- Updated Timeline to 5 weeks (comprehensive foundation per Decision D1)
+- EPIC-000 evaluation: Minor alignment needed (duration 4→5 weeks, milestones, open questions resolved) but strategic scope remains valid and tech-agnostic ✅
 
 **EPIC-000 Evaluation Criteria:**
 - Does EPIC-000 scope need updates for new tooling? (Likely NO - epic is strategic/tech-agnostic)
@@ -471,8 +483,8 @@ Incorporate feedback from `/feedback/PRD-000_v1_comments.md` into PRD-000 v2. Up
 **Priority**: High
 **Dependencies**: None (architectural improvement)
 **Estimated Time**: 30 minutes
-**Status**: ⏳ Pending
-**Context**: New session (requires file moves and CLAUDE.md update)
+**Status**: ✅ Completed
+**Context**: Current session
 
 **Description**:
 Add implementation-phase routing instructions to existing CLAUDE.md and move implementation configuration files from `/implementation/` to `/prompts/CLAUDE/`. Main CLAUDE.md stays intact with planning-phase instructions, just adds routing to implementation configs.
@@ -543,12 +555,26 @@ At the **end** of existing `/CLAUDE.md`, add new section:
 - Verify implementation files accessible from new location
 
 **Success Criteria:**
-- [ ] `/prompts/CLAUDE/` folder created
-- [ ] 6 implementation CLAUDE-*.md files moved to new location
-- [ ] Main `/CLAUDE.md` augmented with implementation routing (planning content unchanged)
-- [ ] All cross-references updated (no broken @implementation/ links)
-- [ ] Generators validated (input_artifacts resolve without issues)
-- [ ] `/generate` command tested successfully
+- [x] `/prompts/CLAUDE/` folder created
+- [x] 6 implementation CLAUDE-*.md files moved to new location
+- [x] Main `/CLAUDE.md` augmented with implementation routing (planning content unchanged)
+- [x] All cross-references verified (all use relative paths, no updates needed)
+- [x] Generators validated (input_artifacts resolve without issues)
+- [x] `/generate` command tested successfully
+
+**Completion Notes:**
+- Created `/prompts/CLAUDE/` directory
+- Moved 6 CLAUDE-*.md files from `/implementation/` to `/prompts/CLAUDE/`:
+  - CLAUDE-core.md
+  - CLAUDE-tooling.md
+  - CLAUDE-testing.md
+  - CLAUDE-typing.md
+  - CLAUDE-validation.md
+  - CLAUDE-architecture.md
+- Added "Implementation Phase Instructions" section to main `/CLAUDE.md` at end
+- Cross-references use relative paths (`./CLAUDE-*.md`) - no updates needed
+- Implementation TODO.md stays in `/implementation/` for implementation-specific tracking
+- Main CLAUDE.md retains all planning instructions, now includes routing to implementation configs
 
 **Output Artifacts:**
 - Updated `/CLAUDE.md` (existing planning content + new implementation routing section)
