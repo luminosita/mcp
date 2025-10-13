@@ -61,84 +61,82 @@
 
 ---
 
-## SDLC Generators Input Dependency Tree
+## SDLC Artifact Dependency Flow
+
+**Purpose**: High-level view of artifact relationships and SDLC flow.
+
+**For detailed information, see:**
+- Paths: "Artifact Path Patterns" section (lines ~330-410)
+- Classification rules: "Input Classification System" section (lines ~148-200)
+- Detailed inputs: Each generator's `<input_artifacts>` section
 
 ```
 Research Phase (Root)
 ├── Business Research
-│   └── artifacts/research/{product_name}_business_research.md
 └── Implementation Research
-    └── artifacts/research/{product_name}_implementation_research.md
 
 ↓
 
 Vision Phase
-└── Product Vision Generator
-    ├── Input: artifacts/research/{product_name}_business_research.md
-    └── Output: artifacts/product_visions/VIS-{XXX}_product_vision_v{N}.md
+└── Product Vision
+    └── Requires: Business Research (mandatory)
 
 ↓
 
 Strategic Phase
-├── Initiative Generator
-│   ├── Primary Input: artifacts/product_visions/VIS-{XXX}_product_vision_v{N}.md (approved)
-│   ├── Secondary Input: artifacts/research/{product_name}_business_research.md (optional)
-│   └── Output: artifacts/initiatives/INIT-{XXX}_initiative_v{N}.md
+├── Initiative
+│   ├── Requires: Product Vision (mandatory)
+│   └── + Business Research (recommended)
 │
-└── Epic Generator
-    ├── Primary Input: artifacts/product_visions/VIS-{XXX}_product_vision_v{N}.md (approved)
-    ├── Secondary Input: artifacts/research/{product_name}_business_research.md (optional)
-    └── Output: artifacts/epics/EPIC-{XXX}_epic_v{N}.md
+└── Epic
+    ├── Requires: Product Vision (mandatory)
+    └── + Business Research (recommended)
 
 ↓
 
 Requirements Phase (Transition - bridges business and technical)
-└── PRD Generator
-    ├── Primary Input: artifacts/epics/EPIC-{XXX}_epic_v{N}.md (approved)
-    ├── Secondary Input 1: artifacts/research/{product_name}_business_research.md (optional - market validation)
-    ├── Secondary Input 2: artifacts/research/{product_name}_implementation_research.md (optional - technical feasibility)
-    └── Output: artifacts/prds/PRD-{XXX}_prd_v{N}.md
-└── High-level Story Generator
-    ├── Primary Input: artifacts/prds/PRD-{XXX}_prd_v{N}.md (approved)
-    ├── Secondary Input: artifacts/research/{product_name}_business_research.md (optional)
-    └── Output: artifacts/hls/HLS-{XXX}_story_v{N}.md
+├── PRD
+│   ├── Requires: Epic (mandatory)
+│   ├── + Business Research (recommended - market validation)
+│   └── + Implementation Research (recommended - technical feasibility)
+│
+└── High-Level Story
+    ├── Requires: PRD (mandatory)
+    └── + Business Research (recommended)
+
 ↓
 
 Story Phase
-└── Backlog Story Generator
-    ├── Primary Input: artifacts/prds/PRD-{XXX}_prd_v{N}.md (approved)
-    ├── Secondary Input: artifacts/research/{product_name}_implementation_research.md (optional)
-    └── Output: artifacts/backlog_stories/US-{XXX}_story_v{N}.md
+└── Backlog Story
+    ├── Requires: PRD (mandatory)
+    └── + Implementation Research (recommended)
 
 ↓
 
 Technical Phase
-├── Spike Generator (Optional - triggered by [REQUIRES SPIKE] marker)
-│   ├── Primary Input: artifacts/backlog_stories/US-{XXX}_story_v{N}.md (question marked [REQUIRES SPIKE])
-│   ├── Alternative Input: artifacts/specs/tech_specs/SPEC-{XXX}_v{N}.md (Open Questions)
-│   ├── Secondary Input: artifacts/research/{product_name}_implementation_research.md (optional - baseline data)
-│   ├── Output: artifacts/spikes/SPIKE-{XXX}_v1.md
+├── Spike (Optional - triggered by [REQUIRES SPIKE] marker)
+│   ├── Requires: Backlog Story OR Tech Spec (mandatory, mutually exclusive)
+│   ├── + Implementation Research (recommended)
 │   ├── Time Box: 1-3 days maximum (strictly enforced)
-│   └── Purpose: Time-boxed investigation to reduce technical uncertainty before implementation
+│   └── Purpose: Time-boxed investigation to reduce technical uncertainty
 │
-├── ADR Generator
-│   ├── Primary Input: artifacts/backlog_stories/US-{XXX}_story_v{N}.md
-│   ├── Optional Input: artifacts/spikes/SPIKE-{XXX}_v1.md (if spike completed - provides findings and evidence)
-│   ├── Secondary Input: artifacts/research/{product_name}_implementation_research.md
-│   └── Output: artifacts/specs/adrs/ADR-{XXX}_v{N}.md
+├── ADR
+│   ├── Requires: Backlog Story (mandatory)
+│   ├── + Spike findings (conditional - if spike completed)
+│   └── + Implementation Research (recommended)
 │
-└── Technical Spec Generator
-    ├── Primary Input: artifacts/backlog_stories/US-{XXX}_story_v{N}.md
-    ├── Optional Input: artifacts/spikes/SPIKE-{XXX}_v1.md (if spike completed - provides implementation details)
-    ├── Secondary Input: artifacts/research/{product_name}_implementation_research.md
-    └── Output: artifacts/specs/tech_specs/SPEC-{XXX}_v{N}.md
+└── Tech Spec
+    ├── Requires: Backlog Story (mandatory)
+    ├── + Spike findings (conditional - if spike completed)
+    └── + Implementation Research (recommended)
 ```
 
 **Key Principles:**
-- **Business Research** flows into all business-phase artifacts (Vision, Initiative, Epic)
-- **Implementation Research** flows into technical-phase artifacts (Backlog Story, Spike, ADR, Tech Spec)
+- **Business Research** flows into all business-phase artifacts (Vision, Initiative, Epic, PRD, HLS)
+- **Implementation Research** flows into technical-phase artifacts (PRD, Backlog Story, Spike, ADR, Tech Spec)
 - **PRD is unique**: Transition phase artifact that may use BOTH research documents
 - **Spike is optional**: Only created when Backlog Story or Tech Spec has [REQUIRES SPIKE] marker
+- **Classification system**: mandatory (must load), recommended (should load), conditional (load if condition met)
 - Each generator produces v1, v2, v3 iterations through feedback cycles
 - Approved v3 artifacts become inputs to downstream generators
 - Generators are stateless; all context from input artifacts only
@@ -196,18 +194,6 @@ All generator input artifacts use a `classification` attribute that defines load
   - Epic accepts Product Vision OR Initiative (group="parent")
   - High-Level Story accepts Epic OR PRD (group="parent")
   - Spike accepts Backlog Story OR Tech Spec (group="source")
-
-### Migration from `required` Attribute
-
-**Old System (deprecated):**
-- `required="true"` - must load (ambiguous: includes both mandatory and recommended)
-- `required="false"` - optional (ambiguous: includes recommended, conditional, and truly optional)
-
-**New System (Issue #3):**
-- `classification="mandatory"` - must load (clear: generator fails without it)
-- `classification="recommended"` - should load (clear: warns but continues without it)
-- `classification="conditional"` - maybe load (clear: only loads if condition met)
-- `mutually_exclusive_group="name"` - one of N required (clear: validates exactly one)
 
 All generators updated to use `classification` attribute exclusively.
 

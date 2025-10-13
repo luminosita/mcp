@@ -12,21 +12,21 @@
 - [X] Move tracebility generator validation checks to a proper section
     - [X] Review generators for paths in tracebility sections
 - [X] Generator output file paths
-- [ ] Read all generated epics
-- [ ] Read all restructured research docs (business and implementation)
+- [X] Read all generated epics
+- [X] Read all restructured research docs (business and implementation)
 - [X] Read all generators and templates (file paths removed, no validation duplications, defragmented validation instructions)
 - [X] Check output file name for generators
 - [X] Remove all paths from generators and templates. Keep it only in CLAUDE.md (input, output)
 - [X] Evaluation related to required/optional input data for generators
 - [X] Remove Tracibility Checklists from templates (validate existance in generators)
-- [ ] verify generate and refine prompts
-    - [ ] examples (Step 5, Step 6 -> Updated Sections)
+- [X] verify generate and refine prompts
+    - [X] examples (Step 5, Step 6 -> Updated Sections)
 - [ ] create refinemenets plan for generated artifacts and apply
 - [X] apply Issue 1, PRD gen only
 - [X] apply Issue 2, PRD only
 - [X] apply Issue 3, all
-- [ ] Validate that everything was applied
-- [ ] CLAUDE.md consolidation after generate and refine prompts refinement
+- [X] Validate that everything was applied
+- [X] CLAUDE.md consolidation after generate and refine prompts refinement
 - [ ] Open Questions in EPIC-000 too techy
 
 ## PRD Validation
