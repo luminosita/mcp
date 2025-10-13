@@ -8,10 +8,10 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: PRD-000 v1 generated, Generator architecture refined for INIT-000
+**Current Status**: PRD-000 v1 generated, INIT-000 created, Generator architecture refined, Feedback received
 **Last Completed**: TASK-015: Refactor Initiative Generator to Handle INIT-000 (Foundation Initiative)
-**Next Task**: TASK-013 (Execute High-Level User Story Generator) or create INIT-000
-**Completion**: 8/16 tasks (50%)
+**Next Task**: TASK-016 (Refine PRD-000 Based on Feedback) or TASK-017 (Restructure CLAUDE.md)
+**Completion**: 8/18 tasks (44%)
 
 ---
 
@@ -373,6 +373,197 @@ Initiative Generator:
 - Updated `/CLAUDE.md` (if dependency flow needs clarification)
 
 ---
+
+## Phase 1.7: PRD Refinement & Implementation Setup
+
+### TASK-016: Refine PRD-000 Based on Feedback
+**Priority**: High
+**Dependencies**: TASK-012 (PRD-000 v1 must exist)
+**Estimated Time**: 45 minutes
+**Status**: ⏳ Pending
+**Context**: Current session
+
+**Description**:
+Incorporate feedback from `/feedback/PRD-000_v1_comments.md` into PRD-000 v2. Update Technical Considerations section to align with specialized CLAUDE.md standards and incorporate additional tooling requirements and answered Open Questions.
+
+**Feedback Summary:**
+1. **Alignment with Hybrid CLAUDE.md Approach:**
+   - Technical Considerations section must align with established standards in specialized CLAUDE.md files (@implementation/CLAUDE-*.md)
+   - Specialized files cover: tooling, testing, typing, validation, architecture
+
+2. **Additional PRD Requirements (New Tools):**
+   - Renovate (dependency automation) - keep library versions up-to-date
+   - NuShell (cross-platform shell) - replacement for Bash
+   - Devbox (portable isolated dev environments) - reduce "works on my machine" issues
+   - Podman (container runtime) - instead of Docker
+
+3. **Open Questions - Answers Provided:**
+   - **Business Q1:** Comprehensive foundation (4-5 weeks, not minimal)
+   - **Business Q2:** Platform standards confirmed:
+     - CI/CD: GitHub Actions
+     - Container registry: DockerHub
+     - Deployment: Podman, Kubernetes Manifests
+     - Secret management: HashiCorp Vault
+   - **Business Q3:** Optimize for experienced team productivity (automation, advanced tooling)
+   - **Tech Q4:** Package manager = uv (confirmed)
+   - **Tech Q5:** K8s deployment = defer to EPIC-005; MVP = Dockerfile + Podman instructions
+   - **Tech Q6:** Observability = defer to EPIC-004
+   - **Tech Q7:** Dev environment database = Podman alternative only (no native PostgreSQL install)
+
+**Changes Required:**
+
+1. **Update Technical Considerations Section:**
+   - Review alignment with specialized CLAUDE.md standards
+   - **Treat CLAUDE-*.md file context as "Decisions Made"** for Technical Considerations
+   - Add Renovate for dependency management
+   - Add NuShell for cross-platform shell scripting
+   - Add Devbox for isolated development environments
+   - Add Podman as primary container runtime (**keep Docker as alternative**)
+
+2. **Update Dependencies Section:**
+   - Add Renovate as system dependency
+   - Add NuShell as system dependency
+   - Add Devbox as system dependency
+   - Add Podman as primary container runtime (keep Docker as alternative option)
+
+3. **Create "Decisions Made" Section:**
+   - **Move all 7 answered Open Questions to new "Decisions Made" section**
+   - Document answers as decisions with rationale
+   - Include decision date and decision makers (based on feedback)
+
+4. **Update Functional Requirements (if needed):**
+   - FR-13: Update to reference Podman as primary (Docker as alternative)
+   - FR-14: Clarify hot-reload works with Devbox
+   - FR-17: Update to reference Podman for database container (Docker alternative)
+   - Add new FR for Renovate integration (dependency automation)
+   - Add new FR for NuShell scripting support
+   - Add new FR for Devbox isolated environments
+
+5. **Update Technology Stack Appendix:**
+   - Add Renovate, NuShell, Devbox, Podman to stack
+   - Document Docker as alternative to Podman (compatibility option)
+   - Update justifications based on feedback and specialized CLAUDE.md standards
+
+**Success Criteria:**
+- [ ] All feedback incorporated into PRD-000 v2
+- [ ] Technical Considerations aligned with specialized CLAUDE.md files
+- [ ] New tooling requirements (Renovate, NuShell, Devbox, Podman) documented
+- [ ] Open Questions answered and documented as decisions
+- [ ] Functional Requirements updated to reflect tooling changes
+- [ ] PRD-000 v2 generated at `/artifacts/prds/PRD-000_project_foundation_bootstrap_v2.md`
+- [ ] **EPIC-000 evaluated for alignment** - verify if parent epic needs updates based on PRD changes
+
+**EPIC-000 Evaluation Criteria:**
+- Does EPIC-000 scope need updates for new tooling? (Likely NO - epic is strategic/tech-agnostic)
+- Do EPIC-000 acceptance criteria still align with PRD requirements? (Verify)
+- Does EPIC-000 business value section need updates? (Verify)
+- If changes needed: Update EPIC-000 and document as v3
+- If no changes needed: Document evaluation result (no updates required, epic remains tech-agnostic)
+
+**Output Artifacts:**
+- `/artifacts/prds/PRD-000_project_foundation_bootstrap_v2.md`
+- EPIC-000 evaluation report (changes needed or no changes required with rationale)
+- `/artifacts/epics/EPIC-000_project_foundation_bootstrap_v3.md` (only if changes needed)
+
+---
+
+### TASK-017: Add Implementation Routing to CLAUDE.md
+**Priority**: High
+**Dependencies**: None (architectural improvement)
+**Estimated Time**: 30 minutes
+**Status**: ⏳ Pending
+**Context**: New session (requires file moves and CLAUDE.md update)
+
+**Description**:
+Add implementation-phase routing instructions to existing CLAUDE.md and move implementation configuration files from `/implementation/` to `/prompts/CLAUDE/`. Main CLAUDE.md stays intact with planning-phase instructions, just adds routing to implementation configs.
+
+**Current State:**
+- Main `/CLAUDE.md`: Planning phase instructions (Product Vision → Epic → PRD → Stories → Spikes/ADRs/Tech Specs)
+- Implementation folder `/implementation/*.md`: Implementation phase configs (Python tooling, testing, typing, validation, architecture)
+- **Problem:** No connection between planning instructions and implementation configs
+
+**Target State:**
+```
+/CLAUDE.md (planning instructions + implementation routing)
+    └─ Implementation Phase → /prompts/CLAUDE/CLAUDE-core.md
+        ├─ Tooling → /prompts/CLAUDE/CLAUDE-tooling.md
+        ├─ Testing → /prompts/CLAUDE/CLAUDE-testing.md
+        ├─ Typing → /prompts/CLAUDE/CLAUDE-typing.md
+        ├─ Validation → /prompts/CLAUDE/CLAUDE-validation.md
+        └─ Architecture → /prompts/CLAUDE/CLAUDE-architecture.md
+```
+
+**Changes Required:**
+
+**Step 1: Create Folder Structure**
+- Create `/prompts/CLAUDE/` directory
+
+**Step 2: Move Implementation Files (CLAUDE-*.md only from /implementation/)**
+- Move `/implementation/CLAUDE-core.md` → `/prompts/CLAUDE/CLAUDE-core.md`
+- Move `/implementation/CLAUDE-tooling.md` → `/prompts/CLAUDE/CLAUDE-tooling.md`
+- Move `/implementation/CLAUDE-testing.md` → `/prompts/CLAUDE/CLAUDE-testing.md`
+- Move `/implementation/CLAUDE-typing.md` → `/prompts/CLAUDE/CLAUDE-typing.md`
+- Move `/implementation/CLAUDE-validation.md` → `/prompts/CLAUDE/CLAUDE-validation.md`
+- Move `/implementation/CLAUDE-architecture.md` → `/prompts/CLAUDE/CLAUDE-architecture.md`
+- **Do NOT move** `/implementation/TODO.md` (stays for implementation-specific tracking)
+- **Do NOT move** `/CLAUDE.md` (stays at root, gets augmented only)
+
+**Step 3: Add Implementation Routing to Existing CLAUDE.md**
+At the **end** of existing `/CLAUDE.md`, add new section:
+```markdown
+---
+
+## Implementation Phase Instructions
+
+**When to use Implementation Phase instructions:**
+- Writing Python code, tests, documentation
+- Setting up development environment, CI/CD, tooling
+- Implementing features from PRDs/Backlog Stories
+- Coding tasks after planning phase completes
+
+**Implementation Configuration Files:**
+- **[CLAUDE-core.md](prompts/CLAUDE/CLAUDE-core.md)** - Main implementation guide and orchestration
+- **[CLAUDE-tooling.md](prompts/CLAUDE/CLAUDE-tooling.md)** - UV, Ruff, MyPy, pytest configuration
+- **[CLAUDE-testing.md](prompts/CLAUDE/CLAUDE-testing.md)** - Testing strategy, fixtures, coverage
+- **[CLAUDE-typing.md](prompts/CLAUDE/CLAUDE-typing.md)** - Type hints, annotations, type safety
+- **[CLAUDE-validation.md](prompts/CLAUDE/CLAUDE-validation.md)** - Pydantic models, input validation, security
+- **[CLAUDE-architecture.md](prompts/CLAUDE/CLAUDE-architecture.md)** - Project structure, modularity, design patterns
+
+**→ For implementation work, see [CLAUDE-core.md](prompts/CLAUDE/CLAUDE-core.md) which orchestrates all specialized configs.**
+```
+
+**Step 4: Update Cross-References in Moved Files**
+- Update all `@implementation/` references → `/prompts/CLAUDE/` in moved files
+- Update feedback file references if needed (e.g., PRD-000_v1_comments.md)
+
+**Step 5: Validate**
+- Verify generators can still load CLAUDE.md (planning instructions unaffected)
+- Verify cross-references resolve correctly
+- Test `/generate` command still works
+- Verify implementation files accessible from new location
+
+**Success Criteria:**
+- [ ] `/prompts/CLAUDE/` folder created
+- [ ] 6 implementation CLAUDE-*.md files moved to new location
+- [ ] Main `/CLAUDE.md` augmented with implementation routing (planning content unchanged)
+- [ ] All cross-references updated (no broken @implementation/ links)
+- [ ] Generators validated (input_artifacts resolve without issues)
+- [ ] `/generate` command tested successfully
+
+**Output Artifacts:**
+- Updated `/CLAUDE.md` (existing planning content + new implementation routing section)
+- `/prompts/CLAUDE/CLAUDE-core.md` (moved from /implementation/)
+- `/prompts/CLAUDE/CLAUDE-tooling.md` (moved)
+- `/prompts/CLAUDE/CLAUDE-testing.md` (moved)
+- `/prompts/CLAUDE/CLAUDE-typing.md` (moved)
+- `/prompts/CLAUDE/CLAUDE-validation.md` (moved)
+- `/prompts/CLAUDE/CLAUDE-architecture.md` (moved)
+
+**Notes:**
+- Main CLAUDE.md stays at root with all planning instructions intact
+- Only adds implementation routing section at the end
+- Implementation TODO.md stays in `/implementation/` for implementation-specific tracking
+- Simpler than creating separate CLAUDE-planning.md - avoids splitting planning content
 
 ## Task Status Legend
 
