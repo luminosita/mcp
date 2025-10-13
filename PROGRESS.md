@@ -15,7 +15,7 @@
 - [ ] Read all generated epics
 - [ ] Read all restructured research docs (business and implementation)
 - [ ] Read all generators and templates (file paths removed, no validation duplications, defragmented validation instructions)
-- [ ] Check output file name for generators
+- [X] Check output file name for generators
 - [ ] Remove all paths from generators and templates. Keep it only in CLAUDE.md (input, output)
 - [ ] Evaluation related to required/optional input data for generators
 - [ ] Remove Tracibility Checklists from templates (validate existance in generators)
