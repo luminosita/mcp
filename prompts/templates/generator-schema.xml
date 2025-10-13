@@ -180,36 +180,46 @@
     <element name="metadata">
       <description>Tracks generator identity, version, dependencies, and provenance</description>
       <required_fields>name, version, sdlc_phase, depends_on, generated_by, date</required_fields>
+      <note>depends_on references artifact types, paths defined in CLAUDE.md</note>
     </element>
 
     <element name="system_role">
       <description>Defines expert persona and primary responsibility</description>
-      <must_reference>Template path that output must follow</must_reference>
+      <must_reference>Template structure from CLAUDE.md Template Paths section</must_reference>
     </element>
 
     <element name="task_context">
       <description>Provides background, inputs, and constraints</description>
-      <must_include>Background explanation, input artifact descriptions, constraints</must_include>
+      <must_include>Background explanation, input artifact descriptions with classification, constraints</must_include>
+      <note>Input artifacts use classification attribute (mandatory/recommended/conditional) instead of required</note>
+    </element>
+
+    <element name="input_artifacts">
+      <description>Defines input artifacts with classification system</description>
+      <attributes>classification (mandatory/recommended/conditional), type, mutually_exclusive_group (optional)</attributes>
+      <must_document>Classification rationale and quality impact for each input</must_document>
+      <reference>See CLAUDE.md Input Classification System for definitions</reference>
     </element>
 
     <element name="instructions">
       <description>Step-by-step execution guidance with priority ordering</description>
-      <must_include>Load inputs, load template, research (if applicable), generate terminal artifact, validate</must_include>
+      <must_include>Load inputs, load template, research (if applicable), generate terminal artifact, validate with failure reporting</must_include>
     </element>
 
     <element name="output_format">
-      <description>Specifications for both terminal artifact</description>
-      <must_include>Formats, validation checklists for the output</must_include>
+      <description>Specifications for terminal artifact</description>
+      <must_include>Formats, validation_checklist with IDs and categories (content, traceability, consistency)</must_include>
+    </element>
+
+    <element name="validation_checklist">
+      <description>Single consolidated checklist with unique IDs and categories</description>
+      <format>criterion id="[XX-##]" category="[content|traceability|consistency]"</format>
+      <note>Replaces old duplicate validation sections. IDs enable specific failure reporting.</note>
     </element>
 
     <element name="traceability">
       <description>Links to source documents and references (documentation only)</description>
-      <note>References are for documentation, not required context loading</note>
-    </element>
-
-    <element name="validation">
-      <description>Self-check criteria for quality assurance</description>
-      <must_include>Checklist covering completeness, quality, XML validity</must_include>
+      <note>References CLAUDE.md for path patterns. Not required context loading.</note>
     </element>
 
     <element name="quality_guidance">
@@ -225,9 +235,46 @@
 
   <usage_notes>
     <note>When creating a new generator, copy this structure and fill in phase-specific details</note>
-    <note>Validation checklists should be specific to the artifact type being generated</note>
+    <note>Use classification system for input artifacts: mandatory/recommended/conditional (see CLAUDE.md)</note>
+    <note>Document quality impact for recommended inputs (e.g., "~20% quality reduction without")</note>
+    <note>Validation checklist must use IDs (CQ-##, TR-##, CC-##) and categories for failure reporting</note>
+    <note>Reference CLAUDE.md for all paths - use natural language references, not hardcoded paths</note>
+    <note>Remove duplicate validation sections - single validation_checklist only</note>
     <note>Research steps should be included for Vision, Epic, and PRD phases</note>
     <note>Constraints should be marked [CUSTOMIZE PER PRODUCT] for reusable generators</note>
     <note>References in traceability section are for documentation only - not loaded into context</note>
   </usage_notes>
+
+  <consolidation_changes>
+    <change issue="1" name="Validation Consolidation">
+      <summary>Single validation_checklist with IDs and categories</summary>
+      <changes>
+        - Removed duplicate &lt;validation&gt;&lt;self_check&gt; section
+        - Added unique IDs (CQ-##, TR-##, CC-##) to validation criteria
+        - Added categories (content, traceability, consistency)
+        - Added failure reporting guidance in validation step
+      </changes>
+    </change>
+
+    <change issue="2" name="Path Consolidation">
+      <summary>Centralized paths in CLAUDE.md</summary>
+      <changes>
+        - Removed hardcoded paths from metadata and traceability
+        - Added references to CLAUDE.md Artifact Path Patterns section
+        - Added references to CLAUDE.md Template Paths section
+        - Use natural language: "see CLAUDE.md for path pattern"
+      </changes>
+    </change>
+
+    <change issue="3" name="Input Classification">
+      <summary>4-tier classification system replacing required attribute</summary>
+      <changes>
+        - Replaced required="true/false" with classification="mandatory/recommended/conditional"
+        - Added mutually_exclusive_group attribute for OR relationships
+        - Added input_classification_reference section
+        - Document quality impact for each input classification
+        - Reference CLAUDE.md Input Classification System section
+      </changes>
+    </change>
+  </consolidation_changes>
 </template>
