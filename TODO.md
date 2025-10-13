@@ -8,10 +8,10 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: 5 Epics v1 generated, ready for human critique
-**Last Completed**: TASK-009: Execute Epic Generator v1
-**Next Task**: TASK-010: Critique Epics v1 & Refine to v2 (or TASK-005: Critique Product Vision v1)
-**Completion**: 6/15 tasks (40%)
+**Current Status**: PRD-000 v1 generated, ready for human critique
+**Last Completed**: TASK-012: Execute PRD Generator v1 (Epic 000)
+**Next Task**: TASK-013 or TASK-015 (generator refinement recommended first)
+**Completion**: 7/16 tasks (44%)
 
 ---
 
@@ -199,140 +199,159 @@ Execute Epic Generator in standalone context to decompose Product Vision into Ep
 
 ---
 
-
-
-
-
-
 ## Phase 1.3: PRD Generation
 
-### TASK-012: Execute PRD Generator v1 (Epic 001)
+### TASK-012: Execute PRD Generator v1 (Epic 000)
 **Priority**: Critical
 **Dependencies**: TASK-011
 **Estimated Time**: 25 minutes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed
 **Context**: New session C3 required
 **Generator Name**: prd
-
 
 **Description**:
 Execute PRD Generator for first epic in standalone context.
 
 **Command**: `/generate TASK-012`
 
-**Context Requirements**:
-- `/CLAUDE.md`
-- `/prompts/CLAUDE-prd.md` (lazy-generate if missing)
-- `/prompts/prd-generator.xml`
-- `/prompts/templates/prd-template.xml`
-- `/artifacts/epics/epic_001_v3.md`
+**Input Data:**
+- EPIC-000
 
-**Success Criteria**:
-- [ ] PRD follows template structure
-- [ ] All required sections complete
-- [ ] Success metrics are SMART
-- [ ] Requirements traceable to epic
-- [ ] Technical approaches researched
-- [ ] Backlog story generator is valid XML
-- [ ] Technical feasibility addressed
-
-**Output Artifacts**:
-- `/artifacts/prds/prd_001/prd_v1.md`
-- `/artifacts/prds/prd_001/TODO.md` (high-level story tracking)
-- `/prompts/backlog-story-generator.xml`
+**Completion Notes:**
+- PRD-000 v1 generated: `/artifacts/prds/PRD-000_project_foundation_bootstrap_v1.md`
+- All template sections populated from EPIC-000, Business Research, Implementation Research
+- 18 functional requirements (FR-01 to FR-18) with detailed acceptance criteria
+- NFRs separated: Business-level (accessibility, maintainability) + Technical (performance, security, observability)
+- 3 user personas with detailed use cases and user journeys
+- Validation: 26/27 criteria passed (1 warning: parent epic in Draft status - acceptable for PoC)
+- Ready for human critique (TASK-013 or proceed to High-Level Story generation)
 
 ---
 
-### TASK-013: Iterate PRD (3 cycles) & Update Strategy
+## Phase 1.4: High-level User Story Generation
+
+### TASK-013: Execute High-level User Story Generator v1 (PRD-000)
 **Priority**: Critical
 **Dependencies**: TASK-012
-**Estimated Time**: 60 minutes
+**Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
+**Context**: New session C3 required
+**Generator Name**: high-level-user-story
 
 **Description**:
-Complete 3-iteration refinement cycle for PRD, **HUMAN manually updates** strategy document with lessons.
+Execute PRD Generator for first epic in standalone context.
 
-**Success Criteria**:
-- [ ] PRD v1 critique created and refinements applied
-- [ ] PRD v2 critique created and final refinements applied
-- [ ] PRD v3 approved
-- [ ] Backlog story generator finalized
-- [ ] **HUMAN**: Strategy doc manually updated with PRD patterns
-- [ ] PRD/TODO.md tracking high-level stories
+**Command**: `/generate TASK-013`
 
-**Output Artifacts**:
-- `/feedback/prd_001_v1_critique.md`
-- `/feedback/prd_001_v2_critique.md`
-- `/artifacts/prds/prd_001/prd_v2.md`
-- `/artifacts/prds/prd_001/prd_v3.md` (approved)
-- `/artifacts/prds/prd_001/TODO.md` (updated with stories)
-- `/prompts/backlog-story-generator.xml` (final)
-- `/docs/context_engineering_strategy_v1.md` (manually updated by human)
+**Input Data:**
+- PRD-000
 
 ---
 
-### TASK-014: Execute Backlog Story Generator v1 (US-01 from PRD)
+## Phase 1.5: Backlog User Story Generation
+
+### TASK-014: Execute Backlog User Story Generator v1 (HLS-001)
 **Priority**: Critical
-**Dependencies**: TASK-013 (PRD v3 approved)
+**Dependencies**: TASK-012
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
-**Context**: New session C4 required
+**Context**: New session C3 required
+**Generator Name**: high-level-user-story
 
 **Description**:
-Execute Backlog Story Generator for first high-level story from PRD.
+Execute PRD Generator for first epic in standalone context.
 
 **Command**: `/generate TASK-014`
 
-**Context Requirements**:
-- `/CLAUDE.md`
-- `/prompts/CLAUDE-backlog-story.md` (lazy-generate if missing)
-- `/prompts/backlog-story-generator.xml`
-- `/prompts/templates/backlog-story-template.xml`
-- `/artifacts/prds/prd_001/prd_v3.md`
-- `/artifacts/prds/prd_001/TODO.md`
-
-**Success Criteria**:
-- [ ] Backlog story follows template structure
-- [ ] Related PRD section populated (PRD ID, high-level story, FRs)
-- [ ] Functional requirements listed
-- [ ] Non-functional requirements defined (all 6 dimensions)
-- [ ] Technical requirements cover all layers
-- [ ] Acceptance criteria in Given-When-Then format
-- [ ] TODO.md file created with implementation tasks
-- [ ] ADR generator prompt is valid XML
-- [ ] Traceability to PRD established
-
-**Output Artifacts**:
-- `/artifacts/backlog_stories/US-01-01_{feature}/backlog_story_v1.md`
-- `/artifacts/backlog_stories/US-01-01_{feature}/TODO.md`
-- `/prompts/adr-generator.xml`
+**Input Data:**
+- HLS-001
 
 ---
 
-### TASK-015: Generate Phase 1 Completion Report
+## Phase 1.6: Generator Architecture Refinement
+
+### TASK-015: Refactor Initiative Generator to Handle INIT-000 (Foundation Initiative)
 **Priority**: High
-**Dependencies**: TASK-014
+**Dependencies**: None (architectural improvement)
 **Estimated Time**: 30 minutes
 **Status**: ⏳ Pending
+**Context**: Current session
 
 **Description**:
-Generate comprehensive Phase 1 completion report documenting framework viability, lessons learned, and recommendations for Phase 2 (MCP Server extraction).
+Refactor initiative-generator to convert existing EPIC-000 instructions into INIT-000 (Foundation Initiative) instructions. The initiative generator should check if INIT-000 exists before generating feature initiatives (INIT-001+), and recommend creating INIT-000 first if it doesn't exist.
 
-**Success Criteria**:
-- [ ] Report documents all completed generators (Vision, Epic, PRD, Backlog Story)
-- [ ] 3-iteration cycles validated for each generator type
-- [ ] At least 5 patterns documented
-- [ ] Framework viability assessment complete
-- [ ] Recommendations for Phase 2 MCP Server project
-- [ ] All templates from final strategy document removed and replaced with extracted file references (e.g., prompts/templates/generator-schema.xml, prompts/templates/specialized-claude-template.md)
-- [ ] Section 6 of final strategy document Synced with TODO.md file
-- [ ] **HUMAN**: Final strategy document update with Phase 1 summary
+**Architectural Rationale:**
+- Product Vision remains initiative-agnostic (strategic, no initiatives generated)
+- Initiative Generator handles ALL initiative creation (foundation + features)
+- INIT-000 (Foundation Initiative) contains EPIC-000 as single supporting epic
+- INIT-001+ (Feature Initiatives) depend on INIT-000 as prerequisite
+- Clean separation at initiative level: foundation bootstrap vs. feature delivery
+- Aligns with decision to create separate INIT-000 for foundation/bootstrap work
 
-**Output Artifacts**:
-- `/docs/phase1_completion_report.md`
-- `/docs/context_engineering_strategy_v1.md` (final Phase 1 update by human)
+**Generation Flow:**
+```
+Product Vision (initiative-agnostic)
+    ↓
+Initiative Generator:
+    ├─ Check: Does INIT-000 exist?
+    │  ├─ NO → Generate INIT-000 (Foundation Initiative with EPIC-000)
+    │  └─ YES → Proceed to feature initiatives
+    ↓
+    └─ Generate INIT-001+ (Feature Initiatives)
+       └─ Reference INIT-000 as prerequisite/dependency
+```
 
-**Phase 1 Completion Gate**: After this task, Phase 1 (PoC) is complete
+**Changes Required:**
+
+1. **Update initiative-generator.xml:**
+
+   **A. Add INIT-000 Detection Step (Priority 1):**
+   - Before generating feature initiatives, check if INIT-000 exists in `/artifacts/initiatives/`
+   - If INIT-000 NOT found:
+     - Recommend creating INIT-000 first as foundation prerequisite
+     - Provide instructions: "Before generating feature initiatives, create INIT-000 (Foundation Initiative)"
+   - If INIT-000 found:
+     - Proceed with feature initiative generation (INIT-001+)
+     - Reference INIT-000 as prerequisite in dependencies section
+
+   **B. Convert EPIC-000 Instructions into INIT-000 Instructions:**
+   - Remove embedded EPIC-000 generation instructions from feature initiative flow
+   - Create dedicated INIT-000 generation section with:
+     - Strategic Objective: "Establish production-ready development infrastructure enabling rapid, confident feature development"
+     - Duration: 1 month (Q1, Weeks 1-4)
+     - Supporting Epics: EPIC-000 (Project Foundation & Bootstrap) - single epic
+     - Key Results focused on infrastructure readiness (environment setup, CI/CD, framework readiness)
+     - Budget: Extract foundation portion (~$200K-$300K for 2 engineers × 4 weeks)
+
+   **C. Update Feature Initiative Instructions (INIT-001+):**
+   - Add prerequisite: "This initiative depends on INIT-000 (Foundation Initiative)"
+   - Adjust timeline: Start after INIT-000 completion (Week 5+, not Week 1)
+   - Adjust budget: Exclude foundation costs (already in INIT-000)
+   - Add dependency metadata: "Dependencies: INIT-000 (must complete first)"
+
+2. **Update epic-generator.xml (if needed):**
+   - Verify EPIC-000 generation correctly references parent initiative INIT-000
+   - Verify EPIC-001+ generation correctly references parent initiative INIT-001+
+   - Ensure mutually_exclusive_group handles INIT-000 vs INIT-001+ correctly for parent selection
+
+3. **Update CLAUDE.md (if needed):**
+   - Update SDLC Artifact Dependency Flow diagram to show INIT-000 explicitly
+   - Clarify initiative generation flow: INIT-000 (foundation) first, then INIT-001+ (features)
+
+**Success Criteria:**
+- [ ] initiative-generator.xml checks for INIT-000 existence before generating feature initiatives
+- [ ] initiative-generator.xml can generate INIT-000 (Foundation Initiative) with EPIC-000 as supporting epic
+- [ ] initiative-generator.xml generates INIT-001+ (Feature Initiatives) with INIT-000 dependency
+- [ ] EPIC-000 instructions converted from epic-level to initiative-level (INIT-000)
+- [ ] Feature initiatives (INIT-001+) reference INIT-000 as prerequisite
+- [ ] Generators maintain backward compatibility with existing artifacts
+- [ ] CLAUDE.md updated if dependency flow documentation needs clarification
+- [ ] Architecture documentation clarifies: INIT-000 (foundation) blocks INIT-001+ (features)
+
+**Output Artifacts:**
+- Updated `/prompts/initiative-generator.xml`
+- Updated `/prompts/epic-generator.xml` (if changes needed)
+- Updated `/CLAUDE.md` (if dependency flow needs clarification)
 
 ---
 
