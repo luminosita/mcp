@@ -19,6 +19,18 @@ As an enterprise software development team member (product manager or developer)
 
 ---
 
+## Parent Artifact Context
+
+**Parent Product Vision:** VIS-001: AI Agent MCP Server Vision
+- **Link:** /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
+- **Vision Capability:** Key Capability #1 - Project Management Integration for context-aware agent responses
+
+**Parent Initiative:** INIT-001: Production-Ready AI Agent Infrastructure
+- **Link:** /artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md
+- **Initiative Contribution:** Delivers first enterprise-critical capability, directly supports KR1 (50+ production deployments) and KR2 (time-to-production <2 weeks)
+
+---
+
 ## Business Value
 
 This epic addresses the **Context Access Barrier** identified in Product Vision where AI agents lack access to project-specific information that developers and product managers routinely use. By integrating with project management systems, agents can provide context-aware responses grounded in actual project state rather than generic advice.
@@ -87,6 +99,20 @@ AI agents lack mechanisms to access project management systems containing:
 [From Product Vision §4.1 Strategic Rationale]
 
 Project management integration consistently identified as high-value capability for development-focused agents. This epic directly addresses the context access barrier by giving agents visibility into organizational project information, ensuring recommendations align with current project state and priorities.
+
+---
+
+## Business Research References
+
+**Primary Research Document:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
+
+**Market Insights Applied:**
+- **Pain Point Analysis (§1.1, Pain Point 2):** Context Access Barriers - agents lack access to project management tools
+- **Capability Recommendation (§4.1, Capability 1):** Project Management Integration identified as high-value capability
+- **User Persona:** Development teams (product managers, developers) requiring project context in agent interactions
+
+**Competitive Context:**
+Addresses context access gap where existing MCP implementations provide protocol only without integration patterns, differentiating through pre-built connectors for common PM tools.
 
 ---
 
@@ -322,19 +348,19 @@ Project management integration consistently identified as high-value capability 
 
 ## Open Questions
 
-[Require product/engineering input before PRD phase]
+**Business-Level Questions:**
 
-1. **Custom Field Support:** Do we need to support JIRA custom fields in MVP, or is standard field set sufficient? (Impacts scope and timeline)
+1. **Custom Field Support Scope:** Do we need to support JIRA custom fields in MVP, or is standard field set sufficient for initial enterprise adoption? (Scope and timeline impact)
 
-2. **Write Operations:** Should we defer all write operations (create, update issues) to post-MVP, or is there high-value subset we should include? (Security vs. user value trade-off)
+2. **Write Operations Priority:** Should we defer all write operations (create, update issues) to post-MVP based on customer feedback, or is there a high-value subset critical for MVP? (Security risk vs user value trade-off)
 
-3. **Caching Strategy:** What cache TTL is acceptable? 5-minute cache reduces API calls but may show stale data. (Performance vs. freshness trade-off)
+3. **Error Handling UX Strategy:** When PM API is down or rate-limited, what user experience is acceptable? Should agents fail gracefully with clear explanation, or retry automatically with user notification? (User experience and reliability expectations)
 
-4. **Error Handling UX:** When PM API is down or rate-limited, should agent fail gracefully with explanation, or retry automatically? (User experience decision)
+4. **Multi-Project Access Model:** Should agents query across all projects user has access to, or require scoping to specific project(s)? (Permission model, user control, and performance implications)
 
-5. **Multi-Project Support:** Should agents query across all projects user has access to, or scope to specific project(s)? (Permission model and performance implications)
+5. **Additional PM Tools Prioritization:** After JIRA/Linear, which PM tool should we prioritize next for MVP or Phase 2? (GitHub Projects, Asana, Monday.com, Trello) - Requires customer development validation.
 
-6. **Additional PM Tools Priority:** After JIRA/Linear, which PM tool should we prioritize next? (GitHub Projects, Asana, Monday.com, Trello) - Validate with customer development.
+**Note:** Technical decisions (caching strategy, API rate limiting approaches, OAuth implementation details, specific API integration patterns) will be addressed in PRD phase through collaboration between PM and Tech Lead.
 
 ---
 

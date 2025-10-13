@@ -19,6 +19,18 @@ As an enterprise software development team member (developer or product manager)
 
 ---
 
+## Parent Artifact Context
+
+**Parent Product Vision:** VIS-001: AI Agent MCP Server Vision
+- **Link:** /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
+- **Vision Capability:** Key Capability #2 - Organizational Knowledge Access for contextually accurate agent responses
+
+**Parent Initiative:** INIT-001: Production-Ready AI Agent Infrastructure
+- **Link:** /artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md
+- **Initiative Contribution:** Enterprise differentiator addressing context access barriers, supports KR1 (50+ production deployments) and KR3 (community validation - showcases MCP value proposition)
+
+---
+
 ## Business Value
 
 This epic addresses the **Context Access Barrier** identified in Product Vision where AI agents cannot access organizational knowledge bases, internal documentation, and project-specific information that developers routinely use. By providing semantic search over indexed organizational content, agents deliver contextually accurate responses aligned with internal standards and practices.
@@ -91,6 +103,20 @@ AI agents lack mechanisms to access organizational knowledge repositories contai
 [From Product Vision §4.1 Strategic Rationale]
 
 Knowledge access directly addresses context barrier by giving agents access to organizational information, ensuring responses align with internal standards and practices. This capability differentiates enterprise MCP infrastructure from consumer AI assistants and protocol-only implementations.
+
+---
+
+## Business Research References
+
+**Primary Research Document:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
+
+**Market Insights Applied:**
+- **Pain Point Analysis (§1.1, Pain Point 2):** Context Access Barriers - agents cannot access organizational knowledge bases and internal documentation
+- **Capability Recommendation (§4.1, Capability 2):** Organizational Knowledge Access identified as enterprise differentiator
+- **User Persona:** Development teams requiring responses aligned with internal standards and practices
+
+**Competitive Context:**
+Differentiates from consumer AI assistants and protocol-only implementations by providing semantic search over organizational knowledge, ensuring contextually accurate responses.
 
 ---
 
@@ -342,21 +368,19 @@ Knowledge access directly addresses context barrier by giving agents access to o
 
 ## Open Questions
 
-[Require product/engineering/security input before PRD phase]
+**Business-Level Questions:**
 
-1. **Vector Database Selection:** Qdrant (open-source, self-hosted) vs. Pinecone (managed, simpler) vs. Weaviate? (Infrastructure complexity vs. operational burden trade-off)
+1. **PII Filtering Policy:** Should we block documents with PII entirely, mask PII in responses, or rely on ACL enforcement? This requires legal/compliance input to determine acceptable risk levels for different industries. (Security vs. usability trade-off)
 
-2. **Embedding Model:** Use open-source sentence-transformers (free, self-hosted) or OpenAI embeddings (higher quality, cost)? (Cost vs. quality trade-off)
+2. **Multi-Tenancy Model:** How should we isolate knowledge bases for different customers/teams in enterprise deployments? What level of data isolation is required for compliance? (Enterprise deployment model and data governance requirements)
 
-3. **ACL Granularity:** Space-level permissions (simpler) or page-level permissions (more accurate)? (Implementation complexity vs. security precision)
+3. **Knowledge Source Prioritization:** After Confluence and Notion, which knowledge sources should we prioritize for MVP or Phase 2? (SharePoint, GitHub wikis, Google Docs, Dropbox Paper) - Requires customer development validation.
 
-4. **Indexing Frequency:** Hourly, daily, or on-demand refresh? (Freshness vs. resource consumption trade-off)
+4. **Access Control Scope:** What is the acceptable balance between security precision and implementation complexity for MVP? Should we target space-level or more granular permissions? (Business risk tolerance vs. development timeline)
 
-5. **Chunk Size:** 256, 512, or 1024 tokens per chunk? (Retrieval precision vs. context completeness trade-off—requires experimentation)
+5. **Retrieval Quality Standards:** What precision threshold is acceptable for MVP? (Current target: >70% precision) Should we delay launch for higher quality, or iterate post-launch? (Time-to-market vs. user experience)
 
-6. **PII Filtering Strategy:** Block documents with PII entirely, mask PII in responses, or trust ACLs? (Security vs. usability trade-off—requires legal/compliance input)
-
-7. **Multi-Tenancy:** How do we isolate knowledge bases for different customers/teams? (Enterprise deployment model question)
+**Note:** Technical decisions (vector database selection, embedding model choice, indexing frequency, chunk size optimization, ACL implementation details) will be addressed in PRD phase through collaboration between PM and Tech Lead.
 
 ---
 

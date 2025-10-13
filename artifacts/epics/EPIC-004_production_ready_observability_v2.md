@@ -19,6 +19,18 @@ As a DevOps/SRE team managing production AI agent infrastructure, I need compreh
 
 ---
 
+## Parent Artifact Context
+
+**Parent Product Vision:** VIS-001: AI Agent MCP Server Vision
+- **Link:** /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
+- **Vision Capability:** Key Capability #5 - Production-Ready Observability enabling confident production deployment
+
+**Parent Initiative:** INIT-001: Production-Ready AI Agent Infrastructure
+- **Link:** /artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md
+- **Initiative Contribution:** Enables operational confidence for 50+ production deployments (KR1), directly measures and supports <0.1% error rate target (KR4), addresses production deployment guides gap
+
+---
+
 ## Business Value
 
 This epic addresses **Production Deployment Guides Gap** identified in Product Vision where MCP implementations lack established patterns for observability architecture. By providing comprehensive health monitoring, performance metrics, and error tracking, we enable confident production deployment and differentiate from protocol-focused implementations.
@@ -95,6 +107,20 @@ While MCP protocol documentation is comprehensive, practical guidance on product
 [From Product Vision §3.1 and §5.1]
 
 Comprehensive production deployment blueprints with reference implementations for observability would accelerate adoption and improve reliability. First-mover advantage in establishing observability patterns. This is a production-first design differentiator vs. protocol-focused implementations.
+
+---
+
+## Business Research References
+
+**Primary Research Document:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
+
+**Market Insights Applied:**
+- **Market Gap Analysis (§3.1, Gap 1):** Production Deployment Guides - observability architecture and monitoring strategy lack established patterns
+- **Strategic Opportunity (§3.1, §5.1):** First-mover advantage in establishing observability patterns for MCP infrastructure
+- **Competitive Context:** Production-first design differentiator vs. protocol-focused implementations
+
+**Enterprise Requirements:**
+DevOps teams require comprehensive observability before approving production deployments - critical enabler for enterprise adoption and scaling to 50+ deployments.
 
 ---
 
@@ -357,21 +383,21 @@ Comprehensive production deployment blueprints with reference implementations fo
 
 ## Open Questions
 
-[Require DevOps/engineering input before PRD phase]
+**Business-Level Questions:**
 
-1. **Tracing Backend:** Jaeger (mature, more features) vs. Grafana Tempo (simpler, integrates with Grafana)? (Operational complexity vs. feature set trade-off)
+1. **Metrics Retention Policy:** How long should we retain metrics? 30 days (minimal cost), 90 days (standard), 1 year (comprehensive historical analysis)? (Storage cost vs. historical analysis and compliance needs)
 
-2. **Trace Sampling:** What sampling rate? 100% (low volume), 10% (medium), adaptive? (Completeness vs. cost trade-off)
+2. **Alerting Channels Priority:** Which alerting integrations are required for MVP? PagerDuty confirmed as priority. Should we also include Slack, email, Opsgenie based on customer requirements? (Integration scope and customer validation)
 
-3. **Metrics Retention:** How long to retain metrics? 30 days, 90 days, 1 year? (Storage cost vs. historical analysis needs)
+3. **Dashboard Customization Approach:** Should we allow customers to customize dashboards (higher flexibility, support complexity) or provide fixed, well-designed templates (simpler, lower support burden)? (Flexibility vs. support/maintenance trade-off)
 
-4. **Alerting Channels:** PagerDuty required, or also Slack, email, Opsgenie? (Integration scope based on customer needs)
+4. **Multi-Tenancy Metrics Isolation:** How should we isolate metrics for different customers/teams in enterprise deployments? What level of segregation is required for compliance and operational clarity? (Enterprise deployment model and data governance)
 
-5. **Dashboard Customization:** Allow customers to customize dashboards, or provide fixed templates? (Flexibility vs. support complexity)
+5. **Logging Integration Scope:** Is basic structured logging sufficient for MVP, or do customers require full log aggregation (ELK, Splunk) integration? (Scope decision for MVP vs. Phase 2 based on customer requirements)
 
-6. **Multi-Tenancy:** How to isolate metrics for different customers/teams? (Enterprise deployment model question)
+6. **Observability Cost Budget:** What is the acceptable infrastructure cost increase for observability? (Prometheus storage, tracing backend, log retention) This impacts retention policies and sampling rates. (Cost-benefit analysis for different deployment scales)
 
-7. **Logging Integration:** Basic structured logging sufficient, or need full log aggregation (ELK, Splunk)? (Scope for MVP vs. Phase 2)
+**Note:** Technical decisions (tracing backend selection - Jaeger vs Tempo, trace sampling strategy, metrics cardinality management, instrumentation approaches) will be addressed in PRD phase through collaboration between PM and Tech Lead.
 
 ---
 

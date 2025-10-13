@@ -19,6 +19,18 @@ As a security-conscious enterprise organization, I need production-grade authent
 
 ---
 
+## Parent Artifact Context
+
+**Parent Product Vision:** VIS-001: AI Agent MCP Server Vision
+- **Link:** /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
+- **Vision Capability:** Key Capability #4 - Secure Authentication & Authorization enabling enterprise adoption
+
+**Parent Initiative:** INIT-001: Production-Ready AI Agent Infrastructure
+- **Link:** /artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md
+- **Initiative Contribution:** Critical security foundation that unblocks EPIC-001 and EPIC-002, directly supports KR1 (50+ production deployments - security gate) and KR4 (zero security incidents, <0.1% error rate)
+
+---
+
 ## Business Value
 
 This epic addresses **Enterprise Security Patterns Gap** identified in Product Vision where existing MCP implementations delegate authentication entirely to developers without providing reference implementations for common enterprise patterns. By providing production-grade security integration, we enable enterprise adoption and differentiate from protocol-focused implementations.
@@ -92,6 +104,20 @@ MCP implementations delegate authentication entirely to developers without provi
 [From Product Vision §3.1]
 
 Security reference architecture with production-ready authentication middleware and example integration with enterprise identity providers (Okta, Auth0, Azure AD) would address compliance and security requirements blocking enterprise adoption. This is a key differentiator vs. protocol-only implementations.
+
+---
+
+## Business Research References
+
+**Primary Research Document:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
+
+**Market Insights Applied:**
+- **Market Gap Analysis (§3.1, Gap 2):** Enterprise Security Patterns - MCP implementations lack reference implementations for enterprise authentication
+- **Strategic Opportunity (§3.1):** Security reference architecture addresses compliance requirements blocking enterprise adoption
+- **Compliance Requirements:** SOC 2, ISO 27001 compliance enabled through comprehensive audit logging
+
+**Competitive Context:**
+Key differentiator vs. protocol-only implementations by providing production-ready authentication middleware and enterprise identity provider integration patterns.
 
 ---
 
@@ -344,21 +370,21 @@ Security reference architecture with production-ready authentication middleware 
 
 ## Open Questions
 
-[Require security/engineering/compliance input before PRD phase]
+**Business-Level Questions:**
 
-1. **SSO Provider Priority:** Which SSO providers should we prioritize? Okta, Auth0, Azure AD confirmed—others needed? (Customer validation)
+1. **SSO Provider Prioritization:** Which SSO providers should we prioritize for MVP? Okta, Auth0, Azure AD confirmed as initial targets. Do we need additional providers based on customer requirements? (Customer validation and market demand)
 
-2. **RBAC Granularity:** Tool-level permissions sufficient, or need resource-level (e.g., specific JIRA projects)? (Complexity vs. precision trade-off)
+2. **Audit Log Retention Policy:** How long should audit logs be retained? 90 days, 1 year, 7 years? Compliance requirements vary by industry (healthcare: HIPAA, finance: SOX, general: SOC 2). (Industry-specific compliance requirements)
 
-3. **Audit Log Retention:** How long should audit logs be retained? 90 days, 1 year, 7 years? (Compliance requirement varies by industry)
+3. **Secrets Management Scope:** Should we require KMS integration (Vault, AWS KMS) for MVP, or document best practices for Phase 2 while using environment variables initially? (Security baseline vs. development scope and timeline)
 
-4. **Secrets Management:** Require KMS (Vault, AWS KMS) for MVP, or document for Phase 2? (Security vs. scope trade-off)
+4. **Security Audit Timing:** Should we schedule external security audit in Month 4-5 (earlier risk mitigation, may require rework) or after features complete in Month 6 (more complete review, less time for fixes)? (Risk mitigation strategy vs. iteration flexibility)
 
-5. **Security Audit Timing:** Schedule audit in Month 4-5 or after all features complete in Month 6? (Risk mitigation vs. iteration time)
+5. **SAML Support Priority:** Is SAML support required for MVP? Some enterprises mandate SAML over OAuth/OIDC. Should we include SAML or defer to Phase 3 based on enterprise requirements? (Enterprise adoption blocker validation)
 
-6. **Rate Limiting Strategy:** Per-user limits only, or also per-tool, per-IP, global? (Granularity vs. complexity)
+6. **Authorization Scope for MVP:** What is the acceptable authorization granularity for MVP? Tool-level permissions, or more granular resource-level control? (Business risk tolerance vs. implementation complexity and timeline)
 
-7. **SAML Support:** Required for MVP (some enterprises mandate SAML), or defer to Phase 3? (Enterprise requirement validation needed)
+**Note:** Technical decisions (RBAC implementation approach, rate limiting algorithms and thresholds, token management strategies, session storage mechanisms) will be addressed in PRD phase through collaboration between PM and Tech Lead.
 
 ---
 

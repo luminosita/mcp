@@ -19,6 +19,18 @@ As a developer or DevOps engineer deploying MCP servers, I need automated genera
 
 ---
 
+## Parent Artifact Context
+
+**Parent Product Vision:** VIS-001: AI Agent MCP Server Vision
+- **Link:** /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
+- **Vision Capability:** Key Capability #3 - Automated Deployment Configuration addressing integration fragmentation
+
+**Parent Initiative:** INIT-001: Production-Ready AI Agent Infrastructure
+- **Link:** /artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md
+- **Initiative Contribution:** Accelerates time-to-production (KR2: <2 weeks), demonstrates integration fragmentation solution through standardized deployment capabilities, supports scaling to 50+ deployments
+
+---
+
 ## Business Value
 
 This epic addresses **CI/CD automation** as a common use case for development agents and the **integration fragmentation** problem by providing standardized deployment capabilities. By automating deployment configuration generation, we reduce deployment errors, accelerate time-to-production, and embed security best practices automatically.
@@ -86,6 +98,20 @@ Development teams waste time building redundant deployment configurations as eac
 [From Product Vision §4.1 Strategic Rationale]
 
 CI/CD automation is common use case for development agents. Addresses integration fragmentation by providing standardized deployment capabilities. Demonstrates MCP value proposition for infrastructure automation.
+
+---
+
+## Business Research References
+
+**Primary Research Document:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
+
+**Market Insights Applied:**
+- **Pain Point Analysis (§1.1, Pain Point 1):** Integration Fragmentation - teams waste time building redundant deployment configurations
+- **Capability Recommendation (§4.1, Capability 3):** Automated Deployment Configuration addresses CI/CD automation use case
+- **User Persona:** Development and DevOps teams requiring standardized deployment patterns
+
+**Competitive Context:**
+Demonstrates MCP value proposition for infrastructure automation by providing standardized deployment capabilities, reducing time from 4-8 hours to <30 minutes.
 
 ---
 
@@ -350,21 +376,23 @@ CI/CD automation is common use case for development agents. Addresses integratio
 
 ## Open Questions
 
-[Require DevOps/security input before PRD phase]
+**Business-Level Questions:**
 
-1. **Helm vs. Raw Manifests:** Generate Helm charts or raw Kubernetes YAML? (Flexibility vs. simplicity trade-off—Helm has adoption but adds complexity)
+1. **Configuration Approach for MVP:** Should we generate Helm charts (more flexibility, adoption in enterprises) or raw Kubernetes YAML (simpler, lower learning curve)? What do target customers prefer? (Deployment pattern validation and customer preferences)
 
-2. **CI/CD Platform Priority:** GitHub Actions, GitLab CI confirmed—need Jenkins, CircleCI, others? (Customer validation)
+2. **CI/CD Platform Prioritization:** GitHub Actions and GitLab CI confirmed as initial targets. Should we add Jenkins, CircleCI, or other platforms based on customer requirements? (Customer validation and market demand)
 
-3. **Security Scanner:** Trivy (open-source, container focus) or Checkov (infrastructure-as-code focus) or both? (Coverage vs. integration complexity)
+3. **Configuration Customization Balance:** How much parameterization should we provide? Opinionated defaults (80/20 rule, easier to use) vs. full customization (covers edge cases, higher complexity)? (Usability vs. flexibility trade-off)
 
-4. **Configuration Customization:** How much parameterization? Opinionated defaults vs. full customization? (Usability vs. flexibility)
+4. **Deployment Automation Scope:** Should we keep deployment execution out of scope for MVP (security, review process) or add basic deployment execution (convenience, faster adoption)? What is risk tolerance? (Security vs. convenience and adoption speed)
 
-5. **Deployment Automation:** Keep out of scope for MVP, or add basic deployment execution? (Security vs. convenience trade-off)
+5. **Multi-Cloud Support Priority:** Is Kubernetes-only sufficient for MVP, or do customers require AWS ECS/GCP Cloud Run/Azure Container Apps templates? (Scope validation and customer deployment patterns)
 
-6. **Multi-Cloud Support:** Kubernetes-only sufficient, or need AWS ECS/GCP Cloud Run templates? (Scope validation with customers)
+6. **GitOps Integration Timing:** Should we include basic ArgoCD/Flux support in MVP, or defer to Phase 2? What percentage of target customers use GitOps workflows? (Adoption pattern validation in target customer base)
 
-7. **GitOps Integration:** Defer to future or include basic ArgoCD/Flux support? (Adoption pattern in target customers)
+7. **Security Validation Standards:** What security baseline is acceptable for MVP? Should we target >95% pass rate for generated configurations, or higher/lower threshold? (Quality bar vs. time-to-market)
+
+**Note:** Technical decisions (security scanner selection - Trivy vs Checkov, template engine choice, Kubernetes API version targeting, container base image standards) will be addressed in PRD phase through collaboration between PM and Tech Lead.
 
 ---
 
