@@ -95,13 +95,20 @@ Vision Phase
 ↓
 
 Strategic Phase
-├── Initiative
+├── INIT-000: Foundation Initiative (greenfield projects only)
 │   ├── Requires: Product Vision (mandatory)
-│   └── + Business Research (recommended)
+│   ├── + Business Research (recommended)
+│   └── Contains: EPIC-000 (Project Foundation & Bootstrap)
 │
-└── Epic
-    ├── Requires: Product Vision (mandatory)
-    └── + Business Research (recommended)
+├── INIT-001+: Feature Initiatives
+│   ├── Requires: Product Vision (mandatory)
+│   ├── + Business Research (recommended)
+│   ├── Dependencies: INIT-000 (must complete first - for greenfield projects)
+│   └── Contains: EPIC-001, EPIC-002, EPIC-003, etc.
+│
+└── Epic (can be generated from Product Vision OR Initiative)
+    ├── Path A: Requires Product Vision (mandatory) + Business Research (recommended)
+    └── Path B: Requires Initiative (mandatory) + Business Research (recommended)
 
 ↓
 
@@ -143,6 +150,9 @@ Technical Phase
 ```
 
 **Key Principles:**
+- **INIT-000 (Foundation Initiative)**: For greenfield/new projects only. Contains EPIC-000 (Project Foundation & Bootstrap). Establishes infrastructure before feature development. No dependencies.
+- **INIT-001+ (Feature Initiatives)**: For feature delivery. Depends on INIT-000 (if greenfield). Contains EPIC-001, EPIC-002, etc.
+- **Epic Generation**: Can be generated from Product Vision (direct) OR Initiative (decomposition). Use mutually exclusive input selection.
 - **Business Research** flows into all business-phase artifacts (Vision, Initiative, Epic, PRD, HLS)
 - **Implementation Research** flows into technical-phase artifacts (PRD, Backlog Story, Spike, ADR, Tech Spec)
 - **PRD is unique**: Transition phase artifact that may use BOTH research documents

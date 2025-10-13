@@ -8,10 +8,10 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: PRD-000 v1 generated, ready for human critique
-**Last Completed**: TASK-012: Execute PRD Generator v1 (Epic 000)
-**Next Task**: TASK-013 or TASK-015 (generator refinement recommended first)
-**Completion**: 7/16 tasks (44%)
+**Current Status**: PRD-000 v1 generated, Generator architecture refined for INIT-000
+**Last Completed**: TASK-015: Refactor Initiative Generator to Handle INIT-000 (Foundation Initiative)
+**Next Task**: TASK-013 (Execute High-Level User Story Generator) or create INIT-000
+**Completion**: 8/16 tasks (50%)
 
 ---
 
@@ -274,11 +274,30 @@ Execute PRD Generator for first epic in standalone context.
 **Priority**: High
 **Dependencies**: None (architectural improvement)
 **Estimated Time**: 30 minutes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed
 **Context**: Current session
 
 **Description**:
 Refactor initiative-generator to convert existing EPIC-000 instructions into INIT-000 (Foundation Initiative) instructions. The initiative generator should check if INIT-000 exists before generating feature initiatives (INIT-001+), and recommend creating INIT-000 first if it doesn't exist.
+
+**Completion Notes:**
+- ✅ Updated initiative-generator.xml (v1.5 → v1.8)
+  - v1.6: Added Step 1 INIT-000 detection, split Step 6 into 6A/6B routing
+  - v1.7: Removed redundant Step 2 routing logic, cleaned up step sequence
+  - v1.8: Made Step 6A fully tech-agnostic (CRITICAL architectural refinement)
+    - Removed specific technologies (FastAPI, PostgreSQL, Python, pytest)
+    - Added tech-agnostic language guidance and examples
+    - Added anti-hallucination guideline for maintaining tech-agnostic language
+    - **Rationale:** Initiatives/Epics are STRATEGIC PHASE (business-focused, tech-agnostic). Technical decisions belong in PRD phase where Implementation Research is available.
+- ✅ Updated CLAUDE.md SDLC Artifact Dependency Flow diagram
+  - Explicitly shows INIT-000 (Foundation Initiative) with EPIC-000
+  - Shows INIT-001+ (Feature Initiatives) with EPIC-001+ and INIT-000 dependency
+  - Added Key Principles clarifying INIT-000 vs INIT-001+ distinction
+- ✅ Verified epic-generator.xml handles INIT-000 correctly (no changes needed)
+  - Already supports Initiative as parent via mutually exclusive inputs
+- ✅ Created INIT-000 artifact (needs regeneration with tech-agnostic language)
+- Generator architecture now clean: Product Vision → INIT-000 (foundation) & INIT-001+ (features)
+- **Architectural Decision:** Strategic Phase = Tech-Agnostic, PRD = Tech-Aware Bridge
 
 **Architectural Rationale:**
 - Product Vision remains initiative-agnostic (strategic, no initiatives generated)

@@ -5,7 +5,7 @@
 - **Status:** Draft
 - **Priority:** Critical
 - **Parent Product Vision:** VIS-001
-- **Parent Initiative:** INIT-001 (Production-Ready AI Agent Infrastructure)
+- **Parent Initiative:** INIT-000 (Project Foundation & Bootstrap Infrastructure)
 - **Owner:** Tech Lead
 - **Target Release:** Q1 2025 (Weeks 1-4)
 - **Informed By Business Research:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
@@ -19,9 +19,9 @@ As a development team member, I need standardized production-ready project infra
 - **Link:** /artifacts/product_visions/VIS-001_product_vision_v1.md
 - **Vision Capability:** Foundation infrastructure enabling rapid development and deployment of AI agent capabilities
 
-**Parent Initiative:** INIT-001: Production-Ready AI Agent Infrastructure
-- **Link:** /artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md
-- **Initiative Contribution:** Establishes foundation infrastructure that enables all subsequent epics (EPIC-001 through EPIC-005) and directly supports KR2 (Time-to-Production Reduction: <2 weeks)
+**Parent Initiative:** INIT-000: Project Foundation & Bootstrap Infrastructure
+- **Link:** /artifacts/initiatives/INIT-000_Project_Foundation_Bootstrap_v1.md
+- **Initiative Contribution:** EPIC-000 is the sole supporting epic for INIT-000 (Foundation Initiative). Establishes foundation infrastructure that enables all feature initiatives (INIT-001+) and their epics (EPIC-001 through EPIC-005). Directly delivers all four INIT-000 Key Results (KR1: <30min setup, KR2: <5min CI/CD, KR3: 100% framework readiness, KR4: Reference architecture documented).
 
 ## Business Value
 Project foundation infrastructure is the critical enabler for all subsequent development work. Without a solid foundation, feature development faces constant friction from inconsistent environments, manual deployment processes, and lack of automation. This epic delivers the scaffolding that allows the entire team to move quickly and safely.
@@ -34,11 +34,11 @@ Development team members benefit from:
 - **Consistent Experience:** Standardized structure and workflows reduce cognitive load when switching between tasks
 
 ### Business Impact
-- **Accelerated Time-to-Market:** Reduces time-to-first-deployment from weeks to days (supports INIT-001 KR2: <2 weeks time-to-production)
+- **Accelerated Time-to-Market:** Reduces time-to-first-deployment from weeks to days (delivers INIT-000 KR1: <30min setup, KR2: <5min CI/CD feedback)
 - **Team Scalability:** Enables rapid onboarding of additional engineers without linear training overhead
 - **Quality Assurance:** Automated build validation reduces integration defects by catching issues early
 - **Risk Reduction:** Repeatable deployment processes minimize human error in production releases
-- **Foundation Investment:** Establishes patterns that accelerate all subsequent epics (EPIC-001 through EPIC-005)
+- **Foundation Investment:** Establishes patterns that accelerate all subsequent feature epics (EPIC-001 through EPIC-005) and unblocks feature initiatives (INIT-001+)
 
 ## Problem Being Solved
 Starting a new infrastructure project presents a critical bootstrapping challenge. Development teams face numerous foundational decisions and setup tasks that must be completed before any feature work can begin:
@@ -49,7 +49,7 @@ Starting a new infrastructure project presents a critical bootstrapping challeng
 - **Integration Failures:** Without continuous integration, code incompatibilities surface late in development cycles
 - **Onboarding Overhead:** New team members face multi-day setup processes with extensive manual configuration
 
-These foundational gaps directly impact INIT-001's strategic objective to "deploy agentic AI systems in weeks instead of months." Without addressing foundation concerns upfront, every feature epic will carry infrastructure debt that compounds over time.
+These foundational gaps directly impact INIT-000's strategic objective to "establish production-ready development infrastructure enabling rapid, confident feature development." Without addressing foundation concerns upfront (INIT-000), every feature initiative (INIT-001+) and epic will carry infrastructure debt that compounds over time.
 
 **Market Context:** Per business research, production deployment patterns for MCP infrastructure are scarce, with teams making critical architectural decisions without established patterns. This creates "inconsistent implementations and potential security or reliability issues" (Business Research §3.1, Gap 1). Establishing strong foundation patterns positions the project as a reference architecture.
 
@@ -152,7 +152,7 @@ These foundational gaps directly impact INIT-001's strategic objective to "deplo
 - **Estimated Duration:** 4 weeks (1 month)
 - **Team Size:** 2 Senior Backend Engineers (full-time), 0.5 Technical Writer (part-time)
 
-**Estimation Rationale:** Foundation work typically represents 10-15% of total project effort for greenfield projects. Given INIT-001 allocates 12 months and 80-120 SP for subsequent feature epics, 40-60 SP for foundation setup aligns with industry norms. Two senior engineers for 4 weeks provides sufficient capacity for infrastructure setup, documentation, and validation.
+**Estimation Rationale:** Foundation work typically represents 10-15% of total project effort for greenfield projects. Given feature initiatives (INIT-001+) allocate 11 months and subsequent feature epics (EPIC-001 through EPIC-005) total 80-120 SP each, 40-60 SP for foundation setup in 1 month (INIT-000/EPIC-000) aligns with industry norms. Two senior engineers for 4 weeks provides sufficient capacity for infrastructure setup, documentation, and validation.
 
 ## Milestones
 - **Milestone 1** (End Week 2): Repository structure established, development environment automation complete
@@ -194,10 +194,12 @@ These foundational gaps directly impact INIT-001's strategic objective to "deplo
 **Note:** Technical decisions (container runtime selection, monorepo vs multi-repo, CI/CD platform choice, Python version policy, dependency management tools) will be addressed in PRD phase through collaboration between PM and Tech Lead.
 
 ## Related Documents
-- **Initiative:** [INIT-001: Production-Ready AI Agent Infrastructure](/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md)
+- **Parent Initiative:** [INIT-000: Project Foundation & Bootstrap Infrastructure](/artifacts/initiatives/INIT-000_Project_Foundation_Bootstrap_v1.md)
+- **Parent Product Vision:** [VIS-001: AI Agent MCP Server](/artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md)
 - **Business Research:** [AI Agent MCP Server Business Research](/artifacts/research/AI_Agent_MCP_Server_business_research.md) - §3.1 Gap 1 (Production Deployment Patterns)
-- **Roadmap Context:** INIT-001 §6 Milestones & Timeline - Phase 1 MVP Foundation (Months 1-3)
-- **Supporting Epics (Blocked by EPIC-000):**
+- **Roadmap Context:** INIT-000 delivers foundation in Q1 2025 Weeks 1-4, enabling INIT-001 (feature initiatives) to begin Week 5+
+- **Downstream Dependencies (Blocked by EPIC-000):**
+  - INIT-001 and all feature initiatives (must wait for INIT-000 completion)
   - EPIC-001: Project Management Integration [to be created]
   - EPIC-002: Organizational Knowledge Access [to be created]
   - EPIC-003: Secure Authentication & Authorization [to be created]
@@ -215,15 +217,16 @@ These foundational gaps directly impact INIT-001's strategic objective to "deplo
 
 ## Traceability Notes
 
-This Epic document was generated using the Epic Generator v1.1 following the Context Engineering Framework methodology. All epic goals, scope, and success metrics are systematically extracted and derived from Initiative INIT-001 with explicit traceability.
+This Epic document was generated using the Epic Generator v1.1 following the Context Engineering Framework methodology. EPIC-000 is the sole supporting epic for INIT-000 (Foundation Initiative). All epic goals, scope, and success metrics are systematically extracted and derived from INIT-000 with explicit traceability.
 
 **Source Traceability:**
-- **Epic Description:** Extracted from INIT-001 §4.1 Supporting Epics, line 127
-- **Timeline:** Derived from INIT-001 §6.1 Milestone 1.0 (Q1 2025, Weeks 1-4)
-- **Team Allocation:** Derived from INIT-001 §5.2 Team Allocation Phase 1 (2 Senior Backend Engineers full-time)
-- **Business Value:** Connected to INIT-001 KR2 (Time-to-Production Reduction: <2 weeks)
-- **Dependencies:** Confirmed from INIT-001 §4.1 Epic Dependencies (blocks all feature epics)
-- **Success Criteria:** Derived from INIT-001 §6.1 Milestone 1.0 Success Criteria
+- **Parent Initiative:** INIT-000: Project Foundation & Bootstrap Infrastructure (v1.0)
+- **Epic Description:** Sole supporting epic for INIT-000, delivers foundation infrastructure
+- **Timeline:** Q1 2025 (Weeks 1-4) - aligns with INIT-000 timeline
+- **Team Allocation:** 2 Senior Backend Engineers (full-time), 0.5 Technical Writer (part-time) - from INIT-000 resource allocation
+- **Business Value:** Delivers all four INIT-000 Key Results (KR1: <30min setup, KR2: <5min CI/CD, KR3: 100% framework readiness, KR4: Reference architecture documented)
+- **Dependencies:** None (INIT-000 is first initiative); blocks all feature initiatives (INIT-001+) and their epics (EPIC-001 through EPIC-005)
+- **Success Criteria:** Derived from INIT-000 Key Results and milestone deliverables
 - **Problem Context:** Connected to Business Research §3.1 Gap 1 (Production Deployment Patterns)
 
 **Strategic Focus Validation:**

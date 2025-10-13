@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Initiative_Generator</name>
-    <version>1.5</version>
+    <version>1.8</version>
     <sdlc_phase>Initiative</sdlc_phase>
     <depends_on>Product Vision (mandatory), Business Research (recommended)</depends_on>
     <generated_by>Context Engineering Framework v1.5</generated_by>
     <date>2025-10-13</date>
-    <changes>v1.5: Replaced required attribute with classification system - Product Vision mandatory, Business Research recommended (Issue #3)</changes>
+    <changes>v1.8: Made Step 6A fully tech-agnostic. INIT-000 is strategic phase artifact (business-focused, no specific technologies). Technical decisions deferred to PRD phase where Implementation Research is available. Added explicit guidance and examples for tech-agnostic language (TASK-015 architectural refinement)</changes>
   </metadata>
 
   <system_role>
@@ -77,22 +77,52 @@
     <guideline category="verification">For budget and FTE estimates, use realistic ranges based on product complexity. Mark estimates clearly.</guideline>
     <guideline category="confidence">Identify areas where executive input is needed (e.g., budget approval, team allocation) and note as [REQUIRES EXECUTIVE DECISION].</guideline>
     <guideline category="scope">Stay at strategic initiative level. Do not define detailed epic requirements—those belong in Epic phase.</guideline>
+    <guideline category="tech_agnostic">CRITICAL: Initiatives are STRATEGIC PHASE artifacts. Do NOT specify technologies (languages, frameworks, databases, tools). Use conceptual terms: "application framework," "data storage layer," "web framework." Technical decisions belong in PRD phase (bridge artifact) where Implementation Research is available. For INIT-000 specifically, maintain strictly tech-agnostic language describing infrastructure capabilities, not implementation technologies.</guideline>
   </anti_hallucination_guidelines>
 
   <instructions>
     <step priority="1">
+      <action>Check for INIT-000 existence (Foundation Initiative)</action>
+      <purpose>Determine if foundation initiative exists before generating feature initiatives</purpose>
+      <guidance>
+        **CRITICAL CHECK:** Before proceeding with initiative generation, check if INIT-000 (Foundation Initiative) exists in `/artifacts/initiatives/` directory.
+
+        **If INIT-000 does NOT exist AND this is a greenfield/new project:**
+        - STOP and recommend creating INIT-000 first
+        - Display message: "⚠️  INIT-000 (Foundation Initiative) not found. For new/greenfield projects, INIT-000 must be created before feature initiatives. Please generate INIT-000 first using this generator with context that this is the foundation initiative."
+        - User must explicitly create INIT-000 before generating INIT-001+
+
+        **If INIT-000 EXISTS OR this is enhancement to existing system:**
+        - Proceed to generate feature initiative (INIT-001, INIT-002, etc.)
+        - Reference INIT-000 as prerequisite in dependencies section
+        - Adjust timeline to start after INIT-000 completion
+
+        **When to create INIT-000 (Foundation Initiative):**
+        - New/greenfield project starting from scratch
+        - No existing codebase or infrastructure
+        - Requires project scaffolding, repository setup, CI/CD foundation
+
+        **When to skip INIT-000 (go directly to INIT-001+):**
+        - Enhancement to existing product/system
+        - Infrastructure already exists
+        - Adding new features to established codebase
+      </guidance>
+      <anti_hallucination>Do not assume INIT-000 existence. Explicitly check the filesystem. For greenfield projects, INIT-000 is mandatory prerequisite.</anti_hallucination>
+    </step>
+
+    <step priority="2">
       <action>Load and analyze Product Vision document</action>
       <purpose>Extract strategic foundation for initiative</purpose>
       <anti_hallucination>Focus on vision statement, success metrics, key capabilities, and market opportunity. Note any gaps in quantification or scope.</anti_hallucination>
     </step>
 
-    <step priority="2">
+    <step priority="3">
       <action>Load Initiative template (path defined in CLAUDE.md Folder Structure section )</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. If template section cannot be filled from Product Vision, make reasonable inferences marked as [ASSUMPTION] or [REQUIRES EXECUTIVE INPUT].</anti_hallucination>
     </step>
 
-    <step priority="3">
+    <step priority="4">
       <action>Define Strategic Objective and Business Context</action>
       <guidance>
         - Craft one-sentence strategic objective from vision
@@ -102,7 +132,7 @@
       </guidance>
     </step>
 
-    <step priority="4">
+    <step priority="5">
       <action>Define Business Goals &amp; OKRs</action>
       <guidance>
         - Transform vision success metrics into 3-5 Key Results
@@ -113,28 +143,108 @@
       </guidance>
     </step>
 
-    <step priority="5">
-      <action>Map vision capabilities to supporting epics</action>
+    <step priority="6">
+      <action>Define Supporting Epics (Route based on initiative type)</action>
       <guidance>
-        - **CRITICAL: Check if this is a greenfield/new project**: If the initiative represents a new project or product from scratch (not an enhancement to existing system), you MUST include Epic-000 as the first epic
-        - **Epic-000: Project Foundation &amp; Bootstrap** (required for new projects only):
-          - Repository structure and scaffolding
-          - Core framework/architecture setup
-          - Development environment configuration
-          - CI/CD pipeline foundation
-          - SDLC workflow setup (CLAUDE.md, TODO.md structure)
-          - Main entry point and core application skeleton
-          - Timeline: Typically Q1 or first 4-6 weeks
-        - Each key capability from Product Vision becomes an Epic (Epic-001, Epic-002, etc.)
-        - Provide brief epic descriptions (1-2 sentences)
+        **Route to appropriate section based on initiative type:**
+        - If generating INIT-000 (Foundation Initiative) → Use Step 6A below
+        - If generating INIT-001+ (Feature Initiative) → Use Step 6B below
+      </guidance>
+    </step>
+
+    <step priority="6A">
+      <action>INIT-000 ONLY: Define Foundation Initiative Supporting Epic</action>
+      <guidance>
+        **THIS SECTION APPLIES ONLY TO INIT-000 (FOUNDATION INITIATIVE)**
+
+        **CRITICAL: Maintain Tech-Agnostic Language**
+        - INIT-000 is a STRATEGIC PHASE artifact (business-focused, tech-agnostic)
+        - Do NOT specify technologies (languages, frameworks, databases, tools)
+        - Use conceptual terms: "application framework," "data storage layer," "language runtime"
+        - Technical specifications belong in PRD phase (PRD-000), not Initiative or Epic
+        - PRD-000 is the bridge artifact where Implementation Research introduces technical decisions
+
+        INIT-000 contains exactly ONE supporting epic:
+
+        **EPIC-000: Project Foundation &amp; Bootstrap**
+        - **Scope (Tech-Agnostic):**
+          - Repository structure and standardized directory hierarchy appropriate for chosen technology stack
+          - Core application framework and architecture setup enabling feature development
+          - Development environment automation (setup scripts, dependency management, environment configuration)
+          - CI/CD pipeline foundation (automated linting, type checking, testing, builds appropriate for tech stack)
+          - SDLC workflow establishment (branching strategy, code review process, release management)
+          - Application skeleton (entry point, health check/readiness endpoint, example component demonstrating patterns)
+          - Development standards documentation (coding standards, contribution guidelines, architecture principles)
+        - **Timeline:** Typically 4-6 weeks for foundation work (adjust based on project complexity)
+        - **Owner:** Tech Lead [TBD]
+        - **Deliverables:**
+          - Working development environment achievable in &lt;30 minutes through automation
+          - Operational CI/CD pipeline with &lt;5 min feedback on commits
+          - Production-ready project structure enabling feature development
+          - Comprehensive development documentation enabling self-service onboarding
+          - Reference architecture patterns documented
+
+        **Key Results for INIT-000 (Foundation-specific, Tech-Agnostic):**
+        - KR1: Development environment setup time: &lt;30 minutes (automated)
+        - KR2: CI/CD pipeline operational with &lt;5 min feedback on every commit
+        - KR3: Framework readiness: 100% of feature epics can begin without infrastructure blockers
+        - KR4: Reference architecture established: Production deployment patterns documented
+
+        **Strategic Objective for INIT-000:**
+        "Establish production-ready development infrastructure enabling rapid, confident feature development"
+
+        **Budget Estimate for INIT-000:**
+        - $200K-$300K (2 Senior Engineers × 4 weeks + infrastructure costs)
+        - 2 FTE: 2 Senior Engineers (full-time), 0.5 Technical Writer (part-time)
+        - Note: Adjust based on technology complexity (mobile app, microservices, data pipeline vary in cost)
+
+        **Dependencies:**
+        - None (INIT-000 is the first initiative - no dependencies)
+        - NOTE: All feature initiatives (INIT-001+) will depend on INIT-000 completion
+
+        Do NOT include status or tracking columns. Initiatives are strategic documents, not tracking tools. Status belongs in TODO.md.
+
+        **Examples of Tech-Agnostic vs. Tech-Specific Language:**
+        - ✅ Tech-Agnostic (USE THIS): "Application framework setup," "Data storage layer," "Language runtime," "Web framework," "Testing framework"
+        - ❌ Tech-Specific (AVOID): "FastAPI setup," "PostgreSQL installation," "Python 3.11+," "pytest configuration," "React/Next.js"
+
+        **Reminder:** Technology choices are made in PRD phase where Implementation Research is available. At Initiative/Epic level, maintain strategic focus on WHAT infrastructure is needed (capabilities), not HOW it will be implemented (specific technologies).
+      </guidance>
+    </step>
+
+    <step priority="6B">
+      <action>INIT-001+ ONLY: Map vision capabilities to feature epics</action>
+      <guidance>
+        **THIS SECTION APPLIES ONLY TO INIT-001+ (FEATURE INITIATIVES)**
+
+        **IMPORTANT:** If this is a greenfield/new project, INIT-000 (Foundation Initiative) MUST exist before creating INIT-001+. If INIT-000 does not exist, return to step 1.
+
+        - Each key capability from Product Vision becomes an Epic (EPIC-001, EPIC-002, EPIC-003, etc.)
+        - Start numbering at EPIC-001 (EPIC-000 reserved for foundation initiative INIT-000)
+        - Provide brief epic descriptions (1-2 sentences per epic)
         - Assign rough timeline per epic (quarters)
         - Note epic owners if known, otherwise mark [TBD]
         - Maintain epic-level abstraction (no detailed requirements)
         - Do NOT include status or tracking columns (e.g., "Planned", "In Progress"). Initiatives are strategic documents, not tracking tools. Status belongs in TODO.md or project management systems.
+
+        **Timeline Adjustment:**
+        - Feature initiative timeline starts AFTER INIT-000 completion
+        - If INIT-000 ends at Week 4, INIT-001+ starts at Week 5
+        - Adjust all milestone dates and epic timelines accordingly
+
+        **Dependencies:**
+        - **Critical Dependency:** INIT-000 (Foundation Initiative) must complete before INIT-001+ begins
+        - Add to dependencies section: "Dependencies: INIT-000 (Project Foundation &amp; Bootstrap) - must complete first"
+        - Note any epic-level dependencies within the initiative
+
+        **Budget Adjustment:**
+        - Feature initiative budget should EXCLUDE foundation costs (already in INIT-000)
+        - If total project budget is $1M and foundation is $300K, feature initiative budget is $700K
+        - Document budget allocation clearly
       </guidance>
     </step>
 
-    <step priority="6">
+    <step priority="7">
       <action>Define Resource Allocation</action>
       <guidance>
         - Estimate budget based on initiative scope and timeline
@@ -142,41 +252,49 @@
         - Estimate FTE required based on epic complexity
         - List teams involved
         - Mark all estimates clearly as [ESTIMATED]
+        - **For INIT-000:** Use foundation-specific budget from Step 7A (~$200K-$300K)
+        - **For INIT-001+:** Exclude foundation costs already allocated to INIT-000
       </guidance>
     </step>
 
-    <step priority="7">
+    <step priority="8">
       <action>Identify Risks and Dependencies</action>
       <guidance>
         - Strategic risks: Market, execution, financial
         - External dependencies: Partners, vendors, regulatory
         - Internal dependencies: Other initiatives, platforms, teams
+        - **For INIT-000:** No initiative dependencies (first initiative)
+        - **For INIT-001+:** MANDATORY dependency on INIT-000 (must complete first)
         - Assign likelihood and impact (High/Med/Low)
         - Propose mitigation strategies
       </guidance>
     </step>
 
-    <step priority="8">
+    <step priority="9">
       <action>Define Success Metrics and Tracking</action>
       <guidance>
         - Primary metrics: Business outcomes from OKRs
         - Secondary metrics: Leading indicators of progress
         - Specify measurement frequency and tracking method
         - Link to dashboards if available
+        - **For INIT-000:** Use infrastructure readiness metrics from Step 6A
+        - **For INIT-001+:** Use feature delivery and business outcome metrics
       </guidance>
     </step>
 
-    <step priority="9">
+    <step priority="10">
       <action>Establish Milestones and Timeline</action>
       <guidance>
         - Break initiative into 3 phases (Foundation, Build, Scale)
         - Define 2-3 milestones per phase with deliverables
         - Align milestones with epic completion
         - Use quarter-level granularity
+        - **For INIT-000:** Single phase (4 weeks), 3 milestones aligned with foundation work
+        - **For INIT-001+:** Start timeline AFTER INIT-000 completion (e.g., Week 5+)
       </guidance>
     </step>
 
-    <step priority="10">
+    <step priority="11">
       <action>Define Governance Structure</action>
       <guidance>
         - Identify steering committee members
@@ -186,7 +304,7 @@
       </guidance>
     </step>
 
-    <step priority="11">
+    <step priority="12">
       <action>Identify Open Questions (Strategic &amp; Resource Level)</action>
       <guidance>
         Initiative-level Open Questions focus on STRATEGIC EXECUTION and RESOURCE ALLOCATION uncertainties that require executive or portfolio-level decision-making.
@@ -229,21 +347,24 @@
       <anti_hallucination>Only include genuine strategic or resource uncertainties requiring executive, portfolio, or organizational decision-making. Do not include operational or tactical questions. Mark all questions with appropriate urgency markers.</anti_hallucination>
     </step>
 
-    <step priority="12">
+    <step priority="13">
       <action>Generate initiative document</action>
       <format>Markdown following Initiative template structure (see CLAUDE.md Template Paths)</format>
       <guidance>
         - Follow complete template structure
         - Ensure Initiative ID is assigned (INIT-XXX format)
+        - **For INIT-000:** Use INIT-000 as ID
+        - **For INIT-001+:** Use INIT-001, INIT-002, etc. as ID
         - Include "Parent Product Vision" field with Vision ID (VIS-XXX)
         - Include "Informed By Business Research" field with document link
+        - **For INIT-001+:** Include "Dependencies" field: "INIT-000 (Project Foundation &amp; Bootstrap) - must complete first"
         - Add Vision Alignment section explaining how initiative implements vision
         - Add Business Research References section with § citations
         - Do NOT include validation checklist in artifact (checklist is for generator validation only)
       </guidance>
     </step>
 
-    <step priority="13">
+    <step priority="14">
       <action>Validate generated artifact</action>
       <guidance>
         IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
@@ -267,14 +388,16 @@
         <criterion id="CQ-01" category="content">Strategic objective is clear and aligns with organizational goals</criterion>
         <criterion id="CQ-02" category="content">3-5 Key Results defined with baseline, target, and due date</criterion>
         <criterion id="CQ-03" category="content">Supporting epics mapped with rough timelines</criterion>
-        <criterion id="CQ-04" category="content">If greenfield/new project, includes Epic-000 for project foundation and bootstrap</criterion>
-        <criterion id="CQ-05" category="content">Supporting epics table excludes status/tracking columns</criterion>
-        <criterion id="CQ-06" category="content">Budget and FTE allocation estimated and justified</criterion>
-        <criterion id="CQ-07" category="content">Risks identified with mitigation strategies</criterion>
-        <criterion id="CQ-08" category="content">Governance structure defined (steering committee, review cadence)</criterion>
-        <criterion id="CQ-09" category="content">Milestones established across 3 phases</criterion>
-        <criterion id="CQ-10" category="content">Open Questions appropriate for initiative phase (strategic/resource level, not tactical or implementation)</criterion>
-        <criterion id="CQ-11" category="content">Readability: Appropriate for executive audience</criterion>
+        <criterion id="CQ-04" category="content">Initiative type correctly identified: INIT-000 (foundation with EPIC-000 only) OR INIT-001+ (features with EPIC-001+)</criterion>
+        <criterion id="CQ-05" category="content">If INIT-000: Contains exactly one supporting epic (EPIC-000) with foundation scope</criterion>
+        <criterion id="CQ-06" category="content">If INIT-001+: Contains multiple feature epics (EPIC-001+) and references INIT-000 as dependency</criterion>
+        <criterion id="CQ-07" category="content">Supporting epics table excludes status/tracking columns</criterion>
+        <criterion id="CQ-08" category="content">Budget and FTE allocation estimated and justified</criterion>
+        <criterion id="CQ-09" category="content">Risks identified with mitigation strategies</criterion>
+        <criterion id="CQ-10" category="content">Governance structure defined (steering committee, review cadence)</criterion>
+        <criterion id="CQ-11" category="content">Milestones established (3 for INIT-000, 3 phases for INIT-001+)</criterion>
+        <criterion id="CQ-12" category="content">Open Questions appropriate for initiative phase (strategic/resource level, not tactical or implementation)</criterion>
+        <criterion id="CQ-13" category="content">Readability: Appropriate for executive audience</criterion>
 
         <!-- Upstream Traceability Criteria -->
         <criterion id="UT-01" category="traceability">"Parent Product Vision" field populated with valid Vision ID (VIS-XXX)</criterion>
