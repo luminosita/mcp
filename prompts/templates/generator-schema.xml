@@ -2,9 +2,11 @@
 <template>
   <metadata>
     <name>Generator_Prompt_Schema_Template</name>
-    <version>1.0</version>
+    <version>2.0</version>
     <source>Extracted from Context Engineering Framework</source>
     <purpose>Standard XML schema for all generator prompts</purpose>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v2.0: Updated for Issue #2 (Path Consolidation), Issue #3 (Input Classification), Issue #1 (Validation Consolidation)</changes>
   </metadata>
 
   <instructions>
@@ -22,7 +24,7 @@
     <name>[Generator_Name]</name>
     <version>[version]</version>
     <sdlc_phase>[Product_Research|Vision|Initiative|Epic|PRD|Feature|High_Level_Story|Backlog_Story|Architecture|Technical_Design|Code|Test]</sdlc_phase>
-    <depends_on>[Path to input artifact(s)]</depends_on>
+    <depends_on>[Artifact type(s) - paths defined in CLAUDE.md]</depends_on>
     <generated_by>[Source that created this generator]</generated_by>
     <date>[YYYY-MM-DD]</date>
   </metadata>
@@ -30,7 +32,7 @@
   <system_role>
     You are an expert [role] with [X]+ years of experience in [domain]. You excel at [key expertise].
 
-    Your output must follow the template at [template_path].
+    Your output must follow the [Artifact Type] template structure defined in CLAUDE.md (see Template Paths section).
   </system_role>
 
   <task_context>
@@ -42,10 +44,22 @@
     </background>
 
     <input_artifacts>
-      <artifact path="[path]" type="[type]">
+      <artifact classification="[mandatory|recommended|conditional]" type="[type]" mutually_exclusive_group="[group_name]">
         [Description of what this input contains and how to use it]
+
+        **Classification**: [MANDATORY|RECOMMENDED|CONDITIONAL] - [Brief explanation of classification and impact]
+
+        Note: Artifact paths defined in CLAUDE.md Artifact Path Patterns section.
       </artifact>
     </input_artifacts>
+
+    <input_classification_reference>
+      See CLAUDE.md Input Classification System section for complete definitions:
+      - MANDATORY: Must be loaded, generator fails without it
+      - RECOMMENDED: Should be loaded for quality (~20-30% quality reduction without)
+      - CONDITIONAL: Loaded only under specific conditions
+      - MUTUALLY_EXCLUSIVE: One of N inputs required (use mutually_exclusive_group attribute)
+    </input_classification_reference>
 
     <constraints>
       <constraint>[CUSTOMIZE PER PRODUCT - Technical/business/timeline constraints]</constraint>
@@ -90,7 +104,14 @@
     </step>
 
     <step priority="[N]">
-      <action>Validate outputs against checklist</action>
+      <action>Validate generated artifact</action>
+      <guidance>
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - Only 8 user stories...")
+           - Passed criteria can be summarized
+        2. Ask the human to confirm whether to regenerate
+      </guidance>
       <reference>See validation_checklist below</reference>
     </step>
   </instructions>
@@ -100,33 +121,31 @@
       <path>[/artifacts/path/artifact_v1.md]</path>
       <format>[Markdown following template structure]</format>
       <validation_checklist>
-        <criterion>[Specific validation criterion 1]</criterion>
-        <criterion>[Specific validation criterion 2]</criterion>
-        <criterion>[Specific validation criterion 3]</criterion>
-        <criterion>Traceability: References to input artifact(s) present</criterion>
-        <criterion>Readability: Accessible to target audience (Flesch score >60 target for docs)</criterion>
+        <!-- Content Quality Criteria -->
+        <criterion id="CQ-01" category="content">[Phase-specific content criterion 1]</criterion>
+        <criterion id="CQ-02" category="content">[Phase-specific content criterion 2]</criterion>
+        <criterion id="CQ-03" category="content">[Phase-specific content criterion 3]</criterion>
+
+        <!-- Traceability Criteria -->
+        <criterion id="TR-01" category="traceability">References to input artifact(s) present with specific sections cited</criterion>
+        <criterion id="TR-02" category="traceability">All decisions trace back to input artifact requirements or marked as [ASSUMPTION]</criterion>
+
+        <!-- Consistency Criteria -->
+        <criterion id="CC-01" category="consistency">Terminology consistent with input artifacts and SDLC framework</criterion>
+        <criterion id="CC-02" category="consistency">Formatting follows template structure exactly</criterion>
+        <criterion id="CC-03" category="consistency">Readability: Accessible to target audience (Flesch score >60 target for docs)</criterion>
       </validation_checklist>
     </terminal_artifact>
 
   </output_format>
 
   <traceability>
-    <source_document>[Path to input artifact]</source_document>
-    <template>[Path to template used]</template>
+    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
+    <source_document>[Artifact type] artifact (see CLAUDE.md for path pattern)</source_document>
+    <template>[Artifact Type] template (see CLAUDE.md Template Paths section)</template>
     <research_reference>[Optional: Section references for documentation only]</research_reference>
     <strategy_reference>[Optional: Section references for documentation only]</strategy_reference>
   </traceability>
-
-  <validation>
-    <self_check>
-      After generation, verify:
-      - [ ] Terminal artifact has all required template sections
-      - [ ] [Phase-specific validation item 1]
-      - [ ] [Phase-specific validation item 2]
-      - [ ] Readability: Language is clear and appropriate for audience
-      - [ ] Traceability: References to input artifact(s) present
-    </self_check>
-  </validation>
 
   <quality_guidance>
     <guideline category="completeness">
