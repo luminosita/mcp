@@ -241,34 +241,18 @@
     </step>
 
     <step priority="13">
-      <action>Internal validation using traceability checklist</action>
+      <action>Validate generated artifact</action>
       <guidance>
-        IMPORTANT: This checklist is for generator internal validation only. DO NOT include this checklist in the generated artifact.
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
 
-        Verify the generated artifact meets these requirements:
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-02: FAILED - Only 2 Key Results defined, need 3-5")
+           - Passed criteria can be summarized (e.g., "17 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
 
-        Upstream Traceability:
-          * "Parent Product Vision" field populated with valid Vision ID (VIS-XXX)
-          * Parent Product Vision document is in "Approved" status
-          * "Informed By Business Research" field populated with valid document link
-          * Business Research document is in "Finalized" status
-          * All Business Research section references (§X.Y format) are valid
-          * Vision alignment section clearly explains how initiative implements vision
-
-        Consistency Checks:
-          * Status value follows standardized format: Draft/In Review/Approved/Active/Completed/Cancelled
-          * Initiative ID follows standard format: INIT-XXX
-          * All placeholder fields [brackets] have been filled in
-          * Key Results are measurable with baseline, target, and due date
-          * OKRs align with organizational objectives
-
-        If any item fails validation, regenerate the artifact to fix the issue.
+        If all criteria pass, proceed to finalize the artifact.
       </guidance>
-    </step>
-
-    <step priority="14">
-      <action>Final validation against template and checklist</action>
-      <reference>See validation_checklist below</reference>
     </step>
   </instructions>
 
@@ -277,19 +261,35 @@
       <path>/artifacts/initiatives/[initiative_id]_v1.md</path>
       <format>Markdown following initiative-template.xml structure</format>
       <validation_checklist>
-        <criterion>Strategic objective is clear and aligns with organizational goals</criterion>
-        <criterion>3-5 Key Results defined with baseline, target, and due date</criterion>
-        <criterion>Supporting epics mapped with rough timelines</criterion>
-        <criterion>If greenfield/new project, includes Epic-000 for project foundation and bootstrap</criterion>
-        <criterion>Supporting epics table excludes status/tracking columns</criterion>
-        <criterion>Budget and FTE allocation estimated and justified</criterion>
-        <criterion>Risks identified with mitigation strategies</criterion>
-        <criterion>Governance structure defined (steering committee, review cadence)</criterion>
-        <criterion>Milestones established across 3 phases</criterion>
-        <criterion>Open Questions appropriate for initiative phase (strategic/resource level, not tactical or implementation)</criterion>
-        <criterion>Traceability: References to Product Vision present</criterion>
-        <criterion>Readability: Appropriate for executive audience</criterion>
-        <criterion>All [CUSTOMIZE PER PRODUCT] placeholders replaced with specific values</criterion>
+        <!-- Content Quality Criteria -->
+        <criterion id="CQ-01" category="content">Strategic objective is clear and aligns with organizational goals</criterion>
+        <criterion id="CQ-02" category="content">3-5 Key Results defined with baseline, target, and due date</criterion>
+        <criterion id="CQ-03" category="content">Supporting epics mapped with rough timelines</criterion>
+        <criterion id="CQ-04" category="content">If greenfield/new project, includes Epic-000 for project foundation and bootstrap</criterion>
+        <criterion id="CQ-05" category="content">Supporting epics table excludes status/tracking columns</criterion>
+        <criterion id="CQ-06" category="content">Budget and FTE allocation estimated and justified</criterion>
+        <criterion id="CQ-07" category="content">Risks identified with mitigation strategies</criterion>
+        <criterion id="CQ-08" category="content">Governance structure defined (steering committee, review cadence)</criterion>
+        <criterion id="CQ-09" category="content">Milestones established across 3 phases</criterion>
+        <criterion id="CQ-10" category="content">Open Questions appropriate for initiative phase (strategic/resource level, not tactical or implementation)</criterion>
+        <criterion id="CQ-11" category="content">Readability: Appropriate for executive audience</criterion>
+
+        <!-- Upstream Traceability Criteria -->
+        <criterion id="UT-01" category="traceability">"Parent Product Vision" field populated with valid Vision ID (VIS-XXX)</criterion>
+        <criterion id="UT-02" category="traceability">Parent Product Vision document is in "Approved" status</criterion>
+        <criterion id="UT-03" category="traceability">"Informed By Business Research" field populated with valid document link</criterion>
+        <criterion id="UT-04" category="traceability">Business Research document is in "Finalized" status</criterion>
+        <criterion id="UT-05" category="traceability">All Business Research section references (§X.Y format) are valid</criterion>
+        <criterion id="UT-06" category="traceability">Vision alignment section clearly explains how initiative implements vision</criterion>
+        <criterion id="UT-07" category="traceability">Traceability: References to Product Vision present</criterion>
+
+        <!-- Consistency Criteria -->
+        <criterion id="CC-01" category="consistency">Status value follows standardized format: Draft/In Review/Approved/Active/Completed/Cancelled</criterion>
+        <criterion id="CC-02" category="consistency">Initiative ID follows standard format: INIT-XXX</criterion>
+        <criterion id="CC-03" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
+        <criterion id="CC-04" category="consistency">Key Results are measurable with baseline, target, and due date</criterion>
+        <criterion id="CC-05" category="consistency">OKRs align with organizational objectives</criterion>
+        <criterion id="CC-06" category="consistency">All [CUSTOMIZE PER PRODUCT] placeholders replaced with specific values</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -300,23 +300,6 @@
     <research_reference>Business Research (if available) - for market justification</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.1 (Initiative Definition)</strategy_reference>
   </traceability>
-
-  <validation>
-    <self_check>
-      After generation, verify:
-      - [ ] Initiative document has all required template sections
-      - [ ] Strategic objective aligns with Product Vision statement
-      - [ ] Key Results are SMART and measurable
-      - [ ] If greenfield project, Epic-000 (Project Foundation) is included with appropriate timeline
-      - [ ] Supporting epics trace back to Product Vision capabilities
-      - [ ] Resource estimates are realistic and justified
-      - [ ] Governance structure is complete with decision authority
-      - [ ] Readability: Language is clear and appropriate for executive audience
-      - [ ] Traceability: Clear references to Product Vision sections
-      - [ ] No placeholder text remains (all [TBD] items have notes)
-      - [ ] All estimates marked as [ESTIMATED] where applicable
-    </self_check>
-  </validation>
 
   <quality_guidance>
     <guideline category="completeness">

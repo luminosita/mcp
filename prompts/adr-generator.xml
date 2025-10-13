@@ -113,17 +113,37 @@
     <step priority="7"><action>Document Decision with Rationale</action></step>
     <step priority="8"><action>Analyze Consequences (positive and negative)</action></step>
     <step priority="9"><action>Generate ADR document at /artifacts/adrs/[adr_id]_v1.md</action></step>
-    <step priority="10"><action>Validate output against checklist</action></step>
+    <step priority="10">
+      <action>Validate generated artifact</action>
+      <guidance>
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
+
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+
+        If all criteria pass, proceed to finalize the artifact.
+      </guidance>
+    </step>
   </instructions>
 
   <output_format>
     <terminal_artifact>
       <validation_checklist>
-        <criterion>Decision context clearly stated</criterion>
-        <criterion>2-4 alternatives evaluated with pros/cons</criterion>
-        <criterion>Decision documented with clear rationale</criterion>
-        <criterion>Consequences analyzed (positive and negative)</criterion>
-        <criterion>References to Implementation Research §X present</criterion>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">Decision context clearly stated</criterion>
+        <criterion id="CQ-02" category="content_quality">2-4 alternatives evaluated with pros/cons</criterion>
+        <criterion id="CQ-03" category="content_quality">Decision documented with clear rationale</criterion>
+        <criterion id="CQ-04" category="content_quality">Consequences analyzed (positive and negative)</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">References to Implementation Research §X present</criterion>
+        <criterion id="UT-02" category="upstream_traceability">References to parent artifact (Backlog Story or Spike) present</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>

@@ -255,35 +255,18 @@
     </step>
 
     <step priority="16">
-      <action>Internal validation using traceability checklist</action>
+      <action>Validate generated artifact</action>
       <guidance>
-        IMPORTANT: This checklist is for generator internal validation only. DO NOT include this checklist in the generated artifact.
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
 
-        Verify the generated artifact meets these requirements:
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
 
-        Upstream Traceability:
-          * "Parent Product Vision" field populated with valid Vision ID (VIS-XXX)
-          * Parent Product Vision document is in "Approved" status
-          * "Parent Initiative" field populated (if epic is part of an initiative)
-          * "Informed By Business Research" field populated with valid document link
-          * Business Research document is in "Finalized" status
-          * All Business Research section references (§X.Y format) are valid
-          * Parent Artifact Context section explains epic's contribution to vision/initiative
-
-        Consistency Checks:
-          * Status value follows standardized format: Draft/In Review/Approved/Planned/In Progress/Completed
-          * Epic ID follows standard format: EPIC-XXX
-          * All placeholder fields [brackets] have been filled in
-          * Epic statement follows "As [user], I need [capability], so that [business value]" format
-          * Acceptance criteria are business-focused (not technical implementation details)
-
-        If any item fails validation, regenerate the artifact to fix the issue.
+        If all criteria pass, proceed to finalize the artifact.
       </guidance>
-    </step>
-
-    <step priority="17">
-      <action>Final validation against template and checklist</action>
-      <reference>See validation_checklist below</reference>
     </step>
   </instructions>
 
@@ -291,20 +274,36 @@
     <terminal_artifact>
       <format>Markdown following epic-template.xml structure</format>
       <validation_checklist>
-        <criterion>Epic statement is clear and user-focused</criterion>
-        <criterion>Business value articulated with 2-3 quantified metrics</criterion>
-        <criterion>Problem statement connects to Product Vision</criterion>
-        <criterion>Scope clearly defined (In/Out)</criterion>
-        <criterion>3-5 high-level user stories listed</criterion>
-        <criterion>Epic-level acceptance criteria defined (Given/When/Then)</criterion>
-        <criterion>Success metrics established with targets and measurement methods</criterion>
-        <criterion>Business-level dependencies and risks identified (NO technical details)</criterion>
-        <criterion>Effort estimation provided (SP range, duration, team size)</criterion>
-        <criterion>Milestones defined across epic timeline</criterion>
-        <criterion>Open Questions are business-level only (NO technical questions)</criterion>
-        <criterion>Traceability: References to Product Vision or Initiative present</criterion>
-        <criterion>Readability: Accessible to cross-functional team</criterion>
-        <criterion>Strategic focus maintained: No specific technologies or technical implementation details</criterion>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">Epic statement is clear and user-focused</criterion>
+        <criterion id="CQ-02" category="content_quality">Business value articulated with 2-3 quantified metrics</criterion>
+        <criterion id="CQ-03" category="content_quality">Problem statement connects to Product Vision</criterion>
+        <criterion id="CQ-04" category="content_quality">Scope clearly defined (In/Out)</criterion>
+        <criterion id="CQ-05" category="content_quality">3-5 high-level user stories listed</criterion>
+        <criterion id="CQ-06" category="content_quality">Epic-level acceptance criteria defined (Given/When/Then)</criterion>
+        <criterion id="CQ-07" category="content_quality">Success metrics established with targets and measurement methods</criterion>
+        <criterion id="CQ-08" category="content_quality">Business-level dependencies and risks identified (NO technical details)</criterion>
+        <criterion id="CQ-09" category="content_quality">Effort estimation provided (SP range, duration, team size)</criterion>
+        <criterion id="CQ-10" category="content_quality">Milestones defined across epic timeline</criterion>
+        <criterion id="CQ-11" category="content_quality">Open Questions are business-level only (NO technical questions)</criterion>
+        <criterion id="CQ-12" category="content_quality">Strategic focus maintained: No specific technologies or technical implementation details</criterion>
+        <criterion id="CQ-13" category="content_quality">Readability: Accessible to cross-functional team</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">"Parent Product Vision" field populated with valid Vision ID (VIS-XXX)</criterion>
+        <criterion id="UT-02" category="upstream_traceability">Parent Product Vision document is in "Approved" status</criterion>
+        <criterion id="UT-03" category="upstream_traceability">"Parent Initiative" field populated (if epic is part of an initiative)</criterion>
+        <criterion id="UT-04" category="upstream_traceability">"Informed By Business Research" field populated with valid document link</criterion>
+        <criterion id="UT-05" category="upstream_traceability">Business Research document is in "Finalized" status</criterion>
+        <criterion id="UT-06" category="upstream_traceability">All Business Research section references (§X.Y format) are valid</criterion>
+        <criterion id="UT-07" category="upstream_traceability">Parent Artifact Context section explains epic's contribution to vision/initiative</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">Status value follows standardized format: Draft/In Review/Approved/Planned/In Progress/Completed</criterion>
+        <criterion id="CC-02" category="consistency">Epic ID follows standard format: EPIC-XXX</criterion>
+        <criterion id="CC-03" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
+        <criterion id="CC-04" category="consistency">Epic statement follows "As [user], I need [capability], so that [business value]" format</criterion>
+        <criterion id="CC-05" category="consistency">Acceptance criteria are business-focused (not technical implementation details)</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -316,24 +315,6 @@
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.2 (Epic Definition)</strategy_reference>
   </traceability>
 
-  <validation>
-    <self_check>
-      After generation, verify:
-      - [ ] Epic document has all required template sections
-      - [ ] Epic statement traces to Product Vision capability or Initiative epic
-      - [ ] Business value quantified with specific metrics
-      - [ ] Scope boundaries explicit (In/Out)
-      - [ ] High-level stories provide epic decomposition preview
-      - [ ] Acceptance criteria focus on user outcomes (not technical implementation)
-      - [ ] Success metrics link to parent initiative OKRs (if applicable)
-      - [ ] Business-level dependencies and risks identified (NO technical details)
-      - [ ] Open Questions are business-level only (NO technical questions about architecture, implementation, or technology)
-      - [ ] Readability: Language appropriate for product team and stakeholders
-      - [ ] Traceability: Clear references to parent artifact sections
-      - [ ] Strategic focus maintained: No specific technologies or implementation details
-      - [ ] Document uses Business Research only (not Implementation Research)
-    </self_check>
-  </validation>
 
   <quality_guidance>
     <guideline category="completeness">

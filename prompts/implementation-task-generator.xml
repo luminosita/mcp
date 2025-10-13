@@ -109,20 +109,41 @@
       <anti_hallucination>Only include genuine task-level blockers or clarifications. These should be granular implementation details, not architectural or product questions. If everything is clear from Tech Spec and Backlog Story, explicitly state no uncertainties.</anti_hallucination>
     </step>
     <step priority="12"><action>Generate Task at /artifacts/implementation_tasks/[task_id]_v1.md</action></step>
-    <step priority="13"><action>Validate output against checklist</action></step>
+    <step priority="13">
+      <action>Validate generated artifact</action>
+      <guidance>
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
+
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+
+        If all criteria pass, proceed to finalize the artifact.
+      </guidance>
+    </step>
   </instructions>
 
   <output_format>
     <terminal_artifact>
       <validation_checklist>
-        <criterion>Task objective specific and granular</criterion>
-        <criterion>Code changes specified (files to modify/create)</criterion>
-        <criterion>Implementation guidance provided (pseudo-code or examples)</criterion>
-        <criterion>Task acceptance criteria defined</criterion>
-        <criterion>Estimated hours (1-16 hours, typically 4-8)</criterion>
-        <criterion>Testing requirements specified</criterion>
-        <criterion>Task-level uncertainties appropriate (granular implementation blockers, not architecture/product questions)</criterion>
-        <criterion>References to Implementation Research §X present (if applicable)</criterion>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">Task objective specific and granular</criterion>
+        <criterion id="CQ-02" category="content_quality">Code changes specified (files to modify/create)</criterion>
+        <criterion id="CQ-03" category="content_quality">Implementation guidance provided (pseudo-code or examples)</criterion>
+        <criterion id="CQ-04" category="content_quality">Task acceptance criteria defined</criterion>
+        <criterion id="CQ-05" category="content_quality">Estimated hours (1-16 hours, typically 4-8)</criterion>
+        <criterion id="CQ-06" category="content_quality">Testing requirements specified</criterion>
+        <criterion id="CQ-07" category="content_quality">Task-level uncertainties appropriate (granular implementation blockers, not architecture/product questions)</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">References to Implementation Research §X present (if applicable)</criterion>
+        <criterion id="UT-02" category="upstream_traceability">References to parent Backlog Story present</criterion>
+        <criterion id="UT-03" category="upstream_traceability">References to Tech Spec present (if applicable)</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>

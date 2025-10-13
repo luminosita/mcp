@@ -242,8 +242,18 @@
     </step>
 
     <step priority="15">
-      <action>Validate output against checklist</action>
-      <reference>See validation_checklist below</reference>
+      <action>Validate generated artifact</action>
+      <guidance>
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
+
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+
+        If all criteria pass, proceed to finalize the artifact.
+      </guidance>
     </step>
   </instructions>
 
@@ -251,20 +261,27 @@
     <terminal_artifact>
       <format>Markdown following high-level-user-story-template.xml structure</format>
       <validation_checklist>
-        <criterion>User story statement uses standard format (As a/I want/So that)</criterion>
-        <criterion>Story is user-centric (focuses on user goals, not system features)</criterion>
-        <criterion>Story is implementation-agnostic (NO technical details, architecture, or technology)</criterion>
-        <criterion>User context defined (persona, characteristics, journey context)</criterion>
-        <criterion>Business value articulated (user value + business value + success criteria)</criterion>
-        <criterion>Functional requirements defined from user perspective</criterion>
-        <criterion>Primary user flow mapped (step-by-step happy path)</criterion>
-        <criterion>Acceptance criteria use Given/When/Then format</criterion>
-        <criterion>Decomposition strategy provided (3-5 backlog stories estimated)</criterion>
-        <criterion>Open Questions appropriate for high-level story phase (user/UX/functional only, not implementation)</criterion>
-        <criterion>Only user-facing NFRs included (NO technical performance targets)</criterion>
-        <criterion>Traceability: References to Epic/PRD and Business Research present</criterion>
-        <criterion>Readability: Accessible to product team and stakeholders</criterion>
-        <criterion>Purely functional: No implementation, architecture, or technology specified</criterion>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">User story statement uses standard format (As a/I want/So that)</criterion>
+        <criterion id="CQ-02" category="content_quality">Story is user-centric (focuses on user goals, not system features)</criterion>
+        <criterion id="CQ-03" category="content_quality">Story is implementation-agnostic (NO technical details, architecture, or technology)</criterion>
+        <criterion id="CQ-04" category="content_quality">User context defined (persona, characteristics, journey context)</criterion>
+        <criterion id="CQ-05" category="content_quality">Business value articulated (user value + business value + success criteria)</criterion>
+        <criterion id="CQ-06" category="content_quality">Functional requirements defined from user perspective</criterion>
+        <criterion id="CQ-07" category="content_quality">Primary user flow mapped (step-by-step happy path)</criterion>
+        <criterion id="CQ-08" category="content_quality">Acceptance criteria use Given/When/Then format</criterion>
+        <criterion id="CQ-09" category="content_quality">Decomposition strategy provided (3-5 backlog stories estimated)</criterion>
+        <criterion id="CQ-10" category="content_quality">Open Questions appropriate for high-level story phase (user/UX/functional only, not implementation)</criterion>
+        <criterion id="CQ-11" category="content_quality">Only user-facing NFRs included (NO technical performance targets)</criterion>
+        <criterion id="CQ-12" category="content_quality">Readability: Accessible to product team and stakeholders</criterion>
+        <criterion id="CQ-13" category="content_quality">Purely functional: No implementation, architecture, or technology specified</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">References to Epic/PRD present</criterion>
+        <criterion id="UT-02" category="upstream_traceability">Business Research references present (if available)</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -276,23 +293,6 @@
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.4 (High-Level User Story), Section 1.8.1 (Business Phase)</strategy_reference>
   </traceability>
 
-  <validation>
-    <self_check>
-      After generation, verify:
-      - [ ] High-level story document has all required template sections
-      - [ ] User story statement traces to Epic/PRD user story
-      - [ ] Story remains purely functional (NO technical details)
-      - [ ] User flow describes WHAT users do (not HOW system implements)
-      - [ ] Acceptance criteria focus on user-observable outcomes
-      - [ ] Business value quantified where possible
-      - [ ] Decomposition plan shows 3-5 backlog stories
-      - [ ] Only user-facing NFRs included (usability, accessibility, localization)
-      - [ ] NO technical NFRs (performance, architecture, scalability)
-      - [ ] Readability: Language appropriate for product team
-      - [ ] Traceability: Clear references to Epic/PRD and Business Research §X
-      - [ ] Implementation-agnostic: No technology, architecture, or code discussion
-    </self_check>
-  </validation>
 
   <quality_guidance>
     <guideline category="completeness">

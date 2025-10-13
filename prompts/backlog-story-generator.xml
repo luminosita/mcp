@@ -263,37 +263,18 @@
     </step>
 
     <step priority="16">
-      <action>Internal validation using traceability checklist</action>
+      <action>Validate generated artifact</action>
       <guidance>
-        IMPORTANT: This checklist is for generator internal validation only. DO NOT include this checklist in the generated artifact.
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
 
-        Verify the generated artifact meets these requirements:
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
 
-        Upstream Traceability:
-          * "Parent PRD" field populated with valid PRD ID (PRD-XXX)
-          * "Parent High-Level Story" field populated (HLS-XX or standalone)
-          * "Functional Requirements Covered" lists all FR-XX from PRD
-          * "Informed By Implementation Research" field populated with valid document link
-          * Parent PRD document is in "Approved" status
-          * Implementation Research document is in "Finalized" status
-          * All Implementation Research section references (§X.Y format) are valid
-          * Technical patterns from research are applied appropriately
-
-        Consistency Checks:
-          * Status value follows standardized format: Backlog/Ready/In Progress/In Review/Done
-          * Story ID follows standard format: US-XXX
-          * All placeholder fields [brackets] have been filled in
-          * User story follows format: "As [role], I want [feature], so that [benefit]"
-          * Acceptance criteria are testable (Given-When-Then format preferred)
-          * Story points estimated and sprint assigned
-
-        If any item fails validation, regenerate the artifact to fix the issue.
+        If all criteria pass, proceed to finalize the artifact.
       </guidance>
-    </step>
-
-    <step priority="17">
-      <action>Final validation against template and checklist</action>
-      <reference>See validation_checklist below</reference>
     </step>
   </instructions>
 
@@ -301,19 +282,37 @@
     <terminal_artifact>
       <format>Markdown following backlog-story-template.xml structure</format>
       <validation_checklist>
-        <criterion>Story title is action-oriented and specific</criterion>
-        <criterion>Detailed requirements clearly stated</criterion>
-        <criterion>Acceptance criteria highly specific and testable (5-10 criteria)</criterion>
-        <criterion>Technical notes reference Implementation Research sections</criterion>
-        <criterion>Technical specifications include API/database/dependencies (if applicable)</criterion>
-        <criterion>Story points estimated (1-5 SP typical)</criterion>
-        <criterion>Testing strategy defined (unit, integration, manual)</criterion>
-        <criterion>Dependencies identified (story, technical, team)</criterion>
-        <criterion>Open Questions capture implementation uncertainties with clear markers ([REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD])</criterion>
-        <criterion>Traceability: References to High-Level Story, PRD, Implementation Research present</criterion>
-        <criterion>Implementation-adjacent: Hints at approach without prescribing exact code</criterion>
-        <criterion>Sprint-ready: Can be completed in 1 sprint by team</criterion>
-        <criterion>For non-PRD-derived stories: Justification and Implementation Research reference per Section 1.5.7</criterion>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">Story title is action-oriented and specific</criterion>
+        <criterion id="CQ-02" category="content_quality">Detailed requirements clearly stated</criterion>
+        <criterion id="CQ-03" category="content_quality">Acceptance criteria highly specific and testable (5-10 criteria)</criterion>
+        <criterion id="CQ-04" category="content_quality">Technical notes reference Implementation Research sections</criterion>
+        <criterion id="CQ-05" category="content_quality">Technical specifications include API/database/dependencies (if applicable)</criterion>
+        <criterion id="CQ-06" category="content_quality">Story points estimated (1-5 SP typical)</criterion>
+        <criterion id="CQ-07" category="content_quality">Testing strategy defined (unit, integration, manual)</criterion>
+        <criterion id="CQ-08" category="content_quality">Dependencies identified (story, technical, team)</criterion>
+        <criterion id="CQ-09" category="content_quality">Open Questions capture implementation uncertainties with clear markers ([REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD])</criterion>
+        <criterion id="CQ-10" category="content_quality">Implementation-adjacent: Hints at approach without prescribing exact code</criterion>
+        <criterion id="CQ-11" category="content_quality">Sprint-ready: Can be completed in 1 sprint by team</criterion>
+        <criterion id="CQ-12" category="content_quality">For non-PRD-derived stories: Justification and Implementation Research reference per Section 1.5.7</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">"Parent PRD" field populated with valid PRD ID (PRD-XXX)</criterion>
+        <criterion id="UT-02" category="upstream_traceability">"Parent High-Level Story" field populated (HLS-XX or standalone)</criterion>
+        <criterion id="UT-03" category="upstream_traceability">"Functional Requirements Covered" lists all FR-XX from PRD</criterion>
+        <criterion id="UT-04" category="upstream_traceability">"Informed By Implementation Research" field populated with valid document link</criterion>
+        <criterion id="UT-05" category="upstream_traceability">Parent PRD document is in "Approved" status</criterion>
+        <criterion id="UT-06" category="upstream_traceability">Implementation Research document is in "Finalized" status</criterion>
+        <criterion id="UT-07" category="upstream_traceability">All Implementation Research section references (§X.Y format) are valid</criterion>
+        <criterion id="UT-08" category="upstream_traceability">Technical patterns from research are applied appropriately</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">Status value follows standardized format: Backlog/Ready/In Progress/In Review/Done</criterion>
+        <criterion id="CC-02" category="consistency">Story ID follows standard format: US-XXX</criterion>
+        <criterion id="CC-03" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
+        <criterion id="CC-04" category="consistency">User story follows format: "As [role], I want [feature], so that [benefit]"</criterion>
+        <criterion id="CC-05" category="consistency">Acceptance criteria are testable (Given-When-Then format preferred)</criterion>
+        <criterion id="CC-06" category="consistency">Story points estimated and sprint assigned</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -325,22 +324,6 @@
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.5 (Backlog User Story), Section 1.5.7 (Story Categories), Section 1.8.2 (Implementation Phase)</strategy_reference>
   </traceability>
 
-  <validation>
-    <self_check>
-      After generation, verify:
-      - [ ] Backlog story document has all required template sections
-      - [ ] Story traces to High-Level Story decomposition plan
-      - [ ] Acceptance criteria highly specific and unambiguous
-      - [ ] Technical notes reference Implementation Research §X.Y
-      - [ ] Story sized appropriately (1-5 SP for sprint completion)
-      - [ ] Testing strategy covers unit, integration, and manual tests
-      - [ ] Dependencies clearly identified
-      - [ ] Traceability section complete with all references
-      - [ ] Implementation-adjacent: Provides guidance without prescribing exact implementation
-      - [ ] Sprint-ready: Team can pick up and complete in one sprint
-      - [ ] For non-PRD-derived stories: Includes category justification per Section 1.5.7
-    </self_check>
-  </validation>
 
   <quality_guidance>
     <guideline category="completeness">

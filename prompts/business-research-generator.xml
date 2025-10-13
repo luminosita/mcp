@@ -442,16 +442,19 @@
     </step>
 
     <step priority="10">
-      <action>Validate business research artifact against quality checklist</action>
+      <action>Validate generated artifact</action>
       <purpose>Ensure deliverable meets all business research standards</purpose>
-      <reference>See validation_checklist below</reference>
-      <details>
-        Complete full validation checklist.
+      <guidance>
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
 
-        If any criterion fails, revise artifact before delivery.
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
 
-        Present validation results to human with final artifact.
-      </details>
+        If all criteria pass, proceed to finalize the artifact.
+      </guidance>
     </step>
   </instructions>
 
@@ -459,33 +462,39 @@
     <terminal_artifact>
       <format>Markdown following `business_research_template.md` structure</format>
       <validation_checklist>
-        <criterion>Human inputs collected and validated before research began</criterion>
-        <criterion>Business research plan created and approved by human</criterion>
-        <criterion>All template sections filled with substantive business content (no placeholders)</criterion>
-        <criterion>Executive Summary provides clear synthesis of market opportunity and strategic direction</criterion>
-        <criterion>Problem Space Analysis articulates user pain points with evidence</criterion>
-        <criterion>Market Analysis includes competitive segmentation by business model and value proposition</criterion>
-        <criterion>Minimum 5-7 products analyzed (including discoveries beyond human references)</criterion>
-        <criterion>All competitors analyzed with value propositions, strengths, weaknesses, business models</criterion>
-        <criterion>User personas developed with goals, pain points, workflows based on research</criterion>
-        <criterion>Market gaps clearly identified with user impact and business opportunity</criterion>
-        <criterion>UX gaps documented with evidence from user feedback</criterion>
-        <criterion>Integration gaps identified with affected workflows</criterion>
-        <criterion>Capabilities defined from USER perspective (what/why, not how)</criterion>
-        <criterion>NO specific technology recommendations (no "use Neo4j", "implement OAuth 2.0")</criterion>
-        <criterion>Business-level NFRs only (compliance, enterprise capabilities, scale posture - not technical specs)</criterion>
-        <criterion>Strategic recommendations include market positioning, feature prioritization, business model</criterion>
-        <criterion>Go-to-market strategy addresses target personas, adoption path, channels, metrics</criterion>
-        <criterion>Roadmap phases prioritize capabilities by business value (MVP → V1 → V2+)</criterion>
-        <criterion>Risk analysis covers market, competitive, and adoption risks with mitigations</criterion>
-        <criterion>ALL factual claims include citations [^N]</criterion>
-        <criterion>References section complete with full URLs for all citations</criterion>
-        <criterion>All URLs in References section are valid and accessible</criterion>
-        <criterion>Readability: Clear language appropriate for product managers and executives (Flesch >60 for summaries)</criterion>
-        <criterion>Traceability: Research clearly supports Product Vision, Epics, PRDs, Initiatives, High-level User Stories</criterion>
-        <criterion>User personas appendix detailed and research-grounded</criterion>
-        <criterion>Competitive intelligence summary table included</criterion>
-        <criterion>Market sizing and opportunity analysis included (TAM/SAM/SOM if available)</criterion>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">Human inputs collected and validated before research began</criterion>
+        <criterion id="CQ-02" category="content_quality">Business research plan created and approved by human</criterion>
+        <criterion id="CQ-03" category="content_quality">All template sections filled with substantive business content (no placeholders)</criterion>
+        <criterion id="CQ-04" category="content_quality">Executive Summary provides clear synthesis of market opportunity and strategic direction</criterion>
+        <criterion id="CQ-05" category="content_quality">Problem Space Analysis articulates user pain points with evidence</criterion>
+        <criterion id="CQ-06" category="content_quality">Market Analysis includes competitive segmentation by business model and value proposition</criterion>
+        <criterion id="CQ-07" category="content_quality">Minimum 5-7 products analyzed (including discoveries beyond human references)</criterion>
+        <criterion id="CQ-08" category="content_quality">All competitors analyzed with value propositions, strengths, weaknesses, business models</criterion>
+        <criterion id="CQ-09" category="content_quality">User personas developed with goals, pain points, workflows based on research</criterion>
+        <criterion id="CQ-10" category="content_quality">Market gaps clearly identified with user impact and business opportunity</criterion>
+        <criterion id="CQ-11" category="content_quality">UX gaps documented with evidence from user feedback</criterion>
+        <criterion id="CQ-12" category="content_quality">Integration gaps identified with affected workflows</criterion>
+        <criterion id="CQ-13" category="content_quality">Capabilities defined from USER perspective (what/why, not how)</criterion>
+        <criterion id="CQ-14" category="content_quality">NO specific technology recommendations (no "use Neo4j", "implement OAuth 2.0")</criterion>
+        <criterion id="CQ-15" category="content_quality">Business-level NFRs only (compliance, enterprise capabilities, scale posture - not technical specs)</criterion>
+        <criterion id="CQ-16" category="content_quality">Strategic recommendations include market positioning, feature prioritization, business model</criterion>
+        <criterion id="CQ-17" category="content_quality">Go-to-market strategy addresses target personas, adoption path, channels, metrics</criterion>
+        <criterion id="CQ-18" category="content_quality">Roadmap phases prioritize capabilities by business value (MVP → V1 → V2+)</criterion>
+        <criterion id="CQ-19" category="content_quality">Risk analysis covers market, competitive, and adoption risks with mitigations</criterion>
+        <criterion id="CQ-20" category="content_quality">Readability: Clear language appropriate for product managers and executives (Flesch >60 for summaries)</criterion>
+        <criterion id="CQ-21" category="content_quality">User personas appendix detailed and research-grounded</criterion>
+        <criterion id="CQ-22" category="content_quality">Competitive intelligence summary table included</criterion>
+        <criterion id="CQ-23" category="content_quality">Market sizing and opportunity analysis included (TAM/SAM/SOM if available)</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">ALL factual claims include citations [^N]</criterion>
+        <criterion id="UT-02" category="upstream_traceability">References section complete with full URLs for all citations</criterion>
+        <criterion id="UT-03" category="upstream_traceability">All URLs in References section are valid and accessible</criterion>
+        <criterion id="UT-04" category="upstream_traceability">Traceability: Research clearly supports Product Vision, Epics, PRDs, Initiatives, High-level User Stories</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">No placeholder text or [TODO] markers present</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -509,36 +518,6 @@
     </companion_research>
   </traceability>
 
-  <validation>
-    <self_check>
-      After generation, verify:
-      - [ ] Business research plan was approved by human before starting
-      - [ ] All human inputs were validated and clarified
-      - [ ] Research artifact has all required template sections
-      - [ ] Executive summary synthesizes market opportunity and strategic direction
-      - [ ] Problem space articulates user pain points with citations
-      - [ ] Market analysis complete with business-model segmentation
-      - [ ] Minimum 5-7 products analyzed (including discoveries beyond references)
-      - [ ] User personas developed with research evidence
-      - [ ] Market gaps identify unmet user needs with evidence
-      - [ ] UX gaps documented with user feedback citations
-      - [ ] Integration gaps show affected workflows
-      - [ ] Capabilities described from USER perspective (what/why, not how)
-      - [ ] NO technology prescriptions (verified: no "use Neo4j", "implement OAuth", etc.)
-      - [ ] Business-level NFRs only (compliance, scale, not technical metrics)
-      - [ ] Strategic recommendations include positioning, prioritization, business model, GTM
-      - [ ] Roadmap phases prioritize by business value
-      - [ ] Risk analysis covers market/competitive/adoption with mitigations
-      - [ ] Every factual claim has citation [^N]
-      - [ ] References section complete with all URLs
-      - [ ] All URLs tested and accessible
-      - [ ] No placeholder text or [TODO] markers
-      - [ ] Readability: Language clear for product managers/executives
-      - [ ] Traceability: Supports Product Vision, Epics, PRDs, Initiatives, User Stories
-      - [ ] User personas appendix detailed
-      - [ ] Competitive intelligence summary included
-    </self_check>
-  </validation>
 
   <quality_guidance>
     <guideline category="business_focus">

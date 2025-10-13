@@ -18,7 +18,14 @@
 - [X] Check output file name for generators
 - [X] Remove all paths from generators and templates. Keep it only in CLAUDE.md (input, output)
 - [X] Evaluation related to required/optional input data for generators
-- [ ] Remove Tracibility Checklists from templates (validate existance in generators)
+- [X] Remove Tracibility Checklists from templates (validate existance in generators)
+- [ ] verify generate and refine prompts
+    - [ ] examples (Step 5, Step 6 -> Updated Sections)
+- [ ] create refinemenets plan for generated artifacts and apply
+- [X] apply Issue 1, PRD gen only
+- [ ] apply Issue 1, all gens
+- [ ] apply Issue 3, PRD only
+- [ ] apply Issue 3, all
 
 ## PRD Validation
 - [ ] Technical Consideration sections were removed from Epics and saved into `artifacts/technical_considerations_from_epic.md`
@@ -57,8 +64,10 @@
 ## Finalization
 - [X] remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification
 - [X] remove next-generator instructions, keep only reference to next-generator to be invoked in the report
+- [ ] Evaluate validation checks migration to a validation tool 
 - [ ] strategy doc update
 - [ ] GRADUATION.md review
+- [ ] IMPORTANT: compare with dot-ai, prp, portal projects from sandbox
 
 ## Implementation
 ### Where is the specification/guidelines on:

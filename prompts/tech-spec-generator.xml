@@ -103,20 +103,41 @@
       <anti_hallucination>Only include genuine implementation uncertainties requiring team discussion or spike resolution. Reference relevant ADRs that have already resolved major decisions. Do not re-open questions already decided in PRD or ADR phases. Distinguish between ADR-worthy questions (requiring alternatives analysis with pros/cons) and Tech Spec questions (implementation details).</anti_hallucination>
     </step>
     <step priority="12"><action>Generate Tech Spec at /artifacts/tech_specs/[spec_id]_v1.md</action></step>
-    <step priority="13"><action>Validate output against checklist</action></step>
+    <step priority="13">
+      <action>Validate generated artifact</action>
+      <guidance>
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
+
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+
+        If all criteria pass, proceed to finalize the artifact.
+      </guidance>
+    </step>
   </instructions>
 
   <output_format>
     <terminal_artifact>
       <validation_checklist>
-        <criterion>Component architecture designed</criterion>
-        <criterion>API contracts specified (endpoints, request/response schemas)</criterion>
-        <criterion>Data models defined (database schemas with types)</criterion>
-        <criterion>Error handling strategy documented</criterion>
-        <criterion>Code examples included (adapted from Implementation Research §8)</criterion>
-        <criterion>Testing strategy defined (unit, integration tests)</criterion>
-        <criterion>Open Questions appropriate for implementation phase (granular details, not re-opening PRD/ADR decisions)</criterion>
-        <criterion>References to Implementation Research §X and ADRs present</criterion>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">Component architecture designed</criterion>
+        <criterion id="CQ-02" category="content_quality">API contracts specified (endpoints, request/response schemas)</criterion>
+        <criterion id="CQ-03" category="content_quality">Data models defined (database schemas with types)</criterion>
+        <criterion id="CQ-04" category="content_quality">Error handling strategy documented</criterion>
+        <criterion id="CQ-05" category="content_quality">Code examples included (adapted from Implementation Research §8)</criterion>
+        <criterion id="CQ-06" category="content_quality">Testing strategy defined (unit, integration tests)</criterion>
+        <criterion id="CQ-07" category="content_quality">Open Questions appropriate for implementation phase (granular details, not re-opening PRD/ADR decisions)</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">References to Implementation Research §X present</criterion>
+        <criterion id="UT-02" category="upstream_traceability">References to ADRs present</criterion>
+        <criterion id="UT-03" category="upstream_traceability">References to parent Backlog Story present</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>

@@ -450,14 +450,19 @@
     </step>
 
     <step priority="10">
-      <action>Validate implementation research artifact against quality checklist</action>
+      <action>Validate generated artifact</action>
       <purpose>Ensure deliverable meets technical research standards</purpose>
-      <reference>See validation_checklist below</reference>
-      <details>
-        Complete validation checklist.
-        If any criterion fails, revise before delivery.
-        Present validation results with final artifact.
-      </details>
+      <guidance>
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
+
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+
+        If all criteria pass, proceed to finalize the artifact.
+      </guidance>
     </step>
   </instructions>
 
@@ -465,35 +470,41 @@
     <terminal_artifact>
       <format>Markdown following `implementation_research_template.md` structure</format>
       <validation_checklist>
-        <criterion>Human inputs collected and validated</criterion>
-        <criterion>Technical research plan approved</criterion>
-        <criterion>All template sections filled with technical content</criterion>
-        <criterion>Executive summary synthesizes technical approach and key decisions</criterion>
-        <criterion>Technical context section provides problem overview</criterion>
-        <criterion>Technology landscape analysis covers competitor tech stacks and architecture patterns</criterion>
-        <criterion>Minimum 3-5 technology stacks analyzed with citations</criterion>
-        <criterion>Architecture patterns documented with production case studies</criterion>
-        <criterion>Technical gaps identified with root cause analysis</criterion>
-        <criterion>Implementation patterns include runnable code examples</criterion>
-        <criterion>Security implementation covers auth, encryption, validation with code</criterion>
-        <criterion>Observability implementation covers logging, metrics, tracing with code</criterion>
-        <criterion>Testing implementation includes unit, integration, e2e, performance examples</criterion>
-        <criterion>API design includes complete code examples (endpoints, pagination, etc.)</criterion>
-        <criterion>Architecture recommendations include justification and trade-offs</criterion>
-        <criterion>Technology stack specifies versions and alternatives considered</criterion>
-        <criterion>Data model includes schema examples in correct query language</criterion>
-        <criterion>Scalability section addresses horizontal/vertical scaling, bottlenecks</criterion>
-        <criterion>Implementation pitfalls documented with mitigation code examples</criterion>
-        <criterion>Anti-patterns include before/after code comparisons</criterion>
-        <criterion>Build vs buy decisions from technical perspective</criterion>
-        <criterion>ALL code examples syntactically correct</criterion>
-        <criterion>ALL technical claims include citations [^N]</criterion>
-        <criterion>References section complete with full URLs</criterion>
-        <criterion>All URLs valid and accessible</criterion>
-        <criterion>Performance targets specific (p99 &lt; 200ms, not "fast")</criterion>
-        <criterion>Technology versions specified</criterion>
-        <criterion>Traceability: Supports Backlog Stories, ADRs, Tech Specs, Implementation Tasks</criterion>
-        <criterion>Backlog Story traceability format included (ref: §6.1 - Pattern Name)</criterion>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">Human inputs collected and validated</criterion>
+        <criterion id="CQ-02" category="content_quality">Technical research plan approved</criterion>
+        <criterion id="CQ-03" category="content_quality">All template sections filled with technical content</criterion>
+        <criterion id="CQ-04" category="content_quality">Executive summary synthesizes technical approach and key decisions</criterion>
+        <criterion id="CQ-05" category="content_quality">Technical context section provides problem overview</criterion>
+        <criterion id="CQ-06" category="content_quality">Technology landscape analysis covers competitor tech stacks and architecture patterns</criterion>
+        <criterion id="CQ-07" category="content_quality">Minimum 3-5 technology stacks analyzed with citations</criterion>
+        <criterion id="CQ-08" category="content_quality">Architecture patterns documented with production case studies</criterion>
+        <criterion id="CQ-09" category="content_quality">Technical gaps identified with root cause analysis</criterion>
+        <criterion id="CQ-10" category="content_quality">Implementation patterns include runnable code examples</criterion>
+        <criterion id="CQ-11" category="content_quality">Security implementation covers auth, encryption, validation with code</criterion>
+        <criterion id="CQ-12" category="content_quality">Observability implementation covers logging, metrics, tracing with code</criterion>
+        <criterion id="CQ-13" category="content_quality">Testing implementation includes unit, integration, e2e, performance examples</criterion>
+        <criterion id="CQ-14" category="content_quality">API design includes complete code examples (endpoints, pagination, etc.)</criterion>
+        <criterion id="CQ-15" category="content_quality">Architecture recommendations include justification and trade-offs</criterion>
+        <criterion id="CQ-16" category="content_quality">Technology stack specifies versions and alternatives considered</criterion>
+        <criterion id="CQ-17" category="content_quality">Data model includes schema examples in correct query language</criterion>
+        <criterion id="CQ-18" category="content_quality">Scalability section addresses horizontal/vertical scaling, bottlenecks</criterion>
+        <criterion id="CQ-19" category="content_quality">Implementation pitfalls documented with mitigation code examples</criterion>
+        <criterion id="CQ-20" category="content_quality">Anti-patterns include before/after code comparisons</criterion>
+        <criterion id="CQ-21" category="content_quality">Build vs buy decisions from technical perspective</criterion>
+        <criterion id="CQ-22" category="content_quality">ALL code examples syntactically correct</criterion>
+        <criterion id="CQ-23" category="content_quality">Performance targets specific (p99 &lt; 200ms, not "fast")</criterion>
+        <criterion id="CQ-24" category="content_quality">Technology versions specified</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">ALL technical claims include citations [^N]</criterion>
+        <criterion id="UT-02" category="upstream_traceability">References section complete with full URLs</criterion>
+        <criterion id="UT-03" category="upstream_traceability">All URLs valid and accessible</criterion>
+        <criterion id="UT-04" category="upstream_traceability">Traceability: Supports Backlog Stories, ADRs, Tech Specs, Implementation Tasks</criterion>
+        <criterion id="UT-05" category="upstream_traceability">Backlog Story traceability format included (ref: §6.1 - Pattern Name)</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">No placeholder text or [TODO] markers present</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -535,37 +546,6 @@
     </requirement>
   </backlog_story_traceability>
 
-  <validation>
-    <self_check>
-      After generation, verify:
-      - [ ] Technical research plan approved
-      - [ ] All inputs validated
-      - [ ] All template sections complete
-      - [ ] Technology landscape analyzed (3-5 stacks)
-      - [ ] Architecture patterns documented
-      - [ ] Technical gaps with root cause analysis
-      - [ ] Code examples throughout (20+ examples)
-      - [ ] All code syntactically correct
-      - [ ] Security patterns with code
-      - [ ] Observability patterns with code
-      - [ ] Testing patterns with code
-      - [ ] API design with complete examples
-      - [ ] Architecture justified with trade-offs
-      - [ ] Technology stack with versions
-      - [ ] Data model with schema examples
-      - [ ] Scalability addressed
-      - [ ] Pitfalls with mitigation code
-      - [ ] Anti-patterns with before/after code
-      - [ ] Build vs buy from technical perspective
-      - [ ] Every technical claim cited [^N]
-      - [ ] References complete with URLs
-      - [ ] URLs tested and accessible
-      - [ ] Performance targets specific
-      - [ ] No placeholder text
-      - [ ] Traceability to Backlog Stories/ADRs/Specs
-      - [ ] Section numbering for Story references
-    </self_check>
-  </validation>
 
   <quality_guidance>
     <guideline category="technical_focus">
