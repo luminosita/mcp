@@ -13,6 +13,16 @@
 ## Epic Statement
 As a development team member, I need standardized production-ready project infrastructure so that I can start building features immediately without setup friction and deploy with confidence.
 
+## Parent Artifact Context
+
+**Parent Product Vision:** VIS-001: AI Agent MCP Server Vision
+- **Link:** /artifacts/product_visions/VIS-001_product_vision_v1.md
+- **Vision Capability:** Foundation infrastructure enabling rapid development and deployment of AI agent capabilities
+
+**Parent Initiative:** INIT-001: Production-Ready AI Agent Infrastructure
+- **Link:** /artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md
+- **Initiative Contribution:** Establishes foundation infrastructure that enables all subsequent epics (EPIC-001 through EPIC-005) and directly supports KR2 (Time-to-Production Reduction: <2 weeks)
+
 ## Business Value
 Project foundation infrastructure is the critical enabler for all subsequent development work. Without a solid foundation, feature development faces constant friction from inconsistent environments, manual deployment processes, and lack of automation. This epic delivers the scaffolding that allows the entire team to move quickly and safely.
 
@@ -42,6 +52,15 @@ Starting a new infrastructure project presents a critical bootstrapping challeng
 These foundational gaps directly impact INIT-001's strategic objective to "deploy agentic AI systems in weeks instead of months." Without addressing foundation concerns upfront, every feature epic will carry infrastructure debt that compounds over time.
 
 **Market Context:** Per business research, production deployment patterns for MCP infrastructure are scarce, with teams making critical architectural decisions without established patterns. This creates "inconsistent implementations and potential security or reliability issues" (Business Research §3.1, Gap 1). Establishing strong foundation patterns positions the project as a reference architecture.
+
+## Business Research References
+
+**Primary Research Document:** /artifacts/research/AI_Agent_MCP_Server_business_research.md
+
+**Market Insights Applied:**
+- **Gap Analysis (§3.1, Gap 1):** Production deployment patterns gap - this epic establishes reference patterns for MCP infrastructure deployment
+- **Capability Recommendation (§4.1):** Foundation infrastructure capabilities that enable rapid development and deployment
+- **Competitive Context:** Address inconsistent implementations observed in market by establishing standardized patterns
 
 ## Scope
 
@@ -163,15 +182,16 @@ These foundational gaps directly impact INIT-001's strategic objective to "deplo
 - [ ] Feature epic teams (EPIC-001, EPIC-002) confirm no blockers to begin work
 
 ## Open Questions
-1. **Container Runtime Selection:** Do we standardize on Docker Desktop for local development, or support multiple container runtimes (Podman, Rancher Desktop)? [DECISION REQUIRED: Week 1]
 
-2. **Monorepo vs. Multi-Repo:** Should foundation support monorepo structure for all components, or separate repositories per major capability? [DECISION REQUIRED: Week 1]
+**Business-Level Questions:**
 
-3. **CI/CD Platform:** Do we use GitHub Actions (if GitHub-hosted), GitLab CI, or alternative? Must align with organizational standards. [REQUIRES PLATFORM TEAM INPUT]
+1. **Foundation Investment vs. Feature Velocity:** What is the acceptable balance between time invested in foundation quality and urgency to begin feature development? Should we target minimum viable foundation (2-3 weeks) or comprehensive foundation (4-5 weeks)?
 
-4. **Python Version Policy:** What Python version range do we support (e.g., 3.10+, 3.11+ only)? Impacts dependency choices. [DECISION REQUIRED: Week 1]
+2. **Organizational Platform Alignment:** Are there mandatory organizational platform standards (CI/CD, container orchestration, deployment tooling) that must be adopted, even if they extend the foundation timeline?
 
-5. **Dependency Management Tool:** Do we use Poetry, pip-tools, or alternative for Python dependency management? [DECISION REQUIRED: Week 1]
+3. **Team Onboarding Priority:** Should we optimize foundation for rapid onboarding of new team members (more documentation, simpler setup) or for experienced team productivity (more automation, advanced tooling)?
+
+**Note:** Technical decisions (container runtime selection, monorepo vs multi-repo, CI/CD platform choice, Python version policy, dependency management tools) will be addressed in PRD phase through collaboration between PM and Tech Lead.
 
 ## Related Documents
 - **Initiative:** [INIT-001: Production-Ready AI Agent Infrastructure](/artifacts/initiatives/INIT-001_AI_Agent_MCP_Infrastructure_v3.md)

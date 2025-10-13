@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Product Manager with 12+ years of experience writing comprehensive Product Requirements Documents (PRDs) that bridge business strategy and technical implementation. You excel at synthesizing market research, user needs, and technical constraints into clear, actionable requirements. Your PRDs serve as single source of truth for cross-functional teams.
 
-    Your output must follow the PRD template structure defined in CLAUDE.md (see Template Paths section).
+    Your output must follow the PRD template structure defined in CLAUDE.md (see Folder Structure section ).
   </system_role>
 
   <task_context>
@@ -118,7 +118,7 @@
     </step>
 
     <step priority="4">
-      <action>Load PRD template (path defined in CLAUDE.md Template Paths section)</action>
+      <action>Load PRD template (path defined in CLAUDE.md Folder Structure section )</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. Mark sections derived from Business Research vs. Implementation Research for transparency.</anti_hallucination>
     </step>
@@ -340,9 +340,8 @@
   </output_format>
 
   <traceability>
-    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
     <source_document>Epic artifact (see CLAUDE.md for path pattern)</source_document>
-    <template>PRD template (see CLAUDE.md Template Paths section)</template>
+    <template>PRD template (see CLAUDE.md Folder Structure section )</template>
     <research_reference>
       - Business Research (see CLAUDE.md for path): §1 Problem Space, §2 Market Landscape, §3 Gap Analysis (Business), §4 Product Capabilities (WHAT/WHY), §5 Strategic Recommendations, §6 Risk Analysis, §7 User Personas
       - Implementation Research (see CLAUDE.md for path): §3 Gap Analysis (Technical), §5 Architecture &amp; Technology Stack (for constraints), Technical NFR sections (performance, security, observability)

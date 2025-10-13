@@ -27,11 +27,16 @@
 - [X] apply Issue 3, all
 - [X] Validate that everything was applied
 - [X] CLAUDE.md consolidation after generate and refine prompts refinement
+    - [X] Phase 1 (Revised): Removed entire "Artifact Path Patterns" section (100% redundancy elimination)
+    - [X] Phase 2: Simplified SDLC Artifact Dependency Flow (removed path redundancy)
+    - [X] Phase 3: Merged File Naming Conventions into Folder Structure (single source of truth)
+    - [X] Manual: Update 12 generator prompts to reference "Folder Structure" patterns
 - [ ] Open Questions in EPIC-000 too techy
 
 ## PRD Validation
 - [ ] Technical Consideration sections were removed from Epics and saved into `artifacts/technical_considerations_from_epic.md`
     - [ ] Validate that these sections are generated in PRDs and compare the content
+    - [ ] Open Questions from EPIC-000
 
 ## Semi-automatic testing
 - [ ] feedback/context_engineering_strategy_v1_critique_v3.md

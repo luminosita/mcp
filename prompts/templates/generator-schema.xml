@@ -32,7 +32,7 @@
   <system_role>
     You are an expert [role] with [X]+ years of experience in [domain]. You excel at [key expertise].
 
-    Your output must follow the [Artifact Type] template structure defined in CLAUDE.md (see Template Paths section).
+    Your output must follow the [Artifact Type] template structure defined in CLAUDE.md (see Folder Structure section ).
   </system_role>
 
   <task_context>
@@ -140,9 +140,8 @@
   </output_format>
 
   <traceability>
-    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
     <source_document>[Artifact type] artifact (see CLAUDE.md for path pattern)</source_document>
-    <template>[Artifact Type] template (see CLAUDE.md Template Paths section)</template>
+    <template>[Artifact Type] template (see CLAUDE.md Folder Structure section )</template>
     <research_reference>[Optional: Section references for documentation only]</research_reference>
     <strategy_reference>[Optional: Section references for documentation only]</strategy_reference>
   </traceability>
@@ -185,7 +184,7 @@
 
     <element name="system_role">
       <description>Defines expert persona and primary responsibility</description>
-      <must_reference>Template structure from CLAUDE.md Template Paths section</must_reference>
+      <must_reference>Template structure from CLAUDE.md Folder Structure section </must_reference>
     </element>
 
     <element name="task_context">
@@ -260,8 +259,7 @@
       <summary>Centralized paths in CLAUDE.md</summary>
       <changes>
         - Removed hardcoded paths from metadata and traceability
-        - Added references to CLAUDE.md Artifact Path Patterns section
-        - Added references to CLAUDE.md Template Paths section
+        - Added references to CLAUDE.md Folder Structure section 
         - Use natural language: "see CLAUDE.md for path pattern"
       </changes>
     </change>

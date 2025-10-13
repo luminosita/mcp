@@ -1,4 +1,32 @@
+# EPIC-000
+## Open Questions
+1. **Container Runtime Selection:** Do we standardize on Docker Desktop for local development, or support multiple container runtimes (Podman, Rancher Desktop)? [DECISION REQUIRED: Week 1]
+
+2. **Monorepo vs. Multi-Repo:** Should foundation support monorepo structure for all components, or separate repositories per major capability? [DECISION REQUIRED: Week 1]
+
+3. **CI/CD Platform:** Do we use GitHub Actions (if GitHub-hosted), GitLab CI, or alternative? Must align with organizational standards. [REQUIRES PLATFORM TEAM INPUT]
+
+4. **Python Version Policy:** What Python version range do we support (e.g., 3.10+, 3.11+ only)? Impacts dependency choices. [DECISION REQUIRED: Week 1]
+
+5. **Dependency Management Tool:** Do we use Poetry, pip-tools, or alternative for Python dependency management? [DECISION REQUIRED: Week 1]
+
+
 # EPIC-001
+## Open Questions
+
+[Require product/engineering input before PRD phase]
+
+1. **Custom Field Support:** Do we need to support JIRA custom fields in MVP, or is standard field set sufficient? (Impacts scope and timeline)
+
+2. **Write Operations:** Should we defer all write operations (create, update issues) to post-MVP, or is there high-value subset we should include? (Security vs. user value trade-off)
+
+3. **Caching Strategy:** What cache TTL is acceptable? 5-minute cache reduces API calls but may show stale data. (Performance vs. freshness trade-off)
+
+4. **Error Handling UX:** When PM API is down or rate-limited, should agent fail gracefully with explanation, or retry automatically? (User experience decision)
+
+5. **Multi-Project Support:** Should agents query across all projects user has access to, or scope to specific project(s)? (Permission model and performance implications)
+
+6. **Additional PM Tools Priority:** After JIRA/Linear, which PM tool should we prioritize next? (GitHub Projects, Asana, Monday.com, Trello) - Validate with customer development.
 
 ## Technical Considerations
 
@@ -33,7 +61,24 @@
 ---
 # EPIC-002
 
----
+## Open Questions
+
+[Require product/engineering/security input before PRD phase]
+
+1. **Vector Database Selection:** Qdrant (open-source, self-hosted) vs. Pinecone (managed, simpler) vs. Weaviate? (Infrastructure complexity vs. operational burden trade-off)
+
+2. **Embedding Model:** Use open-source sentence-transformers (free, self-hosted) or OpenAI embeddings (higher quality, cost)? (Cost vs. quality trade-off)
+
+3. **ACL Granularity:** Space-level permissions (simpler) or page-level permissions (more accurate)? (Implementation complexity vs. security precision)
+
+4. **Indexing Frequency:** Hourly, daily, or on-demand refresh? (Freshness vs. resource consumption trade-off)
+
+5. **Chunk Size:** 256, 512, or 1024 tokens per chunk? (Retrieval precision vs. context completeness trade-off—requires experimentation)
+
+6. **PII Filtering Strategy:** Block documents with PII entirely, mask PII in responses, or trust ACLs? (Security vs. usability trade-off—requires legal/compliance input)
+
+7. **Multi-Tenancy:** How do we isolate knowledge bases for different customers/teams? (Enterprise deployment model question)
+
 
 ## Technical Considerations
 
@@ -76,6 +121,25 @@
 
 ---
 # EPIC-003
+
+## Open Questions
+
+[Require security/engineering/compliance input before PRD phase]
+
+1. **SSO Provider Priority:** Which SSO providers should we prioritize? Okta, Auth0, Azure AD confirmed—others needed? (Customer validation)
+
+2. **RBAC Granularity:** Tool-level permissions sufficient, or need resource-level (e.g., specific JIRA projects)? (Complexity vs. precision trade-off)
+
+3. **Audit Log Retention:** How long should audit logs be retained? 90 days, 1 year, 7 years? (Compliance requirement varies by industry)
+
+4. **Secrets Management:** Require KMS (Vault, AWS KMS) for MVP, or document for Phase 2? (Security vs. scope trade-off)
+
+5. **Security Audit Timing:** Schedule audit in Month 4-5 or after all features complete in Month 6? (Risk mitigation vs. iteration time)
+
+6. **Rate Limiting Strategy:** Per-user limits only, or also per-tool, per-IP, global? (Granularity vs. complexity)
+
+7. **SAML Support:** Required for MVP (some enterprises mandate SAML), or defer to Phase 3? (Enterprise requirement validation needed)
+
 ## Technical Considerations
 
 ### Architecture Impact
@@ -117,6 +181,24 @@
 
 ---
 # EPIC-004
+
+## Open Questions
+
+[Require DevOps/engineering input before PRD phase]
+
+1. **Tracing Backend:** Jaeger (mature, more features) vs. Grafana Tempo (simpler, integrates with Grafana)? (Operational complexity vs. feature set trade-off)
+
+2. **Trace Sampling:** What sampling rate? 100% (low volume), 10% (medium), adaptive? (Completeness vs. cost trade-off)
+
+3. **Metrics Retention:** How long to retain metrics? 30 days, 90 days, 1 year? (Storage cost vs. historical analysis needs)
+
+4. **Alerting Channels:** PagerDuty required, or also Slack, email, Opsgenie? (Integration scope based on customer needs)
+
+5. **Dashboard Customization:** Allow customers to customize dashboards, or provide fixed templates? (Flexibility vs. support complexity)
+
+6. **Multi-Tenancy:** How to isolate metrics for different customers/teams? (Enterprise deployment model question)
+
+7. **Logging Integration:** Basic structured logging sufficient, or need full log aggregation (ELK, Splunk)? (Scope for MVP vs. Phase 2)
 
 ## Technical Considerations
 
@@ -166,6 +248,24 @@
 
 ---
 # EPIC-005
+
+## Open Questions
+
+[Require DevOps/security input before PRD phase]
+
+1. **Helm vs. Raw Manifests:** Generate Helm charts or raw Kubernetes YAML? (Flexibility vs. simplicity trade-off—Helm has adoption but adds complexity)
+
+2. **CI/CD Platform Priority:** GitHub Actions, GitLab CI confirmed—need Jenkins, CircleCI, others? (Customer validation)
+
+3. **Security Scanner:** Trivy (open-source, container focus) or Checkov (infrastructure-as-code focus) or both? (Coverage vs. integration complexity)
+
+4. **Configuration Customization:** How much parameterization? Opinionated defaults vs. full customization? (Usability vs. flexibility)
+
+5. **Deployment Automation:** Keep out of scope for MVP, or add basic deployment execution? (Security vs. convenience trade-off)
+
+6. **Multi-Cloud Support:** Kubernetes-only sufficient, or need AWS ECS/GCP Cloud Run templates? (Scope validation with customers)
+
+7. **GitOps Integration:** Defer to future or include basic ArgoCD/Flux support? (Adoption pattern in target customers)
 
 ## Technical Considerations
 

@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Strategic Product Leader with 15+ years of experience defining organizational initiatives that drive measurable business outcomes. You excel at translating product visions into strategic initiatives with clear OKRs, resource allocation, and executive-level governance. Your initiatives align cross-functional teams and deliver quantifiable business value.
 
-    Your output must follow the Initiative template structure defined in CLAUDE.md (see Template Paths section).
+    Your output must follow the Initiative template structure defined in CLAUDE.md (see Folder Structure section ).
   </system_role>
 
   <task_context>
@@ -87,7 +87,7 @@
     </step>
 
     <step priority="2">
-      <action>Load Initiative template (path defined in CLAUDE.md Template Paths section)</action>
+      <action>Load Initiative template (path defined in CLAUDE.md Folder Structure section )</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. If template section cannot be filled from Product Vision, make reasonable inferences marked as [ASSUMPTION] or [REQUIRES EXECUTIVE INPUT].</anti_hallucination>
     </step>
@@ -297,9 +297,8 @@
   </output_format>
 
   <traceability>
-    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
     <source_document>Product Vision (see CLAUDE.md for path pattern)</source_document>
-    <template>Initiative template (see CLAUDE.md Template Paths section)</template>
+    <template>Initiative template (see CLAUDE.md Folder Structure section )</template>
     <research_reference>Business Research (if available) - for market justification</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.1 (Initiative Definition)</strategy_reference>
   </traceability>

@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Technical Lead with 10+ years of experience designing detailed technical specifications. You excel at translating requirements into concrete component designs, API contracts, and data models. Your specs enable developers to implement efficiently with minimal ambiguity.
 
-    Your output must follow the Technical Specification template structure defined in CLAUDE.md (see Template Paths section).
+    Your output must follow the Technical Specification template structure defined in CLAUDE.md (see Folder Structure section ).
   </system_role>
 
   <task_context>
@@ -71,7 +71,7 @@
     <step priority="1"><action>Load Backlog Story</action></step>
     <step priority="2"><action>Load Implementation Research</action></step>
     <step priority="3"><action>Load relevant ADRs</action></step>
-    <step priority="4"><action>Load Technical Specification template (path defined in CLAUDE.md Template Paths section)</action></step>
+    <step priority="4"><action>Load Technical Specification template (path defined in CLAUDE.md Folder Structure section )</action></step>
     <step priority="5"><action>Design Component Architecture</action></step>
     <step priority="6"><action>Define API Contracts (endpoints, schemas)</action></step>
     <step priority="7"><action>Design Data Models (database schemas)</action></step>
@@ -156,9 +156,8 @@
   </output_format>
 
   <traceability>
-    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
     <source_document>Backlog Story (see CLAUDE.md for path pattern)</source_document>
-    <template>Technical Specification template (see CLAUDE.md Template Paths section)</template>
+    <template>Technical Specification template (see CLAUDE.md Folder Structure section )</template>
     <research_reference>Implementation Research - §4 Implementation Patterns, §5 Architecture, §6 Pitfalls, §8 Code Examples</research_reference>
   </traceability>
 

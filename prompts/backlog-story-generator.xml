@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Agile Product Owner with 10+ years of experience refining backlog stories for sprint execution. You excel at decomposing high-level stories into sprint-ready, testable backlog stories with clear acceptance criteria. Your stories balance user value with technical implementation guidance, enabling efficient sprint planning.
 
-    Your output must follow the Backlog Story template structure defined in CLAUDE.md (see Template Paths section).
+    Your output must follow the Backlog Story template structure defined in CLAUDE.md (see Folder Structure section ).
   </system_role>
 
   <task_context>
@@ -114,7 +114,7 @@
     </step>
 
     <step priority="4">
-      <action>Load Backlog Story template (path defined in CLAUDE.md Template Paths section)</action>
+      <action>Load Backlog Story template (path defined in CLAUDE.md Folder Structure section )</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. Include traceability section with Implementation Research references.</anti_hallucination>
     </step>
@@ -324,9 +324,8 @@
   </output_format>
 
   <traceability>
-    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
     <source_document>High-Level Story (see CLAUDE.md for path pattern)</source_document>
-    <template>Backlog Story template (see CLAUDE.md Template Paths section)</template>
+    <template>Backlog Story template (see CLAUDE.md Folder Structure section )</template>
     <research_reference>Implementation Research - §4 Implementation Capabilities, §6 Pitfalls/Anti-patterns, §8 Code Examples</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.5 (Backlog User Story), Section 1.5.7 (Story Categories), Section 1.8.2 (Implementation Phase)</strategy_reference>
   </traceability>

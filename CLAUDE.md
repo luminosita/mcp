@@ -7,57 +7,68 @@
 
 ## Folder Structure
 
+**Single source for directory hierarchy and file naming conventions.**
+
+**Naming Variables:**
+- `{XXX}` = Artifact ID (e.g., 005, 042, 123)
+- `{N}` = Version number (1, 2, 3)
+- `{product_name}` = Product name for research documents
+- `{artifact-type}` = Artifact type name (e.g., product-vision, epic, prd)
+
 ```
 /
    .claude/
       commands/
-         generate.md       # Universal executor
-         refine.md         # Iteration orchestrator
+         generate.md                              # Universal executor
+         refine.md                                # Iteration orchestrator
 
    docs/
-      sdlc_artifacts_comprehensive_guideline.md       # SDLC artifacts guideline               
-      refinements/                                    # Refinement plans
-   prompts/
-      templates/                                # XML-formatted templates
-         {artifact-type}-template_v{N}.md       # SDLC artifacts templates 
-      {artifact-type}_generator_v{N}.xml        # Generator prompts
+      sdlc_artifacts_comprehensive_guideline.md  # SDLC artifacts guideline
+      refinements/                               # Refinement plans
 
-   artifacts/                                         # All generated deliverables
-      research/                                       # Research artifacts
-         {product_name}_business_research.md          # Business Research
-         {product_name}_implementation_research.md    # Implementation Research
-      product_visions/                                # Product Visions
-         VIS-{XXX}_product_vision_v{N}.md
-      initiatives/                                    # Initiatives
-         INIT-{XXX}_initiative_v{N}.md
-      epics/                                          # Epics
-         EPIC-{XXX}_epic_v{N}.md
-      prds/                                           # PRDs
-         PRD-{XXX}_prd_v{N}.md
-      hls/                                            # High-level user stories  
-         HLS-{XXX}_story_v{N}.md                      
-      backlog_stories/                                # Backlog user stories  
-         US-{XXX}_story_v{N}.md
-      spikes/                                         # Time-boxed technical investigations
-         SPIKE-{XXX}_v{N}.md
-      adrs/                                           # Architecture Decision Records
-         ADR-{XXX}_v{N}.md
-      tech_specs/                                     # Technical Specifications
-         SPEC-{XXX}_v{N}.md
-      tasks/                                          # Implementation Tasks
-         TASK-{XXX}_v{N}.md
+   prompts/                                      # Generators (XML-formatted)
+      templates/                                 # Artifact templates (XML-formatted)
+         {artifact-type}-template.xml            # Format: prd-template.xml, spike-template.xml
+      {artifact-type}-generator.xml              # Format: product-vision-generator.xml, epic-generator.xml
 
-   feedback/                               # Human critique logs
-      {artifact}_v{N}_critique.md
+   artifacts/                                    # All generated deliverables
+      research/                                  # Research artifacts
+         {product_name}_business_research.md     # Format: ai_agent_mcp_server_business_research.md
+         {product_name}_implementation_research.md
+      product_visions/                           # Product Visions
+         VIS-{XXX}_product_vision_v{N}.md        # Format: VIS-001_product_vision_v1.md
+      initiatives/                               # Initiatives
+         INIT-{XXX}_initiative_v{N}.md           # Format: INIT-042_initiative_v1.md
+      epics/                                     # Epics
+         EPIC-{XXX}_epic_v{N}.md                 # Format: EPIC-123_epic_v1.md
+      prds/                                      # PRDs
+         PRD-{XXX}_prd_v{N}.md                   # Format: PRD-005_prd_v1.md
+      hls/                                       # High-level user stories
+         HLS-{XXX}_story_v{N}.md                 # Format: HLS-078_story_v1.md
+      backlog_stories/                           # Backlog user stories
+         US-{XXX}_story_v{N}.md                  # Format: US-234_story_v1.md
+      spikes/                                    # Time-boxed technical investigations (1-3 days)
+         SPIKE-{XXX}_v{N}.md                     # Format: SPIKE-042_v1.md
+      adrs/                                      # Architecture Decision Records
+         ADR-{XXX}_v{N}.md                       # Format: ADR-008_v1.md
+      tech_specs/                                # Technical Specifications
+         SPEC-{XXX}_v{N}.md                      # Format: SPEC-015_v1.md
+      tasks/                                     # Implementation Tasks
+         TASK-{XXX}_v{N}.md                      # Format: TASK-567_v1.md
 
-   CLAUDE.md                               # This file
-   TODO.md                                 # Master Plan (single source of truth)
+   feedback/                                     # Human critique logs
+      {artifact}_v{N}_critique.md                # Format: US-234_v1_critique.md
+
+   CLAUDE.md                                     # This file (root orchestration)
+   TODO.md                                       # Master Plan (single source of truth)
 ```
 
 **Design Rationale**:
 - Max 3 levels deep (prevents navigation complexity)
 - Versioned outputs (v1, v2, v3) prevent overwriting during iterations
 - Feedback folder supports human-in-loop refinement
+- Consistent ID prefixes enable artifact type identification (VIS, EPIC, PRD, US, SPIKE, etc.)
+- File naming conventions inline with structure (single reference point)
 
 ---
 
@@ -66,7 +77,7 @@
 **Purpose**: High-level view of artifact relationships and SDLC flow.
 
 **For detailed information, see:**
-- Paths: "Artifact Path Patterns" section (lines ~330-410)
+- Paths and naming: "Folder Structure" section (lines ~8-72)
 - Classification rules: "Input Classification System" section (lines ~148-200)
 - Detailed inputs: Each generator's `<input_artifacts>` section
 
@@ -331,78 +342,6 @@ Upon completion, update relevant task status in `/TODO.md`:
 | ADR | ADR-XXX | ADR-008 |
 | Tech Spec | SPEC-XXX | SPEC-015 |
 | Implementation Task | TASK-XXX | TASK-567 |
-
-**File Naming Conventions**:
-- Generators: `{artifact-type}-generator.xml` (e.g., `product-vision-generator.xml`, `spike-generator.xml`)
-- Templates: `{artifact-type}-template.xml` (e.g., `prd-template.xml`, `spike-template.xml`)
-- Artifacts (artifact types):
-   - Business Research: `{product_name}_business_research.md`
-   - Implementation Research: `{product_name}_implementation_research.md`
-   - Product Vision: `VIS-{XXX}_product_vision_v{N}.md`
-   - Initiatives: `INIT-{XXX}_initiative_v{N}.md`
-   - Epics: `EPIC-{XXX}_epic_v{N}.md`
-   - PRDs: `PRD-{XXX}_prd_v{N}.md` in `prds/prd_{XXX}/` subfolder
-   - High-Level Stories: `HLS-{XXX}_story_v{N}.md`
-   - Backlog Stories: `US-{XXX}_story_v{N}.md` in `backlog_stories/US-{XXX}_{feature_name}/` subfolder
-   - Spikes: `SPIKE-{XXX}_v{N}.md` (e.g., `SPIKE-042_v1.md`)
-   - ADRs: `ADR-{XXX}_v{N}.md` (e.g., `ADR-008_v1.md`)
-   - Tech Specs: `SPEC-{XXX}_v{N}.md` (e.g., `SPEC-015_v1.md`)
-   - Implementation Tasks: `TASK-{XXX}_v{N}.md`
-
-**Artifact Path Patterns**:
-
-All generators reference paths from this section. Paths are relative to repository root.
-
-**Path Variables:**
-- `{id}` - Artifact ID (e.g., 005, 042, 123)
-- `{version}` - Version number (1, 2, 3)
-- `{product_name}` - Product name for research documents
-- `{feature_name}` - Feature name for backlog stories
-
-**Input Artifact Paths:**
-- Business Research: `artifacts/research/{product_name}_business_research.md`
-- Implementation Research: `artifacts/research/{product_name}_implementation_research.md`
-- Product Vision: `artifacts/product_visions/VIS-{id}_product_vision_v{version}.md`
-- Initiative: `artifacts/initiatives/INIT-{id}_initiative_v{version}.md`
-- Epic: `artifacts/epics/EPIC-{id}_epic_v{version}.md`
-- PRD: `artifacts/prds/PRD-{id}_prd_v{version}.md`
-- High-Level Story: `artifacts/hls/HLS-{id}_story_v{version}.md`
-- Backlog Story: `artifacts/backlog_stories/US-{id}_story_v{version}.md`
-- Spike: `artifacts/spikes/SPIKE-{id}_v{version}.md`
-- ADR: `artifacts/adrs/ADR-{id}_v{version}.md`
-- Tech Spec: `artifacts/tech_specs/SPEC-{id}_v{version}.md`
-- Implementation Task: `artifacts/tasks/TASK-{id}_v{version}.md`
-
-**Template Paths:**
-- Business Research: `prompts/templates/business-research-template.md`
-- Implementation Research: `prompts/templates/implementation-research-template.md`
-- Product Vision: `prompts/templates/product-vision-template.xml`
-- Initiative: `prompts/templates/initiative-template.xml`
-- Epic: `prompts/templates/epic-template.xml`
-- PRD: `prompts/templates/prd-template.xml`
-- High-Level Story: `prompts/templates/high-level-user-story-template.xml`
-- Backlog Story: `prompts/templates/backlog-story-template.xml`
-- Spike: `prompts/templates/spike-template.xml`
-- ADR: `prompts/templates/adr-template.xml`
-- Tech Spec: `prompts/templates/tech-spec-template.xml`
-- Implementation Task: `prompts/templates/implementation-task-template.xml`
-
-**Generator Paths:**
-- Business Research: `prompts/business-research-generator.xml`
-- Implementation Research: `prompts/implementation-research-generator.xml`
-- Product Vision: `prompts/product-vision-generator.xml`
-- Initiative: `prompts/initiative-generator.xml`
-- Epic: `prompts/epic-generator.xml`
-- PRD: `prompts/prd-generator.xml`
-- High-Level Story: `prompts/high-level-user-story-generator.xml`
-- Backlog Story: `prompts/backlog-story-generator.xml`
-- Spike: `prompts/spike-generator.xml`
-- ADR: `prompts/adr-generator.xml`
-- Tech Spec: `prompts/tech-spec-generator.xml`
-- Implementation Task: `prompts/implementation-task-generator.xml`
-
-**Usage in Generators:**
-Generators reference these paths using the artifact type name (e.g., "Load template from path defined in CLAUDE.md for PRD"). All paths are defined once here and referenced by all generators.
 
 ---
 

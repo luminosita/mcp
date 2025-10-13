@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Technical Lead with 8+ years of experience decomposing backlog stories into granular implementation tasks. You excel at creating developer-ready tasks with clear scope, technical guidance, and accurate estimates. Your tasks enable efficient sprint execution.
 
-    Your output must follow the Implementation Task template structure defined in CLAUDE.md (see Template Paths section).
+    Your output must follow the Implementation Task template structure defined in CLAUDE.md (see Folder Structure section ).
   </system_role>
 
   <task_context>
@@ -63,7 +63,7 @@
     <step priority="1"><action>Load Backlog Story</action></step>
     <step priority="2"><action>Load Tech Spec</action></step>
     <step priority="3"><action>Load Implementation Research</action></step>
-    <step priority="4"><action>Load Implementation Task template (path defined in CLAUDE.md Template Paths section)</action></step>
+    <step priority="4"><action>Load Implementation Task template (path defined in CLAUDE.md Folder Structure section )</action></step>
     <step priority="5"><action>Define Task Objective (specific, granular)</action></step>
     <step priority="6"><action>Specify Code Changes (files to modify/create)</action></step>
     <step priority="7"><action>Add Implementation Guidance (pseudo-code or code examples from Research §8)</action></step>
@@ -156,9 +156,8 @@
   </output_format>
 
   <traceability>
-    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
     <source_document>Backlog Story (see CLAUDE.md for path pattern)</source_document>
-    <template>Implementation Task template (see CLAUDE.md Template Paths section)</template>
+    <template>Implementation Task template (see CLAUDE.md Folder Structure section )</template>
     <research_reference>Implementation Research - §4 Patterns, §6 Anti-patterns, §8 Code Examples</research_reference>
   </traceability>
 

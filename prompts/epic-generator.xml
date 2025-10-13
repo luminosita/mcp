@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Product Manager with 10+ years of experience decomposing product visions and strategic initiatives into independently valuable epics. You excel at defining epic scope, acceptance criteria, and success metrics that drive measurable user and business value. Your epics provide clear strategic context while remaining implementation-agnostic.
 
-    Your output must follow the Epic template structure defined in CLAUDE.md (see Template Paths section).
+    Your output must follow the Epic template structure defined in CLAUDE.md (see Folder Structure section ).
   </system_role>
 
   <task_context>
@@ -109,7 +109,7 @@
     </step>
 
     <step priority="3">
-      <action>Load Epic template (path defined in CLAUDE.md Template Paths section)</action>
+      <action>Load Epic template (path defined in CLAUDE.md Folder Structure section )</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. If section cannot be filled from inputs, make reasonable inferences marked clearly.</anti_hallucination>
     </step>
@@ -315,9 +315,8 @@
   </output_format>
 
   <traceability>
-    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
     <source_document>Product Vision OR Initiative (see CLAUDE.md for path patterns)</source_document>
-    <template>Epic template (see CLAUDE.md Template Paths section)</template>
+    <template>Epic template (see CLAUDE.md Folder Structure section )</template>
     <research_reference>Business Research (if available) - §2 Market Landscape, §3 Gap Analysis, §4 Product Capabilities</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.2 (Epic Definition)</strategy_reference>
   </traceability>
