@@ -21,7 +21,7 @@
 - [X] Remove Tracibility Checklists from templates (validate existance in generators)
 - [X] verify generate and refine prompts
     - [X] examples (Step 5, Step 6 -> Updated Sections)
-- [ ] create refinemenets plan for generated artifacts and apply
+- [X] create refinemenets plan for generated artifacts and apply
 - [X] apply Issue 1, PRD gen only
 - [X] apply Issue 2, PRD only
 - [X] apply Issue 3, all
@@ -31,12 +31,12 @@
     - [X] Phase 2: Simplified SDLC Artifact Dependency Flow (removed path redundancy)
     - [X] Phase 3: Merged File Naming Conventions into Folder Structure (single source of truth)
     - [X] Manual: Update 12 generator prompts to reference "Folder Structure" patterns
-- [ ] Open Questions in EPIC-000 too techy
+- [X] Open Questions in EPIC-000 too techy
 
 ## PRD Validation
 - [ ] Technical Consideration sections were removed from Epics and saved into `artifacts/technical_considerations_from_epic.md`
     - [ ] Validate that these sections are generated in PRDs and compare the content
-    - [ ] Open Questions from EPIC-000
+    - [ ] Open Questions (technical) from all epics -> PRDs
 
 ## Semi-automatic testing
 - [ ] feedback/context_engineering_strategy_v1_critique_v3.md
@@ -45,25 +45,10 @@
 - [ ] verify Claude context is in the task report (execute-generator)
 - [ ] Review refine
 
-## Open Questions
-### PRD Generator
-- [X] How is Epic ID specified? Attribute, extraction from TASK name?
-
-### Backlog Story Generator
-- [X] How is PRD ID, High-level User Story ID specified? Attribute, extraction from TASK name?
-
-### Product Management 
-- [X] Adding new PRDs with TODO.md or directly invoking commands? Probably update to Epic's (non)functional requirements
-- [X] Adding new high-level user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
-- [X] Adding new backlog user stories with TODO.md or directly invoking commands? Probably update to PRD's (non)functional requirements
-- [X] Adding new high-level user stories without PRD reference (standalone) - research required
-- [X] Adding new backlog user stories without PRD/high-level US reference (standalone -> enhancements) - research required
-- [X] Adding new implementation tasks without US reference (standalone -> quick bug fix) - research required
-
 ## Pre-finalization
 - [ ] `docs/research/advanced_prompt_engineering/research_coverage_evaluation.md`
-- [ ] verify that all requests from CHAT.md are applied (or create AI report)
-- [ ] review all documents from the beginning
+- [X] verify that all requests from CHAT.md are applied (or create AI report)
+- [X] review all documents from the beginning
 - [ ] analyze all `claude-md` documents
 - [ ] review strategy document, if is still needed
 
@@ -71,7 +56,7 @@
 ## Finalization
 - [X] remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification
 - [X] remove next-generator instructions, keep only reference to next-generator to be invoked in the report
-- [ ] Evaluate validation checks migration to a validation tool 
+- [ ] Validation checks migration to a validation tool 
 - [ ] strategy doc update
 - [ ] GRADUATION.md review
 - [ ] IMPORTANT: compare with dot-ai, prp, portal projects from sandbox
