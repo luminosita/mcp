@@ -256,31 +256,6 @@
 - **User Personas:** [Link to persona documents]
 - **Wireframes/Mockups:** [Link if available]
 - **Business Research:** [Link to relevant sections, e.g., "Business Research §3.2 - UX Gaps"]
-
----
-
-**Story Author:** [Name]
-**Last Updated:** [Date]
-**Next Review:** [Date]
-
-## Traceability Validation Checklist
-
-**Upstream Traceability:**
-- [ ] "Parent Epic" field populated with valid Epic ID (EPIC-XXX)
-- [ ] "Parent PRD" field populated with valid PRD ID (PRD-XXX)
-- [ ] "PRD Section" field specifies which PRD section this story addresses
-- [ ] "Functional Requirements" field lists all FR-XX covered by this story
-- [ ] Parent PRD document is in "Approved" status
-- [ ] Parent Epic document is in "Approved" or "Planned" status
-- [ ] Parent Artifact Context section explains story's contribution to epic/PRD
-
-**Consistency Checks:**
-- [ ] Status value follows standardized format: Draft/In Review/Approved/Ready/In Progress/Completed
-- [ ] Story ID follows standard format: HLS-XXX
-- [ ] All placeholder fields [brackets] have been filled in
-- [ ] User story follows format: "As [user], I want [goal], so that [benefit]"
-- [ ] Acceptance criteria are user-focused (not technical implementation details)
-- [ ] Estimated story points and sprint duration provided
     ]]>
   </structure>
 

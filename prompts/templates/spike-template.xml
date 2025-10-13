@@ -24,7 +24,7 @@
 
 ## Metadata
 - **Spike ID:** SPIKE-[XXX]
-- **Parent:** [US-XXX: Story Title] or [TECH-SPEC-XXX: Spec Title]
+- **Parent:** [US-XXX: Story Title] or [SPEC-XXX: Spec Title]
 - **Status:** [Planned/In Progress/Completed]
 - **Assigned To:** [Developer Name]
 - **Sprint:** [Sprint 15]
@@ -184,7 +184,7 @@ If investigation is not complete within time box, stop and document findings wit
 
 ### Downstream Artifacts to Create/Update
 - [ ] **ADR:** [ADR-YYY - if significant decision with alternatives analysis needed]
-- [ ] **Tech Spec:** [Update TECH-SPEC-ZZZ with implementation details]
+- [ ] **Tech Spec:** [Update SPEC-ZZZ with implementation details]
 - [ ] **Backlog Story:** [Update US-XXX technical notes section]
 
 ### Follow-up Questions for Team
@@ -199,7 +199,7 @@ If investigation is not complete within time box, stop and document findings wit
 
 **Informs:**
 - **ADR:** [ADR-YYY - if created]
-- **Tech Spec:** [TECH-SPEC-ZZZ - if updated]
+- **Tech Spec:** [SPEC-ZZZ - if updated]
 - **Backlog Story:** [US-XXX - updated with findings]
 
 **Related Spikes:**
@@ -221,29 +221,6 @@ If investigation is not complete within time box, stop and document findings wit
 
 **Discussion Notes:**
 - [Link to Slack thread or meeting notes]
-
----
-
-**Spike Completed By:** [Name]
-**Reviewed By:** [Tech Lead Name]
-**Date Reviewed:** [YYYY-MM-DD]
-
-## Traceability Validation Checklist
-
-**Upstream Traceability:**
-- [ ] "Parent" field populated with valid Story ID (US-XXX) or Spec ID (SPEC-XXX)
-- [ ] Parent document has open question marked [REQUIRES SPIKE]
-- [ ] Investigation goal directly addresses the marked open question
-- [ ] Parent document is in appropriate status for spike work
-
-**Consistency Checks:**
-- [ ] Status value follows standardized format: Planned/In Progress/Completed
-- [ ] Spike ID follows standard format: SPIKE-XXX
-- [ ] Time box is 1-3 days maximum
-- [ ] All placeholder fields [brackets] have been filled in
-- [ ] Findings include data/evidence (not speculation)
-- [ ] Clear recommendation provided based on findings
-- [ ] Next steps identify which artifacts need updates (ADR, Tech Spec, parent story)
     ]]>
   </structure>
 

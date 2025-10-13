@@ -30,19 +30,30 @@
 - **Type:** Feature
 - **Status:** [Backlog/Ready/In Progress/In Review/Done]
 - **Priority:** [High/Medium/Low with brief justification]
+- **Parent PRD:** PRD-[XXX]
+- **Parent High-Level Story:** [HLS-XX reference from PRD or standalone]
+- **Functional Requirements Covered:** [FR-01, FR-03, ...]
+- **Informed By Implementation Research:** [Link to Implementation Research document]
+
+## Parent Artifact Context
+
+**Parent PRD:** [PRD-XXX: PRD Title]
+- **Link:** [URL to PRD document v3]
+- **PRD Section:** [Section X.Y that defines this story]
+- **Functional Requirements Coverage:**
+  - **FR-01:** [Requirement description from PRD]
+  - **FR-02:** [Requirement description from PRD]
+  - **FR-03:** [Requirement description from PRD]
+
+**Parent High-Level Story:** [HLS-XXX: HLS Title]
+- **Link:** [URL to HLS document v3]
+- **HLS Section:** [Section X.Y that defines this story]
 
 ## User Story
 As [role], I want [feature], so that [benefit].
 
 ## Description
 [Expanded problem statement or feature description with context and background]
-
-## Parent PRD Details
-**Parent PRD:** PRD-[XXX]
-**Parent PRD Link:** [URL to PRD document v3]
-**Parent High-Level Story:** [HLS-XX reference from PRD or standalone]
-**Functional Requirements Covered:** [FR-01, FR-03, ...]
-**Informed By Implementation Research:** [Link to Implementation Research document]
 
 ## Implementation Research References
 
@@ -148,26 +159,6 @@ As [role], I want [feature], so that [benefit].
 - [Implementation Question 2 with marker]
 
 **Note:** Questions marked [REQUIRES ADR] should trigger ADR creation before implementation begins.
-
-## Traceability Validation Checklist
-
-**Upstream Traceability:**
-- [ ] "Parent PRD" field populated with valid PRD ID (PRD-XXX)
-- [ ] "Parent High-Level Story" field populated (HLS-XX or standalone)
-- [ ] "Functional Requirements Covered" lists all FR-XX from PRD
-- [ ] "Informed By Implementation Research" field populated with valid document link
-- [ ] Parent PRD document is in "Approved" status
-- [ ] Implementation Research document is in "Finalized" status
-- [ ] All Implementation Research section references (§X.Y format) are valid
-- [ ] Technical patterns from research are applied appropriately
-
-**Consistency Checks:**
-- [ ] Status value follows standardized format: Backlog/Ready/In Progress/In Review/Done
-- [ ] Story ID follows standard format: US-XXX
-- [ ] All placeholder fields [brackets] have been filled in
-- [ ] User story follows format: "As [role], I want [feature], so that [benefit]"
-- [ ] Acceptance criteria are testable (Given-When-Then format preferred)
-- [ ] Story points estimated and sprint assigned
     ]]>
   </structure>
 

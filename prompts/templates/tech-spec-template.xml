@@ -199,28 +199,6 @@ interface User {
 
 ## References
 - [Documentation links]
-
-## Traceability Validation Checklist
-
-**Upstream Traceability:**
-- [ ] "Parent Story ID" field populated with valid Story ID (US-XXX)
-- [ ] Parent story document is in appropriate status
-- [ ] "Informed By Spike" field populated if spike provided implementation guidance
-- [ ] If spike referenced, spike document is in "Completed" status
-- [ ] "Informed By Implementation Research" field populated with valid document link
-- [ ] Implementation Research document is in "Finalized" status
-- [ ] All Implementation Research section references (§X.Y format) are valid
-- [ ] Research & Investigation Context section explains how spike/research shaped spec
-- [ ] Related PRD and ADR links provided where applicable
-
-**Consistency Checks:**
-- [ ] Status value follows standardized format: Proposed/Accepted/Active/Deprecated/Superseded
-- [ ] TechSpec ID follows standard format: SPEC-XXX
-- [ ] All placeholder fields [brackets] have been filled in
-- [ ] API specifications include request/response examples
-- [ ] Data models defined with clear interfaces
-- [ ] Security, performance, and testing requirements specified
-- [ ] Implementation plan with phases provided
     ]]>
   </structure>
 

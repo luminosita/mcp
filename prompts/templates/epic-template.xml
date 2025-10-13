@@ -195,24 +195,6 @@ As [user persona], I need [capability] so that [business value].
 - **Related ADRs:** [Links]
 - **Technical Specs:** [Links]
 - **User Research:** [Links]
-
-## Traceability Validation Checklist
-
-**Upstream Traceability:**
-- [ ] "Parent Product Vision" field populated with valid Vision ID (VIS-XXX)
-- [ ] Parent Product Vision document is in "Approved" status
-- [ ] "Parent Initiative" field populated (if epic is part of an initiative)
-- [ ] "Informed By Business Research" field populated with valid document link
-- [ ] Business Research document is in "Finalized" status
-- [ ] All Business Research section references (§X.Y format) are valid
-- [ ] Parent Artifact Context section explains epic's contribution to vision/initiative
-
-**Consistency Checks:**
-- [ ] Status value follows standardized format: Draft/In Review/Approved/Planned/In Progress/Completed
-- [ ] Epic ID follows standard format: EPIC-XXX
-- [ ] All placeholder fields [brackets] have been filled in
-- [ ] Epic statement follows "As [user], I need [capability], so that [business value]" format
-- [ ] Acceptance criteria are business-focused (not technical implementation details)
     ]]>
   </structure>
 
