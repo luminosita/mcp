@@ -2,16 +2,16 @@
 
 **Document Version**: 1.1
 **Status**: Active - Phase 1 (PoC)
-**Last Updated**: 2025-10-07
+**Last Updated**: 2025-10-13
 
 ---
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: PRD-000 v2 generated with all feedback incorporated, CLAUDE.md restructured with implementation routing
-**Last Completed**: TASK-017: Add Implementation Routing to CLAUDE.md
-**Next Task**: TASK-013 (Execute High-level User Story Generator v1)
-**Completion**: 10/18 tasks (56%)
+**Current Status**: HLS-001 v2 created with feedback decisions; 4 additional HLS tasks added for complete PRD-000 coverage
+**Last Completed**: TASK-013: Execute High-level User Story Generator v1 (PRD-000 - HLS-001)
+**Next Task**: TASK-014 (Generate backlog stories from HLS-001) OR TASK-019/020/021/022 (Generate additional HLS stories) OR Update CLAUDE-tooling.md (critical gap from TASK-018)
+**Completion**: 12/22 tasks (55%)
 
 ---
 
@@ -234,17 +234,32 @@ Execute PRD Generator for first epic in standalone context.
 **Priority**: Critical
 **Dependencies**: TASK-012
 **Estimated Time**: 25 minutes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed
 **Context**: New session C3 required
 **Generator Name**: high-level-user-story
 
 **Description**:
-Execute PRD Generator for first epic in standalone context.
+Execute High-level Story Generator for first PRD in standalone context.
 
 **Command**: `/generate TASK-013`
 
 **Input Data:**
 - PRD-000
+
+**Completion Notes:**
+- HLS-001 v1 generated: `/artifacts/hls/HLS-001_automated_dev_environment_setup_v1.md`
+- HLS-001 v2 generated: `/artifacts/hls/HLS-001_automated_dev_environment_setup_v2.md` (incorporated feedback decisions)
+- Story focuses on automated development environment setup (PRD-000 User Flow 1)
+- Addresses Epic EPIC-000 Acceptance Criterion 1 (Rapid Environment Setup)
+- Functional requirements covered: FR-01, FR-02, FR-03, FR-20
+- Primary persona: Senior Backend Engineer; Secondary: New Team Member
+- User journey: Repository clone to working environment in <30 minutes
+- v1: 5 acceptance criteria, 5 stories, ~16 SP, 3 open questions
+- v2: 7 acceptance criteria, 6 stories, ~20 SP, all questions resolved via Decisions D1-D3
+- Decisions incorporated: IDE setup (VS Code), verbose output with progress indicators, interactive prompts with silent mode
+- Validation: 16/16 criteria passed (100%) - fully user-centric, implementation-agnostic
+- Traceability maintained to PRD-000, Business Research, and feedback decisions
+- Ready for backlog story generation (TASK-014)
 
 ---
 
@@ -252,19 +267,119 @@ Execute PRD Generator for first epic in standalone context.
 
 ### TASK-014: Execute Backlog User Story Generator v1 (HLS-001)
 **Priority**: Critical
-**Dependencies**: TASK-012
+**Dependencies**: TASK-013
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session C3 required
 **Generator Name**: high-level-user-story
 
 **Description**:
-Execute PRD Generator for first epic in standalone context.
+Execute Backlog Story Generator for first HLS in standalone context.
 
 **Command**: `/generate TASK-014`
 
 **Input Data:**
 - HLS-001
+
+---
+
+### TASK-019: Execute High-level User Story Generator v1 (PRD-000 - HLS-002)
+**Priority**: High
+**Dependencies**: TASK-013 (HLS-001 generated)
+**Estimated Time**: 25 minutes
+**Status**: ⏳ Pending
+**Context**: New session required
+**Generator Name**: high-level-user-story
+
+**Description**:
+Execute High-level Story Generator for CI/CD Pipeline Setup from PRD-000.
+
+**Command**: `/generate TASK-019`
+
+**Input Data:**
+- PRD-000
+- Focus: CI/CD Pipeline Setup (FR-04, FR-05, FR-06, FR-15, FR-16, FR-21)
+
+**Scope Guidance:**
+- User story: Automated build validation with CI/CD pipeline
+- Primary user flow: PRD-000 Section 6.1 Flow 2 (Feature Development Workflow - steps 6-9)
+- Target personas: Senior Backend Engineer, New Team Member
+- Epic acceptance criterion: Epic-000 Criterion 2 (Automated Build Success)
+
+---
+
+### TASK-020: Execute High-level User Story Generator v1 (PRD-000 - HLS-003)
+**Priority**: High
+**Dependencies**: TASK-013 (HLS-001 generated)
+**Estimated Time**: 25 minutes
+**Status**: ⏳ Pending
+**Context**: New session required
+**Generator Name**: high-level-user-story
+
+**Description**:
+Execute High-level Story Generator for Application Skeleton Implementation from PRD-000.
+
+**Command**: `/generate TASK-020`
+
+**Input Data:**
+- PRD-000
+- Focus: Application Skeleton Implementation (FR-07, FR-08, FR-09)
+
+**Scope Guidance:**
+- User story: FastAPI application skeleton with example MCP tool
+- Primary user flow: Developer reviewing application patterns to implement first feature
+- Target personas: Senior Backend Engineer, New Team Member
+- Epic acceptance criterion: Epic-000 Criterion 3 (Framework Readiness)
+
+---
+
+### TASK-021: Execute High-level User Story Generator v1 (PRD-000 - HLS-004)
+**Priority**: High
+**Dependencies**: TASK-013 (HLS-001 generated)
+**Estimated Time**: 25 minutes
+**Status**: ⏳ Pending
+**Context**: New session required
+**Generator Name**: high-level-user-story
+
+**Description**:
+Execute High-level Story Generator for Development Documentation & Workflow Standards from PRD-000.
+
+**Command**: `/generate TASK-021`
+
+**Input Data:**
+- PRD-000
+- Focus: Development Documentation & Workflow Standards (FR-10, FR-11, FR-12, FR-19)
+
+**Scope Guidance:**
+- User story: Comprehensive development workflow documentation enabling team collaboration
+- Primary user flow: PRD-000 Section 6.1 Flow 2 (Feature Development Workflow - understanding branching, code review, testing)
+- Target personas: New Team Member (primary), Technical Writer, Senior Backend Engineer
+- Epic acceptance criterion: Epic-000 Criterion 4 (Development Standards Clarity)
+
+---
+
+### TASK-022: Execute High-level User Story Generator v1 (PRD-000 - HLS-005)
+**Priority**: Medium
+**Dependencies**: TASK-013 (HLS-001 generated)
+**Estimated Time**: 25 minutes
+**Status**: ⏳ Pending
+**Context**: New session required
+**Generator Name**: high-level-user-story
+
+**Description**:
+Execute High-level Story Generator for Containerized Deployment Configuration from PRD-000.
+
+**Command**: `/generate TASK-022`
+
+**Input Data:**
+- PRD-000
+- Focus: Containerized Deployment Configuration (FR-13, FR-14, FR-17, FR-18)
+
+**Scope Guidance:**
+- User story: Containerized deployment enabling production readiness
+- Primary user flow: Building and running application in Podman container for local development and production deployment
+- Target personas: Senior Backend Engineer, DevOps Engineer
+- Note: Foundation phase focuses on Containerfile creation; full K8s deployment deferred to EPIC-005 per Decision D5
 
 ---
 
@@ -590,6 +705,59 @@ At the **end** of existing `/CLAUDE.md`, add new section:
 - Only adds implementation routing section at the end
 - Implementation TODO.md stays in `/implementation/` for implementation-specific tracking
 - Simpler than creating separate CLAUDE-planning.md - avoids splitting planning content
+
+---
+
+### TASK-018: Evaluate specialized CLAUDE.md files
+**Priority**: High
+**Dependencies**: TASK-017 (CLAUDE-*.md files moved to /prompts/CLAUDE/)
+**Estimated Time**: 30 minutes
+**Status**: ✅ Completed
+**Context**: Current session
+
+**Description**:
+Systematic evaluation of specialized `/prompts/CLAUDE/CLAUDE-*.md` files to ensure they provide clear, non-redundant implementation guidance aligned with PRD-000 requirements.
+
+**Evaluation Criteria:**
+1. **Clarity**: Each file has clear purpose, organization, and actionable guidance
+2. **Duplicated Instructions**: Identify and flag redundant content across files
+3. **Gaps**: Identify missing guidance needed for PRD-000 implementation
+4. **Consistency**: Cross-references work correctly, terminology consistent
+5. **Completeness**: Coverage of all PRD-000 technical requirements
+
+**Files to Evaluate:**
+- `/prompts/CLAUDE/CLAUDE-core.md` - Core development philosophy
+- `/prompts/CLAUDE/CLAUDE-tooling.md` - UV, Ruff, MyPy, pytest
+- `/prompts/CLAUDE/CLAUDE-testing.md` - Testing strategy, coverage
+- `/prompts/CLAUDE/CLAUDE-typing.md` - Type hints, annotations
+- `/prompts/CLAUDE/CLAUDE-validation.md` - Pydantic, security
+- `/prompts/CLAUDE/CLAUDE-architecture.md` - Project structure, patterns
+
+**Success Criteria:**
+- [x] Each file evaluated for clarity and organization
+- [x] Duplicated content identified and documented
+- [x] Gaps identified relative to PRD-000 requirements
+- [x] Cross-references verified
+- [x] Evaluation report created with findings and recommendations
+
+**Completion Notes:**
+- **Evaluation report:** `/docs/specialized_claude_evaluation.md`
+- **Overall assessment:** Excellent foundational guidance, well-organized, minimal problematic duplication
+- **Critical finding:** CLAUDE-tooling.md missing 4 new tools from PRD-000 v2:
+  - ❌ Renovate (dependency automation) - FR-16, FR-21
+  - ❌ NuShell (cross-platform scripting) - FR-19
+  - ❌ Devbox (isolated environments) - FR-20, Decision D3
+  - ❌ Podman (container runtime) - FR-13, FR-17, Decision D2, D7
+- **Coverage:** 11/21 PRD-000 v2 requirements fully covered (52%)
+- **Cross-references:** All verified working, no broken links
+- **Consistency:** Excellent - terminology, code style, structure consistent across all files
+- **Recommended actions:**
+  - **Priority 1 (CRITICAL):** Update CLAUDE-tooling.md with 4 missing tools (~2-3 hours)
+  - **Priority 2 (MEDIUM):** Add Devbox/Podman context to CLAUDE-architecture.md (~1 hour)
+  - **Priority 3 (LOW):** Minor enhancements across files (~1-2 hours)
+
+**Output Artifacts:**
+- `/docs/specialized_claude_evaluation.md` - Comprehensive evaluation report
 
 ## Task Status Legend
 

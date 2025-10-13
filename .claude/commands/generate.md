@@ -61,6 +61,7 @@ Required files for execution:
    - Status lifecycle: Draft → Review → Approved → Planned → In Progress → Completed
    - Only human approval can change Status from "Draft" to "Approved"
    - Never generate artifacts with Status: Planned, Approved, or any other non-Draft status
+5. If generator succesfully created artifact, update `TODO.md`
 
 **Report Results**:
 ```
