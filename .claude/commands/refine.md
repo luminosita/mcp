@@ -36,12 +36,14 @@ This command implements the Self-Refine pattern (research Section 2.4) to improv
   - Exit
 
 ### Step 3: Analyze Critique
-Parse critique file for:
-- **Completeness Issues**: Missing sections, incomplete information
-- **Clarity Issues**: Confusing language, jargon, poor structure
-- **Actionability Issues**: Vague next steps, missing details
-- **Traceability Issues**: Missing references, unclear connections
+Parse critique file for validation categories:
+- **Content Quality (CQ-##)**: Missing sections, incomplete information, unclear explanations
+- **Traceability (TR-##)**: Missing references, unclear connections to input artifacts
+- **Consistency (CC-##)**: Terminology inconsistencies, formatting issues, readability problems
 - **Severity Ratings**: Critical, Major, Minor
+
+Note: Validation criterion IDs (e.g., CQ-03, TR-01) align with generator validation_checklist.
+Reference specific IDs in critique to pinpoint failures.
 
 **Prioritization**:
 1. Critical issues (blockers)
@@ -133,6 +135,8 @@ If human decides to regenerate, only then run the refined generator (/generate c
 3. Execute generation
 4. Save new version artifact: `{artifact}_v{N+1}.md`
 
+Note: Artifact paths follow patterns defined in CLAUDE.md Artifact Path Patterns section.
+
 ### Step 8: Compare Versions
 Generate comparison report:
 
@@ -140,22 +144,24 @@ Generate comparison report:
 ## Artifact Comparison: v{N} → v{N+1}
 
 ### Improvements
-✅ Problem statement now includes 3 quantified pain points (was 0)
-✅ Success metrics follow SMART format (Specific, Measurable, Achievable, Relevant, Time-bound)
-✅ Added 5 traceability references to product-idea.md
+✅ CQ-01: Problem statement now includes 3 quantified pain points (was 0) (content quality)
+✅ CQ-02: Success metrics follow SMART format (Specific, Measurable, Achievable, Relevant, Time-bound) (content quality)
+✅ TR-01: Added 5 traceability references to product-idea.md (traceability)
 
 ### Remaining Issues
-⚠️  Readability: Still somewhat technical (manual Flesch check recommended)
-⚠️  Epic generator: Missing error handling instructions (minor)
+⚠️  CC-03: Readability: Still somewhat technical (manual Flesch check recommended) (consistency)
+⚠️  CQ-05: Epic generator: Missing error handling instructions (minor) (content quality)
 
 ### Validation Checklist
-✅ All template sections present (8/8) - IMPROVED from 6/8
-✅ Quantified metrics present
-✅ Traceability present
-⚠️  Readability: Manual check required
+✅ CQ-01-CQ-08: All template sections present (8/8) - IMPROVED from 6/8
+✅ CQ-03: Quantified metrics present
+✅ TR-01-TR-02: Traceability present
+⚠️  CC-03: Readability: Manual check required
+
+Note: Criterion IDs (CQ-##, TR-##, CC-##) help trace specific validation failures.
 
 Next Steps:
-1. Review /artifacts/{artifact}_v{N+1}.md
+1. Review artifacts/{artifact}_v{N+1}.md
 2. If issues remain: Create /feedback/{artifact}_v{N+1}_critique.md
 3. If acceptable: Proceed to next task or finalize as v3
 ```
@@ -212,20 +218,23 @@ ERROR: Critique file not found
 Expected path: /feedback/{artifact}_v{N}_critique.md
 
 Please create critique file with the following structure:
-## Completeness
-[Issues with missing/incomplete sections]
 
-## Clarity
-[Issues with readability/understanding]
+## Content Quality (CQ-##)
+[Issues with missing/incomplete sections, unclear explanations]
+- Reference specific criterion IDs from generator validation_checklist (e.g., CQ-03)
 
-## Actionability
-[Issues with vague/unclear next steps]
+## Traceability (TR-##)
+[Issues with missing references to input artifacts, unclear connections]
+- Reference specific criterion IDs (e.g., TR-01, TR-02)
 
-## Traceability
-[Issues with missing references]
+## Consistency (CC-##)
+[Issues with terminology inconsistencies, formatting problems, readability]
+- Reference specific criterion IDs (e.g., CC-03)
 
 ## Severity
 Critical | Major | Minor
+
+Note: Criterion IDs help trace specific validation failures in generator validation_checklist.
 ```
 
 ### Error: Maximum Iterations Reached

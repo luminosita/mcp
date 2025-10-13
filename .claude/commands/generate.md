@@ -28,19 +28,26 @@ This command executes a generator prompt based on the task ID specified in `/TOD
 ### Step 2: Load Context & Validate Inputs
 Required files for execution:
 1. `/CLAUDE.md` (root orchestration)
-2. `/prompts/{generator_name}_generator.xml` (the generator to execute)
+2. `/prompts/{generator_name}-generator.xml` (the generator to execute)
   - Derive generator_name from generator name metadata
-3. Input artifacts (from task dependencies, e.g., `/artifacts/product_vision_v3.md`)
+3. Input artifacts
+
+**Path Resolution**:
+- All artifact paths defined in CLAUDE.md Artifact Path Patterns section
+- Use path patterns like: artifacts/product_visions/VIS-{id}_product_vision_v{version}.md
+- For links/URLs in artifacts, use {SDLC_DOCUMENTS_URL} placeholder format
 
 **Context Validation**:
-- Verify all required files exist
-- Check file sizes to ensure <50% context window usage
-- **Validate input artifact status (production requirement)**:
-  - Parse artifact metadata section for Status field
-  - Primary input artifacts should have Status = "Approved"
-  - Exception: Research phase artifacts (business_research.md, implementation_research.md) are always approved sources
-  - Exception: PoC/development mode may proceed with "Draft" status at risk of rework
-- If any file missing: Prompt human with clear error message
+- Verify all files exist and check sizes (<50% context window)
+- **Input Classification Handling** (see CLAUDE.md Input Classification System):
+  - **Mandatory inputs**: Must exist. Generator FAILS if missing. Status must be "Approved" (production).
+  - **Recommended inputs**: WARN if missing. Quality reduced by ~20-30% without. Status should be "Approved".
+  - **Conditional inputs**: Load only if condition met. No warning if not loaded.
+  - **Mutually Exclusive inputs**: Exactly ONE of group required. FAIL if none or multiple provided.
+- **Status Validation (Production)**:
+  - Mandatory/Recommended inputs should have Status = "Approved"
+  - Exception: Research artifacts (business_research.md, implementation_research.md) always approved
+  - Exception: PoC/development may proceed with "Draft" status (risk of rework)
 
 ### Step 3: Execute Generator
 1. Read generator XML content
@@ -57,21 +64,24 @@ Required files for execution:
 
 **Report Results**:
 ```
-✅ Terminal Artifact: /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
+✅ Terminal Artifact: artifacts/product_visions/VIS-001_product_vision_v1.md
+(Path pattern: artifacts/product_visions/VIS-{id}_product_vision_v{version}.md - see CLAUDE.md)
 
 Validation Status:
-✅ Status set to "Draft" in metadata
-✅ All template sections present (8/8)
-⚠️  Readability: Manual check required
-✅ Traceability: 3 references to product-idea.md
+✅ CQ-01: Status set to "Draft" in metadata (content quality)
+✅ CQ-02: All template sections present (8/8) (content quality)
+⚠️  CC-03: Readability: Manual check required (consistency)
+✅ TR-01: Traceability: 3 references to product-idea.md (traceability)
+
+Note: Criterion IDs help identify specific validation failures. See validation_checklist in generator XML.
 
 AI Context Report:
 [RUN `/context` COMMAND AND PASTE OUTPUT HERE]
 
 Action Required:
-1. Review artifact at /artifacts/product_visions/VIS-001_AI_Agent_MCP_Server_v1.md
+1. Review artifact at artifacts/product_visions/VIS-001_product_vision_v1.md
 2. Create critique file: /feedback/product_vision_v1_critique.md
-3. If refinement needed, run: /refine product-vision-generator
+3. If refinement needed, run: /refine product-vision
 ```
 
 ## Error Handling
@@ -106,6 +116,17 @@ Action Required:
 
 Note: For PoC/development, you may proceed with Draft status at risk of rework
 if upstream artifact changes significantly during refinement.
+```
+
+### Error: Recommended Input Missing
+```
+⚠️ WARNING: Recommended input artifact not found
+Input: Business Research (artifacts/research/{product_name}_business_research.md)
+Classification: RECOMMENDED
+Impact: Output quality reduced by ~25% without market context and user personas
+
+Proceed without recommended input? (y/n)
+Note: Generated artifact will be based solely on mandatory inputs.
 ```
 
 ### Error: Generator File Not Found
