@@ -2,18 +2,18 @@
 <generator_prompt>
   <metadata>
     <name>Tech_Spec_Generator</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <sdlc_phase>Technical_Design</sdlc_phase>
-    <depends_on>/artifacts/backlog_stories/[us_id]_v[N].md, [Implementation Research], [ADRs]</depends_on>
-    <generated_by>Context Engineering Framework v1.1</generated_by>
+    <depends_on>Backlog Story, Implementation Research, ADRs (CLAUDE.md: Backlog Story, Implementation Research, and ADR paths)</depends_on>
+    <generated_by>Context Engineering Framework v1.4</generated_by>
     <date>2025-10-11</date>
-    <changes>v1.1: Added Open Questions step with implementation-level guidance, validation checklist criterion, and quality guidance section clarifying boundaries with PRD/ADR phases</changes>
+    <changes>v1.2: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
   </metadata>
 
   <system_role>
     You are an expert Technical Lead with 10+ years of experience designing detailed technical specifications. You excel at translating requirements into concrete component designs, API contracts, and data models. Your specs enable developers to implement efficiently with minimal ambiguity.
 
-    Your output must follow the template at /prompts/templates/tech-spec-template.xml.
+    Your output must follow the Technical Specification template structure defined in CLAUDE.md (see Template Paths section).
   </system_role>
 
   <task_context>
@@ -59,7 +59,7 @@
     <step priority="1"><action>Load Backlog Story</action></step>
     <step priority="2"><action>Load Implementation Research</action></step>
     <step priority="3"><action>Load relevant ADRs</action></step>
-    <step priority="4"><action>Load template from /prompts/templates/tech-spec-template.xml</action></step>
+    <step priority="4"><action>Load Technical Specification template (path defined in CLAUDE.md Template Paths section)</action></step>
     <step priority="5"><action>Design Component Architecture</action></step>
     <step priority="6"><action>Define API Contracts (endpoints, schemas)</action></step>
     <step priority="7"><action>Design Data Models (database schemas)</action></step>
@@ -102,7 +102,7 @@
       </guidance>
       <anti_hallucination>Only include genuine implementation uncertainties requiring team discussion or spike resolution. Reference relevant ADRs that have already resolved major decisions. Do not re-open questions already decided in PRD or ADR phases. Distinguish between ADR-worthy questions (requiring alternatives analysis with pros/cons) and Tech Spec questions (implementation details).</anti_hallucination>
     </step>
-    <step priority="12"><action>Generate Tech Spec at /artifacts/tech_specs/[spec_id]_v1.md</action></step>
+    <step priority="12"><action>Generate Tech Spec following Technical Specification template structure (see CLAUDE.md Template Paths)</action></step>
     <step priority="13">
       <action>Validate generated artifact</action>
       <guidance>
@@ -121,6 +121,7 @@
 
   <output_format>
     <terminal_artifact>
+      <format>Markdown following Technical Specification template structure (see CLAUDE.md Template Paths)</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Component architecture designed</criterion>
@@ -143,8 +144,9 @@
   </output_format>
 
   <traceability>
-    <source_document>/artifacts/backlog_stories/[us_id]_v[N].md</source_document>
-    <template>/prompts/templates/tech-spec-template.xml</template>
+    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
+    <source_document>Backlog Story (see CLAUDE.md for path pattern)</source_document>
+    <template>Technical Specification template (see CLAUDE.md Template Paths section)</template>
     <research_reference>Implementation Research - §4 Implementation Patterns, §5 Architecture, §6 Pitfalls, §8 Code Examples</research_reference>
   </traceability>
 

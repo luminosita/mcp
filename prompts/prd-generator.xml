@@ -2,18 +2,18 @@
 <generator_prompt>
   <metadata>
     <name>PRD_Generator</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <sdlc_phase>PRD</sdlc_phase>
-    <depends_on>/artifacts/epics/[epic_id]_v[N].md, [Business Research], [Implementation Research]</depends_on>
-    <generated_by>Context Engineering Framework v1.1</generated_by>
-    <date>2025-10-11</date>
-    <changes>v1.1: Added explicit step for Open Questions with guidance on bridge artifact nature (business + strategic technical questions)</changes>
+    <depends_on>Epic (CLAUDE.md: Epic path), Business Research (optional), Implementation Research (optional)</depends_on>
+    <generated_by>Context Engineering Framework v1.4</generated_by>
+    <date>2025-10-13</date>
+    <changes>v1.2: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
   </metadata>
 
   <system_role>
     You are an expert Product Manager with 12+ years of experience writing comprehensive Product Requirements Documents (PRDs) that bridge business strategy and technical implementation. You excel at synthesizing market research, user needs, and technical constraints into clear, actionable requirements. Your PRDs serve as single source of truth for cross-functional teams.
 
-    Your output must follow the template at /prompts/templates/prd-template.xml.
+    Your output must follow the PRD template structure defined in CLAUDE.md (see Template Paths section).
   </system_role>
 
   <task_context>
@@ -112,7 +112,7 @@
     </step>
 
     <step priority="4">
-      <action>Load template from /prompts/templates/prd-template.xml</action>
+      <action>Load PRD template (path defined in CLAUDE.md Template Paths section)</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. Mark sections derived from Business Research vs. Implementation Research for transparency.</anti_hallucination>
     </step>
@@ -264,7 +264,7 @@
 
     <step priority="16">
       <action>Generate PRD document</action>
-      <format>Markdown following prd-template.xml structure</format>
+      <format>Markdown following PRD template structure (see CLAUDE.md Template Paths)</format>
       <guidance>
         - Follow complete template structure
         - Ensure PRD ID is assigned (PRD-XXX format)
@@ -295,7 +295,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following prd-template.xml structure</format>
+      <format>Markdown following PRD template structure (see CLAUDE.md Template Paths)</format>
       <validation_checklist>
         <!-- Content Quality Criteria -->
         <criterion id="CQ-01" category="content">Objective and vision clearly articulated</criterion>
@@ -334,11 +334,12 @@
   </output_format>
 
   <traceability>
-    <source_document>/artifacts/epics/[epic_id]_v[N].md</source_document>
-    <template>/prompts/templates/prd-template.xml</template>
+    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
+    <source_document>Epic artifact (see CLAUDE.md for path pattern)</source_document>
+    <template>PRD template (see CLAUDE.md Template Paths section)</template>
     <research_reference>
-      - Business Research: §1 Problem Space, §2 Market Landscape, §3 Gap Analysis (Business), §4 Product Capabilities (WHAT/WHY), §5 Strategic Recommendations, §6 Risk Analysis, §7 User Personas
-      - Implementation Research: §3 Gap Analysis (Technical), §5 Architecture &amp; Technology Stack (for constraints), Technical NFR sections (performance, security, observability)
+      - Business Research (see CLAUDE.md for path): §1 Problem Space, §2 Market Landscape, §3 Gap Analysis (Business), §4 Product Capabilities (WHAT/WHY), §5 Strategic Recommendations, §6 Risk Analysis, §7 User Personas
+      - Implementation Research (see CLAUDE.md for path): §3 Gap Analysis (Technical), §5 Architecture &amp; Technology Stack (for constraints), Technical NFR sections (performance, security, observability)
     </research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.7 (PRD Definition), Section 1.8.3 (PRD as Bridge Artifact)</strategy_reference>
   </traceability>

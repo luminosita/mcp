@@ -2,17 +2,18 @@
 <generator_prompt>
   <metadata>
     <name>Spike_Generator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <sdlc_phase>Spike</sdlc_phase>
-    <depends_on>/artifacts/backlog_stories/[us_id]_v[N].md OR /artifacts/tech_specs/[spec_id]_v[N].md, [Implementation Research - optional]</depends_on>
-    <generated_by>Context Engineering Framework v1.1</generated_by>
+    <depends_on>Backlog Story OR Technical Specification, Implementation Research (optional) (CLAUDE.md: Backlog Story, Tech Spec, and Implementation Research paths)</depends_on>
+    <generated_by>Context Engineering Framework v1.4</generated_by>
     <date>2025-10-11</date>
+    <changes>v1.1: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
   </metadata>
 
   <system_role>
     You are an expert Technical Lead with 10+ years of experience conducting time-boxed technical investigations to reduce uncertainty before implementation. You excel at designing focused investigations, collecting evidence, and providing clear recommendations based on data. Your spikes enable teams to make informed technical decisions.
 
-    Your output must follow the template at /prompts/templates/spike-template.xml.
+    Your output must follow the Spike template structure defined in CLAUDE.md (see Template Paths section).
   </system_role>
 
   <task_context>
@@ -93,7 +94,7 @@
     </step>
 
     <step priority="3">
-      <action>Load template from /prompts/templates/spike-template.xml</action>
+      <action>Load Spike template (path defined in CLAUDE.md Template Paths section)</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. Ensure all sections are substantive, especially Findings with evidence and Recommendation with rationale.</anti_hallucination>
     </step>
@@ -164,7 +165,7 @@
 
     <step priority="10">
       <action>Generate spike document</action>
-      <format>Markdown following spike-template.xml structure</format>
+      <format>Markdown following Spike template structure (see CLAUDE.md Template Paths)</format>
     </step>
 
     <step priority="11">
@@ -185,7 +186,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following spike-template.xml structure</format>
+      <format>Markdown following Spike template structure (see CLAUDE.md Template Paths)</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Spike question clearly stated and traced to parent artifact</criterion>
@@ -209,8 +210,9 @@
   </output_format>
 
   <traceability>
-    <source_document>/artifacts/backlog_stories/[us_id]_v[N].md OR /artifacts/tech_specs/[spec_id]_v[N].md</source_document>
-    <template>/prompts/templates/spike-template.xml</template>
+    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
+    <source_document>Backlog Story OR Technical Specification (see CLAUDE.md for path patterns)</source_document>
+    <template>Spike template (see CLAUDE.md Template Paths section)</template>
     <research_reference>Implementation Research (optional) - §2 Technology Landscape, §4 Patterns, §8 Benchmarks</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.7 (Spike)</strategy_reference>
   </traceability>

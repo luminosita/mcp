@@ -2,18 +2,18 @@
 <generator_prompt>
   <metadata>
     <name>Backlog_Story_Generator</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <sdlc_phase>Backlog_Story</sdlc_phase>
-    <depends_on>/artifacts/high_level_stories/[hls_id]_v[N].md, [Implementation Research]</depends_on>
-    <generated_by>Context Engineering Framework v1.1</generated_by>
+    <depends_on>High-Level Story, Implementation Research (CLAUDE.md: High-Level Story and Implementation Research paths)</depends_on>
+    <generated_by>Context Engineering Framework v1.4</generated_by>
     <date>2025-10-11</date>
-    <changes>v1.1: Added Open Questions step (step 13) with implementation uncertainty focus, enhanced validation checklist, and added quality guidance section clarifying boundaries with High-Level Story, ADR, and Tech Spec phases</changes>
+    <changes>v1.2: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
   </metadata>
 
   <system_role>
     You are an expert Agile Product Owner with 10+ years of experience refining backlog stories for sprint execution. You excel at decomposing high-level stories into sprint-ready, testable backlog stories with clear acceptance criteria. Your stories balance user value with technical implementation guidance, enabling efficient sprint planning.
 
-    Your output must follow the template at /prompts/templates/backlog-story-template.xml.
+    Your output must follow the Backlog Story template structure defined in CLAUDE.md (see Template Paths section).
   </system_role>
 
   <task_context>
@@ -108,7 +108,7 @@
     </step>
 
     <step priority="4">
-      <action>Load template from /prompts/templates/backlog-story-template.xml</action>
+      <action>Load Backlog Story template (path defined in CLAUDE.md Template Paths section)</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. Include traceability section with Implementation Research references.</anti_hallucination>
     </step>
@@ -249,7 +249,7 @@
 
     <step priority="15">
       <action>Generate backlog story document</action>
-      <format>Markdown following backlog-story-template.xml structure</format>
+      <format>Markdown following Backlog Story template structure (see CLAUDE.md Template Paths)</format>
       <guidance>
         - Follow complete template structure
         - Ensure Story ID is assigned (US-XXX format)
@@ -280,7 +280,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following backlog-story-template.xml structure</format>
+      <format>Markdown following Backlog Story template structure (see CLAUDE.md Template Paths)</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Story title is action-oriented and specific</criterion>
@@ -318,8 +318,9 @@
   </output_format>
 
   <traceability>
-    <source_document>/artifacts/high_level_stories/[hls_id]_v[N].md</source_document>
-    <template>/prompts/templates/backlog-story-template.xml</template>
+    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
+    <source_document>High-Level Story (see CLAUDE.md for path pattern)</source_document>
+    <template>Backlog Story template (see CLAUDE.md Template Paths section)</template>
     <research_reference>Implementation Research - §4 Implementation Capabilities, §6 Pitfalls/Anti-patterns, §8 Code Examples</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.5 (Backlog User Story), Section 1.5.7 (Story Categories), Section 1.8.2 (Implementation Phase)</strategy_reference>
   </traceability>

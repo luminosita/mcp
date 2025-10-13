@@ -2,18 +2,18 @@
 <generator_prompt>
   <metadata>
     <name>ADR_Generator</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <sdlc_phase>Architecture</sdlc_phase>
-    <depends_on>/artifacts/backlog_stories/[us_id]_v[N].md OR Technical Spike, [Implementation Research]</depends_on>
-    <generated_by>Context Engineering Framework v1.1</generated_by>
+    <depends_on>Backlog Story OR Spike, Implementation Research (CLAUDE.md: Backlog Story, Spike, and Implementation Research paths)</depends_on>
+    <generated_by>Context Engineering Framework v1.4</generated_by>
     <date>2025-10-11</date>
-    <changes>v1.1: Enhanced background with PRD context (questions deferred from PRD), added decision source identification step, and quality guidance section clarifying ADR vs Tech Spec boundaries</changes>
+    <changes>v1.2: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
   </metadata>
 
   <system_role>
     You are an expert Software Architect with 12+ years of experience documenting architectural decisions. You excel at evaluating alternatives, analyzing trade-offs, and documenting decisions with clear rationale. Your ADRs provide lasting context for technical choices.
 
-    Your output must follow the template at /prompts/templates/adr-template.xml.
+    Your output must follow the ADR template structure defined in CLAUDE.md (see Template Paths section).
   </system_role>
 
   <task_context>
@@ -84,7 +84,7 @@
       </anti_hallucination>
     </step>
     <step priority="2"><action>Load Implementation Research</action></step>
-    <step priority="3"><action>Load template from /prompts/templates/adr-template.xml</action></step>
+    <step priority="3"><action>Load ADR template (path defined in CLAUDE.md Template Paths section)</action></step>
     <step priority="4">
       <action>Identify Decision Source and Context</action>
       <guidance>
@@ -112,7 +112,7 @@
     <step priority="6"><action>Evaluate Alternatives (2-4 options from Implementation Research)</action></step>
     <step priority="7"><action>Document Decision with Rationale</action></step>
     <step priority="8"><action>Analyze Consequences (positive and negative)</action></step>
-    <step priority="9"><action>Generate ADR document at /artifacts/adrs/[adr_id]_v1.md</action></step>
+    <step priority="9"><action>Generate ADR document following ADR template structure (see CLAUDE.md Template Paths)</action></step>
     <step priority="10">
       <action>Validate generated artifact</action>
       <guidance>
@@ -131,6 +131,7 @@
 
   <output_format>
     <terminal_artifact>
+      <format>Markdown following ADR template structure (see CLAUDE.md Template Paths)</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Decision context clearly stated</criterion>
@@ -149,8 +150,9 @@
   </output_format>
 
   <traceability>
-    <source_document>/artifacts/backlog_stories/[us_id]_v[N].md</source_document>
-    <template>/prompts/templates/adr-template.xml</template>
+    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
+    <source_document>Backlog Story OR Spike (see CLAUDE.md for path patterns)</source_document>
+    <template>ADR template (see CLAUDE.md Template Paths section)</template>
     <research_reference>Implementation Research - §2 Technology Landscape, §5 Architecture &amp; Tech Stack, §6 Pitfalls, §8 Benchmarks</research_reference>
   </traceability>
 

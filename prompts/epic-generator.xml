@@ -2,18 +2,18 @@
 <generator_prompt>
   <metadata>
     <name>Epic_Generator</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <sdlc_phase>Epic</sdlc_phase>
-    <depends_on>/artifacts/product_vision_v[N].md OR /artifacts/initiatives/[initiative_id]_v[N].md</depends_on>
-    <generated_by>Context Engineering Framework v1.1</generated_by>
+    <depends_on>Product Vision OR Initiative (CLAUDE.md: Product Vision and Initiative paths)</depends_on>
+    <generated_by>Context Engineering Framework v1.4</generated_by>
     <date>2025-10-11</date>
-    <changes>v1.2: Added explicit Open Questions step with guidance to exclude technical questions AND product/technical trade-offs (defer both to PRD phase)</changes>
+    <changes>v1.3: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
   </metadata>
 
   <system_role>
     You are an expert Product Manager with 10+ years of experience decomposing product visions and strategic initiatives into independently valuable epics. You excel at defining epic scope, acceptance criteria, and success metrics that drive measurable user and business value. Your epics provide clear strategic context while remaining implementation-agnostic.
 
-    Your output must follow the template at /prompts/templates/epic-template.xml.
+    Your output must follow the Epic template structure defined in CLAUDE.md (see Template Paths section).
   </system_role>
 
   <task_context>
@@ -103,7 +103,7 @@
     </step>
 
     <step priority="3">
-      <action>Load template from /prompts/templates/epic-template.xml</action>
+      <action>Load Epic template (path defined in CLAUDE.md Template Paths section)</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. If section cannot be filled from inputs, make reasonable inferences marked clearly.</anti_hallucination>
     </step>
@@ -241,7 +241,7 @@
 
     <step priority="15">
       <action>Generate epic document</action>
-      <format>Markdown following epic-template.xml structure</format>
+      <format>Markdown following Epic template structure (see CLAUDE.md Template Paths)</format>
       <guidance>
         - Follow complete template structure
         - Ensure Epic ID is assigned (EPIC-XXX format)
@@ -272,7 +272,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following epic-template.xml structure</format>
+      <format>Markdown following Epic template structure (see CLAUDE.md Template Paths)</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Epic statement is clear and user-focused</criterion>
@@ -309,8 +309,9 @@
   </output_format>
 
   <traceability>
-    <source_document>/artifacts/product_vision_v[N].md OR /artifacts/initiatives/[initiative_id]_v[N].md</source_document>
-    <template>/prompts/templates/epic-template.xml</template>
+    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
+    <source_document>Product Vision OR Initiative (see CLAUDE.md for path patterns)</source_document>
+    <template>Epic template (see CLAUDE.md Template Paths section)</template>
     <research_reference>Business Research (if available) - §2 Market Landscape, §3 Gap Analysis, §4 Product Capabilities</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.2 (Epic Definition)</strategy_reference>
   </traceability>

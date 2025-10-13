@@ -302,6 +302,63 @@ Upon completion, update relevant task status in `/TODO.md`:
    - Tech Specs: `SPEC-{XXX}_v{N}.md` (e.g., `SPEC-015_v1.md`)
    - Implementation Tasks: `TASK-{XXX}_v{N}.md`
 
+**Artifact Path Patterns**:
+
+All generators reference paths from this section. Paths are relative to repository root.
+
+**Path Variables:**
+- `{id}` - Artifact ID (e.g., 005, 042, 123)
+- `{version}` - Version number (1, 2, 3)
+- `{product_name}` - Product name for research documents
+- `{feature_name}` - Feature name for backlog stories
+
+**Input Artifact Paths:**
+- Business Research: `artifacts/research/{product_name}_business_research.md`
+- Implementation Research: `artifacts/research/{product_name}_implementation_research.md`
+- Product Vision: `artifacts/product_visions/VIS-{id}_product_vision_v{version}.md`
+- Initiative: `artifacts/initiatives/INIT-{id}_initiative_v{version}.md`
+- Epic: `artifacts/epics/EPIC-{id}_epic_v{version}.md`
+- PRD: `artifacts/prds/PRD-{id}_prd_v{version}.md`
+- High-Level Story: `artifacts/hls/HLS-{id}_story_v{version}.md`
+- Backlog Story: `artifacts/backlog_stories/US-{id}_story_v{version}.md`
+- Spike: `artifacts/spikes/SPIKE-{id}_v{version}.md`
+- ADR: `artifacts/adrs/ADR-{id}_v{version}.md`
+- Tech Spec: `artifacts/tech_specs/SPEC-{id}_v{version}.md`
+- Implementation Task: `artifacts/tasks/TASK-{id}_v{version}.md`
+
+**Template Paths:**
+- Business Research: `prompts/templates/business-research-template.md`
+- Implementation Research: `prompts/templates/implementation-research-template.md`
+- Product Vision: `prompts/templates/product-vision-template.xml`
+- Initiative: `prompts/templates/initiative-template.xml`
+- Epic: `prompts/templates/epic-template.xml`
+- PRD: `prompts/templates/prd-template.xml`
+- High-Level Story: `prompts/templates/high-level-user-story-template.xml`
+- Backlog Story: `prompts/templates/backlog-story-template.xml`
+- Spike: `prompts/templates/spike-template.xml`
+- ADR: `prompts/templates/adr-template.xml`
+- Tech Spec: `prompts/templates/tech-spec-template.xml`
+- Implementation Task: `prompts/templates/implementation-task-template.xml`
+
+**Generator Paths:**
+- Business Research: `prompts/business-research-generator.xml`
+- Implementation Research: `prompts/implementation-research-generator.xml`
+- Product Vision: `prompts/product-vision-generator.xml`
+- Initiative: `prompts/initiative-generator.xml`
+- Epic: `prompts/epic-generator.xml`
+- PRD: `prompts/prd-generator.xml`
+- High-Level Story: `prompts/high-level-user-story-generator.xml`
+- Backlog Story: `prompts/backlog-story-generator.xml`
+- Spike: `prompts/spike-generator.xml`
+- ADR: `prompts/adr-generator.xml`
+- Tech Spec: `prompts/tech-spec-generator.xml`
+- Implementation Task: `prompts/implementation-task-generator.xml`
+
+**Usage in Generators:**
+Generators reference these paths using the artifact type name (e.g., "Load template from path defined in CLAUDE.md for PRD"). All paths are defined once here and referenced by all generators.
+
+---
+
 **Status Value Standards**:
 - Research (Business/Implementation): Draft → In Review → Finalized
 - Strategic (Vision/Initiative/Epic): Draft → In Review → Approved → Planned/Active → In Progress → Completed
@@ -313,12 +370,13 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 ---
 
-**Document Version**: 1.3
-**Last Updated**: 2025-10-12
+**Document Version**: 1.4
+**Last Updated**: 2025-10-13
 **Maintained By**: Context Engineering PoC Team
 **Next Review**: End of Phase 1
 
 **Version History:**
+- v1.4 (2025-10-13): Added centralized Artifact Path Patterns section (Issue #2 - Path Consolidation)
 - v1.3 (2025-10-12): Standardized artifact IDs, file naming conventions, and status values across all templates
 - v1.2 (2025-10-11): Added Spike artifact to framework (time-boxed technical investigations)
 - v1.1 (2025-10-11): Initial comprehensive version

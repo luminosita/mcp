@@ -2,18 +2,18 @@
 <generator_prompt>
   <metadata>
     <name>Initiative_Generator</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <sdlc_phase>Initiative</sdlc_phase>
-    <depends_on>/artifacts/product_vision_v[N].md</depends_on>
-    <generated_by>Context Engineering Framework v1.1</generated_by>
+    <depends_on>Product Vision (CLAUDE.md: Product Vision path)</depends_on>
+    <generated_by>Context Engineering Framework v1.4</generated_by>
     <date>2025-10-11</date>
-    <changes>v1.3: Added Open Questions step (step 11) with strategic/resource focus, enhanced validation checklist, and added quality guidance section clarifying boundaries with Epic/PRD/Story phases</changes>
+    <changes>v1.4: Consolidated path references - all paths defined in CLAUDE.md Artifact Path Patterns section (Issue #2)</changes>
   </metadata>
 
   <system_role>
     You are an expert Strategic Product Leader with 15+ years of experience defining organizational initiatives that drive measurable business outcomes. You excel at translating product visions into strategic initiatives with clear OKRs, resource allocation, and executive-level governance. Your initiatives align cross-functional teams and deliver quantifiable business value.
 
-    Your output must follow the template at /prompts/templates/initiative-template.xml.
+    Your output must follow the Initiative template structure defined in CLAUDE.md (see Template Paths section).
   </system_role>
 
   <task_context>
@@ -83,7 +83,7 @@
     </step>
 
     <step priority="2">
-      <action>Load template from /prompts/templates/initiative-template.xml</action>
+      <action>Load Initiative template (path defined in CLAUDE.md Template Paths section)</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. If template section cannot be filled from Product Vision, make reasonable inferences marked as [ASSUMPTION] or [REQUIRES EXECUTIVE INPUT].</anti_hallucination>
     </step>
@@ -227,8 +227,7 @@
 
     <step priority="12">
       <action>Generate initiative document</action>
-      <output_path>/artifacts/initiatives/[initiative_id]_v1.md</output_path>
-      <format>Markdown following initiative-template.xml structure</format>
+      <format>Markdown following Initiative template structure (see CLAUDE.md Template Paths)</format>
       <guidance>
         - Follow complete template structure
         - Ensure Initiative ID is assigned (INIT-XXX format)
@@ -258,8 +257,7 @@
 
   <output_format>
     <terminal_artifact>
-      <path>/artifacts/initiatives/[initiative_id]_v1.md</path>
-      <format>Markdown following initiative-template.xml structure</format>
+      <format>Markdown following Initiative template structure (see CLAUDE.md Template Paths)</format>
       <validation_checklist>
         <!-- Content Quality Criteria -->
         <criterion id="CQ-01" category="content">Strategic objective is clear and aligns with organizational goals</criterion>
@@ -295,8 +293,9 @@
   </output_format>
 
   <traceability>
-    <source_document>/artifacts/product_vision_v[N].md</source_document>
-    <template>/prompts/templates/initiative-template.xml</template>
+    <note>All artifact paths defined in CLAUDE.md Artifact Path Patterns section</note>
+    <source_document>Product Vision (see CLAUDE.md for path pattern)</source_document>
+    <template>Initiative template (see CLAUDE.md Template Paths section)</template>
     <research_reference>Business Research (if available) - for market justification</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.1 (Initiative Definition)</strategy_reference>
   </traceability>
