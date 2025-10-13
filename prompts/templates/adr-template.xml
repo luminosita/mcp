@@ -2,9 +2,11 @@
 <template>
   <metadata>
     <name>Architecture_Decision_Record_Template</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <source>Section 6.2 of advanced_prompt_engineering_software_docs_code_final.md (lines 773-849)</source>
     <sdlc_phase>Architecture</sdlc_phase>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.1: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
   </metadata>
 
   <instructions>
@@ -25,7 +27,7 @@
 - **Deciders:** [Names]
 - **Parent Story ID:** US-[XXX]
 - **Informed By Spike:** SPIKE-[XXX] (if spike provided evidence)
-- **Informed By Implementation Research:** [Link to Implementation Research document]
+- **Informed By Implementation Research:** {SDLC_DOCUMENTS_URL}/implementation-research
 
 ## Context
 What is the issue we're addressing?
@@ -34,16 +36,16 @@ What is the issue we're addressing?
 ## Research & Investigation Context
 
 **Parent Backlog Story:** [US-XXX: Story Title]
-- **Link:** [URL to Backlog Story]
+- **Link:** {SDLC_DOCUMENTS_URL}/backlog-story/{id} (example: {SDLC_DOCUMENTS_URL}/backlog-story/234)
 - **Decision Driver:** [Why this decision was needed for the story]
 
 **Informed By Spike:** [SPIKE-XXX: Spike Title] (if applicable)
-- **Link:** [URL to Spike document]
+- **Link:** {SDLC_DOCUMENTS_URL}/spike/{id} (example: {SDLC_DOCUMENTS_URL}/spike/042)
 - **Key Findings:** [Summary of spike findings that informed this decision]
 - **Evidence Applied:** [Benchmarks, prototypes, or data from spike]
 
 **Implementation Research References:**
-**Primary Research Document:** [Link to Implementation Research report]
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/implementation-research
 
 **Relevant Patterns:**
 - **§[X.Y]: [Architecture Pattern]:** [How this pattern informs the decision]
@@ -107,7 +109,7 @@ What is the issue we're addressing?
 - [ ] Cost analysis approved
 
 ## Related Decisions
-- [ADR-XXX: Related decision]
+- {SDLC_DOCUMENTS_URL}/adr/{id}: [Related decision]
 
 ## References
 - [Link to technical documentation]

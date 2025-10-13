@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Product_Requirements_Document_Template</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
     <sdlc_phase>PRD</sdlc_phase>
-    <last_updated>2025-10-12</last_updated>
-    <changes>v1.3: Phase 1 Metadata Refinement - Added Parent Epic field, optional Informed By Business Research and Implementation Research fields, Parent Artifact Context section, and Research References section for upstream traceability (downstream tracking deferred to backlog software)</changes>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.4: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
   </metadata>
 
   <instructions>
@@ -29,20 +29,20 @@
 - **Version:** [version]
 - **Status:** [Draft/In Review/Approved]
 - **Parent Epic:** EPIC-[XXX]
-- **Informed By Business Research:** [Link - optional for market context]
-- **Informed By Implementation Research:** [Link - optional for technical feasibility]
+- **Informed By Business Research:** [{SDLC_DOCUMENTS_URL}/business-research - optional for market context]
+- **Informed By Implementation Research:** [{SDLC_DOCUMENTS_URL}/implementation-research - optional for technical feasibility]
 
 ## Parent Artifact Context
 
 **Parent Epic:** [EPIC-XXX: Epic Title]
-- **Link:** [URL to Epic document]
+- **Link:** {SDLC_DOCUMENTS_URL}/epic/{id} (example: {SDLC_DOCUMENTS_URL}/epic/003)
 - **Epic Scope Coverage:** [Which portion of the epic this PRD addresses]
 - **Epic Acceptance Criteria Mapping:** [Which epic-level criteria this PRD satisfies]
 
 ## Research References
 
 ### Business Research (Optional - When Market Context Needed)
-**Document:** [Link to Business Research report]
+**Document:** {SDLC_DOCUMENTS_URL}/business-research
 
 **Applied Insights:**
 - **§[X.Y]: [Section Title]:** [Insight relevant to PRD requirements]
@@ -51,7 +51,7 @@
 *Use when PRD requires market validation, competitive positioning, or business model context.*
 
 ### Implementation Research (Optional - When Technical Feasibility Needed)
-**Document:** [Link to Implementation Research report]
+**Document:** {SDLC_DOCUMENTS_URL}/implementation-research
 
 **Applied Insights:**
 - **§[X.Y]: [Section Title]:** [Technical feasibility insight]
@@ -174,9 +174,9 @@
 - [Question 2 - mark as [BUSINESS] or [TECHNICAL]]
 
 ## Related Documents
-- **Parent Epic:** [EPIC-XXX Link]
-- **Business Research:** [Link - if referenced]
-- **Implementation Research:** [Link - if referenced]
+- **Parent Epic:** {SDLC_DOCUMENTS_URL}/epic/{id}
+- **Business Research:** {SDLC_DOCUMENTS_URL}/business-research (if referenced)
+- **Implementation Research:** {SDLC_DOCUMENTS_URL}/implementation-research (if referenced)
 
 ## Appendix
 [Additional context, research data]

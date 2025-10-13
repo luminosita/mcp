@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Technical_Specification_Template</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <source>Section 6.3 of advanced_prompt_engineering_software_docs_code_final.md (lines 905-1016)</source>
     <sdlc_phase>Technical_Design</sdlc_phase>
-    <last_updated>2025-10-11</last_updated>
-    <changes>v1.1: Enhanced Open Questions section with comprehensive guidance on implementation-level questions, clear boundaries with PRD/ADR phases, and examples</changes>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.2: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
   </metadata>
 
   <instructions>
@@ -27,28 +27,28 @@
 - **Status:** [Proposed | Accepted | Active | Deprecated | Superseded]
 - **Deciders:** [Names]
 - **Parent Story ID:** US-[XXX]
-- **Related PRD:** [Link]
-- **Related ADR:** [Link]
+- **Related PRD:** {SDLC_DOCUMENTS_URL}/prd/{id}
+- **Related ADR:** {SDLC_DOCUMENTS_URL}/adr/{id}
 - **Informed By Spike:** SPIKE-[XXX] (if spike provided implementation guidance)
-- **Informed By Implementation Research:** [Link to Implementation Research document]
+- **Informed By Implementation Research:** {SDLC_DOCUMENTS_URL}/implementation-research
 
 ## Overview
 **Summary:** [One paragraph overview]
-**Related PRD:** [Link]
-**Related ADR:** [Link]
+**Related PRD:** {SDLC_DOCUMENTS_URL}/prd/{id}
+**Related ADR:** {SDLC_DOCUMENTS_URL}/adr/{id}
 
 ## Research & Investigation Context
 
 **Parent Backlog Story:** [US-XXX: Story Title]
-- **Link:** [URL to Backlog Story]
+- **Link:** {SDLC_DOCUMENTS_URL}/backlog-story/{id} (example: {SDLC_DOCUMENTS_URL}/backlog-story/234)
 
 **Informed By Spike:** [SPIKE-XXX: Spike Title] (if applicable)
-- **Link:** [URL to Spike document]
+- **Link:** {SDLC_DOCUMENTS_URL}/spike/{id} (example: {SDLC_DOCUMENTS_URL}/spike/042)
 - **Implementation Guidance:** [How spike findings shaped this technical spec]
 - **Key Decisions:** [Decisions made based on spike evidence]
 
 **Implementation Research References:**
-**Primary Research Document:** [Link to Implementation Research report]
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/implementation-research
 
 **Implementation Patterns Applied:**
 - **§[X.Y]: [Technical Capability]:** [Detailed implementation pattern]

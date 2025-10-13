@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>Backlog_Story_Template</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <source>Section 6.4 of advanced_prompt_engineering_software_docs_code_final.md (lines 1063-1112), enhanced for Context Engineering Framework</source>
     <sdlc_phase>Backlog_Story</sdlc_phase>
     <note>This template is for DETAILED backlog user stories, not high-level stories in PRDs</note>
-    <last_updated>2025-10-12</last_updated>
-    <changes>v1.3: Phase 1 Metadata Refinement - Renamed Related PRD to Parent PRD Details, renamed High-Level Story to Parent High-Level Story, added Informed By Implementation Research field, and added Implementation Research References section for traceability</changes>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.4: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
   </metadata>
 
   <instructions>
@@ -33,12 +33,12 @@
 - **Parent PRD:** PRD-[XXX]
 - **Parent High-Level Story:** [HLS-XX reference from PRD or standalone]
 - **Functional Requirements Covered:** [FR-01, FR-03, ...]
-- **Informed By Implementation Research:** [Link to Implementation Research document]
+- **Informed By Implementation Research:** {SDLC_DOCUMENTS_URL}/implementation-research
 
 ## Parent Artifact Context
 
 **Parent PRD:** [PRD-XXX: PRD Title]
-- **Link:** [URL to PRD document]
+- **Link:** {SDLC_DOCUMENTS_URL}/prd/{id} (example: {SDLC_DOCUMENTS_URL}/prd/005)
 - **PRD Section:** [Section X.Y that defines this story]
 - **Functional Requirements Coverage:**
   - **FR-01:** [Requirement description from PRD]
@@ -46,7 +46,7 @@
   - **FR-03:** [Requirement description from PRD]
 
 **Parent High-Level Story:** [HLS-XXX: HLS Title]
-- **Link:** [URL to HLS document]
+- **Link:** {SDLC_DOCUMENTS_URL}/hls/{id} (example: {SDLC_DOCUMENTS_URL}/hls/078)
 - **HLS Section:** [Section X.Y that defines this story]
 
 ## User Story
@@ -57,7 +57,7 @@ As [role], I want [feature], so that [benefit].
 
 ## Implementation Research References
 
-**Primary Research Document:** [Link to Implementation Research report]
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/implementation-research
 
 **Technical Patterns Applied:**
 - **§[X.Y]: [Pattern Name]:** [How this pattern applies to implementation]

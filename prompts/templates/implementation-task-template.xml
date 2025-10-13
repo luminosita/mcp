@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>Implementation_Task_Template</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>Implementation Task</sdlc_phase>
     <alias>Technical Task, Sub-task</alias>
-    <last_updated>2025-10-11</last_updated>
-    <changes>v1.1: Enhanced Task-Level Uncertainties &amp; Blockers section in Risk &amp; Complexity Notes with comprehensive guidance, uncertainty markers (CLARIFY BEFORE START, BLOCKED BY, NEEDS PAIR PROGRAMMING, TECH DEBT), and clear examples distinguishing task-level from story-level questions</changes>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.2: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
   </metadata>
 
   <instructions>
@@ -117,7 +117,7 @@
 
 ### Implementation Research Reference
 [If applicable, reference Implementation Research sections]
-- **Primary Research:** [Link to Implementation Research document]
+- **Primary Research:** {SDLC_DOCUMENTS_URL}/implementation-research
 - **§[X.Y] - [Pattern Name]:** [Specific guidance from research]
 - **§[X.Y] - [Anti-Pattern]:** [Pitfall to avoid with explanation]
 - **Code Example:** [Link to Appendix B example if applicable]
@@ -267,11 +267,11 @@
 - [ ] Documentation sufficient
 
 ## Related Links
-- **Parent Story:** [Link to US-XXX]
-- **PRD Section:** [Link to relevant PRD section]
-- **ADR:** [Link if architecture decision relevant]
-- **Tech Spec:** [Link if detailed spec exists]
-- **Implementation Research:** [Link to §X.Y if applicable]
+- **Parent Story:** {SDLC_DOCUMENTS_URL}/backlog-story/{id}
+- **PRD Section:** {SDLC_DOCUMENTS_URL}/prd/{id} (section)
+- **ADR:** {SDLC_DOCUMENTS_URL}/adr/{id} (if architecture decision relevant)
+- **Tech Spec:** {SDLC_DOCUMENTS_URL}/tech-spec/{id} (if detailed spec exists)
+- **Implementation Research:** {SDLC_DOCUMENTS_URL}/implementation-research (§X.Y if applicable)
 - **Design Mockup:** [Link if UI task]
 - **API Documentation:** [Link if API task]
 

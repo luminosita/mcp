@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Epic_Template</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <source>Generated based on industry best practices and Context Engineering framework</source>
     <sdlc_phase>Epic</sdlc_phase>
-    <last_updated>2025-10-12</last_updated>
-    <changes>v1.3: Phase 1 Metadata Refinement - Renamed Product Vision to Parent Product Vision, added Parent Initiative field, added Informed By Business Research field, added Parent Artifact Context section, and Business Research References section for upstream traceability (downstream tracking deferred to backlog software)</changes>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.4: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
   </metadata>
 
   <instructions>
@@ -31,7 +31,7 @@
 - **Parent Initiative:** INIT-[XXX] (if part of initiative)
 - **Owner:** [Name]
 - **Target Release:** [Q1 2025]
-- **Informed By Business Research:** [Link to Business Research document]
+- **Informed By Business Research:** {SDLC_DOCUMENTS_URL}/business-research
 
 ## Epic Statement
 As [user persona], I need [capability] so that [business value].
@@ -39,11 +39,11 @@ As [user persona], I need [capability] so that [business value].
 ## Parent Artifact Context
 
 **Parent Product Vision:** [VIS-XXX: Vision Title]
-- **Link:** [URL to Product Vision document]
+- **Link:** {SDLC_DOCUMENTS_URL}/product-vision/{id} (example: {SDLC_DOCUMENTS_URL}/product-vision/001)
 - **Vision Capability:** [Which key capability from vision this epic implements]
 
 **Parent Initiative:** [INIT-XXX: Initiative Title] (if applicable)
-- **Link:** [URL to Initiative document]
+- **Link:** {SDLC_DOCUMENTS_URL}/initiative/{id} (example: {SDLC_DOCUMENTS_URL}/initiative/042)
 - **Initiative Contribution:** [How this epic contributes to initiative OKRs]
 
 ## Business Value
@@ -62,7 +62,7 @@ As [user persona], I need [capability] so that [business value].
 
 ## Business Research References
 
-**Primary Research Document:** [Link to Business Research report]
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/business-research
 
 **Market Insights Applied:**
 - **Gap Analysis (§3.1):** [Specific gap this epic addresses]
@@ -189,11 +189,11 @@ As [user persona], I need [capability] so that [business value].
 - [Business Question 2]
 
 ## Related Documents
-- **Parent Product Vision:** [VIS-XXX Link]
-- **Parent Initiative:** [INIT-XXX Link] (if applicable)
-- **Business Research:** [Link with specific sections referenced]
-- **Related ADRs:** [Links]
-- **Technical Specs:** [Links]
+- **Parent Product Vision:** {SDLC_DOCUMENTS_URL}/product-vision/{id}
+- **Parent Initiative:** {SDLC_DOCUMENTS_URL}/initiative/{id} (if applicable)
+- **Business Research:** {SDLC_DOCUMENTS_URL}/business-research (with specific sections referenced)
+- **Related ADRs:** {SDLC_DOCUMENTS_URL}/adr/{id}
+- **Technical Specs:** {SDLC_DOCUMENTS_URL}/tech-spec/{id}
 - **User Research:** [Links]
     ]]>
   </structure>

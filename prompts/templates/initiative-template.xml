@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Initiative_Template</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>Initiative</sdlc_phase>
-    <last_updated>2025-10-12</last_updated>
-    <changes>v1.2: Phase 1 Metadata Refinement - Added Parent Product Vision field, Informed By Business Research field, Vision Alignment section, and Business Research References section for traceability</changes>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.3: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
   </metadata>
 
   <instructions>
@@ -33,7 +33,7 @@
 - **Budget:** $[Amount]
 - **Parent Product Vision:** VIS-[XXX]
 - **Related Strategy Doc:** [Link to portfolio/business strategy]
-- **Informed By Business Research:** [Link to Business Research document]
+- **Informed By Business Research:** {SDLC_DOCUMENTS_URL}/business-research
 
 ## Strategic Objective
 
@@ -77,12 +77,12 @@
 ## Vision Alignment
 
 **Parent Product Vision:** [VIS-XXX: Vision Title]
-- **Link:** [URL to Product Vision document]
+- **Link:** {SDLC_DOCUMENTS_URL}/product-vision/{id} (example: {SDLC_DOCUMENTS_URL}/product-vision/001)
 - **Vision Alignment:** [How this initiative directly implements the vision]
 
 ## Business Research References
 
-**Primary Research Document:** [Link to Business Research report]
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/business-research
 
 **Strategic Insights Applied:**
 - **Market Opportunity (§2.1):** [Specific market segment or opportunity]

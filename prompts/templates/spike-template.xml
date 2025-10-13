@@ -2,11 +2,12 @@
 <template>
   <metadata>
     <name>Spike_Template</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1 and Context Engineering Framework</source>
     <sdlc_phase>Spike</sdlc_phase>
     <alias>Technical Spike, Investigation Spike, Research Spike</alias>
-    <date>2025-10-11</date>
+    <date>2025-10-13</date>
+    <changes>v1.1: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
   </metadata>
 
   <instructions>
@@ -36,7 +37,7 @@
 ### Question to Answer
 [Original question from Backlog Story Open Questions marked as [REQUIRES SPIKE]]
 
-**Source Reference:** [Link to US-XXX Open Questions section or Tech Spec section]
+**Source Reference:** {SDLC_DOCUMENTS_URL}/backlog-story/{id} (Open Questions section) OR {SDLC_DOCUMENTS_URL}/tech-spec/{id} (section)
 
 ### Success Criteria
 [How will we know we have enough information to make a decision?]
@@ -177,15 +178,15 @@ If investigation is not complete within time box, stop and document findings wit
 ## Next Steps
 
 ### Immediate Actions
-- [ ] Update Parent Story [US-XXX] with spike findings and recommendation
+- [ ] Update Parent Story [{SDLC_DOCUMENTS_URL}/backlog-story/{id}] with spike findings and recommendation
 - [ ] Update story estimate based on findings
 - [ ] Decide if ADR needed (if significant architectural decision)
 - [ ] Decide if Tech Spec update needed (if implementation details clarified)
 
 ### Downstream Artifacts to Create/Update
-- [ ] **ADR:** [ADR-YYY - if significant decision with alternatives analysis needed]
-- [ ] **Tech Spec:** [Update SPEC-ZZZ with implementation details]
-- [ ] **Backlog Story:** [Update US-XXX technical notes section]
+- [ ] **ADR:** [{SDLC_DOCUMENTS_URL}/adr/{id} - if significant decision with alternatives analysis needed]
+- [ ] **Tech Spec:** [Update {SDLC_DOCUMENTS_URL}/tech-spec/{id} with implementation details]
+- [ ] **Backlog Story:** [Update {SDLC_DOCUMENTS_URL}/backlog-story/{id} technical notes section]
 
 ### Follow-up Questions for Team
 - [Question 1 for team discussion]
@@ -194,16 +195,16 @@ If investigation is not complete within time box, stop and document findings wit
 ## Traceability
 
 **Triggered By:**
-- **Backlog Story:** [US-XXX]
+- **Backlog Story:** {SDLC_DOCUMENTS_URL}/backlog-story/{id}
 - **Open Question:** [Original question from US-XXX]
 
 **Informs:**
-- **ADR:** [ADR-YYY - if created]
-- **Tech Spec:** [SPEC-ZZZ - if updated]
-- **Backlog Story:** [US-XXX - updated with findings]
+- **ADR:** {SDLC_DOCUMENTS_URL}/adr/{id} (if created)
+- **Tech Spec:** {SDLC_DOCUMENTS_URL}/tech-spec/{id} (if updated)
+- **Backlog Story:** {SDLC_DOCUMENTS_URL}/backlog-story/{id} (updated with findings)
 
 **Related Spikes:**
-- [SPIKE-AAA: Related investigation]
+- {SDLC_DOCUMENTS_URL}/spike/{id}: [Related investigation]
 
 ## References
 
