@@ -38,7 +38,7 @@
 ## Parent Artifact Context
 
 **Parent PRD:** [PRD-XXX: PRD Title]
-- **Link:** [URL to PRD document v3]
+- **Link:** [URL to PRD document]
 - **PRD Section:** [Section X.Y that defines this story]
 - **Functional Requirements Coverage:**
   - **FR-01:** [Requirement description from PRD]
@@ -46,7 +46,7 @@
   - **FR-03:** [Requirement description from PRD]
 
 **Parent High-Level Story:** [HLS-XXX: HLS Title]
-- **Link:** [URL to HLS document v3]
+- **Link:** [URL to HLS document]
 - **HLS Section:** [Section X.Y that defines this story]
 
 ## User Story

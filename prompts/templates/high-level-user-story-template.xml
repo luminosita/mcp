@@ -39,11 +39,11 @@
 ## Parent Artifact Context
 
 **Parent Epic:** [EPIC-XXX: Epic Title]
-- **Link:** [URL to Epic document v3]
+- **Link:** [URL to Epic document]
 - **Epic Contribution:** [How this story contributes to epic completion]
 
 **Parent PRD:** [PRD-XXX: PRD Title]
-- **Link:** [URL to PRD document v3]
+- **Link:** [URL to PRD document]
 - **PRD Section:** [Section X.Y that defines this story]
 - **Functional Requirements Coverage:**
   - **FR-01:** [Requirement description from PRD]
