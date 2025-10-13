@@ -890,7 +890,7 @@ Replace binary `required="true/false"` with semantic classification:
 - **[MANDATORY]** - Generator cannot proceed without this input
 - **[RECOMMENDED]** - Generator loads by default for enrichment; warns if missing
 - **[CONDITIONAL]** - Generator loads only if condition met (e.g., marker present)
-
+```
 ```
 PRD Generator
 ├── [MANDATORY] Primary Input: artifacts/epics/EPIC-{XXX}_epic_v{N}.md

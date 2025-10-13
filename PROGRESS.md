@@ -9,15 +9,15 @@
     - [X] Drop sub TODO.md files
 
 ## Validation
-- [ ] Move tracebility generator validation checks to a proper section
-    - [ ] Review generators for paths in tracebility sections
-- [ ] Generator output file paths
+- [X] Move tracebility generator validation checks to a proper section
+    - [X] Review generators for paths in tracebility sections
+- [X] Generator output file paths
 - [ ] Read all generated epics
 - [ ] Read all restructured research docs (business and implementation)
-- [ ] Read all generators and templates (file paths removed, no validation duplications, defragmented validation instructions)
+- [X] Read all generators and templates (file paths removed, no validation duplications, defragmented validation instructions)
 - [X] Check output file name for generators
-- [ ] Remove all paths from generators and templates. Keep it only in CLAUDE.md (input, output)
-- [ ] Evaluation related to required/optional input data for generators
+- [X] Remove all paths from generators and templates. Keep it only in CLAUDE.md (input, output)
+- [X] Evaluation related to required/optional input data for generators
 - [ ] Remove Tracibility Checklists from templates (validate existance in generators)
 
 ## PRD Validation
