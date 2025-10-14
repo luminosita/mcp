@@ -1,10 +1,12 @@
 # CLAUDE.md - Core Python Development Guide
 
 > **Hybrid Approach**: This is the lean core configuration. For detailed examples and specialized guidance, see the specialized configuration files linked below.
+>
+> **Taskfile Interface**: Use `task <command>` for all development operations. Taskfile provides a unified CLI interface across all projects, abstracting underlying tools (uv, ruff, mypy, pytest) for consistency.
 
 ## 📚 Specialized Configuration Files
 
-- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Development tools: UV, Ruff, MyPy, pytest, Renovate, NuShell, Devbox, Podman
+- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Development tools: Taskfile, UV, Ruff, MyPy, pytest, Renovate, NuShell, Devbox, Podman
 - **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing strategy, fixtures, and coverage requirements
 - **[CLAUDE-typing.md](./CLAUDE-typing.md)** - Type hints, annotations, and type safety patterns
 - **[CLAUDE-validation.md](./CLAUDE-validation.md)** - Pydantic models, input validation, and security
@@ -174,30 +176,38 @@ def test_should_return_user_when_valid_id_provided(sample_user):
 
 ## 🛠️ Development Tools
 
-### UV Package Manager
+### Taskfile (Primary Interface)
 ```bash
-# Essential commands
-uv venv                    # Create virtual environment
-uv sync                    # Install dependencies
-uv add package-name        # Add dependency
-uv add --dev pytest        # Add dev dependency
-uv run pytest              # Run tests
+# Essential commands - use Taskfile for ALL operations
+task --list                # Show all available tasks
+task setup                 # Initial project setup
+task check                 # Run all quality checks
 ```
 
-### Code Quality Tools
+### Dependency Management (via Taskfile)
 ```bash
-# Ruff (linting and formatting)
-ruff check --fix .         # Check and fix issues
-ruff format .              # Format code
-
-# MyPy (type checking)
-mypy src/ --strict         # Type check with strict mode
-
-# pytest (testing)
-pytest --cov=src --cov-report=html
+task deps:install          # Install dependencies
+task deps:add -- PKG=requests          # Add dependency
+task deps:add:dev -- PKG=pytest        # Add dev dependency
+task deps:update           # Update dependencies
 ```
 
-**See [CLAUDE-tooling.md](./CLAUDE-tooling.md) for detailed tool configuration**
+### Code Quality (via Taskfile)
+```bash
+# Linting and formatting
+task lint:fix              # Check and fix issues
+task format                # Format code
+task lint:all              # Lint + format
+
+# Type checking
+task type-check            # Type check with strict mode
+
+# Testing
+task test                  # Run tests with coverage
+task test:coverage         # Run tests with 80%+ enforcement
+```
+
+**See [CLAUDE-tooling.md](./CLAUDE-tooling.md) for comprehensive Taskfile commands and tool configuration**
 
 ---
 
@@ -286,13 +296,17 @@ rg --files -g "*.py"
 
 ## 📋 Pre-commit Checklist
 
-- [ ] All type hints added (mypy passes)
+Run `task check` to verify all requirements:
+
+- [ ] All type hints added (`task type-check` passes)
 - [ ] Docstrings for all public functions/classes
-- [ ] Tests written (80%+ coverage)
-- [ ] Ruff check and format pass
+- [ ] Tests written 80%+ coverage (`task test:coverage` passes)
+- [ ] Linting and formatting pass (`task lint:all` passes)
 - [ ] No security issues
-- [ ] Dependencies locked (uv.lock updated)
+- [ ] Dependencies locked (uv.lock updated via `task deps:*`)
 - [ ] Documentation updated if needed
+
+**Quick command**: `task check` runs all quality checks
 
 ---
 
@@ -300,20 +314,30 @@ rg --files -g "*.py"
 
 ### Development Setup
 ```bash
-uv venv && source .venv/bin/activate
-uv sync --all-extras
+task setup                 # Install dependencies and setup hooks
+task info                  # Show environment information
 ```
 
 ### Quality Checks
 ```bash
-ruff check --fix . && ruff format .
-mypy src/ --strict
-pytest --cov
+task check                 # Run all checks (lint, format, type, test)
+task lint:fix              # Fix linting issues
+task format                # Format code
+task type-check            # Type check with strict mode
+task test:coverage         # Run tests with coverage enforcement
 ```
 
-### Run Application
+### Development Workflow
 ```bash
-uv run python -m project_name
+task dev                   # Start development server
+task test:watch            # Run tests in watch mode
+task db:start              # Start database
+task container:build       # Build container image
+```
+
+### Show All Commands
+```bash
+task --list                # List all available tasks
 ```
 
 ---

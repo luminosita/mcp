@@ -1,6 +1,291 @@
 # CLAUDE-tooling.md - Development Tools & Configuration
 
 > **Specialized Guide**: Comprehensive tooling setup for Python development with UV, Ruff, MyPy, and pytest.
+>
+> **Taskfile Interface**: All CLI commands are consolidated in `/Taskfile.yml` for consistent cross-platform execution. Use `task <command>` as the primary interface; individual tool commands documented below for understanding and configuration.
+
+---
+
+## 🎯 Taskfile - Unified CLI Interface
+
+### Why Taskfile?
+Taskfile provides a unified interface for all development operations:
+- **Cross-platform consistency** - Same commands work on macOS, Linux, Windows
+- **Self-documenting** - `task --list` shows all available commands
+- **Language-agnostic** - Works across Python, Go, Rust, or any future tech stack
+- **Simple YAML** - Easy to read, extend, and maintain
+- **No dependencies** - Single binary, no runtime requirements
+
+**Philosophy**: Taskfile is the common facade for ALL CLI operations. Individual tools (uv, ruff, mypy, pytest) are implementation details abstracted behind Taskfile tasks.
+
+### Installation
+
+```bash
+# macOS
+brew install go-task
+
+# Linux (via snap)
+snap install task --classic
+
+# Linux (via sh script)
+sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+
+# Windows (via Scoop)
+scoop install task
+
+# Or add to Devbox (recommended)
+devbox add go-task
+```
+
+### Essential Commands
+
+```bash
+# Show all available tasks
+task --list
+
+# Show detailed task information
+task --list-all
+
+# Run specific task
+task <task-name>
+
+# Pass arguments to task
+task deps:add -- PKG=requests
+```
+
+### Common Development Tasks
+
+#### Code Quality
+```bash
+# Run linter (check only)
+task lint
+
+# Run linter with auto-fix
+task lint:fix
+
+# Run linter in watch mode
+task lint:watch
+
+# Format code
+task format
+
+# Check formatting without changes
+task format:check
+
+# Run both linting and formatting
+task lint:all
+```
+
+#### Type Checking
+```bash
+# Run MyPy type checker (strict mode)
+task type-check
+
+# Generate type coverage report
+task type-check:report
+
+# Install missing type stubs
+task type-check:install
+```
+
+#### Testing
+```bash
+# Run all tests with coverage
+task test
+
+# Run unit tests only
+task test:unit
+
+# Run integration tests only
+task test:integration
+
+# Run e2e tests only
+task test:e2e
+
+# Run tests in watch mode
+task test:watch
+
+# Run only last failed tests
+task test:failed
+
+# Run tests with coverage enforcement (80%+)
+task test:coverage
+
+# Run tests in parallel
+task test:parallel
+```
+
+#### Quality Checks (All)
+```bash
+# Run all quality checks (lint, format, type, test)
+task check
+
+# Run CI/CD pipeline checks
+task check:ci
+```
+
+#### Dependency Management
+```bash
+# Install dependencies
+task deps:install
+
+# Install all dependencies including extras
+task deps:install:all
+
+# Add new dependency
+task deps:add -- PKG=requests
+
+# Add dev dependency
+task deps:add:dev -- PKG=pytest-watch
+
+# Remove dependency
+task deps:remove -- PKG=requests
+
+# Update dependencies
+task deps:update
+
+# Export to requirements.txt
+task deps:export
+```
+
+#### Pre-commit Hooks
+```bash
+# Install pre-commit hooks
+task hooks:install
+
+# Run hooks on all files
+task hooks:run
+
+# Update hook versions
+task hooks:update
+```
+
+#### Build & Run
+```bash
+# Build Python package
+task build
+
+# Run application
+task run -- SCRIPT=main.py
+
+# Start development server
+task dev
+
+# Start Python REPL
+task shell
+```
+
+#### Container Operations (Podman)
+```bash
+# Build container image
+task container:build
+
+# Run application container
+task container:run
+
+# Stop container
+task container:stop
+
+# View container logs
+task container:logs
+
+# Execute shell in container
+task container:shell
+
+# Clean containers and images
+task container:clean
+```
+
+#### Database Operations (Podman)
+```bash
+# Start PostgreSQL database
+task db:start
+
+# Stop database
+task db:stop
+
+# Connect to database shell
+task db:shell
+
+# View database logs
+task db:logs
+
+# Restart database
+task db:restart
+```
+
+#### Devbox Integration
+```bash
+# Enter Devbox shell
+task devbox:shell
+
+# Run command in Devbox
+task devbox:run -- CMD=pytest
+
+# Update Devbox packages
+task devbox:update
+
+# Show Devbox info
+task devbox:info
+```
+
+#### Utilities
+```bash
+# Clean build artifacts and caches
+task clean
+
+# Clean everything including venv
+task clean:all
+
+# Initial project setup
+task setup
+
+# Show project environment info
+task info
+
+# Show help
+task help
+```
+
+### Taskfile Structure
+
+The Taskfile is organized into logical sections:
+1. **Code Quality Tasks** - Linting and formatting
+2. **Type Checking Tasks** - MyPy operations
+3. **Testing Tasks** - All test operations
+4. **Quality Check Tasks** - Combined checks
+5. **Dependency Management** - UV operations
+6. **Pre-commit Hooks** - Git hook operations
+7. **Build & Run Tasks** - Application execution
+8. **Container Tasks** - Podman operations
+9. **Database Tasks** - Database management
+10. **Devbox Tasks** - Environment management
+11. **Documentation Tasks** - Docs generation (placeholder)
+12. **Utility Tasks** - Cleanup and setup
+
+### Extending Taskfile
+
+To add new tasks, edit `/Taskfile.yml`:
+
+```yaml
+tasks:
+  my-task:
+    desc: Description of what this task does
+    cmds:
+      - command to run
+      - another command
+    deps:
+      - other-task  # Run this task first
+```
+
+**Best Practices**:
+- Keep tasks focused (single responsibility)
+- Use descriptive names with `:` separators (e.g., `test:unit`, `db:start`)
+- Add `desc` field for `task --list` output
+- Use variables for repeated values (defined in `vars:` section)
+- Document complex tasks in comments
+
+---
 
 ## 📦 UV Package Manager
 
@@ -1110,46 +1395,52 @@ podman-compose down
 
 ## 🔄 Complete Development Workflow
 
-### Initial Setup (with Devbox)
+> **Note**: All commands use Taskfile interface for consistency. Individual tool commands are abstracted behind `task` commands.
+
+### Initial Setup
 
 ```bash
-# 1. Install Devbox (if not already installed)
-curl -fsSL https://get.jetpack.io/devbox | bash
+# 1. Install Taskfile (if not already installed)
+# macOS: brew install go-task
+# Linux: See Taskfile section above
 
 # 2. Clone repository
 git clone https://github.com/your-org/project.git
 cd project
 
-# 3. Enter Devbox shell (installs all dependencies automatically)
-devbox shell
+# 3. Run initial project setup
+task setup
+# This installs dependencies and sets up pre-commit hooks
 
-# 4. Run setup script (NuShell)
-devbox run setup
-# Or manually: nu scripts/setup.nu
-
-# 5. Verify environment
-uv run python -c "import fastapi; print('✅ Environment ready')"
+# 4. Verify environment
+task info
+# Shows project info, tool versions, and environment status
 ```
 
-### Daily Development (with Devbox)
+### Daily Development Workflow
 
 ```bash
-# 1. Enter Devbox shell
-devbox shell
-
-# 2. Pull latest changes
+# 1. Pull latest changes
 git pull origin main
 
-# 3. Create feature branch
+# 2. Create feature branch
 git checkout -b feature/new-feature
 
-# 4. Add dependencies if needed
-uv add new-package
+# 3. Add dependencies if needed
+task deps:add -- PKG=requests
+task deps:add:dev -- PKG=pytest-watch
+
+# 4. Make code changes
+# ... edit files ...
 
 # 5. Run quality checks before committing
-devbox run lint        # Ruff check + format
-devbox run typecheck   # MyPy strict
-devbox run test        # pytest with coverage
+task lint:fix      # Auto-fix linting issues
+task format        # Format code
+task type-check    # Check types
+task test          # Run tests with coverage
+
+# Or run all checks at once
+task check
 
 # 6. Commit changes (pre-commit hooks run automatically)
 git add .
@@ -1159,68 +1450,120 @@ git commit -m "feat: add new feature"
 git push origin feature/new-feature
 ```
 
-### Database Development (with Podman)
+### Test-Driven Development Workflow
 
 ```bash
-# Start PostgreSQL in Podman container
-podman run -d --name mcp-db \
-  -e POSTGRES_PASSWORD=dev \
-  -e POSTGRES_DB=mcp \
-  -p 5432:5432 \
-  postgres:15
+# 1. Start test watch mode
+task test:watch
 
-# Or use devbox script
-devbox run db:start
+# 2. Make changes in another terminal
+# Tests automatically re-run on file changes
 
-# Connect to database
-podman exec -it mcp-db psql -U postgres -d mcp
+# 3. Run specific test file
+task test -- ARGS="tests/test_module.py"
 
-# Stop database
-podman stop mcp-db
-podman rm mcp-db
+# 4. Run only failed tests
+task test:failed
+
+# 5. Check test coverage
+task test:coverage
 ```
 
-### Container Development (with Podman)
+### Database Development
 
 ```bash
-# Build container image
-podman build -t mcp-server:dev .
+# 1. Start PostgreSQL database
+task db:start
 
-# Run container locally
-podman run -d --name mcp-server \
-  -p 8000:8000 \
-  -e DATABASE_URL=postgresql://postgres:dev@localhost:5432/mcp \
-  mcp-server:dev
+# 2. Connect to database shell
+task db:shell
 
-# View logs
-podman logs -f mcp-server
+# 3. View database logs
+task db:logs
 
-# Test endpoints
-curl http://localhost:8000/health
+# 4. Restart database
+task db:restart
 
-# Stop and remove
-podman stop mcp-server && podman rm mcp-server
+# 5. Stop database when done
+task db:stop
 ```
 
-### CI/CD Pipeline Commands
+### Container Development
+
 ```bash
-# Install dependencies
-uv sync --frozen
+# 1. Build container image
+task container:build
 
-# Run linting
-ruff check .
+# 2. Run application container
+task container:run
 
-# Run type checking
-mypy src/ --strict
+# 3. View container logs
+task container:logs
 
-# Run tests with coverage
-pytest --cov=src --cov-report=xml --cov-fail-under=80
+# 4. Execute shell in container
+task container:shell
 
-# Build package
-uv build
+# 5. Stop and remove container
+task container:stop
 
-# Publish to PyPI
-uv publish
+# 6. Clean all containers and images
+task container:clean
+```
+
+### Devbox Workflow (Recommended)
+
+```bash
+# 1. Enter Devbox shell (installs all tools automatically)
+task devbox:shell
+
+# 2. All Taskfile commands work inside Devbox
+task test
+task lint
+task dev
+
+# 3. Show Devbox environment info
+task devbox:info
+
+# 4. Update Devbox packages
+task devbox:update
+```
+
+### CI/CD Pipeline
+
+```bash
+# Run all CI checks (uses frozen lockfile)
+task check:ci
+
+# Individual CI steps
+task deps:install              # Install from lockfile
+task lint                      # Check linting
+task type-check                # Check types
+task test:coverage             # Run tests with coverage enforcement
+task build                     # Build package
+```
+
+### Pre-commit Workflow
+
+```bash
+# Install pre-commit hooks (done automatically in task setup)
+task hooks:install
+
+# Run hooks manually on all files
+task hooks:run
+
+# Update hook versions
+task hooks:update
+```
+
+### Development Server
+
+```bash
+# Start development server with hot-reload
+task dev
+
+# Run in background and view logs
+task dev &
+tail -f logs/dev.log
 ```
 
 ---
@@ -1282,21 +1625,25 @@ ruff check --select C90 .
 
 ## ⚠️ Critical Tool Requirements
 
+### CLI Interface (Primary)
+1. **Use Taskfile for all operations** - `task <command>` is the primary interface
+2. **Never use direct tool commands in docs** - Always reference Taskfile tasks
+3. **Extend Taskfile for new operations** - Add new tasks to `/Taskfile.yml`
+
 ### Core Development Tools
-1. **Always use UV** for dependency management - never use pip directly
-2. **Never manually edit uv.lock** - always use `uv add/remove`
-3. **Run Ruff before commits** - `ruff check --fix . && ruff format .`
-4. **Type check with MyPy strict mode** - `mypy src/ --strict`
-5. **Maintain 80%+ test coverage** - `pytest --cov-fail-under=80`
-6. **Use pre-commit hooks** - Automate quality checks before commits
+4. **Always use UV** for dependency management - never use pip directly (via `task deps:*`)
+5. **Never manually edit uv.lock** - always use `task deps:add/remove`
+6. **Run quality checks before commits** - `task check` or `task lint:fix && task format && task type-check && task test`
+7. **Maintain 80%+ test coverage** - `task test:coverage` enforces this
+8. **Use pre-commit hooks** - `task hooks:install` (done automatically in `task setup`)
 
 ### Environment & Deployment Tools (PRD-000 v2)
-7. **Use Devbox for development** - Eliminates "works on my machine" issues
-8. **Use NuShell for cross-platform scripts** - Replaces Bash for macOS/Linux/Windows compatibility
-9. **Use Podman for containers** - Organizational standard per PRD-000 Decision D2
-10. **Enable Renovate** - Automate dependency updates and security vulnerability fixes
-11. **Pin dependencies** - Ensure reproducible builds via uv.lock
-12. **Commit devbox.json and devbox.lock** - Ensures reproducible environments across team
+9. **Use Devbox for development** - Eliminates "works on my machine" issues (`task devbox:shell`)
+10. **Use NuShell for cross-platform scripts** - Replaces Bash for macOS/Linux/Windows compatibility
+11. **Use Podman for containers** - Organizational standard per PRD-000 Decision D2 (`task container:*`)
+12. **Enable Renovate** - Automate dependency updates and security vulnerability fixes
+13. **Pin dependencies** - Ensure reproducible builds via uv.lock
+14. **Commit devbox.json and devbox.lock** - Ensures reproducible environments across team
 
 ---
 

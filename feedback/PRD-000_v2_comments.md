@@ -1,23 +1,22 @@
-## User Experience Section - MINOR changes
+## Additional Tool
+### Issue
+Shell CLI tools for various development tasks are scattered(e.g., for linting and testing - `ruff check .`, `mypy src/ --strict`, `uv run pytest -v`, for running code - `uv run python script.py`)
 
-### Flow 1: New Developer Environment Setup
+### Proposed Solution
+Consolidate all CLI tool executions into Taskfile and central place for all tool capabilities. Consolidate all `CLAUDE.md` instructions to exclusively use Taskfile tasks for the operations
 
-2. Developer installs Devbox if not present: `curl -fsSL https://get.jetify.com/devbox | sh`
+**Rationale**: 
+Current MCP project uses Python as a main programming language and Python-orientied specialized `CLAUDE.md` files. Future projects will have different architectures and programming languages. Common thing among all these architectures is hybrid approach with specialized `CLAUDE.md` files. Each architecture has it's own tooling and we need to establish a common fasade for all architectures. Taskfile gives as that capability to unify tooling under the common fasade
 
-Comment: Devbox must be preinstalled by system-setup script using dotfiles type of repository
+### Affected artifacts
+- CLAUDE-tooling.md (requires update with Taskfile instructions)
+- PRD-000, HLS-001, US-001 (add new tool requirement)
 
-3. Developer runs automated setup script: `devbox shell`
+---
 
-Comment: Developer runs `devbox shell` from his/her shell to enter Devbox shell environment. Upon entering devbox shell, it must execute `scripts/setup.nu` script (the actual setup script)
+## Specialized CLAUDE.md files
+### Issue
+In the first round of PRD refinement (@feedback/PRD-000_v1_comments.md) we introduced establish standard defined in "Hybrid CLAUDE.md approach". We refined PRD successfully, but forget to refine PRD generator and template for future PRDs
 
-UPDATE: Developer must execute `scripts/setup.nu`, it will not start automatically
-
-#### Flow 3: Troubleshooting Setup Issues
-
-5. Developer re-runs setup script: `devbox shell`
-
-Comment: same as Step 3 in Flow 1
-
-UPDATE: same as Step 3 in Flow 1
-
-
+### Proposed Solution
+Update PRD generator and template accordingly. Evaluate if update is required for HLS and Backlog generators and templates

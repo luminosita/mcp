@@ -1,0 +1,383 @@
+version: '3'
+
+# AI Agent MCP Server - Development Tasks
+# Consolidated CLI interface for all development operations
+# See: /prompts/CLAUDE/CLAUDE-tooling.md for detailed documentation
+
+vars:
+  SRC_DIR: src
+  TESTS_DIR: tests
+  COVERAGE_MIN: 80
+  PYTHON_VERSION: "3.11"
+  PROJECT_NAME: ai_agent_mcp_server
+  CONTAINER_NAME: mcp-server
+  DB_CONTAINER_NAME: mcp-db
+
+tasks:
+  # ====================
+  # Code Quality Tasks
+  # ====================
+
+  lint:
+    desc: Run Ruff linter (check only, no fixes)
+    cmds:
+      - ruff check .
+
+  lint:fix:
+    desc: Run Ruff linter with auto-fix
+    cmds:
+      - ruff check --fix .
+
+  lint:watch:
+    desc: Run Ruff linter in watch mode
+    cmds:
+      - ruff check --watch .
+
+  format:
+    desc: Format code with Ruff formatter
+    cmds:
+      - ruff format .
+
+  format:check:
+    desc: Check formatting without changes
+    cmds:
+      - ruff format --check .
+
+  lint:all:
+    desc: Run linting and formatting together
+    cmds:
+      - ruff check --fix .
+      - ruff format .
+
+  # ====================
+  # Type Checking Tasks
+  # ====================
+
+  type-check:
+    desc: Run MyPy type checker (strict mode)
+    cmds:
+      - mypy {{.SRC_DIR}}/ --strict
+
+  type-check:report:
+    desc: Generate MyPy HTML type coverage report
+    cmds:
+      - mypy {{.SRC_DIR}}/ --html-report ./mypy-report
+      - echo "Report generated at mypy-report/index.html"
+
+  type-check:install:
+    desc: Install missing type stubs
+    cmds:
+      - mypy --install-types
+
+  # ====================
+  # Testing Tasks
+  # ====================
+
+  test:
+    desc: Run all tests with coverage
+    cmds:
+      - uv run pytest --cov={{.SRC_DIR}} --cov-report=html --cov-report=term
+
+  test:unit:
+    desc: Run unit tests only
+    cmds:
+      - uv run pytest {{.TESTS_DIR}}/unit -v
+
+  test:integration:
+    desc: Run integration tests only
+    cmds:
+      - uv run pytest {{.TESTS_DIR}}/integration -v
+
+  test:e2e:
+    desc: Run end-to-end tests only
+    cmds:
+      - uv run pytest {{.TESTS_DIR}}/e2e -v
+
+  test:watch:
+    desc: Run tests in watch mode
+    cmds:
+      - uv run pytest-watch
+
+  test:verbose:
+    desc: Run tests with verbose output
+    cmds:
+      - uv run pytest -v
+
+  test:failed:
+    desc: Run only last failed tests
+    cmds:
+      - uv run pytest --lf
+
+  test:coverage:
+    desc: Run tests and enforce {{.COVERAGE_MIN}}% coverage
+    cmds:
+      - uv run pytest --cov={{.SRC_DIR}} --cov-report=html --cov-report=xml --cov-fail-under={{.COVERAGE_MIN}}
+
+  test:parallel:
+    desc: Run tests in parallel
+    cmds:
+      - uv run pytest -n auto
+
+  test:mark:
+    desc: Run tests by marker (usage - task test:mark -- MARKER=integration)
+    cmds:
+      - uv run pytest -m "{{.MARKER}}"
+
+  # ====================
+  # Quality Check (All)
+  # ====================
+
+  check:
+    desc: Run all quality checks (lint, format, type-check, test)
+    cmds:
+      - task: lint
+      - task: format:check
+      - task: type-check
+      - task: test:coverage
+
+  check:ci:
+    desc: Run CI/CD pipeline checks (frozen deps)
+    cmds:
+      - uv sync --frozen
+      - ruff check .
+      - mypy {{.SRC_DIR}}/ --strict
+      - pytest --cov={{.SRC_DIR}} --cov-report=xml --cov-fail-under={{.COVERAGE_MIN}}
+
+  # ====================
+  # Dependency Management
+  # ====================
+
+  deps:install:
+    desc: Install project dependencies
+    cmds:
+      - uv sync
+
+  deps:install:all:
+    desc: Install all dependencies including extras
+    cmds:
+      - uv sync --all-extras
+
+  deps:add:
+    desc: Add a new dependency (usage - task deps:add -- PKG=requests)
+    cmds:
+      - uv add {{.PKG}}
+
+  deps:add:dev:
+    desc: Add a dev dependency (usage - task deps:add:dev -- PKG=pytest)
+    cmds:
+      - uv add --dev {{.PKG}}
+
+  deps:remove:
+    desc: Remove a dependency (usage - task deps:remove -- PKG=requests)
+    cmds:
+      - uv remove {{.PKG}}
+
+  deps:lock:
+    desc: Update lockfile without installing
+    cmds:
+      - uv lock
+
+  deps:update:
+    desc: Update dependencies (via Renovate - manual fallback)
+    cmds:
+      - uv lock --upgrade
+      - uv sync
+
+  deps:export:
+    desc: Export dependencies to requirements.txt
+    cmds:
+      - uv export --format requirements-txt --output-file requirements.txt
+
+  # ====================
+  # Pre-commit Hooks
+  # ====================
+
+  hooks:install:
+    desc: Install pre-commit hooks
+    cmds:
+      - uv run pre-commit install
+
+  hooks:run:
+    desc: Run pre-commit hooks on all files
+    cmds:
+      - uv run pre-commit run --all-files
+
+  hooks:update:
+    desc: Update pre-commit hook versions
+    cmds:
+      - uv run pre-commit autoupdate
+
+  # ====================
+  # Build & Run Tasks
+  # ====================
+
+  build:
+    desc: Build Python package
+    cmds:
+      - uv build
+
+  run:
+    desc: Run application (usage - task run -- SCRIPT=main.py)
+    cmds:
+      - uv run python {{.SCRIPT | default "main.py"}}
+
+  dev:
+    desc: Start development server with hot-reload
+    cmds:
+      - uv run uvicorn {{.PROJECT_NAME}}.main:app --reload --host 0.0.0.0 --port 8000
+
+  shell:
+    desc: Start Python REPL with project loaded
+    cmds:
+      - uv run python
+
+  # ====================
+  # Container Tasks (Podman)
+  # ====================
+
+  container:build:
+    desc: Build Podman container image
+    cmds:
+      - podman build -t {{.CONTAINER_NAME}}:dev .
+
+  container:run:
+    desc: Run application in Podman container
+    cmds:
+      - podman run -d --name {{.CONTAINER_NAME}} -p 8000:8000 -e DATABASE_URL=postgresql://postgres:dev@localhost:5432/mcp {{.CONTAINER_NAME}}:dev
+
+  container:stop:
+    desc: Stop application container
+    cmds:
+      - podman stop {{.CONTAINER_NAME}}
+      - podman rm {{.CONTAINER_NAME}}
+
+  container:logs:
+    desc: View container logs
+    cmds:
+      - podman logs -f {{.CONTAINER_NAME}}
+
+  container:shell:
+    desc: Execute shell in running container
+    cmds:
+      - podman exec -it {{.CONTAINER_NAME}} /bin/sh
+
+  container:clean:
+    desc: Remove all containers and images
+    cmds:
+      - podman stop {{.CONTAINER_NAME}} || true
+      - podman rm {{.CONTAINER_NAME}} || true
+      - podman rmi {{.CONTAINER_NAME}}:dev || true
+
+  # ====================
+  # Database Tasks (Podman)
+  # ====================
+
+  db:start:
+    desc: Start PostgreSQL database in Podman
+    cmds:
+      - podman run -d --name {{.DB_CONTAINER_NAME}} -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=mcp -p 5432:5432 postgres:15
+
+  db:stop:
+    desc: Stop PostgreSQL database
+    cmds:
+      - podman stop {{.DB_CONTAINER_NAME}}
+      - podman rm {{.DB_CONTAINER_NAME}}
+
+  db:shell:
+    desc: Connect to PostgreSQL shell
+    cmds:
+      - podman exec -it {{.DB_CONTAINER_NAME}} psql -U postgres -d mcp
+
+  db:logs:
+    desc: View database logs
+    cmds:
+      - podman logs -f {{.DB_CONTAINER_NAME}}
+
+  db:restart:
+    desc: Restart database
+    cmds:
+      - task: db:stop
+      - task: db:start
+
+  # ====================
+  # Devbox Tasks
+  # ====================
+
+  devbox:shell:
+    desc: Enter Devbox isolated environment shell
+    cmds:
+      - devbox shell
+
+  devbox:run:
+    desc: Run command in Devbox (usage - task devbox:run -- CMD=pytest)
+    cmds:
+      - devbox run {{.CMD}}
+
+  devbox:update:
+    desc: Update Devbox packages
+    cmds:
+      - devbox update
+
+  devbox:info:
+    desc: Show Devbox environment info
+    cmds:
+      - devbox info
+
+  # ====================
+  # Documentation Tasks
+  # ====================
+
+  docs:build:
+    desc: Build documentation
+    cmds:
+      - echo "Documentation build not yet configured"
+      - echo "Add MkDocs or Sphinx configuration"
+
+  docs:serve:
+    desc: Serve documentation locally
+    cmds:
+      - echo "Documentation serve not yet configured"
+
+  # ====================
+  # Utility Tasks
+  # ====================
+
+  clean:
+    desc: Clean build artifacts and caches
+    cmds:
+      - rm -rf build/ dist/ *.egg-info
+      - rm -rf .pytest_cache .mypy_cache .ruff_cache
+      - rm -rf htmlcov/ .coverage coverage.xml
+      - rm -rf mypy-report/
+      - find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+
+  clean:all:
+    desc: Clean everything including virtual environments
+    cmds:
+      - task: clean
+      - rm -rf .venv venv
+
+  setup:
+    desc: Initial project setup (install deps and hooks)
+    cmds:
+      - uv sync --all-extras
+      - task: hooks:install
+      - echo "✅ Project setup complete"
+
+  info:
+    desc: Show project environment information
+    cmds:
+      - echo "Project - {{.PROJECT_NAME}}"
+      - echo "Python Version - {{.PYTHON_VERSION}}"
+      - echo "Coverage Minimum - {{.COVERAGE_MIN}}%"
+      - echo ""
+      - uv --version
+      - python --version
+      - ruff --version
+      - mypy --version
+      - pytest --version
+
+  help:
+    desc: Show available tasks
+    cmds:
+      - task --list
