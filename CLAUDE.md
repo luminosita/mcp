@@ -4,6 +4,7 @@
 
 **Product Name:** AI_Agent_MCP_Server
 **Documentation Product Name:** AI Agent MCP Server
+**Package Name:** mcp_server (alias: ai_agent_mcp_server)
 
 ## Folder Structure
 
