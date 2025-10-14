@@ -230,15 +230,15 @@ Execute Backlog Story Generator for sixth backlog story from HLS-001 v2 decompos
 **Context**: Current session
 
 **Description**:
-Address feedback from PRD-000_v2_comments.md: Update PRD generator and template to incorporate "Hybrid CLAUDE.md approach" established during PRD-000 refinement. Evaluate if HLS and Backlog generators/templates need similar updates.
+Address feedback from PRD-000_v1_comments.md: Update PRD generator and template to incorporate "Hybrid CLAUDE.md approach" established during PRD-000 refinement. Evaluate if HLS and Backlog generators/templates need similar updates.
 
 **Issue Identified:**
 - PRD-000 v1 feedback introduced "Hybrid CLAUDE.md approach" standard
-- PRD-000 v2 successfully refined using this approach
+- PRD-000 v2 & 3 successfully refined using this approach
 - PRD generator and template not updated to reflect this standard
 - Future PRDs won't benefit from established pattern
 
-**Hybrid CLAUDE.md Approach (from PRD-000 v2):**
+**Hybrid CLAUDE.md Approach (from PRD-000 v3):**
 - Technical Considerations section aligns with specialized CLAUDE.md standards
 - References specialized CLAUDE-*.md files as "Decisions Made" for technical context
 - Treats CLAUDE-*.md content as authoritative for implementation guidance
@@ -255,7 +255,7 @@ Address feedback from PRD-000_v2_comments.md: Update PRD generator and template 
 
 2. **Update prd-template.xml:**
    - Update Technical Considerations section instructions
-   - Add note: "Align with specialized CLAUDE-*.md standards (CLAUDE-tooling, CLAUDE-testing, CLAUDE-typing, CLAUDE-validation, CLAUDE-architecture)"
+   - Add note: "Align with specialized CLAUDE-*.md standards (CLAUDE-tooling, CLAUDE-testing, CLAUDE-typing, CLAUDE-validation, CLAUDE-architecture, and additional domain-specific files as needed for security, authentication, messaging, etc.)"
    - Add note: "Treat CLAUDE.md content as authoritative - supplement, don't duplicate"
    - Add "References to CLAUDE.md Standards" subsection
 
@@ -274,12 +274,36 @@ Address feedback from PRD-000_v2_comments.md: Update PRD generator and template 
    - Check if Technical Approach section should reference CLAUDE.md standards
    - Update instructions if needed
 
+6. **Evaluate tech-spec-generator.xml:**
+   - Check if Tech Spec generator needs CLAUDE.md awareness
+   - Likely YES
+   - Update generator to reference CLAUDE.md standards if needed
+   - Update template if needed
+
+7. **Evaluate tech-spec-template.xml:**
+   - Check if template should reference CLAUDE.md standards
+   - Update instructions if needed
+
+8. **Evaluate implementation-task-generator.xml:**
+   - Check if Implementation Task generator needs CLAUDE.md awareness
+   - Likely YES
+   - Update generator to reference CLAUDE.md standards if needed
+   - Update template if needed
+
+9. **Evaluate implementation-task-template.xml:**
+   - Check if template should reference CLAUDE.md standards
+   - Update instructions if needed
+
 **Success Criteria:**
 - [ ] prd-generator.xml updated with Hybrid CLAUDE.md approach instructions
 - [ ] prd-template.xml updated with CLAUDE.md alignment guidance
 - [ ] HLS generator evaluated (update or no-update decision documented)
 - [ ] Backlog Story generator evaluated (updated if needed)
 - [ ] Backlog Story template evaluated (updated if needed)
+- [ ] Tech Spec generator evaluated (updated if needed)
+- [ ] Tech Spec template evaluated (updated if needed)
+- [ ] Implementation Task generator evaluated (updated if needed)
+- [ ] Implementation Task template evaluated (updated if needed)
 - [ ] Validation checklists updated to verify CLAUDE.md alignment
 - [ ] Changes backward-compatible with existing artifacts
 
@@ -288,11 +312,15 @@ Address feedback from PRD-000_v2_comments.md: Update PRD generator and template 
 - Updated `/prompts/templates/prd-template.xml`
 - Updated `/prompts/backlog-story-generator.xml` (if needed)
 - Updated `/prompts/templates/backlog-story-template.xml` (if needed)
+- Updated `/prompts/tech-spec-generator.xml` (if needed)
+- Updated `/prompts/templates/tech-spec-template.xml` (if needed)
+- Updated `/prompts/implementation-task-generator.xml` (if needed)
+- Updated `/prompts/templates/implementation-task-template.xml` (if needed)
 - Evaluation notes for HLS generator (no changes expected)
 
 **Reference:**
-- Feedback: `/feedback/PRD-000_v2_comments.md` (Specialized CLAUDE.md files section)
-- Example: `/artifacts/prds/PRD-000_project_foundation_bootstrap_v2.md` (Hybrid approach implemented)
+- Feedback: `/feedback/PRD-000_v1_comments.md` (`Hybrid CLAUDE.md approach`)
+- Example: `/artifacts/prds/PRD-000_project_foundation_bootstrap_v3.md` (Hybrid approach implemented)
 - Specialized files: `/prompts/CLAUDE/CLAUDE-*.md`
 
 ---
