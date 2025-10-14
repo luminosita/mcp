@@ -8,10 +8,10 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: US-002 COMPLETED; SPEC-001 v1 generated; Implementation tasks partially generated (TASK-034, TASK-035 of 10 total); Ready to complete TASK-033 or proceed with implementation
-**Last Completed**: TASK-033 (partial - 2/10 implementation tasks generated), TASK-032 (SPEC-001 Tech Spec), TASK-031 (US-002 Implementation - repository structure created)
+**Current Status**: TASK-030 COMPLETED (Hybrid CLAUDE.md approach integrated across all generators); US-002 COMPLETED; SPEC-001 v1 generated; Implementation tasks partially generated (TASK-034, TASK-035 of 10 total)
+**Last Completed**: TASK-030 (Generator Template Refinement - Hybrid CLAUDE.md approach), TASK-033 (partial - 2/10 implementation tasks generated), TASK-032 (SPEC-001 Tech Spec), TASK-031 (US-002 Implementation)
 **Next Task**: Complete TASK-033 (generate remaining 8 implementation tasks) OR proceed with US-001 implementation OR TASK-019-022 (Generate remaining HLS stories) OR TASK-025-028 (Generate remaining US stories)
-**Completion**: 19/33 tasks (58%)
+**Completion**: 20/33 tasks (61%)
 **Archived Tasks**: See `/TODO-completed.md` for 16 completed tasks
 
 ---
@@ -220,13 +220,14 @@ Execute Backlog Story Generator for sixth backlog story from HLS-001 v2 decompos
 
 ---
 
-## Phase 1.8: Generator Template Refinement (Pending)
+## Phase 1.8: Generator Template Refinement (Completed)
 
 ### TASK-030: Update PRD Generator and Template with Hybrid CLAUDE.md Approach
 **Priority**: High
 **Dependencies**: TASK-016 (PRD-000 v2 refined with hybrid approach)
 **Estimated Time**: 1-2 hours
-**Status**: ⏳ Pending
+**Status**: ✅ Completed (2025-10-14)
+**Actual Time**: ~2 hours
 **Context**: Current session
 
 **Description**:
@@ -295,17 +296,17 @@ Address feedback from PRD-000_v1_comments.md: Update PRD generator and template 
    - Update instructions if needed
 
 **Success Criteria:**
-- [ ] prd-generator.xml updated with Hybrid CLAUDE.md approach instructions
-- [ ] prd-template.xml updated with CLAUDE.md alignment guidance
-- [ ] HLS generator evaluated (update or no-update decision documented)
-- [ ] Backlog Story generator evaluated (updated if needed)
-- [ ] Backlog Story template evaluated (updated if needed)
-- [ ] Tech Spec generator evaluated (updated if needed)
-- [ ] Tech Spec template evaluated (updated if needed)
-- [ ] Implementation Task generator evaluated (updated if needed)
-- [ ] Implementation Task template evaluated (updated if needed)
-- [ ] Validation checklists updated to verify CLAUDE.md alignment
-- [ ] Changes backward-compatible with existing artifacts
+- [x] prd-generator.xml updated with Hybrid CLAUDE.md approach instructions (v1.3 → v1.4)
+- [x] prd-template.xml updated with CLAUDE.md alignment guidance (v1.4 → v1.5)
+- [x] HLS generator evaluated (NO CHANGES NEEDED - user-centric, implementation-agnostic)
+- [x] Backlog Story generator updated with CLAUDE.md approach (v1.3 → v1.4)
+- [x] Backlog Story template updated with Technical Requirements restructure (v1.4 → v1.5)
+- [x] Tech Spec generator updated with extensive CLAUDE.md integration (v1.3 → v1.4)
+- [x] Tech Spec template updated with Architecture and Testing sections (v1.4 → v1.5)
+- [x] Implementation Task generator updated with comprehensive CLAUDE.md references (v1.3 → v1.4)
+- [x] Implementation Task template updated with Development Workflow and Implementation Standards (v1.4 → v1.5)
+- [x] Validation checklists updated to verify CLAUDE.md alignment (CQ-14/CQ-13/CQ-08 criteria added)
+- [x] Changes backward-compatible with existing artifacts (all conditional loading)
 
 **Output Artifacts:**
 - Updated `/prompts/prd-generator.xml`
@@ -322,6 +323,25 @@ Address feedback from PRD-000_v1_comments.md: Update PRD generator and template 
 - Feedback: `/feedback/PRD-000_v1_comments.md` (`Hybrid CLAUDE.md approach`)
 - Example: `/artifacts/prds/PRD-000_project_foundation_bootstrap_v3.md` (Hybrid approach implemented)
 - Specialized files: `/prompts/CLAUDE/CLAUDE-*.md`
+
+**Completion Summary:**
+
+All 8 generators and templates updated with Hybrid CLAUDE.md approach:
+
+1. **PRD** (v1.3→v1.4, v1.4→v1.5): Added conditional CLAUDE.md input, step 3.5 for review, updated NFR/Dependencies sections, validation criterion CQ-14
+2. **HLS** (No Changes): Evaluated - remains user-centric and implementation-agnostic (correct design)
+3. **Backlog Story** (v1.3→v1.4, v1.4→v1.5): Added conditional CLAUDE.md input, updated Technical Notes step, restructured Technical Requirements section, validation criterion CQ-13
+4. **Tech Spec** (v1.3→v1.4, v1.4→v1.5): Added conditional CLAUDE.md input, step 4.5 for review, updated Component Architecture/Code Examples/Testing steps, restructured Architecture and Testing sections, validation criterion CQ-08
+5. **Implementation Task** (v1.3→v1.4, v1.4→v1.5): Added conditional CLAUDE.md input, step 4.5 for review, updated Implementation Guidance/Testing steps, added Development Workflow and Implementation Standards sections, validation criterion CQ-08
+
+**Key Pattern Established:**
+- No hardcoded paths (all reference "per CLAUDE.md")
+- Extensible file lists (core + domain-specific)
+- Authoritative treatment (supplement not duplicate)
+- Conditional loading (when technical content present)
+- Consistent validation criteria across all generators
+
+**Impact:** Future PRDs, Backlog Stories, Tech Specs, and Implementation Tasks will automatically reference specialized CLAUDE-*.md files as authoritative implementation standards, ensuring consistency and reducing duplication.
 
 ---
 
