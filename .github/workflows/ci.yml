@@ -1,0 +1,275 @@
+name: CI/CD Pipeline
+
+# Trigger on feature branch pushes and PRs to main
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'chore/**'
+  pull_request:
+    branches:
+      - main
+
+# Cancel in-progress runs on new push to same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Setup job - installs dependencies and caches for downstream jobs
+  setup:
+    name: Setup Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install UV
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Cache UV dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/uv
+            .venv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen
+
+      - name: Cache pytest cache
+        uses: actions/cache@v4
+        with:
+          path: .pytest_cache
+          key: pytest-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            pytest-${{ runner.os }}-
+
+      - name: Cache mypy cache
+        uses: actions/cache@v4
+        with:
+          path: .mypy_cache
+          key: mypy-${{ runner.os }}-${{ hashFiles('**/*.py') }}
+          restore-keys: |
+            mypy-${{ runner.os }}-
+
+  # Lint and format validation job
+  lint-and-format:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install UV
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Restore UV cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/uv
+            .venv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen
+
+      - name: Install Task
+        run: |
+          sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+
+      - name: Run linting checks
+        run: |
+          ~/.local/bin/task lint
+
+      - name: Run format checks
+        run: |
+          ~/.local/bin/task format:check
+
+  # Type checking validation job
+  type-check:
+    name: Type Safety Validation
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install UV
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Restore UV cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/uv
+            .venv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
+
+      - name: Restore mypy cache
+        uses: actions/cache@v4
+        with:
+          path: .mypy_cache
+          key: mypy-${{ runner.os }}-${{ hashFiles('**/*.py') }}
+          restore-keys: |
+            mypy-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen
+
+      - name: Install Task
+        run: |
+          sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+
+      - name: Run type checking
+        run: |
+          ~/.local/bin/task type-check
+
+  # Test execution and coverage validation job
+  test-and-coverage:
+    name: Test Execution and Coverage
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install UV
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Restore UV cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/uv
+            .venv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
+
+      - name: Restore pytest cache
+        uses: actions/cache@v4
+        with:
+          path: .pytest_cache
+          key: pytest-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            pytest-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen
+
+      - name: Install Task
+        run: |
+          sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+
+      - name: Run tests with coverage
+        run: |
+          ~/.local/bin/task test:coverage
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports
+          path: |
+            htmlcov/
+            coverage.xml
+
+  # Report job - aggregates results and posts to PR
+  report:
+    name: Build Status Report
+    runs-on: ubuntu-latest
+    needs: [lint-and-format, type-check, test-and-coverage]
+    if: always()
+    steps:
+      - name: Check job results
+        run: |
+          if [ "${{ needs.lint-and-format.result }}" != "success" ] || \
+             [ "${{ needs.type-check.result }}" != "success" ] || \
+             [ "${{ needs.test-and-coverage.result }}" != "success" ]; then
+            echo "❌ Build failed - one or more validation jobs failed"
+            echo "- Lint and Format: ${{ needs.lint-and-format.result }}"
+            echo "- Type Check: ${{ needs.type-check.result }}"
+            echo "- Test and Coverage: ${{ needs.test-and-coverage.result }}"
+            exit 1
+          else
+            echo "✅ Build passed - all validation jobs succeeded"
+          fi
+
+      - name: Download coverage reports
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-reports
+          path: coverage-reports/
+
+      - name: Post PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const lintResult = '${{ needs.lint-and-format.result }}';
+            const typeResult = '${{ needs.type-check.result }}';
+            const testResult = '${{ needs.test-and-coverage.result }}';
+
+            const status = (lintResult === 'success' && typeResult === 'success' && testResult === 'success')
+              ? '✅ Build Passed'
+              : '❌ Build Failed';
+
+            const body = `## ${status}
+
+            | Job | Status |
+            |-----|--------|
+            | Code Quality Checks | ${lintResult === 'success' ? '✅' : '❌'} |
+            | Type Safety Validation | ${typeResult === 'success' ? '✅' : '❌'} |
+            | Test Execution and Coverage | ${testResult === 'success' ? '✅' : '❌'} |
+
+            [View detailed logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

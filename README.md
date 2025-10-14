@@ -1,5 +1,7 @@
 # AI Agent MCP Server
 
+[![CI/CD Pipeline](https://github.com/USERNAME/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/USERNAME/REPO/actions/workflows/ci.yml)
+
 A Model Context Protocol (MCP) server implementation for AI agent interactions, built with FastAPI and Python 3.11+.
 
 ## Quick Start
