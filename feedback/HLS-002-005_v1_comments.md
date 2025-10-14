@@ -1,5 +1,7 @@
 # Decisions Made
 
+**IMPORTANT** Replace `Open Questions` sections in HLS artifacts with `Decisions Made` section
+
 ## HLS-002
 
 ### Open Questions

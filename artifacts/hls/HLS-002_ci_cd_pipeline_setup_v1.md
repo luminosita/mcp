@@ -330,7 +330,7 @@ This story is foundational for all subsequent feature epics (EPIC-001 through EP
   - Build infrastructure available 99.5% of time during business hours (minimal downtime)
   - Automated dependency PRs reviewed and merged within 1 business day (security responsiveness)
 
-## Risks & Open Questions
+## Risks & Decisions Made
 
 ### Risks
 
