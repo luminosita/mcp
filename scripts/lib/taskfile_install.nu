@@ -1,60 +1,63 @@
-# NuShell module for Taskfile installation with explicit exports (per SPEC-001 D1)
+# Taskfile Validation Module
 #
-# This module handles cross-platform Taskfile 3.0+ installation with retry logic
-# and checksum verification for security.
+# This module checks if Taskfile is installed and available in the devbox environment.
+# Installation should be handled via devbox.json, not by this script.
 #
-# Supports:
-# - macOS: brew (preferred) + binary fallback
-# - Linux: binary download with checksum verification
-# - WSL2: apt (if available) + binary fallback
-#
-# Usage:
-#   use scripts/lib/taskfile_install.nu check_taskfile_installed
-#   use scripts/lib/os_detection.nu detect_os
-#
-#   let os_info = (detect_os)
-#   let result = (check_taskfile_installed)
-#
-#   if not $result.installed {
-#       print $"Warning: Taskfile installation failed: ($result.error)"
-#       print "Setup will continue in degraded mode (manual task execution required)"
-#   }
+# Public Functions:
+# - check_taskfile_installed: Check if Taskfile is installed and get version
 
-# Check if Taskfile is already installed
-# Helper function (not exported - private to module)
-#
-# Returns: record<installed: bool, version: string, source: string, error: string>
+use common.nu *
+
+# Check if Taskfile is installed
+# Returns: record {installed: bool, version: string, error: string}
 export def check_taskfile_installed [] {
-    let task_result = (which task)
+    print "🔍 Checking for Taskfile..."
 
-    if ($task_result | is-empty) {
+    # Check if task binary exists
+    let binary_check = (check_binary_exists "task")
+
+    if not $binary_check.exists {
         return {
             installed: false,
             version: "",
-            source: "",
-            error: ""
+            error: "Taskfile not found in PATH. Please add 'go-task' to devbox.json"
         }
     }
 
     # Get version
-    let version_output = (task --version | complete)
+    let version_result = (get_binary_version "task" "--version")
 
-    if $version_output.exit_code != 0 {
+    if $version_result.success {
+        print $"✅ Taskfile installed: ($version_result.version)"
+        return {
+            installed: true,
+            version: $version_result.version,
+            error: ""
+        }
+    } else {
         return {
             installed: false,
             version: "",
-            source: "",
-            error: "Taskfile command exists but version check failed"
+            error: $"Taskfile found but version check failed: ($version_result.error)"
         }
     }
+}
 
-    # Parse version (format: "Task version: v3.39.0" or just "v3.39.0")
-    let version_str = ($version_output.stdout | str trim | split row " " | last)
+# Verify Taskfile functionality
+# Returns: record {functional: bool, error: string}
+export def verify_taskfile_functionality [] {
+    print "🔍 Verifying Taskfile functionality..."
 
-    return {
-        installed: true,
-        version: $version_str,
-        source: "existing",
-        error: ""
+    # Try to list tasks
+    let result = (^task --list | complete)
+
+    if (command_succeeded $result) {
+        print "✅ Taskfile functional"
+        return {functional: true, error: ""}
+    } else {
+        return {
+            functional: false,
+            error: $"Taskfile --list command failed: ($result.stderr)"
+        }
     }
 }

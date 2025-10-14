@@ -10,64 +10,42 @@
 # - validate_taskfile: Check Taskfile installation and functionality
 # - validate_dependencies: Test critical module imports
 
+use common.nu
+use common.nu *
+
 # Validation check record structure:
 # {name: string, passed: bool, message: string, error: string}
 
 # Validate Python version (>= 3.11)
+# Assumes Python binary exists (validated in earlier setup phase)
 # Args:
 #   venv_path: string - Path to virtual environment
 # Returns: record {name, passed, message, error}
 export def validate_python_version [venv_path: string = ".venv"] {
     let check_name = "Python Version (>= 3.11)"
 
-    let python_bin = if ($nu.os-info.name == "windows") {
-        ($venv_path | path join "Scripts" "python.exe")
-    } else {
-        ($venv_path | path join "bin" "python")
-    }
+    let python_bin = (get_python_bin_path $venv_path)
 
-    if not ($python_bin | path exists) {
+    # Get version (assumes binary exists)
+    let version_result = (get_binary_version $python_bin "--version")
+
+    if not $version_result.success {
         return {
             name: $check_name,
             passed: false,
             message: "",
-            error: $"Python binary not found at ($python_bin)"
+            error: $version_result.error
         }
     }
 
-    let result = (^$python_bin --version | complete)
+    # Validate version meets requirement (using common.nu function)
+    let validation = (common validate_python_version $version_result.version 3 11)
 
-    if $result.exit_code != 0 {
-        return {
-            name: $check_name,
-            passed: false,
-            message: "",
-            error: $"Python version check failed: ($result.stderr)"
-        }
-    }
-
-    # Parse version (e.g., "Python 3.11.6" -> "3.11.6")
-    let version_str = ($result.stdout | str trim | str replace "Python " "")
-    let version_parts = ($version_str | split row ".")
-
-    if ($version_parts | length) < 2 {
-        return {
-            name: $check_name,
-            passed: false,
-            message: "",
-            error: $"Could not parse Python version: ($version_str)"
-        }
-    }
-
-    let major = ($version_parts | get 0 | into int)
-    let minor = ($version_parts | get 1 | into int)
-
-    # Check if Python >= 3.11
-    if ($major >= 3) and ($minor >= 11) {
+    if $validation.valid {
         return {
             name: $check_name,
             passed: true,
-            message: $"Python ($version_str) meets requirement (>= 3.11)",
+            message: $"Python ($validation.version.full) meets requirement (>= 3.11)",
             error: ""
         }
     } else {
@@ -75,32 +53,21 @@ export def validate_python_version [venv_path: string = ".venv"] {
             name: $check_name,
             passed: false,
             message: "",
-            error: $"Python ($version_str) does not meet requirement (>= 3.11)"
+            error: $validation.error
         }
     }
 }
 
-# Validate Taskfile installation and functionality
+# Validate Taskfile functionality
+# Assumes Taskfile binary exists (validated in earlier setup phase)
 # Returns: record {name, passed, message, error}
 export def validate_taskfile [] {
     let check_name = "Taskfile Functionality"
 
-    # Check task --version
-    let version_result = (^task --version | complete)
-
-    if $version_result.exit_code != 0 {
-        return {
-            name: $check_name,
-            passed: false,
-            message: "",
-            error: "Taskfile not installed or not in PATH"
-        }
-    }
-
-    # Check task --list
+    # Check task --list (assumes task binary exists)
     let list_result = (^task --list | complete)
 
-    if $list_result.exit_code != 0 {
+    if not (command_succeeded $list_result) {
         return {
             name: $check_name,
             passed: false,
@@ -109,43 +76,33 @@ export def validate_taskfile [] {
         }
     }
 
-    let version = ($version_result.stdout | str trim)
+    # Get version for informational message
+    let version_result = (get_binary_version "task" "--version")
+    let version_str = if $version_result.success { $version_result.version } else { "unknown" }
 
     return {
         name: $check_name,
         passed: true,
-        message: $"Taskfile ($version) installed and functional",
+        message: $"Taskfile ($version_str) functional",
         error: ""
     }
 }
 
 # Validate critical module imports
+# Assumes Python binary exists (validated in earlier setup phase)
 # Args:
 #   venv_path: string - Path to virtual environment
 # Returns: record {name, passed, message, error}
 export def validate_dependencies [venv_path: string = ".venv"] {
     let check_name = "Critical Module Imports"
 
-    let python_bin = if ($nu.os-info.name == "windows") {
-        ($venv_path | path join "Scripts" "python.exe")
-    } else {
-        ($venv_path | path join "bin" "python")
-    }
+    let python_bin = (get_python_bin_path $venv_path)
 
-    if not ($python_bin | path exists) {
-        return {
-            name: $check_name,
-            passed: false,
-            message: "",
-            error: $"Python binary not found at ($python_bin)"
-        }
-    }
-
-    # Try to import mcp_server package
+    # Try to import mcp_server package (assumes python binary exists)
     let import_cmd = "import mcp_server; print('OK')"
     let result = (^$python_bin -c $import_cmd | complete)
 
-    if $result.exit_code == 0 {
+    if (command_succeeded $result) {
         return {
             name: $check_name,
             passed: true,
@@ -210,27 +167,15 @@ export def validate_precommit_hooks [] {
 }
 
 # Validate file permissions for .venv
+# Assumes venv exists (created in earlier setup phase)
 # Args:
 #   venv_path: string - Path to virtual environment
 # Returns: record {name, passed, message, error}
 export def validate_venv_permissions [venv_path: string = ".venv"] {
     let check_name = "Virtual Environment Permissions"
 
-    if not ($venv_path | path exists) {
-        return {
-            name: $check_name,
-            passed: false,
-            message: "",
-            error: $"Virtual environment not found at ($venv_path)"
-        }
-    }
-
-    # Check if venv directory is readable
-    let python_bin = if ($nu.os-info.name == "windows") {
-        ($venv_path | path join "Scripts" "python.exe")
-    } else {
-        ($venv_path | path join "bin" "python")
-    }
+    # Check if venv directory is readable (assumes it exists)
+    let python_bin = (get_python_bin_path $venv_path)
 
     if ($python_bin | path exists) {
         return {

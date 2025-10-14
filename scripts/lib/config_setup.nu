@@ -8,6 +8,8 @@
 # - install_precommit_hooks: Install pre-commit hooks
 # - setup_configuration: Complete configuration setup (env + hooks)
 
+use common.nu *
+
 # Check if .env file exists
 # Returns: record {exists: bool, path: string}
 def check_env_exists [] {
@@ -76,12 +78,7 @@ export def setup_env_file [] {
 #   venv_path: string - Path to virtual environment
 # Returns: record {installed: bool, path: string}
 def check_precommit_installed [venv_path: string = ".venv"] {
-    let precommit_bin = if ($nu.os-info.name == "windows") {
-        ($venv_path | path join "Scripts" "pre-commit.exe")
-    } else {
-        ($venv_path | path join "bin" "pre-commit")
-    }
-
+    let precommit_bin = (get_precommit_bin_path $venv_path)
     let installed = ($precommit_bin | path exists)
 
     return {installed: $installed, path: $precommit_bin}

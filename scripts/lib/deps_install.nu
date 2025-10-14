@@ -8,6 +8,8 @@
 # - install_dependencies: Install Python dependencies from pyproject.toml
 # - sync_dependencies: Sync dependencies (uv sync command)
 
+use common.nu *
+
 # Parse package count from uv output
 # Args:
 #   output: string - UV command output
@@ -39,13 +41,6 @@ def install_with_retry [
 
     for attempt in 0..<$max_attempts {
         print $"📦 Attempt ($attempt + 1) of ($max_attempts): Installing dependencies..."
-
-        # Get Python binary path
-        let python_bin = if ($nu.os-info.name == "windows") {
-            ($venv_path | path join "Scripts" "python.exe")
-        } else {
-            ($venv_path | path join "bin" "python")
-        }
 
         # Use uv pip install with pyproject.toml
         # The -e . flag installs the package in editable mode
@@ -115,12 +110,7 @@ export def install_dependencies [venv_path: string = ".venv"] {
 
     # Verify venv exists
     let venv_full_path = ($venv_path | path expand)
-
-    let python_bin = if ($nu.os-info.name == "windows") {
-        ($venv_full_path | path join "Scripts" "python.exe")
-    } else {
-        ($venv_full_path | path join "bin" "python")
-    }
+    let python_bin = (get_python_bin_path $venv_full_path)
 
     if not ($python_bin | path exists) {
         return {

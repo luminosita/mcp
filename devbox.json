@@ -4,6 +4,7 @@
     "python@3.11",
     "nushell@latest",
     "go-task@latest",
+    "uv@latest",
     "podman@latest"
   ],
   "shell": {
@@ -15,6 +16,7 @@
       "echo 'Python version:' $(python --version)",
       "echo 'NuShell version:' $(nu --version)",
       "echo 'Taskfile version:' $(task --version)",
+      "echo 'UV version:' $(uv --version)",
       "echo 'Podman version:' $(podman --version)",
       "echo ''",
       "echo 'Quick start:'",

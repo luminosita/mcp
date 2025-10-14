@@ -118,31 +118,31 @@ def main [
 
     print "✅ All prerequisites validated\n"
 
-    # Phase 3: Taskfile Installation
+    # Phase 3: Taskfile Validation
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    print "Phase 3: Taskfile Installation"
+    print "Phase 3: Taskfile Validation"
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 
     let taskfile = (check_taskfile_installed)
 
     if not $taskfile.installed {
-        print $"⚠️  Warning: Taskfile installation failed"
-        print $"  Error: ($taskfile.error)"
-        print "  Continuing in degraded mode...\n"
-        $errors = ($errors | append "Taskfile installation failed")
+        print $"❌ Taskfile not found: ($taskfile.error)"
+        print "  Please add 'go-task' to devbox.json\n"
+        exit 1
     } else {
         print $"✅ Taskfile ready: ($taskfile.version)\n"
     }
 
-    # Phase 4: UV Installation
+    # Phase 4: UV Validation
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    print "Phase 4: UV Package Manager Installation"
+    print "Phase 4: UV Package Manager Validation"
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 
     let uv_result = (check_uv_installed)
 
     if not $uv_result.installed {
-        print $"❌ UV installation failed: ($uv_result.error)"
+        print $"❌ UV not found: ($uv_result.error)"
+        print "  Please add 'uv' to devbox.json\n"
         exit 1
     }
 
