@@ -1015,6 +1015,183 @@ Execute Backlog Story Generator for sixth backlog story from HLS-001 v2 decompos
 
 ---
 
+### TASK-029: Implement Taskfile Integration for CLI Tool Consolidation
+**Priority**: High
+**Dependencies**: TASK-023 (CLAUDE-tooling.md updated with all tools)
+**Estimated Time**: 2-3 hours
+**Status**: ✅ Completed
+**Context**: Current session
+
+**Description**:
+Address feedback from PRD-000_v2_comments.md: Consolidate scattered CLI tool executions (ruff, mypy, pytest, uv) into Taskfile as unified interface. Update CLAUDE.md instructions to exclusively use Taskfile tasks.
+
+**Rationale**:
+Current MCP project uses Python-specific tools. Future projects will have different architectures and languages. Taskfile provides common facade for all architectures, enabling consistent tooling interface across diverse projects.
+
+**Issue Identified:**
+- Shell CLI tools scattered: `ruff check .`, `mypy src/ --strict`, `uv run pytest -v`, `uv run python script.py`
+- CLAUDE.md files have Python-specific commands
+- No common interface for future multi-language projects
+
+**Changes Required:**
+
+1. **Create Taskfile.yml:**
+   - Task: `lint` - Run Ruff linter
+   - Task: `type-check` - Run MyPy type checker
+   - Task: `test` - Run pytest with coverage
+   - Task: `test:watch` - Run pytest in watch mode
+   - Task: `format` - Run Ruff formatter
+   - Task: `build` - Build package with uv
+   - Task: `run` - Run application with uv
+   - Task: `dev` - Start development server with hot-reload
+   - Task: `deps:update` - Update dependencies with Renovate
+   - Task: `container:build` - Build Podman container
+   - Task: `container:run` - Run Podman container
+   - Task: `devbox:shell` - Enter Devbox shell
+
+2. **Update CLAUDE-tooling.md:**
+   - Replace direct CLI commands with Taskfile task references
+   - Add Taskfile section with installation and usage
+   - Update Complete Development Workflow section to use Taskfile tasks
+   - Keep tool-specific sections for configuration and understanding
+
+3. **Update CLAUDE-core.md:**
+   - Reference Taskfile as primary interface for tool execution
+   - Update examples to use `task <name>` instead of direct commands
+
+4. **Update PRD-000 v2 (if needed):**
+   - Add Taskfile as system dependency
+   - Add FR for Taskfile integration (or update existing FR-19)
+   - Reference Taskfile in Technical Considerations section
+
+5. **Evaluate HLS-001 and US-001:**
+   - Check if setup script should install Taskfile
+   - Check if setup script should validate Taskfile installation
+   - Update acceptance criteria if needed
+
+**Success Criteria:**
+- [x] Taskfile.yml created with all common development tasks
+- [x] CLAUDE-tooling.md updated to use Taskfile tasks
+- [x] CLAUDE-core.md references Taskfile as primary interface
+- [x] PRD-000 v2 evaluated for Taskfile requirement (update if needed)
+- [x] HLS-001 evaluated for Taskfile integration (update if needed)
+- [x] US-001 evaluated for Taskfile installation (update if needed)
+- [x] All tool commands abstracted behind Taskfile tasks
+- [x] Documentation clear for both Taskfile usage and underlying tools
+
+**Output Artifacts:**
+- `/Taskfile.yml` ✅ Created with 60+ tasks organized into 12 logical sections
+- Updated `/prompts/CLAUDE/CLAUDE-tooling.md` ✅ Added 287-line Taskfile section, updated workflows
+- Updated `/prompts/CLAUDE/CLAUDE-core.md` ✅ Updated to use task commands throughout
+- PRD-000 evaluation ✅ Completed - SHOULD BE UPDATED (add Taskfile to dependencies, add FR-22)
+- HLS-001 evaluation ✅ Completed - NO UPDATE NEEDED (user-story level, implementation-agnostic)
+- US-001 evaluation ✅ Completed - SHOULD BE UPDATED (add Taskfile install/validation)
+
+**Completion Notes:**
+- **Taskfile.yml Created:** 60+ tasks covering code quality, testing, dependencies, containers, database, devbox operations
+- **CLAUDE-tooling.md Updated:**
+  - Added comprehensive Taskfile section (287 lines) with installation, commands reference, best practices
+  - Updated Complete Development Workflow section to use Taskfile commands exclusively
+  - Updated Critical Tool Requirements to list Taskfile as #1 primary interface
+  - Added philosophy: "Taskfile is the common facade for ALL CLI operations"
+- **CLAUDE-core.md Updated:**
+  - Updated introduction to mention Taskfile interface
+  - Replaced direct tool commands with Taskfile commands in Development Tools section
+  - Updated Quick Reference with Taskfile commands
+  - Updated Pre-commit Checklist with Taskfile validation
+- **Evaluations Completed:**
+  - **PRD-000 v2:** SHOULD UPDATE - Add Taskfile to System Dependencies, add FR-22, update Technical Considerations
+  - **HLS-001 v2:** NO UPDATE NEEDED - High-level story is implementation-agnostic; Taskfile is implementation detail
+  - **US-001 v1:** SHOULD UPDATE - Add Taskfile installation/validation to setup script requirements
+- **Architecture Improvement:** Established language-agnostic CLI interface for future multi-language projects
+- **Developer Experience:** Unified interface eliminates need to memorize tool-specific commands
+
+**Follow-Up Actions Recommended:**
+1. Create PRD-000 v3 with Taskfile integration (add to System Dependencies, add FR-22)
+2. Create US-001 v2 with Taskfile installation/validation requirements
+3. Update CLAUDE.md root file to reference Taskfile in implementation section (optional)
+
+**Reference:**
+- Feedback: `/feedback/PRD-000_v2_comments.md` (Additional Tool section)
+- Taskfile Docs: https://taskfile.dev/
+
+---
+
+### TASK-030: Update PRD Generator and Template with Hybrid CLAUDE.md Approach
+**Priority**: High
+**Dependencies**: TASK-016 (PRD-000 v2 refined with hybrid approach)
+**Estimated Time**: 1-2 hours
+**Status**: ⏳ Pending
+**Context**: Current session
+
+**Description**:
+Address feedback from PRD-000_v2_comments.md: Update PRD generator and template to incorporate "Hybrid CLAUDE.md approach" established during PRD-000 refinement. Evaluate if HLS and Backlog generators/templates need similar updates.
+
+**Issue Identified:**
+- PRD-000 v1 feedback introduced "Hybrid CLAUDE.md approach" standard
+- PRD-000 v2 successfully refined using this approach
+- PRD generator and template not updated to reflect this standard
+- Future PRDs won't benefit from established pattern
+
+**Hybrid CLAUDE.md Approach (from PRD-000 v2):**
+- Technical Considerations section aligns with specialized CLAUDE.md standards
+- References specialized CLAUDE-*.md files as "Decisions Made" for technical context
+- Treats CLAUDE-*.md content as authoritative for implementation guidance
+- PRD Technical Considerations supplements (not duplicates) CLAUDE.md standards
+
+**Changes Required:**
+
+1. **Update prd-generator.xml:**
+   - Add instruction to review specialized CLAUDE-*.md files during PRD generation
+   - Add guidance to align Technical Considerations with CLAUDE.md standards
+   - Add instruction to treat CLAUDE.md content as "Decisions Made"
+   - Update validation checklist to verify CLAUDE.md alignment
+   - Add input artifact reference to CLAUDE-*.md files (conditional classification)
+
+2. **Update prd-template.xml:**
+   - Update Technical Considerations section instructions
+   - Add note: "Align with specialized CLAUDE-*.md standards (CLAUDE-tooling, CLAUDE-testing, CLAUDE-typing, CLAUDE-validation, CLAUDE-architecture)"
+   - Add note: "Treat CLAUDE.md content as authoritative - supplement, don't duplicate"
+   - Add "References to CLAUDE.md Standards" subsection
+
+3. **Evaluate high-level-user-story-generator.xml:**
+   - Check if HLS generator needs CLAUDE.md awareness
+   - Likely NO - HLS is user-centric, implementation-agnostic
+   - Document evaluation result
+
+4. **Evaluate backlog-story-generator.xml:**
+   - Check if Backlog Story generator needs CLAUDE.md awareness
+   - Likely YES - Backlog Stories include Technical Approach section
+   - Update generator to reference CLAUDE.md standards if needed
+   - Update template if needed
+
+5. **Evaluate backlog-story-template.xml:**
+   - Check if Technical Approach section should reference CLAUDE.md standards
+   - Update instructions if needed
+
+**Success Criteria:**
+- [ ] prd-generator.xml updated with Hybrid CLAUDE.md approach instructions
+- [ ] prd-template.xml updated with CLAUDE.md alignment guidance
+- [ ] HLS generator evaluated (update or no-update decision documented)
+- [ ] Backlog Story generator evaluated (updated if needed)
+- [ ] Backlog Story template evaluated (updated if needed)
+- [ ] Validation checklists updated to verify CLAUDE.md alignment
+- [ ] Changes backward-compatible with existing artifacts
+
+**Output Artifacts:**
+- Updated `/prompts/prd-generator.xml`
+- Updated `/prompts/templates/prd-template.xml`
+- Updated `/prompts/backlog-story-generator.xml` (if needed)
+- Updated `/prompts/templates/backlog-story-template.xml` (if needed)
+- Evaluation notes for HLS generator (no changes expected)
+
+**Reference:**
+- Feedback: `/feedback/PRD-000_v2_comments.md` (Specialized CLAUDE.md files section)
+- Example: `/artifacts/prds/PRD-000_project_foundation_bootstrap_v2.md` (Hybrid approach implemented)
+- Specialized files: `/prompts/CLAUDE/CLAUDE-*.md`
+
+---
+
 ## Task Status Legend
 
 - ✅ Completed
