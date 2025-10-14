@@ -920,8 +920,8 @@ try {
 def main [--silent] {
     print "🚀 Starting environment setup..."
 
-    # Detect OS
-    let os = (sys | get host.name)
+    # Detect OS (sys requires subcommand)
+    let os = (sys host | get name)
     print $"Detected OS: ($os)"
 
     # Check prerequisites
@@ -935,19 +935,19 @@ def main [--silent] {
 
     # Create virtual environment
     print "Creating virtual environment..."
-    uv venv .venv
+    ^uv venv .venv
 
     # Install dependencies
     print "Installing dependencies..."
-    uv sync --all-extras
+    ^uv sync --all-extras
 
     # Configure pre-commit
     print "Configuring pre-commit hooks..."
-    uv run pre-commit install
+    ^uv run pre-commit install
 
     # Copy .env.example if needed
     if not (".env" | path exists) {
-        cp .env.example .env
+        ^cp .env.example .env
         print "✅ Created .env file from template"
     }
 
@@ -1011,11 +1011,13 @@ NuShell supports module-based code organization for better maintainability and r
 ```
 scripts/
 ├── setup.nu                 # Main entry point (orchestrator)
-└── lib/
-    ├── os_detection.nu      # Module: OS detection (export def detect_os)
-    ├── prerequisites.nu     # Module: Prerequisites validation (export def check_prerequisites)
-    ├── validation.nu        # Module: Environment validation (export def validate_environment)
-    └── error_handler.nu     # Module: Error handling (export def retry_with_backoff)
+├── lib/
+│   ├── os_detection.nu      # Module: OS detection (export def detect_os)
+│   ├── prerequisites.nu     # Module: Prerequisites validation (export def check_prerequisites)
+│   ├── validation.nu        # Module: Environment validation (export def validate_environment)
+│   └── error_handler.nu     # Module: Error handling (export def retry_with_backoff)
+└── tests/                   # NuShell tests
+
 ```
 
 #### Import Strategy: `use` vs `source`
@@ -1040,13 +1042,19 @@ All public functions must use `export def`:
 # scripts/lib/os_detection.nu
 
 # Detect operating system, architecture, and version
-# Returns: record<os: string, arch: string, version: string>
-export def detect_os [] -> record<os: string, arch: string, version: string> {
-    let sys_info = (sys | get host)
+# Returns: record {os: string, arch: string, version: string}
+# NOTE: Detailed type annotations (-> record<...>) not supported in NuShell 0.106+
+export def detect_os [] {
+    # Use sys host subcommand (sys requires a subcommand)
+    let sys_info = (sys host)
+
+    let os_name = $sys_info.name
+    # sys host doesn't provide arch field, use external uname command
+    let arch = (^uname -m | str trim)
 
     return {
-        os: $sys_info.name,
-        arch: $sys_info.arch,
+        os: $os_name,
+        arch: $arch,
         version: $sys_info.kernel_version
     }
 }
@@ -1112,7 +1120,8 @@ def check_python [] -> record {
 # Provides comprehensive health checks for development environment
 
 # Public function: Validate entire environment
-export def validate_environment [] -> record {
+# NOTE: Type annotations (-> record) not supported in detail, use comment documentation
+export def validate_environment [] {
     print "Validating environment..."
 
     mut checks = []
@@ -1133,7 +1142,7 @@ export def validate_environment [] -> record {
 }
 
 # Private helper: Check Python version
-def check_python_version [] -> record {
+def check_python_version [] {
     let version = (python --version | parse "Python {version}" | get version.0)
 
     if ($version >= "3.11") {
@@ -1144,7 +1153,7 @@ def check_python_version [] -> record {
 }
 
 # Private helper: Check venv exists
-def check_venv_exists [] -> record {
+def check_venv_exists [] {
     if (".venv" | path exists) {
         return {name: "Virtual environment", passed: true, message: ".venv directory exists"}
     } else {
@@ -1153,8 +1162,8 @@ def check_venv_exists [] -> record {
 }
 
 # Private helper: Check dependencies importable
-def check_dependencies_importable [] -> record {
-    let result = (uv run python -c "import fastapi; import pydantic" | complete)
+def check_dependencies_importable [] {
+    let result = (^uv run python -c "import fastapi; import pydantic" | complete)
 
     if $result.exit_code == 0 {
         return {name: "Dependencies", passed: true, message: "All dependencies importable"}
@@ -1240,6 +1249,176 @@ def my_function [] {  # Missing 'export'
 - **SPEC-001 v2 Decision D1:** Use `use` with explicit exports for maintainability
 - **Implementation Guide:** See `/artifacts/tech_specs/SPEC-001_automated_setup_script_v2.md`
 
+### Common NuShell Pitfalls & Solutions
+
+**IMPORTANT**: Real issues encountered during implementation (NuShell 0.106.1). Follow these patterns to avoid syntax errors.
+
+#### 1. Type Annotations Not Supported
+
+**❌ WRONG:**
+```nu
+export def detect_os [] -> record<os: string, arch: string, version: string> {
+    # Error: Parse mismatch, detailed type annotations not supported
+}
+```
+
+**✅ CORRECT:**
+```nu
+# Use comment documentation for type information
+# Returns: record {os: string, arch: string, version: string}
+export def detect_os [] {
+    return {os: "macos", arch: "arm64", version: "14.5"}
+}
+```
+
+#### 2. sys Command Requires Subcommand
+
+**❌ WRONG:**
+```nu
+let sys_info = (sys | get host)  # Error: sys doesn't support piping
+```
+
+**✅ CORRECT:**
+```nu
+let sys_info = (sys host)  # Use sys host subcommand directly
+```
+
+#### 3. sys host Doesn't Provide Architecture
+
+**❌ WRONG:**
+```nu
+let sys_info = (sys host)
+let arch = $sys_info.arch  # Error: Column 'arch' not found
+```
+
+**✅ CORRECT:**
+```nu
+let sys_info = (sys host)
+let arch = (^uname -m | str trim)  # Use external uname with ^ prefix
+```
+
+#### 4. External Commands Need ^ Prefix
+
+**❌ WRONG:**
+```nu
+uv venv .venv           # May conflict with NuShell builtins
+tar -xzf file.tar.gz    # Error: NuShell tries to parse flags
+```
+
+**✅ CORRECT:**
+```nu
+^uv venv .venv          # ^ prefix ensures external command
+^tar -xzf file.tar.gz   # Prevents NuShell flag parsing
+^chmod +x script.sh
+^mv source dest
+```
+
+#### 5. Mutable Variables in Catch Blocks
+
+**❌ WRONG:**
+```nu
+mut error_msg = ""
+try {
+    # ... code
+} catch { |err|
+    $error_msg = $"Failed: ($err)"  # Error: Capture of mutable variable
+}
+```
+
+**✅ CORRECT:**
+```nu
+let result = (try {
+    # ... code
+    {success: true, error: ""}
+} catch { |err|
+    {success: false, error: $"Failed: ($err)"}
+})
+
+if not $result.success {
+    print $result.error
+}
+```
+
+#### 6. String Interpolation with Parentheses
+
+**❌ WRONG:**
+```nu
+print $"Detected: ($result.os)"  # Error: Shell tries to execute 'detected:' command
+```
+
+**✅ CORRECT - Option 1: Extract variable**
+```nu
+let detected_os = $result.os
+print $"Detected: ($detected_os)"
+```
+
+**✅ CORRECT - Option 2: Escape parentheses**
+```nu
+print $"Detected: \(($result.os)\)"
+```
+
+#### 7. Shell Redirection (Bash-style Not Supported)
+
+**❌ WRONG:**
+```nu
+let output = (command 2>&1 | complete)  # Error: Use out+err> not 2>&1
+```
+
+**✅ CORRECT:**
+```nu
+let output = (^command | complete)  # complete captures stdout + stderr
+```
+
+#### 8. Test Assertions with Comparisons
+
+**❌ WRONG:**
+```nu
+assert ($result.arch | str length) > 0  # Error: Extra positional argument
+```
+
+**✅ CORRECT:**
+```nu
+assert (($result.arch | str length) > 0)  # Wrap comparison in extra parentheses
+```
+
+#### 9. Version Parsing Edge Cases
+
+**❌ FRAGILE:**
+```nu
+let version = ($output | split row " " | get 1)
+# Breaks on "Python 3.11.5+" or "Python 3.11.5rc1"
+```
+
+**✅ ROBUST:**
+```nu
+let version_str = ($output | str trim | split row " " | get 1)
+let clean_version = ($version_str | split row "+" | get 0 | split row "rc" | get 0)
+let parts = ($clean_version | split row ".")
+let major = ($parts | get 0 | into int)
+let minor = ($parts | get 1 | into int)
+```
+
+#### 10. Error Handling Best Practices
+
+**❌ WRONG:**
+```nu
+def check_tool [] {
+    if (which tool | is-empty) {
+        error make {msg: "Tool not found"}  # Abrupt exit
+    }
+}
+```
+
+**✅ CORRECT:**
+```nu
+def check_tool [] {
+    if (which tool | is-empty) {
+        return {ok: false, error: "Tool not found. Install: devbox add tool"}
+    }
+    return {ok: true, error: ""}
+}
+```
+
 ### NuShell vs Bash Comparison
 
 | Feature | Bash | NuShell |
@@ -1284,6 +1463,19 @@ env                   # Environment variables
 http get https://api.github.com/repos/nushell/nushell
 http post https://api.example.com/data { key: "value" }
 ```
+
+**NuShell Scripting Conventions:**
+- **Location:** All NuShell scripts in `scripts/` directory
+- **Module Library:** Reusable modules in `scripts/lib/` with explicit exports (`export def`)
+- **Testing:** NuShell module tests in `scripts/tests/` (NOT in `tests/` directory)
+- **Import Pattern:** Use `use ../lib/module.nu function_name` for explicit imports (per SPEC-001 D1)
+- **Test Execution:** Run tests with `nu scripts/tests/test_module_name.nu`
+- **Naming Convention:** Test files named `test_module_name.nu` matching module being tested
+
+**Directory Separation:**
+- `scripts/` - NuShell setup scripts and automation (DevOps/Infrastructure)
+- `tests/` - Python application tests (unit, integration, e2e)
+- `src/` - Python application source code
 
 ---
 
