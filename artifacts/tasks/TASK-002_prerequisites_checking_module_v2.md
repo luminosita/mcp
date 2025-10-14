@@ -1,7 +1,7 @@
 # Implementation Task: Implement Prerequisites Checking Module
 
 ## Metadata
-- **Task ID:** TASK-035
+- **Task ID:** TASK-002
 - **Parent Story ID:** US-001
 - **Status:** To Do
 - **Priority:** Critical

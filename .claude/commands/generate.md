@@ -3,7 +3,7 @@ name: generate
 description: Execute a generator prompt from TODO.md task list
 args:
   - name: task_id
-    description: Task ID from TODO.md (e.g., TASK-003)
+    description: Task ID from TODO.md (e.g., TODO-003)
     required: true
 ---
 
@@ -14,7 +14,7 @@ This command executes a generator prompt based on the task ID specified in `/TOD
 ## Usage
 
 ```bash
-/generate TASK-003
+/generate TODO-003
 ```
 
 ## Workflow
@@ -89,15 +89,15 @@ Action Required:
 
 ### Error: Task ID Not Found
 ```
-ERROR: Task TASK-999 not found in /TODO.md
+ERROR: Task TODO-999 not found in /TODO.md
 Please verify task ID and try again.
 ```
 
 ### Error: Missing Dependency
 ```
-ERROR: Task TASK-003 depends on TASK-001 (not completed)
+ERROR: Task TODO-003 depends on TODO-001 (not completed)
 Complete prerequisite tasks first:
-- TASK-001: Create Product Idea Stub [Status: ⏳ Pending]
+- TODO-001: Create Product Idea Stub [Status: ⏳ Pending]
 ```
 
 ### Error: Input Artifact Not Approved
@@ -109,8 +109,8 @@ Found: Status = "Draft" in /artifacts/product_visions/VIS-001_AI_Agent_MCP_Serve
 This artifact requires critique and refinement before use as input.
 
 Action Required:
-1. Complete critique cycle (e.g., TASK-005: Critique Product Vision v1)
-2. Refine artifact based on feedback (e.g., TASK-006: Refine to v2)
+1. Complete critique cycle (e.g., TODO-005: Critique Product Vision v1)
+2. Refine artifact based on feedback (e.g., TODO-006: Refine to v2)
 3. Obtain approval after final refinement (v3)
 4. Update artifact status to "Approved"
 5. Retry generator execution
@@ -133,8 +133,8 @@ Note: Generated artifact will be based solely on mandatory inputs.
 ### Error: Generator File Not Found
 ```
 ERROR: Generator /prompts/product-vision-generator.xml does not exist
-This generator should be created by TASK-002.
-Complete TASK-002 first or create generator manually.
+This generator should be created by TODO-002.
+Complete TODO-002 first or create generator manually.
 ```
 
 ### Error: Context Window Overflow

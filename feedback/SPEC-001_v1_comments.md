@@ -15,4 +15,4 @@ D3: Fail-fast
 5. **Taskfile Installation Retry:** If Taskfile installation fails, should script retry or fail immediately?
 D5: Retry 3 times for network errors, fail immediately for platform/permission errors, continue in degraded mode if retries exhausted
 
-## Update Implementation Tasks (TASK-034, TASK-035) if needed
+## Update Implementation Tasks (TASK-001, TASK-002) if needed

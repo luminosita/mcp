@@ -10,23 +10,40 @@
 - **Domain:** DevOps/Infrastructure
 - **Estimated Hours:** 4 hours
 - **Related Tech Spec:** SPEC-001 (Phase 1: Core Infrastructure)
+- **Version:** v2
+- **Change Summary:** Incorporated SPEC-001 v1 feedback decisions (D1: explicit exports, D3: gum for terminal UX)
+
+## Decisions Incorporated from SPEC-001 v1 Feedback
+
+**D1 - NuShell Module Import Strategy:**
+- Use `use lib/module.nu` with explicit exports (NOT `source`)
+- Provides better maintainability and clear module boundaries
+- **Impact:** All modules must use `export def` for public functions
+
+**D3 - Progress Indicator Implementation:**
+- Use gum (https://github.com/charmbracelet/gum) for terminal UX/UI
+- **Impact:** Progress indicators and user feedback via gum (handled in main setup.nu, not this module)
 
 ## Task Description
 
 **Objective:**
-Create the foundational NuShell directory structure (`scripts/` and `scripts/lib/`) and implement the OS detection module that identifies macOS, Linux, and WSL2 environments with architecture and version information.
+Create the foundational NuShell directory structure (`scripts/` and `scripts/lib/`) and implement the OS detection module that identifies macOS, Linux, and WSL2 environments with architecture and version information. Module must use explicit exports per Decision D1.
 
 **Technical Context:**
 This task establishes the foundational module architecture for the automated setup script. The OS detection module is critical as all subsequent modules make platform-specific decisions based on its output. Per SPEC-001 §2 (Component Diagram), this module is the first step in the setup orchestration flow.
+
+**Architecture Decision:**
+Per SPEC-001 v1 Decision D1, all NuShell modules use `use` with explicit exports (NOT `source`). This module establishes the pattern for all subsequent modules.
 
 ## Technical Specifications
 
 ### Implementation Approach
 1. Create `scripts/` and `scripts/lib/` directory structure
-2. Implement `os_detection.nu` module with `detect_os` function
+2. Implement `os_detection.nu` module with **explicitly exported** `detect_os` function
 3. Use NuShell built-in commands (`sys`, `uname`) for cross-platform detection
 4. Return structured record with OS type, architecture, and version
-5. Write unit tests for all supported platforms
+5. Ensure module follows `use` import pattern (explicit exports only)
+6. Write unit tests for all supported platforms
 
 ### Code Changes Required
 
@@ -35,7 +52,7 @@ This task establishes the foundational module architecture for the automated set
 - `scripts/lib/` - NuShell module library
 
 **New Files to Create:**
-- `scripts/lib/os_detection.nu` - OS detection module (export `detect_os` function)
+- `scripts/lib/os_detection.nu` - OS detection module (explicit `export def detect_os`)
 - `tests/unit/test_os_detection.nu` - Unit tests for OS detection
 
 ### Technical Details
@@ -43,6 +60,8 @@ This task establishes the foundational module architecture for the automated set
 #### DevOps/Infrastructure Task
 - **Module:** os_detection.nu
 - **Public Functions:** `detect_os() -> record<os: string, arch: string, version: string>`
+- **Export Pattern:** Explicit exports using `export def` (per D1)
+- **Import Pattern:** Other modules will use `use scripts/lib/os_detection.nu detect_os`
 - **Platform Support:** macOS, Linux (Ubuntu/Debian/Fedora/Arch), Windows WSL2
 - **Detection Strategy:**
   - Use `sys | get host` for structured system information
@@ -53,12 +72,14 @@ This task establishes the foundational module architecture for the automated set
 ## Acceptance Criteria (Task Level)
 
 - [ ] `scripts/` and `scripts/lib/` directories created
-- [ ] `scripts/lib/os_detection.nu` module implemented with `detect_os` function
+- [ ] `scripts/lib/os_detection.nu` module implemented with **explicitly exported** `detect_os` function
+- [ ] Module uses `export def` (NOT plain `def`) per Decision D1
 - [ ] Function returns structured record: `{os: string, arch: string, version: string}`
 - [ ] Correctly detects macOS (both Intel and Apple Silicon)
 - [ ] Correctly detects Linux distributions (Ubuntu, Fedora, Arch)
 - [ ] Correctly detects Windows WSL2 (Ubuntu distribution)
 - [ ] Unit tests pass for all supported platforms
+- [ ] Unit tests demonstrate proper `use` import pattern
 - [ ] Code follows NuShell best practices (use structured data, avoid string parsing where possible)
 - [ ] No linting errors from NuShell analyzer
 
@@ -68,8 +89,10 @@ This task establishes the foundational module architecture for the automated set
 
 ```nushell
 # scripts/lib/os_detection.nu
+# NuShell module for OS detection with explicit exports (per SPEC-001 D1)
 
 # Detect operating system, architecture, and version
+# Returns structured record with OS information
 export def detect_os [] -> record<os: string, arch: string, version: string> {
     # Get system info using NuShell's built-in sys command
     let sys_info = (sys | get host)
@@ -125,12 +148,23 @@ export def detect_os [] -> record<os: string, arch: string, version: string> {
 }
 ```
 
+### Usage Example (for documentation)
+
+```nushell
+# Import module using `use` with explicit function import (per D1)
+use scripts/lib/os_detection.nu detect_os
+
+# Call function
+let os_info = (detect_os)
+print $os_info  # {os: "macos", arch: "arm64", version: "14.5"}
+```
+
 ### Unit Tests Example
 
 ```nushell
 # tests/unit/test_os_detection.nu
 use std assert
-use scripts/lib/os_detection.nu
+use scripts/lib/os_detection.nu detect_os  # Explicit import per D1
 
 def test_detect_os [] {
     let result = (detect_os)
@@ -153,6 +187,7 @@ test_detect_os
 
 ### Reference Implementation
 - NuShell `sys` command documentation: https://www.nushell.sh/commands/docs/sys.html
+- NuShell modules documentation: https://www.nushell.sh/book/modules.html
 - Similar pattern in Devbox: https://github.com/jetpack-io/devbox
 
 ### Implementation Research Reference
@@ -167,7 +202,7 @@ test_detect_os
 
 ### Task Dependencies
 - **Blocked By:** None (foundation task)
-- **Blocks:** TASK-035 (Prerequisites module needs OS detection)
+- **Blocks:** TASK-002 (Prerequisites module needs OS detection)
 
 ### Environment Requirements
 - Devbox shell environment active
@@ -183,6 +218,7 @@ test_detect_os
 - NuShell structured data handling (low - well-documented)
 - Cross-platform testing (medium - requires multiple environments)
 - WSL2 detection logic (low - straightforward file check)
+- Module export pattern enforcement (low - simple syntax change)
 
 ## Testing Requirements
 
@@ -192,6 +228,7 @@ test_detect_os
 - [ ] Test architecture detection (x86_64/arm64/amd64)
 - [ ] Test version string parsing
 - [ ] Test WSL2 detection via /proc/version
+- [ ] Test module import using `use` pattern (verify explicit export works)
 
 ### Integration Tests (if applicable)
 - [ ] Manual test on macOS (Intel and Apple Silicon if available)
@@ -200,9 +237,10 @@ test_detect_os
 
 ### Manual Testing Steps
 1. Run `devbox shell` to enter isolated environment
-2. Execute `use scripts/lib/os_detection.nu; detect_os`
-3. Verify output structure matches: `{os: "macos", arch: "arm64", version: "14.5"}`
-4. Repeat on all supported platforms
+2. Test explicit import: `use scripts/lib/os_detection.nu detect_os`
+3. Execute function: `let info = (detect_os); print $info`
+4. Verify output structure matches: `{os: "macos", arch: "arm64", version: "14.5"}`
+5. Repeat on all supported platforms
 
 ## Non-Functional Requirements
 
@@ -220,24 +258,30 @@ test_detect_os
 **Technical Risks:**
 - Different Linux distributions may have varying version file formats (/etc/os-release variations)
 - WSL2 detection may fail on older WSL versions
+- Module import failures if `export def` not used correctly
 
 **Mitigation Strategies:**
 - Provide fallback logic if primary detection methods fail
 - Test on multiple Linux distributions (Ubuntu, Fedora, Arch)
 - Document known limitations in code comments
+- Include import examples in module header comments
+- Validate explicit exports with unit tests
 
 **Task-Level Uncertainties & Blockers:**
 
-No task-level uncertainties. Implementation approach clear from Tech Spec SPEC-001 §2.2 (os_detection.nu module interface).
+No task-level uncertainties. Implementation approach clear from Tech Spec SPEC-001 §2.2 (os_detection.nu module interface) and SPEC-001 v1 Decision D1 (explicit exports).
 
 ## Definition of Done (Task Level)
 
 - [ ] Implementation complete and functionally correct
 - [ ] Code follows NuShell coding standards
+- [ ] Module uses explicit exports (`export def`) per Decision D1
 - [ ] All unit tests written and passing
+- [ ] Unit tests demonstrate `use` import pattern
 - [ ] Code reviewed and approved by 1 reviewer
 - [ ] No NuShell analyzer warnings
 - [ ] Inline comments added explaining detection logic
+- [ ] Module header includes usage example with `use` import
 - [ ] Merged to main branch
 - [ ] Task status updated to Done
 
@@ -251,10 +295,14 @@ No task-level uncertainties. Implementation approach clear from Tech Spec SPEC-0
 - [ ] Version parsing handles edge cases (missing files, malformed data)
 - [ ] Code is readable with clear variable names
 - [ ] Inline comments explain complex logic (e.g., WSL2 detection)
+- [ ] **Module uses `export def` (NOT plain `def`) per Decision D1**
+- [ ] **Unit tests demonstrate correct `use` import pattern**
+- [ ] Module header includes usage documentation
 
 ## Related Links
 - **Parent Story:** /artifacts/backlog_stories/US-001_automated_setup_script_v2.md
 - **Tech Spec:** /artifacts/tech_specs/SPEC-001_automated_setup_script_v1.md (§2.2 - os_detection.nu)
+- **Tech Spec Feedback:** /feedback/SPEC-001_v1_comments.md (Decisions D1, D3)
 - **Implementation Research:** /artifacts/research/AI_Agent_MCP_Server_implementation_research.md
 
 ## Notes & Comments
@@ -263,6 +311,17 @@ No task-level uncertainties. Implementation approach clear from Tech Spec SPEC-0
 - Use NuShell's `sys` command for primary detection (cleaner than parsing `uname` output)
 - WSL2 detection via `/proc/version` is reliable across WSL versions
 - Version parsing may vary by distribution - prioritize Ubuntu/Debian (most common)
+- **CRITICAL:** All functions must use `export def` for explicit exports (per D1)
+- Include usage example in module header comments for developer reference
+
+**Changes from v1:**
+- Added explicit reference to Decision D1 (use `use` with explicit exports)
+- Added explicit reference to Decision D3 (gum for terminal UX - not directly applicable to this module)
+- Updated code examples to emphasize `export def` usage
+- Added usage example demonstrating `use` import pattern
+- Enhanced acceptance criteria to verify explicit export pattern
+- Updated code review checklist to enforce explicit exports
+- Added testing requirement for verifying `use` import pattern
 
 **Blockers/Issues Encountered:**
 [To be filled during implementation if issues arise]

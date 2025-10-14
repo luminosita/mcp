@@ -1,7 +1,7 @@
 # Implementation Task: Implement Prerequisites Checking Module
 
 ## Metadata
-- **Task ID:** TASK-035
+- **Task ID:** TASK-002
 - **Parent Story ID:** US-001
 - **Status:** To Do
 - **Priority:** Critical
@@ -174,7 +174,7 @@ def test_python_missing [] {
 - Python, Podman, Git (for testing)
 
 ### Task Dependencies
-- **Blocked By:** TASK-034 (OS detection module provides context for error messages)
+- **Blocked By:** TASK-001 (OS detection module provides context for error messages)
 - **Blocks:** TASK-036 (Taskfile installation requires prerequisites to be validated first)
 
 ### Environment Requirements

@@ -8,9 +8,9 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: TASK-030 COMPLETED (Hybrid CLAUDE.md approach integrated across all generators); US-002 COMPLETED; SPEC-001 v1 generated; Implementation tasks partially generated (TASK-034, TASK-035 of 10 total)
-**Last Completed**: TASK-030 (Generator Template Refinement - Hybrid CLAUDE.md approach), TASK-033 (partial - 2/10 implementation tasks generated), TASK-032 (SPEC-001 Tech Spec), TASK-031 (US-002 Implementation)
-**Next Task**: Complete TASK-033 (generate remaining 8 implementation tasks) OR proceed with US-001 implementation OR TASK-019-022 (Generate remaining HLS stories) OR TASK-025-028 (Generate remaining US stories)
+**Current Status**: TODO-030 COMPLETED (Hybrid CLAUDE.md approach integrated across all generators); US-002 COMPLETED; SPEC-001 v1 generated; Implementation tasks partially generated (TODO-034, TODO-035 of 10 total)
+**Last Completed**: TODO-030 (Generator Template Refinement - Hybrid CLAUDE.md approach), TODO-033 (partial - 2/10 implementation tasks generated), TODO-032 (SPEC-001 Tech Spec), TODO-031 (US-002 Implementation)
+**Next Task**: Complete TODO-033 (generate remaining 8 implementation tasks) OR proceed with US-001 implementation OR TODO-019-022 (Generate remaining HLS stories) OR TODO-025-028 (Generate remaining US stories)
 **Completion**: 20/33 tasks (61%)
 **Archived Tasks**: See `/TODO-completed.md` for 16 completed tasks
 
@@ -18,9 +18,9 @@
 
 ## Phase 1.4: High-level User Story Generation (Pending)
 
-### TASK-019: Execute High-level User Story Generator v1 (PRD-000 - HLS-002)
+### TODO-019: Execute High-level User Story Generator v1 (PRD-000 - HLS-002)
 **Priority**: High
-**Dependencies**: TASK-013 (HLS-001 generated)
+**Dependencies**: TODO-013 (HLS-001 generated)
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session required
@@ -29,7 +29,7 @@
 **Description**:
 Execute High-level Story Generator for CI/CD Pipeline Setup from PRD-000.
 
-**Command**: `/generate TASK-019`
+**Command**: `/generate TODO-019`
 
 **Input Data:**
 - PRD-000 v3
@@ -43,9 +43,9 @@ Execute High-level Story Generator for CI/CD Pipeline Setup from PRD-000.
 
 ---
 
-### TASK-020: Execute High-level User Story Generator v1 (PRD-000 - HLS-003)
+### TODO-020: Execute High-level User Story Generator v1 (PRD-000 - HLS-003)
 **Priority**: High
-**Dependencies**: TASK-013 (HLS-001 generated)
+**Dependencies**: TODO-013 (HLS-001 generated)
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session required
@@ -54,7 +54,7 @@ Execute High-level Story Generator for CI/CD Pipeline Setup from PRD-000.
 **Description**:
 Execute High-level Story Generator for Application Skeleton Implementation from PRD-000.
 
-**Command**: `/generate TASK-020`
+**Command**: `/generate TODO-020`
 
 **Input Data:**
 - PRD-000 v3
@@ -68,9 +68,9 @@ Execute High-level Story Generator for Application Skeleton Implementation from 
 
 ---
 
-### TASK-021: Execute High-level User Story Generator v1 (PRD-000 - HLS-004)
+### TODO-021: Execute High-level User Story Generator v1 (PRD-000 - HLS-004)
 **Priority**: High
-**Dependencies**: TASK-013 (HLS-001 generated)
+**Dependencies**: TODO-013 (HLS-001 generated)
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session required
@@ -79,7 +79,7 @@ Execute High-level Story Generator for Application Skeleton Implementation from 
 **Description**:
 Execute High-level Story Generator for Development Documentation & Workflow Standards from PRD-000.
 
-**Command**: `/generate TASK-021`
+**Command**: `/generate TODO-021`
 
 **Input Data:**
 - PRD-000 v3
@@ -93,9 +93,9 @@ Execute High-level Story Generator for Development Documentation & Workflow Stan
 
 ---
 
-### TASK-022: Execute High-level User Story Generator v1 (PRD-000 - HLS-005)
+### TODO-022: Execute High-level User Story Generator v1 (PRD-000 - HLS-005)
 **Priority**: Medium
-**Dependencies**: TASK-013 (HLS-001 generated)
+**Dependencies**: TODO-013 (HLS-001 generated)
 **Estimated Time**: 25 minutes
 **Status**: ⏳ Pending
 **Context**: New session required
@@ -104,7 +104,7 @@ Execute High-level Story Generator for Development Documentation & Workflow Stan
 **Description**:
 Execute High-level Story Generator for Containerized Deployment Configuration from PRD-000.
 
-**Command**: `/generate TASK-022`
+**Command**: `/generate TODO-022`
 
 **Input Data:**
 - PRD-000 v3
@@ -120,9 +120,9 @@ Execute High-level Story Generator for Containerized Deployment Configuration fr
 
 ## Phase 1.5: Backlog User Story Generation (Pending)
 
-### TASK-025: Execute Backlog User Story Generator v1 (HLS-001 - US-003)
+### TODO-025: Execute Backlog User Story Generator v1 (HLS-001 - US-003)
 **Priority**: High
-**Dependencies**: TASK-014 (US-001 generated)
+**Dependencies**: TODO-014 (US-001 generated)
 **Estimated Time**: 20 minutes
 **Status**: ⏳ Pending
 **Context**: New session C6 required
@@ -131,7 +131,7 @@ Execute High-level Story Generator for Containerized Deployment Configuration fr
 **Description**:
 Execute Backlog Story Generator for third backlog story from HLS-001 v2 decomposition.
 
-**Command**: `/generate TASK-025`
+**Command**: `/generate TODO-025`
 
 **Input Data:**
 - HLS-001 v2 (Story #3: Configure Devbox Isolated Environment)
@@ -145,9 +145,9 @@ Execute Backlog Story Generator for third backlog story from HLS-001 v2 decompos
 
 ---
 
-### TASK-026: Execute Backlog User Story Generator v1 (HLS-001 - US-004)
+### TODO-026: Execute Backlog User Story Generator v1 (HLS-001 - US-004)
 **Priority**: High
-**Dependencies**: TASK-014 (US-001 generated)
+**Dependencies**: TODO-014 (US-001 generated)
 **Estimated Time**: 20 minutes
 **Status**: ⏳ Pending
 **Context**: New session C7 required
@@ -156,7 +156,7 @@ Execute Backlog Story Generator for third backlog story from HLS-001 v2 decompos
 **Description**:
 Execute Backlog Story Generator for fourth backlog story from HLS-001 v2 decomposition.
 
-**Command**: `/generate TASK-026`
+**Command**: `/generate TODO-026`
 
 **Input Data:**
 - HLS-001 v2 (Story #4: Implement VS Code IDE Configuration)
@@ -170,9 +170,9 @@ Execute Backlog Story Generator for fourth backlog story from HLS-001 v2 decompo
 
 ---
 
-### TASK-027: Execute Backlog User Story Generator v1 (HLS-001 - US-005)
+### TODO-027: Execute Backlog User Story Generator v1 (HLS-001 - US-005)
 **Priority**: High
-**Dependencies**: TASK-014 (US-001 generated)
+**Dependencies**: TODO-014 (US-001 generated)
 **Estimated Time**: 20 minutes
 **Status**: ⏳ Pending
 **Context**: New session C8 required
@@ -181,7 +181,7 @@ Execute Backlog Story Generator for fourth backlog story from HLS-001 v2 decompo
 **Description**:
 Execute Backlog Story Generator for fifth backlog story from HLS-001 v2 decomposition.
 
-**Command**: `/generate TASK-027`
+**Command**: `/generate TODO-027`
 
 **Input Data:**
 - HLS-001 v2 (Story #5: Implement Environment Validation and Health Checks)
@@ -195,9 +195,9 @@ Execute Backlog Story Generator for fifth backlog story from HLS-001 v2 decompos
 
 ---
 
-### TASK-028: Execute Backlog User Story Generator v1 (HLS-001 - US-006)
+### TODO-028: Execute Backlog User Story Generator v1 (HLS-001 - US-006)
 **Priority**: Medium
-**Dependencies**: TASK-014 (US-001 generated)
+**Dependencies**: TODO-014 (US-001 generated)
 **Estimated Time**: 20 minutes
 **Status**: ⏳ Pending
 **Context**: New session C9 required
@@ -206,7 +206,7 @@ Execute Backlog Story Generator for fifth backlog story from HLS-001 v2 decompos
 **Description**:
 Execute Backlog Story Generator for sixth backlog story from HLS-001 v2 decomposition.
 
-**Command**: `/generate TASK-028`
+**Command**: `/generate TODO-028`
 
 **Input Data:**
 - HLS-001 v2 (Story #6: Create Setup Documentation with Troubleshooting Guide)
@@ -222,9 +222,9 @@ Execute Backlog Story Generator for sixth backlog story from HLS-001 v2 decompos
 
 ## Phase 1.8: Generator Template Refinement (Completed)
 
-### TASK-030: Update PRD Generator and Template with Hybrid CLAUDE.md Approach
+### TODO-030: Update PRD Generator and Template with Hybrid CLAUDE.md Approach
 **Priority**: High
-**Dependencies**: TASK-016 (PRD-000 v2 refined with hybrid approach)
+**Dependencies**: TODO-016 (PRD-000 v2 refined with hybrid approach)
 **Estimated Time**: 1-2 hours
 **Status**: ✅ Completed (2025-10-14)
 **Actual Time**: ~2 hours
@@ -347,7 +347,7 @@ All 8 generators and templates updated with Hybrid CLAUDE.md approach:
 
 ## Phase 1.9: Implementation (In Progress)
 
-### TASK-031: US-002 Implementation (Repository Directory Structure)
+### TODO-031: US-002 Implementation (Repository Directory Structure)
 **Priority**: Critical - Foundation enabler blocking US-001
 **Dependencies**: None (foundation story)
 **Estimated Time**: 1-2 hours
@@ -406,7 +406,7 @@ Implement US-002 v2 - Establish Repository Directory Structure following Python 
 - Verify all directories tracked in git
 
 **Phase 8: Validation**
-- Verify Taskfile.yml exists (already present from TASK-029)
+- Verify Taskfile.yml exists (already present from TODO-029)
 - Run `task --list` to validate Taskfile configuration
 - Verify all acceptance criteria met
 - Test package importability: `python -c "import mcp_server"`
@@ -464,9 +464,9 @@ Implement US-002 v2 - Establish Repository Directory Structure following Python 
 
 ## Phase 1.10: Technical Design for Complex Stories (In Progress)
 
-### TASK-032: Generate Tech Spec for US-001 (Automated Setup Script)
+### TODO-032: Generate Tech Spec for US-001 (Automated Setup Script)
 **Priority**: High
-**Dependencies**: TASK-014 (US-001 v2 generated), TASK-031 (US-002 implemented - optional but recommended)
+**Dependencies**: TODO-014 (US-001 v2 generated), TODO-031 (US-002 implemented - optional but recommended)
 **Estimated Time**: 30-45 minutes
 **Status**: ✅ Completed (2025-10-14)
 **Actual Time**: ~30 minutes
@@ -476,7 +476,7 @@ Implement US-002 v2 - Establish Repository Directory Structure following Python 
 **Description**:
 Generate Technical Specification for US-001 (Automated Setup Script) per SDLC guideline Section 11 recommendations. US-001 is 6 SP with high complexity, cross-platform requirements, and significant error handling needs, making it a candidate for Tech Spec creation.
 
-**Command**: `/generate TASK-032`
+**Command**: `/generate TODO-032`
 
 **Input Data:**
 - US-001 v2 (Automated Setup Script with Interactive Prompts and Taskfile Integration)
@@ -529,18 +529,18 @@ Generate Technical Specification for US-001 (Automated Setup Script) per SDLC gu
 
 ---
 
-### TASK-033: Generate Implementation Tasks for US-001 (from Tech Spec)
+### TODO-033: Generate Implementation Tasks for US-001 (from Tech Spec)
 **Priority**: High
-**Dependencies**: TASK-032 (SPEC-001 Tech Spec generated)
+**Dependencies**: TODO-032 (SPEC-001 Tech Spec generated)
 **Estimated Time**: 30-45 minutes
-**Status**: 🔄 In Progress (2/10 tasks generated: TASK-034, TASK-035)
+**Status**: 🔄 In Progress (2/10 tasks generated: TODO-034, TODO-035)
 **Context**: New session C11 required
 **Generator Name**: implementation-task
 
 **Description**:
 Generate Implementation Tasks (TASK-XXX) decomposing Tech Spec SPEC-001 into granular work units (4-16 hours each) for US-001 implementation.
 
-**Command**: `/generate TASK-033`
+**Command**: `/generate TODO-033`
 
 **Input Data:**
 - SPEC-001 v1 (Tech Spec for Automated Setup Script)
@@ -584,28 +584,439 @@ Generate Implementation Tasks (TASK-XXX) decomposing Tech Spec SPEC-001 into gra
 - Ordered by dependencies
 
 **Success Criteria:**
-- [ ] 8-10 Implementation Tasks generated from SPEC-001
-- [ ] Each task 4-16 hours estimated time
-- [ ] Tasks ordered by dependencies (can identify parallel vs sequential work)
-- [ ] Each task has clear acceptance criteria
-- [ ] Tasks cover all phases from Tech Spec
-- [ ] Testing tasks included (unit + integration)
-- [ ] All US-001 acceptance scenarios covered across tasks
+- [x] 8-10 Implementation Tasks generated from SPEC-001 (10 tasks total: TODO-034 through TODO-043)
+- [x] Each task 4-16 hours estimated time (range: 3-6 hours per task)
+- [x] Tasks ordered by dependencies (can identify parallel vs sequential work)
+- [x] Each task has clear acceptance criteria (7-8 criteria per task)
+- [x] Tasks cover all phases from Tech Spec (Phase 1-6 mapped)
+- [x] Testing tasks included (unit + integration) (TODO-040: Integration tests, unit tests in each implementation task)
+- [x] All US-001 acceptance scenarios covered across tasks
 
 **Output Artifacts:**
 - `/artifacts/tasks/TASK-XXX_*.md` (8-10 implementation task files)
 - Task dependency graph (optional visualization)
 
 **Progress (2025-10-14):**
-- ✅ TASK-034: NuShell Module Structure and OS Detection (Phase 1)
-- ✅ TASK-035: Prerequisites Checking Module (Phase 1)
-- ⏳ TASK-036-043: Remaining 8 tasks (Phases 2-7) - pending generation
+- ✅ TASK-001: NuShell Module Structure and OS Detection (Phase 1) - Generated v2
+- ✅ TASK-002: Prerequisites Checking Module (Phase 1) - Generated v2
+- ✅ TASK-003-010: Remaining 8 tasks (Phases 2-6) - Task descriptions added to TODO.md (ready for generation)
 
 **Reference:**
 - Tech Spec: `/artifacts/tech_specs/SPEC-001_automated_setup_script_v1.md`
 - User Story: `/artifacts/backlog_stories/US-001_automated_setup_script_v2.md`
 - SDLC Guideline: `/docs/sdlc_artifacts_comprehensive_guideline.md` (Section 11.10)
 - Template: `/prompts/templates/implementation-task-template.xml`
+
+**Remaining Tasks to Generate (TASK-003 through TASK-010):**
+
+### TODO-036: Implement Taskfile Installation Module (Cross-Platform)
+**Priority**: Critical
+**Dependencies**: TODO-044 (OS detection), TODO-045 (Prerequisites module)
+**Estimated Time**: 6 hours
+**Status**: ⏳ Pending
+**Related Tech Spec**: SPEC-001 Phase 2: Installation Logic
+**Domain**: DevOps/Infrastructure
+
+**Description**:
+Implement `scripts/lib/taskfile_install.nu` module with cross-platform Taskfile 3.0+ installation logic. Module handles macOS (brew + binary fallback), Linux (binary download with checksum verification), and WSL2 (apt + binary fallback). Implements retry logic for download failures and validates installation via `task --version`.
+
+**Scope**:
+- Files to Create: `scripts/lib/taskfile_install.nu`
+- Files to Modify: None
+- Tests to Write: Unit tests for installation logic (3 platform paths, retry logic, checksum verification)
+
+**Key Requirements**:
+- Cross-platform installation (macOS/Linux/WSL2)
+- Binary checksum verification for security
+- Retry logic with 3 attempts for network failures
+- Validate installation via `task --version`
+- Graceful degradation if Taskfile installation fails (setup continues with warning)
+- Export public functions per Decision D1 (`export def`)
+
+**Acceptance Criteria**:
+- [ ] Module installs Taskfile 3.0+ on macOS via brew (fallback to binary)
+- [ ] Module installs Taskfile 3.0+ on Linux via binary download with checksum
+- [ ] Module installs Taskfile 3.0+ on WSL2 via apt (fallback to binary)
+- [ ] Download retry logic with 3 attempts and exponential backoff
+- [ ] Validates installation via `task --version` command
+- [ ] Unit tests achieve 80% coverage minimum
+- [ ] No new linting/type errors introduced
+
+---
+
+### TODO-037: Implement UV Installation and Virtual Environment Setup
+**Priority**: Critical
+**Dependencies**: TODO-044 (OS detection), TODO-045 (Taskfile installed)
+**Estimated Time**: 6 hours
+**Status**: ⏳ Pending
+**Related Tech Spec**: SPEC-001 Phase 2: Installation Logic
+**Domain**: DevOps/Infrastructure
+
+**Description**:
+Implement `scripts/lib/uv_install.nu`, `scripts/lib/venv_setup.nu`, and `scripts/lib/deps_install.nu` modules for uv package manager installation, virtual environment creation, and Python dependency installation via uv. Includes progress indicators via gum (Decision D3) and retry logic for network failures.
+
+**Scope**:
+- Files to Create: `scripts/lib/uv_install.nu`, `scripts/lib/venv_setup.nu`, `scripts/lib/deps_install.nu`
+- Files to Modify: None
+- Tests to Write: Unit tests for all three modules (installation, venv creation, dependency install with retries)
+
+**Key Requirements**:
+- Install uv package manager with cross-platform support
+- Update PATH environment variable for uv binary
+- Create Python virtual environment at `.venv/` via `uv venv`
+- Install dependencies from `pyproject.toml` via `uv pip install`
+- Progress indicators for long-running operations (gum integration)
+- Retry logic for network failures (3 attempts)
+- Validate uv installation via `uv --version`
+
+**Acceptance Criteria**:
+- [ ] Module installs uv package manager on all platforms
+- [ ] PATH updated to include uv binary location
+- [ ] Virtual environment created at `.venv/` successfully
+- [ ] Dependencies installed from pyproject.toml via uv
+- [ ] Progress indicators display during installation (gum)
+- [ ] Retry logic handles network failures (3 attempts)
+- [ ] Unit tests achieve 80% coverage minimum
+- [ ] No new linting/type errors introduced
+
+---
+
+### TODO-038: Implement Configuration Setup and Validation Modules
+**Priority**: High
+**Dependencies**: TODO-037 (Dependencies installed)
+**Estimated Time**: 4 hours
+**Status**: ⏳ Pending
+**Related Tech Spec**: SPEC-001 Phase 3: Configuration & Validation
+**Domain**: DevOps/Infrastructure
+
+**Description**:
+Implement `scripts/lib/config_setup.nu` for .env file creation and pre-commit hook installation, and `scripts/lib/validation.nu` for comprehensive environment health checks (Python version, Taskfile functionality, dependency imports, file permissions).
+
+**Scope**:
+- Files to Create: `scripts/lib/config_setup.nu`, `scripts/lib/validation.nu`
+- Files to Modify: None
+- Tests to Write: Unit tests for configuration and validation modules
+
+**Key Requirements**:
+- Copy `.env.example` to `.env` if not exists
+- Install pre-commit hooks via `.venv/bin/pre-commit install`
+- Validate Python 3.11+ version
+- Validate Taskfile functionality (`task --version`, `task --list`)
+- Test dependency imports (import mcp_server modules)
+- Check file permissions (.venv/, scripts/)
+- Return structured validation report (pass/fail per check)
+
+**Acceptance Criteria**:
+- [ ] .env file created from .env.example (if not exists)
+- [ ] Pre-commit hooks installed successfully
+- [ ] Python version validated (3.11+)
+- [ ] Taskfile commands verified (`task --version`, `task --list`)
+- [ ] Critical module imports tested (mcp_server)
+- [ ] File permissions validated (.venv/ readable/executable)
+- [ ] Validation returns structured report (all checks documented)
+- [ ] Unit tests achieve 80% coverage minimum
+- [ ] No new linting/type errors introduced
+
+---
+
+### TODO-039: Implement Interactive Prompts and Main Orchestrator
+**Priority**: Critical
+**Dependencies**: TODO-038 (Validation module)
+**Estimated Time**: 4 hours
+**Status**: ⏳ Pending
+**Related Tech Spec**: SPEC-001 Phase 4: Interactive & Orchestration
+**Domain**: DevOps/Infrastructure
+
+**Description**:
+Implement `scripts/lib/interactive.nu` for user prompts with sensible defaults, and `scripts/setup.nu` main orchestrator that sequences all modules, handles `--silent` flag, propagates errors, and displays final setup report with next steps.
+
+**Scope**:
+- Files to Create: `scripts/lib/interactive.nu`, `scripts/setup.nu` (main entry point)
+- Files to Modify: None
+- Tests to Write: Unit tests for interactive module, integration test stubs for orchestrator
+
+**Key Requirements**:
+- Interactive prompts for IDE preference, verbose mode (gum integration per D3)
+- Sensible defaults (VS Code, verbose=true)
+- `--silent` flag bypasses all prompts (uses defaults)
+- Main orchestrator sequences modules: OS detection → Prerequisites → Taskfile → uv → Dependencies → Config → Validation
+- Error propagation (fail-fast per D4)
+- Final report displays: setup duration, next steps (e.g., "Run `task dev` to start server")
+- Progress indicators via gum (Decision D3)
+
+**Acceptance Criteria**:
+- [ ] Interactive prompts for IDE and verbose mode (with defaults)
+- [ ] `--silent` flag bypasses prompts and uses defaults
+- [ ] Main orchestrator sequences all modules in correct order
+- [ ] Error propagation stops execution on failures (fail-fast)
+- [ ] Final report displays setup duration and next steps
+- [ ] Progress indicators show during execution (gum)
+- [ ] Unit tests for interactive module achieve 80% coverage
+- [ ] No new linting/type errors introduced
+
+---
+
+### TODO-040: Write Integration Tests and Platform Testing
+**Priority**: High
+**Dependencies**: TODO-039 (Main orchestrator complete)
+**Estimated Time**: 5 hours
+**Status**: ⏳ Pending
+**Related Tech Spec**: SPEC-001 Phase 5: Testing & Documentation
+**Domain**: Testing/QA
+
+**Description**:
+Write comprehensive integration tests for full setup flow on all supported platforms (macOS, Linux, WSL2). Test end-to-end execution including error scenarios (missing prerequisites, network failures, Taskfile installation failures). Validate setup completes within 30-minute target.
+
+**Scope**:
+- Files to Create: `tests/integration/test_setup_flow.nu`, `tests/integration/test_platform_compat.nu`
+- Files to Modify: None
+- Tests to Write: Integration tests for full setup flow, platform-specific tests, error scenario tests
+
+**Key Requirements**:
+- End-to-end test: repository clone → setup.nu → environment ready
+- Platform-specific tests (macOS, Linux, WSL2)
+- Test Taskfile installation on systems without Taskfile
+- Test silent mode (`--silent` flag)
+- Test error scenarios: missing Python, missing Podman, network failures
+- Validate 30-minute setup time target
+- Test idempotent re-run (<2 minutes)
+
+**Acceptance Criteria**:
+- [ ] Integration test covers full setup flow end-to-end
+- [ ] Tests pass on macOS, Linux, and WSL2
+- [ ] Taskfile installation tested on clean systems
+- [ ] Silent mode tested (`--silent` flag)
+- [ ] Error scenarios tested (missing prerequisites, network failures)
+- [ ] Setup completes within 30-minute target
+- [ ] Idempotent re-run completes within 2 minutes
+- [ ] All tests documented with clear scenarios
+
+---
+
+### TODO-041: Create Setup Documentation and Troubleshooting Guide
+**Priority**: High
+**Dependencies**: TODO-040 (Testing complete)
+**Estimated Time**: 3 hours
+**Status**: ⏳ Pending
+**Related Tech Spec**: SPEC-001 Phase 5: Testing & Documentation
+**Domain**: Documentation
+
+**Description**:
+Create comprehensive setup documentation in `docs/SETUP.md` with usage instructions, troubleshooting guide, and common error resolutions. Add inline code comments and function documentation to all NuShell modules.
+
+**Scope**:
+- Files to Create: `docs/SETUP.md`, `docs/TROUBLESHOOTING.md`
+- Files to Modify: All `scripts/lib/*.nu` modules (add inline comments)
+- Tests to Write: None (documentation task)
+
+**Key Requirements**:
+- Setup documentation with prerequisites, usage, and examples
+- Troubleshooting guide with common errors and resolutions
+- Document `--silent` flag for CI/CD automation
+- Document platform-specific considerations (macOS/Linux/WSL2)
+- Inline code comments for all NuShell functions
+- Function documentation with parameters and return values
+
+**Acceptance Criteria**:
+- [ ] docs/SETUP.md created with complete usage instructions
+- [ ] docs/TROUBLESHOOTING.md created with common errors
+- [ ] All error codes documented with remediation steps
+- [ ] Platform-specific setup steps documented
+- [ ] Silent mode usage documented for CI/CD
+- [ ] All NuShell functions have inline comments
+- [ ] Function parameters and return values documented
+- [ ] Documentation reviewed for clarity and completeness
+
+---
+
+### TODO-042: Handle Edge Cases and Refine Error Messages
+**Priority**: Medium
+**Dependencies**: TODO-041 (Documentation complete)
+**Estimated Time**: 4 hours
+**Status**: ⏳ Pending
+**Related Tech Spec**: SPEC-001 Phase 6: Refinement & Edge Cases
+**Domain**: DevOps/Infrastructure
+
+**Description**:
+Handle edge cases (slow network, disk space issues, permission errors, Taskfile installation failures) and improve error messages with platform-specific remediation steps. Implement degraded mode for Taskfile installation failures (setup continues with warning).
+
+**Scope**:
+- Files to Modify: `scripts/lib/error_handler.nu`, `scripts/lib/taskfile_install.nu`, `scripts/lib/deps_install.nu`, `scripts/setup.nu`
+- Tests to Write: Unit tests for edge case handling
+
+**Key Requirements**:
+- Handle slow network with timeout warnings
+- Check disk space before operations (minimum 1GB free)
+- Handle permission errors with sudo guidance
+- Taskfile installation failure: continue setup with warning (degraded mode)
+- Platform-specific error messages (e.g., macOS: "Install Xcode CLI tools")
+- Retry logic improvements based on error type
+
+**Acceptance Criteria**:
+- [ ] Slow network handled with timeout warnings
+- [ ] Disk space checked before operations (1GB minimum)
+- [ ] Permission errors provide sudo guidance
+- [ ] Taskfile failure allows setup to continue (degraded mode)
+- [ ] Error messages include platform-specific remediation
+- [ ] Retry logic improved for common failure types
+- [ ] Unit tests for edge cases achieve 80% coverage
+- [ ] No new linting/type errors introduced
+
+---
+
+### TODO-043: Performance Optimization and Final Bug Fixes
+**Priority**: Medium
+**Dependencies**: TODO-042 (Edge cases handled)
+**Estimated Time**: 4 hours
+**Status**: ⏳ Pending
+**Related Tech Spec**: SPEC-001 Phase 6: Refinement & Edge Cases
+**Domain**: DevOps/Infrastructure
+
+**Description**:
+Optimize performance via parallel downloads where possible, refine progress indicators, and fix any remaining bugs from testing. Validate 30-minute setup target and 2-minute idempotent re-run target are consistently met.
+
+**Scope**:
+- Files to Modify: `scripts/lib/deps_install.nu`, `scripts/lib/taskfile_install.nu`, `scripts/setup.nu`
+- Tests to Write: Performance benchmarks, final regression tests
+
+**Key Requirements**:
+- Parallel downloads for uv and Taskfile (if both need installation)
+- Progress indicator refinement (accurate time estimates)
+- Performance profiling to identify bottlenecks
+- Validate 30-minute setup target consistently met
+- Validate 2-minute idempotent re-run target consistently met
+- Final bug fixes from testing feedback
+- Code cleanup and optimization
+
+**Acceptance Criteria**:
+- [ ] Parallel downloads implemented where possible
+- [ ] Progress indicators accurate (time estimates within 10%)
+- [ ] Setup completes within 30 minutes on average hardware
+- [ ] Idempotent re-run completes within 2 minutes
+- [ ] All known bugs fixed and regression tested
+- [ ] Performance benchmarks documented
+- [ ] Code reviewed and optimized for readability
+- [ ] Final integration tests pass on all platforms
+
+---
+
+**Task Summary (TODO-034 through TODO-043):**
+
+Total: 10 implementation tasks
+Total Estimated Time: 44 hours (matches 6 SP × 4 hours/SP = 24 hours for development + 20 hours for testing/docs/refinement)
+
+**By Phase:**
+- Phase 1 (Core Infrastructure): TODO-034, TODO-035 (8 hours) ✅ Generated
+- Phase 2 (Installation Logic): TODO-036, TODO-037 (12 hours) ⏳ Ready for generation
+- Phase 3 (Configuration & Validation): TODO-038 (4 hours) ⏳ Ready for generation
+- Phase 4 (Interactive & Orchestration): TODO-039 (4 hours) ⏳ Ready for generation
+- Phase 5 (Testing & Documentation): TODO-040, TODO-041 (8 hours) ⏳ Ready for generation
+- Phase 6 (Refinement & Edge Cases): TODO-042, TODO-043 (8 hours) ⏳ Ready for generation
+
+**By Priority:**
+- Critical: TODO-034, TODO-035, TODO-036, TODO-037, TODO-039 (5 tasks)
+- High: TODO-038, TODO-040, TODO-041 (3 tasks)
+- Medium: TODO-042, TODO-043 (2 tasks)
+
+**Parallel Execution Opportunities:**
+- TODO-036 and TODO-037 can run in parallel (both depend on TODO-034, TODO-035)
+- TODO-040 and TODO-041 can run in parallel (both depend on TODO-039)
+- TODO-042 and TODO-043 can run in parallel (both depend on TODO-041)
+
+**Next Steps:**
+1. Generate remaining task artifacts (TODO-036 through TODO-043) using `/generate` command
+2. Review and refine task descriptions
+3. Begin implementation starting with TODO-036, TODO-037 (parallel execution)
+
+---
+
+## Phase 1.11: Implementation Tasks Execution (Pending)
+
+### TODO-044: Implement TASK-001 (NuShell Module Structure and OS Detection)
+**Priority**: Critical
+**Dependencies**: None (foundation task)
+**Estimated Time**: 4 hours
+**Status**: ⏳ Pending
+**Context**: Current session
+**Domain**: DevOps/Infrastructure
+
+**Description**:
+Implement TASK-001 v2 - Create NuShell module structure (`scripts/` and `scripts/lib/`) and implement OS detection module with explicit exports per SPEC-001 Decision D1.
+
+**Implementation Task Reference:**
+- `/artifacts/tasks/TASK-001_nushell_module_structure_os_detection_v2.md`
+- Estimated Hours: 4 hours
+- Complexity: Low-Medium
+
+**Implementation Scope:**
+- Create `scripts/` and `scripts/lib/` directories
+- Implement `scripts/lib/os_detection.nu` with explicitly exported `detect_os` function
+- Function returns structured record: `{os: string, arch: string, version: string}`
+- Detect macOS (Intel/Apple Silicon), Linux (Ubuntu/Fedora/Arch), WSL2
+- Use `export def` pattern per SPEC-001 Decision D1 (NOT `source`)
+- Write unit tests demonstrating `use` import pattern
+
+**Success Criteria:**
+- [ ] Directory structure created
+- [ ] `os_detection.nu` module implemented with explicit exports
+- [ ] Correctly detects all supported platforms (macOS, Linux, WSL2)
+- [ ] Returns structured OS information record
+- [ ] Unit tests pass with `use` import pattern
+- [ ] No NuShell analyzer warnings
+
+**Output Artifacts:**
+- `scripts/lib/os_detection.nu`
+- `tests/unit/test_os_detection.nu`
+
+**Reference:**
+- Task Spec: `/artifacts/tasks/TASK-001_nushell_module_structure_os_detection_v2.md`
+- Tech Spec: `/artifacts/tech_specs/SPEC-001_automated_setup_script_v1.md` (§2.2)
+- Parent Story: `/artifacts/backlog_stories/US-001_automated_setup_script_v2.md`
+
+---
+
+### TODO-045: Implement TASK-002 (Prerequisites Checking Module)
+**Priority**: Critical
+**Dependencies**: TODO-044 (TASK-001 OS detection module)
+**Estimated Time**: 4 hours
+**Status**: ⏳ Pending
+**Context**: Current session
+**Domain**: DevOps/Infrastructure
+
+**Description**:
+Implement TASK-002 v2 - Prerequisites validation module that checks Python 3.11+, Podman, and Git availability with explicit exports per SPEC-001 Decision D1. Module returns complete validation report (all errors collected for best UX); setup script fails fast if errors found per Decision D4.
+
+**Implementation Task Reference:**
+- `/artifacts/tasks/TASK-002_prerequisites_checking_module_v2.md`
+- Estimated Hours: 4 hours
+- Complexity: Low-Medium
+
+**Implementation Scope:**
+- Implement `scripts/lib/prerequisites.nu` with explicitly exported `check_prerequisites` function
+- Validate Python 3.11+ availability and version
+- Validate Podman and Git availability
+- Return structured record with validation results and errors
+- Collect ALL errors before returning (complete report for user)
+- Include Devbox configuration guidance in error messages
+- Write unit tests with mocked commands
+
+**Success Criteria:**
+- [ ] `prerequisites.nu` module implemented with explicit exports
+- [ ] Function validates Python 3.11+, Podman, Git
+- [ ] Returns structured validation report
+- [ ] Error messages include Devbox guidance
+- [ ] Module checks all prerequisites (complete report)
+- [ ] Unit tests pass with mocked commands
+- [ ] Unit tests demonstrate `use` import pattern
+
+**Output Artifacts:**
+- `scripts/lib/prerequisites.nu`
+- `tests/unit/test_prerequisites.nu`
+
+**Reference:**
+- Task Spec: `/artifacts/tasks/TASK-002_prerequisites_checking_module_v2.md`
+- Tech Spec: `/artifacts/tech_specs/SPEC-001_automated_setup_script_v1.md` (§2.2)
+- Parent Story: `/artifacts/backlog_stories/US-001_automated_setup_script_v2.md` (Scenario 5)
 
 ---
 
