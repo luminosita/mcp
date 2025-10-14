@@ -123,7 +123,7 @@ def main [
     print "Phase 3: Taskfile Installation"
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 
-    let taskfile = (ensure_taskfile $os_info)
+    let taskfile = (check_taskfile_installed)
 
     if not $taskfile.installed {
         print $"⚠️  Warning: Taskfile installation failed"
@@ -139,7 +139,7 @@ def main [
     print "Phase 4: UV Package Manager Installation"
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 
-    let uv_result = (ensure_uv)
+    let uv_result = (check_uv_installed)
 
     if not $uv_result.installed {
         print $"❌ UV installation failed: ($uv_result.error)"
