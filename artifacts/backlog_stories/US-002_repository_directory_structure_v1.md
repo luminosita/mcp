@@ -14,7 +14,7 @@
 ## Parent Artifact Context
 
 **Parent PRD:** PRD-000: Project Foundation & Bootstrap Infrastructure
-- **Link:** /artifacts/prds/PRD-000_project_foundation_bootstrap_v2.md
+- **Link:** /artifacts/prds/PRD-000_project_foundation_bootstrap_v3.md
 - **PRD Section:** Section 8 - Technical Considerations (Repository Structure)
 - **Functional Requirements Coverage:**
   - **FR-02:** Standardized repository directory structure following Python src layout

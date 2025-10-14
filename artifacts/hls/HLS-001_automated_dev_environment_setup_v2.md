@@ -18,7 +18,7 @@
 - **Epic Contribution:** This story directly addresses Epic Acceptance Criterion 1 (Rapid Environment Setup). Successful implementation enables developers to achieve working development environments in under 30 minutes, removing environment inconsistency as a blocker to feature development.
 
 **Parent PRD:** PRD-000: Project Foundation & Bootstrap Infrastructure
-- **Link:** /artifacts/prds/PRD-000_project_foundation_bootstrap_v2.md
+- **Link:** /artifacts/prds/PRD-000_project_foundation_bootstrap_v3.md
 - **PRD Section:** Section 6.1 - User Flows (Flow 1: New Developer Environment Setup)
 - **Functional Requirements Coverage:**
   - **FR-01:** Automated environment setup script supporting macOS, Linux, and Windows (WSL2)

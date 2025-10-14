@@ -392,9 +392,14 @@ Upon completion, update relevant task status in `/TODO.md`:
 - Implementing features from PRDs/Backlog Stories
 - Coding tasks after planning phase completes
 
+**Unified CLI Interface:**
+- **Use `task <command>` for all development operations** - Taskfile provides language-agnostic interface
+- **Run `task --list` to discover available commands** - Self-documenting workflow
+- **See [CLAUDE-tooling.md](prompts/CLAUDE/CLAUDE-tooling.md) for complete Taskfile reference**
+
 **Implementation Configuration Files:**
-- **[CLAUDE-core.md](prompts/CLAUDE/CLAUDE-core.md)** - Main implementation guide and orchestration
-- **[CLAUDE-tooling.md](prompts/CLAUDE/CLAUDE-tooling.md)** - UV, Ruff, MyPy, pytest configuration
+- **[CLAUDE-core.md](prompts/CLAUDE/CLAUDE-core.md)** - Main implementation guide and orchestration (includes Taskfile usage)
+- **[CLAUDE-tooling.md](prompts/CLAUDE/CLAUDE-tooling.md)** - Taskfile (unified CLI), UV, Ruff, MyPy, pytest configuration
 - **[CLAUDE-testing.md](prompts/CLAUDE/CLAUDE-testing.md)** - Testing strategy, fixtures, coverage
 - **[CLAUDE-typing.md](prompts/CLAUDE/CLAUDE-typing.md)** - Type hints, annotations, type safety
 - **[CLAUDE-validation.md](prompts/CLAUDE/CLAUDE-validation.md)** - Pydantic models, input validation, security
