@@ -9,7 +9,7 @@ vars:
   TESTS_DIR: tests
   COVERAGE_MIN: 80
   PYTHON_VERSION: "3.11"
-  PROJECT_NAME: ai_agent_mcp_server
+  PROJECT_NAME: mcp_server
   CONTAINER_NAME: mcp-server
   DB_CONTAINER_NAME: mcp-db
 

@@ -1,10 +1,11 @@
 # Comprehensive SDLC Artifacts Guideline
 
-**Version:** 1.2
-**Date:** 2025-10-12
+**Version:** 1.3
+**Date:** 2025-10-14
 **Purpose:** Strategic guideline for SDLC artifact creation, hierarchy, and relationships across different Agile scaling approaches
 
 **Recent Updates:**
+- v1.3 (2025-10-14): Added Section 12 - When to Skip Tech Specs and Implementation Tasks
 - v1.2 (2025-10-12): Added Section 1.10 - Metadata Standards and Traceability
 - v1.1 (2025-10-10): Initial comprehensive version
 
@@ -30,7 +31,8 @@ This guideline synthesizes SDLC artifact definitions, creation timelines, hierar
 8. [Assumptions Evaluation](#8-assumptions-evaluation)
 9. [Practical Decision Framework](#9-practical-decision-framework)
 10. [Research Architecture for SDLC Artifacts](#10-research-architecture-for-sdlc-artifacts)
-11. [Conclusion](#11-conclusion)
+11. [When to Skip Tech Specs and Implementation Tasks](#11-when-to-skip-tech-specs-and-implementation-tasks)
+12. [Conclusion](#12-conclusion)
 
 ---
 
@@ -2820,11 +2822,386 @@ Teams building AI products lack tools to track ML experiments. Current solutions
 
 ---
 
-## 11. Conclusion
+## 11. When to Skip Tech Specs and Implementation Tasks
 
-### 11.1 Key Takeaways
+### 11.1 Overview
 
-#### 11.1.1 SDLC Artifact Hierarchy
+The SDLC artifact hierarchy includes two technical detail artifacts between Backlog Stories and implementation:
+
+```
+Backlog Story (US-XXX)
+    ↓
+Tech Spec (SPEC-XXX) ← Optional
+    ↓
+Implementation Tasks (TASK-XXX) ← Optional
+    ↓
+Implementation/Code
+```
+
+**Key Question:** When should teams skip creating Tech Specs (SPEC-XXX) and Implementation Tasks (TASK-XXX) and proceed directly from Backlog Story to implementation?
+
+**Answer:** It depends on story complexity, team size, domain span, and uncertainty level.
+
+---
+
+### 11.2 SDLC-Defined Flow
+
+**Full SDLC Flow (From CLAUDE.md):**
+
+```
+Requirements Phase
+├── PRD (PRD-XXX)
+└── High-Level Story (HLS-XXX)
+    └── Decomposes into Backlog Stories
+
+Story Phase
+└── Backlog Story (US-XXX)
+    └── Includes Open Questions section with markers
+
+Technical Phase (OPTIONAL)
+├── Spike (SPIKE-XXX) ← Triggered by [REQUIRES SPIKE] marker
+│   └── Time-boxed investigation (1-3 days max)
+├── ADR (ADR-XXX) ← Triggered by [REQUIRES ADR] marker
+│   └── Major architectural decision
+└── Tech Spec (SPEC-XXX) ← Design document
+    └── Decomposes into Implementation Tasks
+
+Implementation Phase
+├── Implementation Tasks (TASK-XXX) ← Granular work units (4-16 hours)
+└── Code
+```
+
+**What We're Skipping:**
+- **Tech Spec (SPEC-XXX):** Technical design document with architecture diagrams, API specifications, implementation phases
+- **Implementation Tasks (TASK-XXX):** Granular work units (4-16 hours each) that decompose Tech Specs
+
+**What We're NOT Skipping:**
+- **Spike (SPIKE-XXX):** Time-boxed investigations still created when [REQUIRES SPIKE] marker present
+- **ADR (ADR-XXX):** Architectural decisions still documented when [REQUIRES ADR] marker present
+
+---
+
+### 11.3 When to Skip Tech Specs and Implementation Tasks
+
+**Skip When ALL of the following are true:**
+
+| **Criterion** | **Threshold** | **Rationale** |
+|---------------|---------------|---------------|
+| **Story Points** | ≤2 SP | Simple stories don't need detailed design |
+| **Developer Count** | Single developer | No coordination overhead requiring written specs |
+| **Domain Span** | Single domain | No cross-boundary complexity (e.g., only frontend OR only backend) |
+| **Complexity** | Low | Straightforward implementation with clear path |
+| **Uncertainty** | Low | No significant technical unknowns (address via Spike if needed) |
+| **Precedent** | Similar work exists | Team has completed similar stories before |
+
+**Example Stories Suitable for Skipping:**
+- US-002 (Repository Directory Structure): 2 SP, single developer, straightforward filesystem operations, clear specification
+- UI component with mockups: 1-2 SP, frontend only, design already complete
+- Configuration file creation: 1 SP, single file, template provided
+- Simple CRUD endpoint: 2 SP, follows existing pattern
+
+---
+
+### 11.4 When NOT to Skip Tech Specs and Implementation Tasks
+
+**Don't Skip When ANY of the following are true:**
+
+| **Criterion** | **Threshold** | **Risk** |
+|---------------|---------------|----------|
+| **Story Points** | >3 SP | High complexity requires design before implementation |
+| **Developer Count** | Multiple developers | Coordination requires shared written specification |
+| **Domain Span** | Cross-domain | Changes span frontend + backend + database requiring integration design |
+| **Complexity** | High | Non-obvious implementation approach requiring design validation |
+| **Uncertainty** | High | Significant unknowns (complete Spike first, then create Tech Spec) |
+| **Team Experience** | Unfamiliar domain | Team lacks experience with required technologies/patterns |
+| **Integration** | Multiple systems | Changes affect multiple services or external integrations |
+
+**Example Stories Requiring Tech Specs:**
+- US-001 (Automated Setup Script): 6 SP, cross-platform, multiple phases, complex error handling, Taskfile integration
+- New authentication system: 8 SP, security-critical, affects all services
+- Database migration: 5 SP, high risk, requires rollback strategy
+- Performance optimization: 8 SP, requires benchmarking, multiple approaches to evaluate
+
+---
+
+### 11.5 Trade-offs Analysis
+
+#### 11.5.1 Benefits of Skipping
+
+**Velocity:**
+- Faster from story to code (hours vs days)
+- Reduced ceremony overhead
+- Fewer artifacts to maintain
+
+**Agility:**
+- Quick pivots when requirements change
+- Less investment in upfront design
+- Faster feedback loops
+
+**Developer Autonomy:**
+- Developers own end-to-end implementation
+- Less coordination overhead
+- Encourages ownership and creativity
+
+**Best For:**
+- Small teams (1-3 developers)
+- Low-risk changes
+- Well-understood domains
+- Rapid prototyping phases
+
+---
+
+#### 11.5.2 Costs of Skipping
+
+**Coordination:**
+- Parallel development difficult without shared spec
+- Increased communication overhead (synchronous vs written)
+- Risk of implementation divergence with multiple developers
+
+**Documentation:**
+- Implementation decisions not captured
+- Onboarding harder for new team members
+- Tribal knowledge accumulates
+
+**Quality:**
+- Design flaws discovered during implementation (rework cost)
+- Missed edge cases not identified upfront
+- Integration issues surface late
+
+**Risk For:**
+- Complex features (>3 SP)
+- Cross-domain changes
+- Multiple developers working in parallel
+- High uncertainty or unfamiliar technologies
+
+---
+
+### 11.6 Decision Matrix
+
+**Use this matrix to guide skip/don't-skip decisions:**
+
+| **Story Characteristics** | **Decision** | **Rationale** |
+|---------------------------|--------------|---------------|
+| 1-2 SP, single dev, single domain | **SKIP** | Overhead not justified |
+| 3-5 SP, single dev, familiar domain | **CONSIDER** | Depends on complexity |
+| 3-5 SP, multiple devs, familiar domain | **DON'T SKIP** | Coordination requires spec |
+| 5+ SP, any team size | **DON'T SKIP** | Complexity requires design |
+| Any SP, high uncertainty | **DON'T SKIP** | Complete Spike first, then create Tech Spec |
+| Any SP, cross-domain (e.g., UI + API + DB) | **DON'T SKIP** | Integration design required |
+| Any SP, unfamiliar technology | **CONSIDER** | Complete Spike first if needed, then decide |
+
+---
+
+### 11.7 Practical Examples
+
+#### 11.7.1 Example 1: US-002 (Repository Directory Structure) - SKIP JUSTIFIED
+
+**Story Characteristics:**
+- **Story Points:** 2 SP (Low-Medium complexity)
+- **Developer Count:** Single developer
+- **Domain Span:** Single domain (filesystem operations)
+- **Complexity:** Low (straightforward directory creation)
+- **Uncertainty:** None (directory structure fully specified in US-002)
+- **Precedent:** Standard Python src layout pattern
+
+**Decision:** **SKIP Tech Spec and Implementation Tasks**
+
+**Rationale:**
+- US-002 specification already contains detailed directory tree structure
+- All file content templates provided in story
+- No technical unknowns requiring investigation
+- Single developer can complete in 1-2 hours
+- No coordination required
+- Implementation path clear and straightforward
+
+**Implementation Approach:**
+- Proceed directly from US-002 v2 to implementation
+- Follow directory structure specification in story
+- Use file content templates from US-002 specification
+- Validate against acceptance criteria (9 scenarios)
+
+---
+
+#### 11.7.2 Example 2: US-001 (Automated Setup Script) - CONSIDER NOT SKIPPING
+
+**Story Characteristics:**
+- **Story Points:** 6 SP (High complexity)
+- **Developer Count:** Single developer
+- **Domain Span:** Cross-platform (macOS, Linux, Windows WSL2)
+- **Complexity:** High (error handling, retry logic, cross-platform detection)
+- **Uncertainty:** Medium (Taskfile installation cross-platform, Devbox integration)
+- **Precedent:** Some (NuShell scripting, but not this specific setup flow)
+
+**Decision:** **CONSIDER Creating Tech Spec** (borderline case)
+
+**Arguments FOR Creating Tech Spec:**
+- High complexity (6 SP) suggests design benefit
+- Cross-platform requirements need careful planning
+- Error handling strategy should be designed upfront
+- Multiple installation paths (Taskfile, uv, pre-commit) need coordination
+- Idempotency design requires careful state management
+- Degraded mode handling (Taskfile unavailable) needs design
+
+**Arguments AGAINST Creating Tech Spec:**
+- Single developer (no coordination overhead)
+- US-001 already detailed (11 acceptance scenarios)
+- Implementation approach clear from requirements
+- NuShell script structure straightforward
+- Risk of over-documentation for PoC phase
+
+**Recommendation:**
+- **Option A (Recommended for Production):** Create Tech Spec with:
+  - NuShell module structure design
+  - Error handling strategy (retry logic, exponential backoff)
+  - Cross-platform detection logic
+  - Taskfile installation decision tree (per platform)
+  - Idempotency state management approach
+  - Degraded mode handling design
+  - Then decompose into Implementation Tasks (8-10 tasks)
+
+- **Option B (Acceptable for PoC):** Skip Tech Spec, proceed directly to implementation with risk acceptance:
+  - Risk: Design flaws discovered during implementation require rework
+  - Mitigation: Detailed US-001 specification reduces risk
+  - Constraint: Single developer reduces coordination cost
+
+**Decision Factors:**
+- **PoC Phase:** Skip acceptable (velocity prioritized)
+- **Production Phase:** Don't skip (quality/maintainability prioritized)
+- **Team Size:** If multiple developers → Don't skip
+- **Timeline Pressure:** If tight deadline → Consider skipping with documented risks
+
+---
+
+### 11.8 Spike Relationship
+
+**Important:** Spikes (SPIKE-XXX) are NOT skipped when [REQUIRES SPIKE] marker present in Backlog Story.
+
+**Workflow:**
+```
+Backlog Story with [REQUIRES SPIKE]
+    ↓
+Create Spike (SPIKE-XXX) - Time-boxed investigation (1-3 days)
+    ↓
+Spike findings documented
+    ↓
+Decision: Create Tech Spec or Update Story?
+    ├─ If major decision → Create ADR (ADR-XXX)
+    ├─ If complex implementation → Create Tech Spec (SPEC-XXX)
+    └─ If simple implementation → Update Backlog Story, proceed to code
+```
+
+**Key Points:**
+- Spikes address **uncertainty** through time-boxed investigation
+- Spike completion doesn't automatically require Tech Spec creation
+- Decision to create Tech Spec based on complexity revealed by Spike
+- High uncertainty + high complexity → Spike THEN Tech Spec
+
+---
+
+### 11.9 Continuous Evaluation
+
+**Teams should regularly evaluate skip decisions:**
+
+**Quarterly Review Questions:**
+1. How many stories >3 SP proceeded without Tech Specs?
+2. What was the rework rate on skipped vs non-skipped stories?
+3. Did skipped stories cause integration issues?
+4. What was the time-to-completion for skipped vs non-skipped stories?
+5. Did team members feel they had sufficient design clarity?
+
+**Adjust Thresholds:**
+- If rework rate high → Lower Story Point threshold for Tech Spec creation
+- If velocity impacted → Increase Story Point threshold
+- If coordination issues → Require Tech Specs for all multi-developer stories
+- If quality issues → Require Tech Specs for cross-domain stories
+
+**Context-Specific:**
+- Thresholds in this guideline are **starting points**
+- Teams should calibrate based on their context
+- Document team-specific thresholds in CLAUDE.md or team charter
+
+---
+
+### 11.10 Implementation Guidance
+
+**When Skipping Tech Specs:**
+
+1. **Ensure Backlog Story is Detailed:**
+   - All acceptance criteria clear and testable
+   - Technical approach section completed
+   - Open questions resolved or marked with appropriate markers
+   - Definition of Done comprehensive
+
+2. **Use Story Comments for Design Notes:**
+   - Capture implementation decisions as story comments
+   - Link to relevant documentation or prior art
+   - Document assumptions made during implementation
+
+3. **Increase Code Review Rigor:**
+   - More thorough code review to catch design issues
+   - Explicitly review for edge cases and error handling
+   - Validate against all acceptance criteria
+
+4. **Document Key Decisions:**
+   - If architectural decision made → Create ADR retroactively
+   - If pattern established → Document in CLAUDE-architecture.md
+   - If gotchas discovered → Update story with learnings
+
+**When Creating Tech Specs:**
+
+1. **Tech Spec Should Address:**
+   - System architecture (components, interactions)
+   - API specifications (endpoints, contracts)
+   - Data models (schemas, relationships)
+   - Implementation phases (order, dependencies)
+   - Testing strategy (unit, integration, e2e)
+   - Deployment approach
+   - Rollback/mitigation strategy
+
+2. **Implementation Tasks Should Be:**
+   - Granular (4-16 hours each)
+   - Independent where possible (parallel work)
+   - Testable (clear acceptance criteria)
+   - Ordered by dependencies
+
+---
+
+### 11.11 Summary Recommendations
+
+**Default Rules (Starting Point):**
+
+| **Story Points** | **Single Developer** | **Multiple Developers** |
+|------------------|---------------------|------------------------|
+| **1-2 SP** | SKIP | DON'T SKIP (coordination) |
+| **3-5 SP** | CONSIDER | DON'T SKIP |
+| **5+ SP** | DON'T SKIP | DON'T SKIP |
+
+**Override Factors (Any of these → Don't Skip):**
+- Cross-domain changes (frontend + backend + database)
+- High uncertainty (complete Spike first)
+- Unfamiliar technology or domain
+- Security-critical changes
+- Multiple system integrations
+- Performance-critical optimizations
+
+**Team Calibration:**
+- Start with these defaults
+- Evaluate quarterly
+- Adjust thresholds based on rework rate, velocity, coordination overhead
+- Document team-specific thresholds
+
+**PoC vs Production:**
+- **PoC Phase:** More aggressive skipping acceptable (velocity prioritized)
+- **Production Phase:** More conservative (quality/maintainability prioritized)
+- **Transition:** Retroactively create Tech Specs for complex features as they stabilize
+
+---
+
+## 12. Conclusion
+
+### 12.1 Key Takeaways
+
+#### 12.1.1 SDLC Artifact Hierarchy
 
 **Strategic Layers:**
 - **Initiative:** Organizational strategic goal (quarters-years)
@@ -2838,7 +3215,7 @@ Teams building AI products lack tools to track ML experiments. Current solutions
 
 ---
 
-#### 11.1.2 Two Dominant Strategies
+#### 12.1.2 Two Dominant Strategies
 
 **Strategy 1 (Simplified Agile):**
 - **Relationship:** Feature ⟷ High-Level Story are siblings
@@ -2854,7 +3231,7 @@ Teams building AI products lack tools to track ML experiments. Current solutions
 
 ---
 
-#### 11.1.3 PRD Role
+#### 12.1.3 PRD Role
 
 **PRD = Strategic Input Document:**
 - **What PRDs Contain:** Business goals, rationale, personas, success metrics, constraints, non-functional requirements, dependencies
@@ -2869,7 +3246,7 @@ Teams building AI products lack tools to track ML experiments. Current solutions
 
 ---
 
-#### 11.1.4 Initiatives in SDLC
+#### 12.1.4 Initiatives in SDLC
 
 **Position:** Above Epics, below organizational strategy
 **Purpose:** Align multiple epics/features to measurable business outcomes
@@ -2877,7 +3254,7 @@ Teams building AI products lack tools to track ML experiments. Current solutions
 
 ---
 
-#### 11.1.5 Assumption Evaluation
+#### 12.1.5 Assumption Evaluation
 
 **Assumption 1:** ✅ **Valid** – Simplified Agile (Strategy 1) is strongly correlated with smaller teams, with exceptions for regulated industries or complex products.
 
@@ -2885,7 +3262,7 @@ Teams building AI products lack tools to track ML experiments. Current solutions
 
 ---
 
-### 11.2 Strategic Recommendations
+### 12.2 Strategic Recommendations
 
 #### For Small Teams (1-3 Scrum teams):
 1. **Adopt Strategy 1** (Simplified Agile) as default
@@ -2914,7 +3291,7 @@ Teams building AI products lack tools to track ML experiments. Current solutions
 
 ---
 
-### 11.3 Future Considerations
+### 12.3 Future Considerations
 
 #### Emerging Trends:
 - **AI-assisted PRD generation:** Tools like ChatGPT, Claude generating draft PRDs from product briefs

@@ -56,18 +56,18 @@ The directory structure serves multiple purposes: (1) enables the automated setu
 - Preserve existing directories: `artifacts/`, `prompts/`, `.claude/`, `feedback/`
 
 ### Python Package Structure (src/ layout)
-- Create `src/ai_agent_mcp_server/` as main package directory
+- Create `src/mcp_server/` as main package directory
 - Create subdirectories with appropriate `__init__.py` files:
-  - `src/ai_agent_mcp_server/core/` - Core business logic and constants
-  - `src/ai_agent_mcp_server/models/` - Data models (SQLAlchemy, Pydantic)
-  - `src/ai_agent_mcp_server/services/` - Business services layer
-  - `src/ai_agent_mcp_server/repositories/` - Data access layer (Repository pattern)
-  - `src/ai_agent_mcp_server/tools/` - MCP tool implementations
-  - `src/ai_agent_mcp_server/api/` - API endpoints and routes
-  - `src/ai_agent_mcp_server/utils/` - Shared utilities
-- Create `src/ai_agent_mcp_server/__main__.py` for module execution support
-- Create `src/ai_agent_mcp_server/main.py` as FastAPI application entry point
-- Create `src/ai_agent_mcp_server/config.py` for configuration management
+  - `src/mcp_server/core/` - Core business logic and constants
+  - `src/mcp_server/models/` - Data models (SQLAlchemy, Pydantic)
+  - `src/mcp_server/services/` - Business services layer
+  - `src/mcp_server/repositories/` - Data access layer (Repository pattern)
+  - `src/mcp_server/tools/` - MCP tool implementations
+  - `src/mcp_server/api/` - API endpoints and routes
+  - `src/mcp_server/utils/` - Shared utilities
+- Create `src/mcp_server/__main__.py` for module execution support
+- Create `src/mcp_server/main.py` as FastAPI application entry point
+- Create `src/mcp_server/config.py` for configuration management
 
 ### Test Structure
 - Create `tests/conftest.py` for pytest fixtures
@@ -111,7 +111,7 @@ ai-agent-mcp-server/
 │       └── .gitkeep
 ├── .claude/                    # Existing - Claude Code configuration
 ├── src/
-│   └── ai_agent_mcp_server/
+│   └── mcp_server/
 │       ├── __init__.py         # Package root
 │       ├── __main__.py         # Entry point for -m execution
 │       ├── main.py             # FastAPI application entry point
@@ -341,8 +341,8 @@ SECRET_KEY="change-me-in-production"
 ### Scenario 2: Python src layout validated
 **Given** the repository structure is established
 **When** a developer examines the `src/` directory
-**Then** the structure follows Python src layout with `src/ai_agent_mcp_server/` as the main package
-**And** all subdirectories under `ai_agent_mcp_server/` have `__init__.py` files
+**Then** the structure follows Python src layout with `src/mcp_server/` as the main package
+**And** all subdirectories under `mcp_server/` have `__init__.py` files
 **And** the package is importable without issues
 
 ### Scenario 3: Test structure mirrors source structure
@@ -350,7 +350,7 @@ SECRET_KEY="change-me-in-production"
 **When** a developer examines the `tests/` directory
 **Then** subdirectories exist for unit, integration, and e2e tests
 **And** `tests/conftest.py` exists for shared fixtures
-**And** test directories mirror the source structure (e.g., `tests/unit/test_tools/` mirrors `src/ai_agent_mcp_server/tools/`)
+**And** test directories mirror the source structure (e.g., `tests/unit/test_tools/` mirrors `src/mcp_server/tools/`)
 
 ### Scenario 4: Configuration files present
 **Given** the repository structure is established
