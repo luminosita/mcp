@@ -7,10 +7,10 @@
 
 ## Current Phase: Phase 1.6 - Implementation (HLS-002 Stories)
 
-**Current Status**: Parallel track - 4/6 stories implemented (US-003, US-004, US-005, US-006), backlog story generation in progress
-**Last Completed**: TODO-032 (US-006 Test Execution and Coverage Reporting implemented)
-**Next Task**: TODO-026 (Generate US-006: Test Execution and Coverage Reporting) - SKIPPED (already generated)
-**Implementation**: 4/6 stories implemented (US-003, US-004, US-005, US-006 complete)
+**Current Status**: Parallel track - 5/6 stories implemented (US-003, US-004, US-005, US-006, US-007), backlog story generation in progress
+**Last Completed**: TODO-033 (US-007 Pre-commit Hooks Configuration implemented)
+**Next Task**: TODO-027 (Generate US-007: Pre-commit Hooks Configuration) - SKIPPED (already generated)
+**Implementation**: 5/6 stories implemented (US-003, US-004, US-005, US-006, US-007 complete)
 **Generation**: 3/6 stories generated (US-003, US-004, US-005 complete)
 
 **Parallel Track**: Continue backlog story generation (TODO-024 through TODO-028) while implementation begins
@@ -670,7 +670,7 @@ Implement automated test execution using pytest with coverage reporting integrat
 **Priority**: Medium
 **Dependencies**: TODO-027 (US-007 generated), TODO-030 (US-004 Ruff config), TODO-031 (US-005 MyPy config)
 **Estimated Time**: 1-2 hours (2 SP)
-**Status**: ⏳ Pending
+**Status**: ✅ Completed (2025-10-14)
 **Context**: Current session OK
 **Type**: Implementation
 
@@ -709,10 +709,66 @@ Configure pre-commit hooks that automatically execute on every local commit, run
 **Performance Targets**:
 - Pre-commit hook execution: <10 seconds for typical commit (1-10 changed files)
 
+**Validation**:
+- [x] Pre-commit framework installed as dev dependency (pyproject.toml line 35)
+- [x] .pre-commit-config.yaml configured with Ruff, MyPy, file checks (already existed)
+- [x] Taskfile commands exist: `task hooks:install`, `task hooks:run`, `task hooks:update` (already existed)
+- [x] Setup script installs pre-commit hooks automatically (scripts/lib/config_setup.nu)
+- [x] Hooks tested with intentional violations (verified all hooks detect issues)
+- [x] Hooks block commit on failure (verified - commit blocked on type error)
+- [x] Hooks can be bypassed with --no-verify (verified - commit succeeded)
+- [x] Hooks run only on staged files (verified - unstaged violations ignored)
+- [x] Documentation added to CONTRIBUTING.md (231 lines, comprehensive guide)
+- [x] All 8 acceptance criteria validated
+
+**Completion Notes**:
+- ✅ **Infrastructure Already in Place** (from previous US-003, US-004, US-005):
+  - Pre-commit installed as dev dependency (pyproject.toml line 35: `pre-commit>=3.5.0`)
+  - .pre-commit-config.yaml fully configured with:
+    * Ruff linting (ruff check --fix)
+    * Ruff formatting (ruff format)
+    * MyPy strict type checking (excluding tests/)
+    * General file checks (trailing whitespace, EOF fixer, YAML/JSON/TOML validation, merge conflict detection, private key detection)
+  - Taskfile commands operational (hooks:install, hooks:run, hooks:update)
+  - Setup script (scripts/lib/config_setup.nu) automatically runs `pre-commit install` during environment setup
+- ✅ **Testing and Validation**:
+  - Created test files with intentional violations (linting, formatting, type errors)
+  - Verified hooks detect and block commits on violations
+  - Verified auto-fix behavior (Ruff auto-fixes linting and formatting issues)
+  - Verified bypass mechanism (--no-verify flag works)
+  - Verified hooks check only staged files (unstaged violations ignored)
+  - Verified hook execution time <10 seconds for single file changes
+- ✅ **Documentation** (CONTRIBUTING.md - 231 new lines):
+  - Added "Pre-commit Hooks" section under "Development Workflow"
+  - Documented "Why Pre-commit Hooks?" (instant feedback, prevent bad commits, reduce CI failures)
+  - Installation instructions (automated via setup.nu, manual via `task hooks:install`)
+  - Detailed "What Gets Checked" (Ruff linting, Ruff formatting, MyPy, general file checks)
+  - Hook workflow with example
+  - Example hook failure with error messages
+  - Manual hook execution commands (`task hooks:run`, `task hooks:update`)
+  - Bypass mechanism documentation (--no-verify with warnings)
+  - Hook configuration (YAML excerpt from .pre-commit-config.yaml)
+  - Comprehensive troubleshooting guide (6 common problems with solutions)
+
+**All 8 Acceptance Criteria Validated**:
+- ✅ Scenario 1: Hooks run automatically on every commit (verified via git commit)
+- ✅ Scenario 2: Linting violation blocks commit (verified with unused import)
+- ✅ Scenario 3: Formatting violation blocks commit (verified with bad spacing)
+- ✅ Scenario 4: Type checking violation blocks commit (verified with missing type hints)
+- ✅ Scenario 5: Clean code allows commit (verified with properly typed code)
+- ✅ Scenario 6: Bypass mechanism works (verified with --no-verify flag)
+- ✅ Scenario 7: Hooks run only on staged files (verified - unstaged violations ignored)
+- ✅ Scenario 8: Manual hook execution on all files (verified with `task hooks:run`)
+
+**Performance**:
+- Hook execution time: <2 seconds for single file changes (well below <10 second target)
+- Hooks check only staged files by default (pre-commit framework standard behavior)
+
 **Notes**:
-- Simplest story in HLS-002 (2 SP)
-- Hooks mirror CI/CD checks from US-004/US-005
-- No Tech Spec or Implementation Tasks needed
+- Most infrastructure pre-existed from US-003, US-004, US-005 implementations
+- Primary deliverable: comprehensive documentation in CONTRIBUTING.md
+- Simplest implementation story in HLS-002 (2 SP) due to existing infrastructure
+- Hooks mirror CI/CD pipeline checks (Ruff, MyPy, file validation)
 
 ---
 
