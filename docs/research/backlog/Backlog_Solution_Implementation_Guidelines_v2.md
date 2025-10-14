@@ -462,7 +462,7 @@ Based on identified gaps and competitive analysis, the recommended product shoul
         client_secret: ${OKTA_CLIENT_SECRET}
         issuer: https://company.okta.com
         scopes: [openid, profile, email]
-  
+
   # RBAC configuration
   roles:
     - name: product_manager
@@ -489,17 +489,17 @@ Based on identified gaps and competitive analysis, the recommended product shoul
   # Using environment-based secrets with validation
   import os
   from cryptography.fernet import Fernet
-  
+
   class SecureConfig:
       def __init__(self):
           self.encryption_key = os.environ.get('ENCRYPTION_KEY')
           if not self.encryption_key:
               raise ValueError("ENCRYPTION_KEY environment variable not set")
           self.cipher = Fernet(self.encryption_key.encode())
-      
+
       def encrypt_sensitive_data(self, data: str) -> bytes:
           return self.cipher.encrypt(data.encode())
-      
+
       def decrypt_sensitive_data(self, encrypted: bytes) -> str:
           return self.cipher.decrypt(encrypted).decode()
   ```
@@ -521,7 +521,7 @@ Enterprise-grade systems require comprehensive observability: structured logging
   import logging
   import json
   from datetime import datetime
-  
+
   class JSONFormatter(logging.Formatter):
       def format(self, record):
           log_entry = {
@@ -537,7 +537,7 @@ Enterprise-grade systems require comprehensive observability: structured logging
           if record.exc_info:
               log_entry["exception"] = self.formatException(record.exc_info)
           return json.dumps(log_entry)
-  
+
   # Configure logger
   logger = logging.getLogger(__name__)
   handler = logging.StreamHandler()
@@ -556,12 +556,12 @@ Enterprise-grade systems require comprehensive observability: structured logging
   ```python
   from prometheus_client import Counter, Histogram, Gauge
   import time
-  
+
   # Define metrics
   api_requests = Counter('api_requests_total', 'Total API requests', ['method', 'endpoint', 'status'])
   api_latency = Histogram('api_request_duration_seconds', 'API request latency', ['method', 'endpoint'])
   active_artifacts = Gauge('active_artifacts', 'Number of active artifacts', ['type'])
-  
+
   # Instrument code
   def track_request(method, endpoint):
       def decorator(func):
@@ -648,14 +648,14 @@ def test_dependency_impact_analysis(graph_db):
             CREATE (t)-[:BLOCKS]->(s)
             CREATE (s)-[:CHILD_OF]->(e)
         """)
-        
+
         # Execute impact analysis query
         result = session.run("""
             MATCH (task:Task {id: 'TASK-1'})-[:BLOCKS*1..5]->(dependent)
             -[:CHILD_OF*]->(epic:Epic)
             RETURN DISTINCT epic.id AS epicId, epic.title AS title
         """)
-        
+
         impacted_epics = [record["epicId"] for record in result]
         assert "EPIC-1" in impacted_epics
 ```
@@ -692,7 +692,7 @@ class ArtifactResponse(BaseModel):
     status: str
     created_at: datetime
     updated_at: datetime
-    
+
 @app.post("/api/v1/artifacts", response_model=ArtifactResponse, status_code=201)
 async def create_artifact(
     artifact: ArtifactCreate,
@@ -703,7 +703,7 @@ async def create_artifact(
     # Verify permissions
     if not has_permission(current_user, "artifact:create"):
         raise HTTPException(status_code=403, detail="Insufficient permissions")
-    
+
     # Validate parent relationship if specified
     if artifact.parent_id:
         parent = await get_artifact(artifact.parent_id)
@@ -711,17 +711,17 @@ async def create_artifact(
             raise HTTPException(status_code=404, detail="Parent artifact not found")
         if not is_valid_child_type(parent.type, artifact.type):
             raise HTTPException(status_code=400, detail="Invalid parent-child relationship")
-    
+
     # Create artifact in graph database
     new_artifact = await artifact_service.create(artifact, creator_id=current_user["id"])
-    
+
     # Log audit event
     await audit_log.record(
         actor=current_user,
         action="artifact.create",
         target=new_artifact
     )
-    
+
     return new_artifact
 
 @app.get("/api/v1/artifacts/{artifact_id}", response_model=ArtifactResponse)
@@ -735,17 +735,17 @@ async def get_artifact(
     artifact = await artifact_service.get(artifact_id)
     if not artifact:
         raise HTTPException(status_code=404, detail="Artifact not found")
-    
+
     # Apply field selection if specified
     if fields:
         artifact = {k: v for k, v in artifact.items() if k in fields}
-    
+
     # Expand related resources if requested
     if expand and "parent" in expand:
         artifact["parent"] = await artifact_service.get(artifact["parent_id"])
     if expand and "children" in expand:
         artifact["children"] = await artifact_service.get_children(artifact_id)
-    
+
     return artifact
 ```
 
@@ -753,7 +753,7 @@ async def get_artifact(
 
 **External System Integration:**
 - **Provider-Based Architecture:** Design integration service with pluggable provider pattern. Each provider (Confluence, Google Drive, GitHub) implements standard interface: `authenticate()`, `fetch_document()`, `create_link()`, `sync_status()`.
-- **Webhook Support:** 
+- **Webhook Support:**
   - **Incoming:** Accept webhooks from GitHub (PR events), GitLab (merge events), Slack (interactive messages). Validate webhook signatures for security.
   - **Outgoing:** Send webhooks to external systems when artifacts change (status updates, new comments, assignments). Include configurable retry logic with exponential backoff.
 
@@ -765,63 +765,63 @@ from typing import Dict, Any
 
 class DocumentProvider(ABC):
     """Abstract base class for document repository providers"""
-    
+
     @abstractmethod
     async def authenticate(self, credentials: Dict[str, str]) -> bool:
         pass
-    
+
     @abstractmethod
     async def create_document_link(self, artifact_id: str, doc_url: str) -> Dict[str, Any]:
         pass
-    
+
     @abstractmethod
     async def insert_status_badge(self, doc_id: str, artifact_id: str, status: str) -> bool:
         pass
 
 class ConfluenceProvider(DocumentProvider):
     """Confluence Cloud integration provider"""
-    
+
     def __init__(self, base_url: str):
         self.base_url = base_url
         self.session = None
-    
+
     async def authenticate(self, credentials: Dict[str, str]) -> bool:
         """Authenticate using Confluence Cloud API token"""
         self.session = requests.Session()
         self.session.auth = (credentials["email"], credentials["api_token"])
         self.session.headers.update({"Content-Type": "application/json"})
-        
+
         # Verify credentials with test request
         response = self.session.get(f"{self.base_url}/wiki/rest/api/user/current")
         return response.status_code == 200
-    
+
     async def create_document_link(self, artifact_id: str, doc_url: str) -> Dict[str, Any]:
         """Create bidirectional link between artifact and Confluence page"""
         # Extract page ID from URL
         page_id = self._extract_page_id(doc_url)
-        
+
         # Add backlink to Confluence page
         page_content = await self._get_page_content(page_id)
         updated_content = self._append_artifact_reference(page_content, artifact_id)
         await self._update_page_content(page_id, updated_content)
-        
+
         return {
             "document_id": page_id,
             "document_url": doc_url,
             "artifact_id": artifact_id,
             "link_created": True
         }
-    
+
     async def insert_status_badge(self, doc_id: str, artifact_id: str, status: str) -> bool:
         """Insert/update live status badge in Confluence page"""
         badge_macro = self._generate_status_macro(artifact_id, status)
         page_content = await self._get_page_content(doc_id)
-        
+
         if self._has_status_badge(page_content, artifact_id):
             updated_content = self._update_status_badge(page_content, artifact_id, badge_macro)
         else:
             updated_content = self._insert_status_badge(page_content, badge_macro)
-        
+
         await self._update_page_content(doc_id, updated_content)
         return True
 ```
@@ -922,7 +922,7 @@ Microservices-based architecture with service-oriented decomposition. This balan
     createdAt: datetime(),
     createdBy: 'usr_123'
   })
-  
+
   // Relationship structure with properties
   MATCH (s1:Story {id: 'STORY-1'}), (s2:Story {id: 'STORY-2'})
   CREATE (s1)-[:BLOCKS {
@@ -1011,7 +1011,7 @@ spec:
   ```cypher
   // Anti-pattern: Storing relationships as properties
   (:Story {blockedBy: ['STORY-1', 'STORY-2', 'STORY-3']})
-  
+
   // Correct: Using typed relationships
   (:Story {id: 'STORY-1'})-[:BLOCKS]->(:Story {id: 'STORY-4'})
   (:Story {id: 'STORY-2'})-[:BLOCKS]->(:Story {id: 'STORY-4'})
@@ -1034,7 +1034,7 @@ spec:
   MATCH (s:Story)
   WHERE s.id = 'STORY-123'
   RETURN s
-  
+
   // Efficient: Indexed lookup
   MATCH (s:Story {id: 'STORY-123'})
   RETURN s

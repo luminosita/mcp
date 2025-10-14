@@ -19,10 +19,9 @@ Artifact generators inputs are defined in several locations:
 ### Evaluation
 - Q1: do we need SDLC Generators Input Dependency Tree with comprehensive "Input Classification System", "Artifact Path Patterns" and "File Naming Conventions" defined?
 
-## Folder Structure section 
+## Folder Structure section
 ### Current situation
 Folder structure define locations of all files in the project. It also contains File Naming convention specified separately in "File Naming Conventions" section.
 
 ### Evaluation
 What information from Folder Structure section adds value and what are redundant information?
-

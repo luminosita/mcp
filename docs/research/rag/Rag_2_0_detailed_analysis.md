@@ -218,7 +218,7 @@ eval_data = {
 }
 dataset = Dataset.from_dict(eval_data)
 results = evaluate(
-    dataset, 
+    dataset,
     metrics=[Faithfulness(), AnswerRelevancy(), ContextPrecision()]
 )
 ```

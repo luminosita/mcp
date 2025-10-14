@@ -1,6 +1,6 @@
 - Problem overview
     - Our current AI-assistance framework for software product documentation and implementation relies on AI agent artifacts (commands, prompts and templates) as local files residing in the same repository as software artifacts
-    - By using our AI-assistance framework for creation of new products we are forced to keep local version of AI agent artifacts per product repository. Huge maintenance problem. 
+    - By using our AI-assistance framework for creation of new products we are forced to keep local version of AI agent artifacts per product repository. Huge maintenance problem.
     - We want a single repository for all AI agent artifacts with proper versioning and documentation
 - Target users (high-level)
     - Product managers creating software product documentation utilizing assistance of AI agents
@@ -10,5 +10,3 @@
     - AI Agent should prime AI context with RAG queries accessable as MCP Server tool
 - Initial constraints
     - Inital scope is to encapsulate all AI agent artifacts within MCP Server
-
-

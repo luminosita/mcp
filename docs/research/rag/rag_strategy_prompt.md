@@ -111,11 +111,11 @@ from llama_index.core.node_parser import SemanticSplitterNodeParser
 def chunk_document(document_content: str, metadata: dict) -> list:
     """
     Chunk [DOCUMENT_TYPE] with [chosen strategy].
-    
+
     Args:
         document_content: Raw document text
         metadata: Document-level metadata
-        
+
     Returns:
         List of chunks with embedded metadata
     """
@@ -172,7 +172,7 @@ from qdrant_client.models import Distance, VectorParams
 def create_index_for_document_type(client: QdrantClient, collection_name: str):
     """
     Create optimized index for [DOCUMENT_TYPE].
-    
+
     Args:
         client: Vector database client
         collection_name: Name for this document type collection
@@ -183,7 +183,7 @@ def create_index_for_document_type(client: QdrantClient, collection_name: str):
 def index_document_chunks(chunks: list, embeddings: list, client: QdrantClient):
     """
     Index document chunks with metadata.
-    
+
     Args:
         chunks: List of document chunks
         embeddings: Corresponding embedding vectors
@@ -291,11 +291,11 @@ from llama_index.core.extractors import TitleExtractor, KeywordExtractor
 def extract_metadata(document_content: str, document_info: dict) -> dict:
     """
     Extract comprehensive metadata for [DOCUMENT_TYPE].
-    
+
     Args:
         document_content: Document text
         document_info: Known document information
-        
+
     Returns:
         Complete metadata dictionary
     """
@@ -348,12 +348,12 @@ def retrieve_for_document_type(
 ) -> list:
     """
     Retrieve relevant chunks for [DOCUMENT_TYPE] queries.
-    
+
     Args:
         query: User's natural language query
         user_permissions: User's access control information
         index: Pre-built vector index
-        
+
     Returns:
         Ranked list of relevant chunks with metadata
     """
@@ -363,12 +363,12 @@ def retrieve_for_document_type(
 def generate_answer(query: str, retrieved_chunks: list, llm) -> dict:
     """
     Generate answer from retrieved chunks.
-    
+
     Args:
         query: Original query
         retrieved_chunks: Retrieved and reranked chunks
         llm: Language model for generation
-        
+
     Returns:
         Answer with citations and confidence
     """
@@ -437,8 +437,8 @@ Recommend specific technologies with justification:
 Provide architecture description:
 
 ```
-User Query → Query Processing → Metadata Filtering → 
-Vector Search → Reranking → Context Assembly → 
+User Query → Query Processing → Metadata Filtering →
+Vector Search → Reranking → Context Assembly →
 LLM Generation → Response with Citations
 ```
 
@@ -475,7 +475,7 @@ class DocumentTypeChunker:
     def __init__(self, config: dict):
         # [Initialization with configuration]
         pass
-    
+
     def chunk(self, document: str, metadata: dict) -> list:
         # [Chunking implementation]
         pass
@@ -485,11 +485,11 @@ class DocumentTypeIndexer:
     def __init__(self, vector_db_client, embedding_model):
         # [Initialization]
         pass
-    
+
     def index_documents(self, documents: list):
         # [Bulk indexing]
         pass
-    
+
     def update_document(self, document_id: str, updated_content: str):
         # [Incremental update]
         pass
@@ -499,7 +499,7 @@ class DocumentTypeRetriever:
     def __init__(self, index, reranker, config: dict):
         # [Initialization]
         pass
-    
+
     def retrieve(self, query: str, filters: dict, top_k: int) -> list:
         # [Retrieval with RAG 2.0 techniques]
         pass
@@ -509,7 +509,7 @@ class DocumentTypeRAGPipeline:
     def __init__(self, chunker, indexer, retriever, llm):
         # [Component assembly]
         pass
-    
+
     def query(self, user_query: str, user_context: dict) -> dict:
         # [Complete query handling]
         pass
@@ -538,18 +538,18 @@ class DocumentTypeRAGPipeline:
         try:
             # Primary retrieval path
             results = self.retriever.retrieve(user_query, filters, top_k=10)
-            
+
             if not results:
                 # Fallback: Broaden search
                 results = self.retriever.retrieve(user_query, {}, top_k=20)
-            
+
             answer = self.llm.generate(user_query, results)
-            
+
         except VectorDBTimeout:
             # Fallback: Use cached results if available
             results = self.cache.get_similar_queries(user_query)
             answer = self.generate_from_cache(results)
-            
+
         except LLMAPIError:
             # Fallback: Return retrieved documents with error message
             return {
@@ -557,7 +557,7 @@ class DocumentTypeRAGPipeline:
                 "documents": results,
                 "message": "Unable to generate summary, showing raw results"
             }
-            
+
         return {"status": "success", "answer": answer, "sources": results}
 ```
 
@@ -816,18 +816,18 @@ Define how to validate improvements:
 ```python
 class ABTestFramework:
     """Framework for testing RAG improvements."""
-    
+
     def split_traffic(self, user_id: str) -> str:
         """Assign user to variant A or B."""
         # [Consistent hashing for user assignment]
         pass
-    
-    def log_query_result(self, variant: str, query: str, 
+
+    def log_query_result(self, variant: str, query: str,
                         result: dict, user_feedback: dict):
         """Log query and user feedback for analysis."""
         # [Structured logging for analysis]
         pass
-    
+
     def analyze_results(self, min_samples: int = 100) -> dict:
         """Statistical analysis of variant performance."""
         # [Statistical significance testing]

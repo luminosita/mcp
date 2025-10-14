@@ -1208,7 +1208,7 @@ def hash_password(password: str) -> tuple[str, str]:
 async def register_user(user: UserRegistration):
     """
     Register new user with secure password handling
-    
+
     Security measures:
     - Input validation via Pydantic
     - Password strength requirements
@@ -1223,18 +1223,18 @@ async def register_user(user: UserRegistration):
                 status_code=400,
                 detail="Password must contain uppercase, lowercase, number, special character"
             )
-        
+
         # Hash password
         pwd_hash, salt = hash_password(user.password)
-        
+
         # Store user (parameterized query example)
         # db.execute(
         #     "INSERT INTO users (email, password_hash, salt, username) VALUES (?, ?, ?, ?)",
         #     (user.email, pwd_hash, salt, user.username)
         # )
-        
+
         return {"message": "User registered successfully", "email": user.email}
-    
+
     except Exception as e:
         # Log error without exposing sensitive details
         # logger.error(f"Registration error: {type(e).__name__}")
@@ -1774,9 +1774,9 @@ Role of prompt engineer in AI-driven Software Development Lifecycle is rapidly e
 
 ---
 
-**Document Version:** 1.0 Unified  
-**Last Updated:** January 2026  
-**Source Documents:** ChatGPT-5, Gemini 2.5 Pro, Claude Sonnet 4.5 Research Reports  
+**Document Version:** 1.0 Unified
+**Last Updated:** January 2026
+**Source Documents:** ChatGPT-5, Gemini 2.5 Pro, Claude Sonnet 4.5 Research Reports
 **License:** For educational and research purposes
 
 ---

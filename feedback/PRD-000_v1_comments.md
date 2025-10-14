@@ -21,7 +21,7 @@ Main implementation-aware CLAUDE.md is @implementation/CLAUDE-core.md
 
 - Renovate tool (https://github.com/renovatebot/renovate, Cross-platform Dependency Automation) - to keep library versions up-to-date
 - NuShell (https://www.nushell.sh, cross-platform shell, works on Linux, macOS, BSD, and Windows) - replacement for Bash
-- Devbox (https://www.jetify.com/devbox, Portable, Isolated Dev Environments on any Machine) - to provide isolation from local developer's machine and heavily reduce "Work's on my machine" issues 
+- Devbox (https://www.jetify.com/devbox, Portable, Isolated Dev Environments on any Machine) - to provide isolation from local developer's machine and heavily reduce "Work's on my machine" issues
 - Podman (instead of Docker)
 
 ## Open Questions - Answers
@@ -46,5 +46,3 @@ Main implementation-aware CLAUDE.md is @implementation/CLAUDE-core.md
 6. defer to EPIC-004
 
 7. Podman alternative only
-
-

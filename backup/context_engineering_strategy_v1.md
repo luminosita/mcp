@@ -108,10 +108,10 @@ This document defines the **Context Engineering Framework** for AI-assisted soft
 
    docs/
       context_engineering_strategy_v1.md           # Comprehensive methodology
-      sdlc_artifacts_comprehensive_guideline.md    # SDLC artifacts guideline               
+      sdlc_artifacts_comprehensive_guideline.md    # SDLC artifacts guideline
    prompts/
       templates/                          # XML-formatted templates
-         {phase}-template_v{1-3}.md       ## SDLC artifacts templates 
+         {phase}-template_v{1-3}.md       ## SDLC artifacts templates
       {phase}_generator_v{1-3}.xml               # Generator prompts
 
    artifacts/                              # All generated deliverables

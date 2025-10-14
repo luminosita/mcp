@@ -627,7 +627,7 @@ def hash_password(password: str) -> tuple[str, str]:
 async def register_user(user: UserRegistration):
     """
     Register new user with secure password handling
-    
+
     Security measures:
     - Input validation via Pydantic
     - Password strength requirements
@@ -642,18 +642,18 @@ async def register_user(user: UserRegistration):
                 status_code=400,
                 detail="Password must contain uppercase, lowercase, number, and special character"
             )
-        
+
         # Hash password
         pwd_hash, salt = hash_password(user.password)
-        
+
         # Store user (parameterized query example)
         # db.execute(
         #     "INSERT INTO users (email, password_hash, salt, username) VALUES (?, ?, ?, ?)",
         #     (user.email, pwd_hash, salt, user.username)
         # )
-        
+
         return {"message": "User registered successfully", "email": user.email}
-    
+
     except Exception as e:
         # Log error without exposing sensitive details
         # logger.error(f"Registration error: {type(e).__name__}")
@@ -801,7 +801,7 @@ function DataTable<T extends Record<string, any>>({
           aria-label="Filter table data"
         />
       </div>
-      
+
       <table role="table">
         <thead>
           <tr role="row">
@@ -1324,9 +1324,9 @@ This research has synthesized the state-of-the-art in prompt engineering for sof
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** October 2025  
-**Authors:** Compiled from 2024-2025 Research  
+**Document Version:** 1.0
+**Last Updated:** October 2025
+**Authors:** Compiled from 2024-2025 Research
 **License:** For educational and research purposes
 
 [^1]: Anthropic, "Introducing Contextual Retrieval", accessed September 2024, https://www.anthropic.com/news/contextual-retrieval
@@ -1408,5 +1408,3 @@ This research has synthesized the state-of-the-art in prompt engineering for sof
 [^39]: arXiv, "Prompting Techniques for Secure Code Generation: A Systematic Investigation", accessed February 2025, https://arxiv.org/html/2407.07064v2
 
 [^40]: VKTR, "Inside Anthropic's Model Context Protocol: The New AI Data Standard", accessed June 2025, https://www.vktr.com/ai-technology/inside-anthropics-model-context-protocol-mcp-the-new-ai-data-standard/
-
-

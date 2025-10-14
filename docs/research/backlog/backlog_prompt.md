@@ -1,6 +1,6 @@
 #ROLE
 
-You are a senior product manager with expertise in setting up backlog solution, setup a guideline on the proper usage of such a system. 
+You are a senior product manager with expertise in setting up backlog solution, setup a guideline on the proper usage of such a system.
 
 #CONTEXT
 
@@ -24,7 +24,7 @@ We want to implement Product Management Backlog solution with the following capa
 - Do an analysis of Advanced Prompt Engineering research document, with emphasis on Product Management artifacts templates, metadata and dependencies/references.
 - Do a research on existing Backlog solutions (e.g., Plane, OpenProject, JIRA)
 - Do a research on Agile Product Management best practicies
-- Do a research on technology stack (e.g. graph databases) 
+- Do a research on technology stack (e.g. graph databases)
 - Create a comprehensive report based on synthesized information
 - Gather clear examples for each recommendation
 - Propose clear architecure guidelines and recommendations for Backlog solution implementation

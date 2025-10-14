@@ -22,4 +22,3 @@ Primary idea of Research Artifact is to be the primary source of truth for creat
 - `prompts/templates/research-artifact-template.md`
 - `prompts/research_prompt.xml`
 - `docs/research/backlog/Backlog_Solution_Implementation_Guidelines_v2.md`
-

@@ -17,4 +17,3 @@
 ## Output
 - [X] Generator Prompt
 - [X] Research Artifact Template
-

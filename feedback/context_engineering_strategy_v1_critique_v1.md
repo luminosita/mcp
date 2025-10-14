@@ -3,14 +3,14 @@
 ## Questions:
 
 ### Q1: Duplication of instructions
-- Q1a: Why both documents, Product Vision generator prompt and Product Vision template, contain identical validation checklist? 
+- Q1a: Why both documents, Product Vision generator prompt and Product Vision template, contain identical validation checklist?
 - Q1b: What is the reason for duplication?
 
-### Q2 Research 
+### Q2 Research
 
-We are instructing LLM to "Research or infer 2-3 existing solutions in this space". 
+We are instructing LLM to "Research or infer 2-3 existing solutions in this space".
 
-- Q2a: Should we instruct LLM to research and suggest additional product capabilities for the review or just rely on the product idea document input for capabilities? 
+- Q2a: Should we instruct LLM to research and suggest additional product capabilities for the review or just rely on the product idea document input for capabilities?
 - Q2b: Do we want to do that part within epic generator prompt? If yes, I do not see any research instructions as part of `<step priority="12">` nor in `<next-generator>` section.
 - Q2c: Product vision creation is an iterative research-based process. How can we achieve this if we do not instruct LLM to do a research on important areas. Please disregard this part, if it is implied that LLMs will do a research by default if they miss information, regardless of our instructions. Do we need to specify `deep reasearch` or `deep thinking` instructions in that case.
 
@@ -23,7 +23,7 @@ We are instructing LLM to "Research or infer 2-3 existing solutions in this spac
 ### Q4 Epic Generator
 
 - Q4a: `<step priority="12">` instructs LLM model to "Follow generator prompt XML schema (see Section 5.1 of strategy document)". It refers to "strategy document" for XML Schema. Strategy document is not an input for this generator prompt. Should we extract templates from strategy document and refer to them when we instruct LLM to generate promtps?
- 
+
 ### Q5 Main CLAUDE.md
 
 - Q5a: In Step 3 of main CLAUDE.md, why do we use `/kickoff xecute-generator ...` instead of `/generate ...`
@@ -57,12 +57,10 @@ We are instructing LLM to "Research or infer 2-3 existing solutions in this spac
 
 ## Change in the strategy
 I revisited the phases listed in Section 1.4 of the strategy document. We need to insert new phase after the Phase 1 (PoC). That will be MCP Server phase. That phase will include:
-- Cleanup of all prompts (.claude/commands/* and /prompts/*) and templates 
+- Cleanup of all prompts (.claude/commands/* and /prompts/*) and templates
 - Extraction of all prompts and templates and relocation of these files into a new MCP Server repository
 - MCP Server will be Python/Pydantic based product serving our prompts and templates and making them available for any future project
 - **Rationale**: current folder structure is great for the PoC product. If we want to use it for other products we need to copy/paste prompt and template files. This is a headache for maintenance. Much better approach is to isolate everything into a common repository (MCP Server repository) and make them reusable.
 - This requires update of the main strategy document as well as Graduation related documents
 
 **CRITICAL** Analyze my critiques, and perform clarification loop by asking questions until all statements are clarified. Propose updates to our plan with new tasks based on the critiques. Only proceed with updates upon confirmation.
- 
-

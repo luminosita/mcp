@@ -259,7 +259,7 @@
       <summary>Centralized paths in CLAUDE.md</summary>
       <changes>
         - Removed hardcoded paths from metadata and traceability
-        - Added references to CLAUDE.md Folder Structure section 
+        - Added references to CLAUDE.md Folder Structure section
         - Use natural language: "see CLAUDE.md for path pattern"
       </changes>
     </change>

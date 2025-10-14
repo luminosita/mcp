@@ -5,7 +5,7 @@ Shell CLI tools for various development tasks are scattered(e.g., for linting an
 ### Proposed Solution
 Consolidate all CLI tool executions into Taskfile and central place for all tool capabilities. Consolidate all `CLAUDE.md` instructions to exclusively use Taskfile tasks for the operations
 
-**Rationale**: 
+**Rationale**:
 Current MCP project uses Python as a main programming language and Python-orientied specialized `CLAUDE.md` files. Future projects will have different architectures and programming languages. Common thing among all these architectures is hybrid approach with specialized `CLAUDE.md` files. Each architecture has it's own tooling and we need to establish a common fasade for all architectures. Taskfile gives as that capability to unify tooling under the common fasade
 
 ### Affected artifacts

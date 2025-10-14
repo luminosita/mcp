@@ -21,4 +21,3 @@
 - Q1: do we specify anti-hallucination guardrails (as specified in Section 3: Anti-Hallucination and Factual Grounding Strategies of the main research document) anywhere in generated prompts? Specifially, do we specify instructions for confirming all the assumptions before proceeding?
 
 **CRITICAL** Analyze my critiques, and perform clarification loop by asking questions until all statements are clarified. Give clear answer to evaluate requests. Only proceed with updates upon confirmation.
- 

@@ -93,7 +93,7 @@ C. Citation Requirements
 YES - make this a REQUIRED validation criterion
 
 D. Relationship to SDLC Phases
-NO 
+NO
 
 **Rationale**:
 - no need to have explicitly stated SDLC phases, as long as we can comprehensive information for SDLC artifacts creation

@@ -91,10 +91,10 @@ Gap Analysis Report: Context Engineering Proof-of-Concept
 
   **Human Response**:
   - All proposed assumptions are correct
-  - We are creating CLI tool. Product details should be created as part of Product Vision generation task. 
-  - My understanding of the research document is that we generally need a sophisticated prompt for each phase/step/task of the process. Maybe that is an overkill. Iterative proof of concept project should clarify that assumption. 
+  - We are creating CLI tool. Product details should be created as part of Product Vision generation task.
+  - My understanding of the research document is that we generally need a sophisticated prompt for each phase/step/task of the process. Maybe that is an overkill. Iterative proof of concept project should clarify that assumption.
   - One of the tasks should be creation of Product Vision Generator prompt followed by that prompt execution. As a result we will get Product Vision template in the form of a sophisticated reusable prompt stored in the folder structure.
-  - Another assumption of mine is that each task must be executed in a standalone context. 
+  - Another assumption of mine is that each task must be executed in a standalone context.
   - The only activity performed within this current context should be project initial plan generation as a very first step of Context Engineering framework.
   - Yet another assumption of mine is that the basis of Context Engineering framework is the tree of sophisticated prompts generating sub-prompts for the future phases/steps/tasks and that each template artifact is essentially a prompt generating sub-artifacts.
   - **CRITICAL** Iterative execution of subsequent tasks within standalone contexts
@@ -102,7 +102,7 @@ Gap Analysis Report: Context Engineering Proof-of-Concept
   - **CRITICAL** Analyze my response, and perform clarification loop by asking questions until clear strategy/workflow is established
   - Success criteria for G2 would be clear Context Engineering strategy/workflow document
   - Specialized CLAUDE.md files should be created right before execution of the specialized task requiring information from those CLAUDE.md files
-  - Each task context should contain main CLAUDE.md file, specialized CLAUDE.md file (by instruction provided in the main CLAUDE.md) at the minimum. 
+  - Each task context should contain main CLAUDE.md file, specialized CLAUDE.md file (by instruction provided in the main CLAUDE.md) at the minimum.
   - Outcome of this step can also affect the initial context for this session and result in the update of the prompt
 
   ## Step 2
@@ -297,19 +297,19 @@ graph TD;
 A["Master Prompt (this session)"] -->|GENERATES| P[Master Plan];
 A -->|GENERATES| PVP[Product Vision Generator Prompt];
 
-PVP -->|GENERATES| PVD["Product Vision Document (in separate context C1)"] 
+PVP -->|GENERATES| PVD["Product Vision Document (in separate context C1)"]
 PVP -->|GENERATES| EP["Epic Generator Prompt (in separate context C1)"]
 
-EP -->|GENERATES| ED["Epic Document (in separate context C2)"] 
+EP -->|GENERATES| ED["Epic Document (in separate context C2)"]
 EP -->|GENERATES| PRP["PRD Generator Prompt (in separate context C2)"]
 
-PRP -->|GENERATES| PRD["PRD (in separate context C3)"] 
+PRP -->|GENERATES| PRD["PRD (in separate context C3)"]
 PRP -->|GENERATES| USP["User Story Generator Prompt (in separate context C3)"]
 ```
-**Notes**: 
-- Product Vision Document is the final document not a template. It is based on the template defined in the main research document. If template is missing it should be separately generated and placed in the folder structure so that it can be referenced by PVP (Product Vision Generator Prompt). 
-- Epic Document is the final document not a template. It is based on the template defined in the main research document. If template is missing it should be separately generated and placed in the folder structure so that it can be referenced by EP (Epic Generator Prompt). 
-- PRD is the final document not a template. It is based on the template defined in the main research document. That template should be extracted from the document, finalized and placed in the folder structure so that it can be referenced by PRP (PRD Generator Prompt). 
+**Notes**:
+- Product Vision Document is the final document not a template. It is based on the template defined in the main research document. If template is missing it should be separately generated and placed in the folder structure so that it can be referenced by PVP (Product Vision Generator Prompt).
+- Epic Document is the final document not a template. It is based on the template defined in the main research document. If template is missing it should be separately generated and placed in the folder structure so that it can be referenced by EP (Epic Generator Prompt).
+- PRD is the final document not a template. It is based on the template defined in the main research document. That template should be extracted from the document, finalized and placed in the folder structure so that it can be referenced by PRP (PRD Generator Prompt).
 
 Depth model should be SDLC-aligned: One level per phase (Vision → Epic → PRD → Story → (ADR + Spec + Implementation Task) → Code → Test)
 
@@ -325,10 +325,10 @@ New Option:
   /.claude/commands/execute-product-vision-generator.xml or /.claude/commands/execute-generator.xml (fixed execution prompt)
 
 **Notes**:
-- fixed execution prompt executes specific generator prompt, provided as an $ARGUMENT. 
+- fixed execution prompt executes specific generator prompt, provided as an $ARGUMENT.
 - fixed execution prompt can be generic, capable of executing any generator prompt or tied to a specific type of generator prompt
 - we might come up with additional documents during the process required by particular prompt
-  
+
 ---
 
 Q3: Task Execution Trigger Mechanism (excellent question)
@@ -337,7 +337,7 @@ This should be one of the main goal of this proof of concept project. The idea i
 ---
 
 Q4: Context Engineering Strategy Document Structure
-Proposed document structure is good for the start. It will slightly evolve as we progress. 
+Proposed document structure is good for the start. It will slightly evolve as we progress.
 
 ---
 
@@ -357,7 +357,7 @@ Scenario Example:
 ---
 
 **CRITICAL** Analyze my response, and perform clarification loop by potentially asking questions until clear strategy/workflow is established
-  
+
 
 ## Step 3
 
@@ -684,7 +684,7 @@ Question 7a: Option B → Converted to XML prompt format with <template> tags
 Question 7b: Who extracts templates?
   Option A: Master Prompt (this session) extracts or generates, in case it is missing in the main document, all templates upfront and stores them in the repo
 
---- 
+---
 Q8: Iteration Refinement Mechanics
 
 Question 8a: Which iteration trigger model for PoC?
@@ -717,9 +717,9 @@ Q9: Context Isolation Boundary
 ---
 Q10: Master Plan Scope
 
-  Question 10a: 
+  Question 10a:
   Answer: Option A (Task List)
-  
+
   Question 10b: Should the Master Plan include validation criteria for each task?
   Answer: Yes. Rationale: it will clearly present a structured report of a task execution
 
@@ -1510,8 +1510,8 @@ Answer: your understanding of my previous statements is excellent. I changed my 
 Q1: Backlog Story Generator Invocation Pattern
 
 Answer: Option B + Option C
-**Explanation**: 
-- backlog-story-generator should process multiple high-level user stories coming from the same PRD. Backlog story generator requires access to PRD to properly generate backlog user stories.  
+**Explanation**:
+- backlog-story-generator should process multiple high-level user stories coming from the same PRD. Backlog story generator requires access to PRD to properly generate backlog user stories.
 - one high-level user story can spawn multiple backlog stories. backlog-story-generator can do a deep analysis and research and decide to have multiple backlog stories for a corresponding high-level story
 - there is a case of minor changes (enhancements, bug fixes, etc) where we want to generate backlog user story but we do not have a full PRD for it. That is also a valid use case
 
@@ -1520,7 +1520,7 @@ Q2: PRD High-Level User Story Format
 
 Question 2a:
 - Functional requirements are separate from high-level user stories. There should be a reference between high-level user story and function requirement(s) (e.g. story STR-001 satisfies FR-3)
-- Functional requirements are contained within PRD and related backlog user story. Backlog user story should clearly state what functional requirement it covers from related PRD, if available. 
+- Functional requirements are contained within PRD and related backlog user story. Backlog user story should clearly state what functional requirement it covers from related PRD, if available.
 - As previously stated, we will track status of high-level user stories and implementation tasks as part of a separate tracking TODO.md file
 
 Question 2b: What does "Processed" checkbox mean exactly?
@@ -1533,7 +1533,7 @@ Q3: Backlog User Story Subfolder Structure
 
 Answer: Option C
 
-**Note**: 
+**Note**:
 - Subfolder for backlog use story contains TODO.md file to track implementation task status
 
 ---
@@ -1562,7 +1562,7 @@ To clarify the answer, content of TODO.md file should be:
   - [Backend task 1]
 
 Question 4b: What does checked task mean?
-- ☑ = Task sent for further processing 
+- ☑ = Task sent for further processing
 
 **Notes**:
 - we can keep it a bit generic for this documentation strategy phase
@@ -1635,7 +1635,7 @@ C3: PRD Generator
 C4: Backlog Story Generator (per high-level story)
     Input: prd_v3.md (specific high-level story)
     Output: backlog_story_v3.md (with impl. task) + tech-spec-generator + adr-generator
-    **Changes**:  
+    **Changes**:
     - ☐ checkboxes are placed in TODO.md file in Backlog story subfolder
     - PRD as input for backlog story generator as most likely, but optional for minor changes. specific high-level story is required.
 
@@ -2174,7 +2174,7 @@ Q7: Updated Folder Structure
 Question 7a: Should /artifacts/specs/ folder be removed since specs are now in backlog story subfolders?
 Answer: yes
 
-Question 7b: 
+Question 7b:
 Answer: deferred
 
   ---
@@ -2535,8 +2535,8 @@ Answer: deferred
 
   On Remarks - MCP Server Phase:
 
-  CRITICAL Q8: We need to clarify phases. My understanding is that we are still on the Phase 1 (PoC). Phase 1 ends with TASK-014, as currently specified in `TODO.md`. After Phase 1 (PoC) we should proceed into Phase 2 (MCP Server Extraction & Productization). Afterwards, we continue as original planned thru Phase #3-5  
-  
+  CRITICAL Q8: We need to clarify phases. My understanding is that we are still on the Phase 1 (PoC). Phase 1 ends with TASK-014, as currently specified in `TODO.md`. After Phase 1 (PoC) we should proceed into Phase 2 (MCP Server Extraction & Productization). Afterwards, we continue as original planned thru Phase #3-5
+
   Q8.1: After TASK-014 as specified now in `TODO.md`
 
   Q8.2: We will define that as part of the new MCP Server project. The idea is for MCP Server project to be implemented using defined strategy, in the same way as PoC project.

@@ -17,5 +17,4 @@
 - Initial constraints
     - Inital scope is to encapsulate all AI agent artifacts within MCP Server
 - References
-    - Teller (https://github.com/tellerops/teller), great overview of required features 
-
+    - Teller (https://github.com/tellerops/teller), great overview of required features

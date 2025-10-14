@@ -6,13 +6,13 @@ You are a senior software product researcher with the strong technical backgroun
 
 ## CONTEXT
 We performed extensive deep research on three different software products:
-    - Universal Secrets Management Tool 
+    - Universal Secrets Management Tool
     - MCP Server for AI-assisted software engineering
     - Product Management Backlog solution
 All there researches produced very good results in the form of market analysis, identifing gaps, features/capabilities recommendation, and software architecture. The issue we found is that the results lack the common structure. Each research excelled in certain areas and left some important ones uncovered. True cause of the variations in the research outcome is the inconcistency and weak prompt formulation.
 
 ## GOAL
-Establish a clear and comprehensive research prompt and research artifact template containing instructions to follow research structure, to cover all important areas, but at the same time provide enough freedom to a research AI agent to excel in finding new gaps and niches in the market and sophisticated synthesis of competitive products capabilities. Research artifact needs to be the main guide for product SDLC artifacts creation. 
+Establish a clear and comprehensive research prompt and research artifact template containing instructions to follow research structure, to cover all important areas, but at the same time provide enough freedom to a research AI agent to excel in finding new gaps and niches in the market and sophisticated synthesis of competitive products capabilities. Research artifact needs to be the main guide for product SDLC artifacts creation.
 
 ## STEPS
 - Do a deep analysis of the existing prompts and their corresponding research results
@@ -40,7 +40,7 @@ Establish a clear and comprehensive research prompt and research artifact templa
 - Research Prompt must clarify human inputs by asking questions
 - Research Prompt can proceed with the research only after confirmation of clarity. Each LLM assumpation must be clarified and confirmed with human.
 - Research Prompt must produce the research plan and wait for the confirmation
-- Research Prompt must contain final research artifact validation checklist 
+- Research Prompt must contain final research artifact validation checklist
 - Research Prompt must contain instructions to generate final research artifact with all research citations following `CITATION REQUIREMENTS`
 - Research Prompt must follow `generator-schema.xml`. Add sections if required.
 - Research Prompt must instruct formulation of overall architecture recommendation
@@ -79,11 +79,11 @@ Establish a clear and comprehensive research prompt and research artifact templa
 
 ## REFERENCES
 - `docs/research/backlog/backlog_prompt.md`                                   #prompt used for backlog solution research
-- `docs/research/backlog/Backlog Solution Implementation Guidelines.md`       #backlog solution research artifact 
+- `docs/research/backlog/Backlog Solution Implementation Guidelines.md`       #backlog solution research artifact
 - `docs/research/mcp/mcp_prompt.md`                                       #prompt used for mcp server research
-- `docs/research/mcp/AI Agent MCP Server Implementation Report.md`        #mcp server research artifact 
+- `docs/research/mcp/AI Agent MCP Server Implementation Report.md`        #mcp server research artifact
 - `docs/research/shh/shh_prompt.md`                                       #prompt used for secrets management research
-- `docs/research/shh/Secrets Management Solution Research Report.md`      #secrets management research artifact 
+- `docs/research/shh/Secrets Management Solution Research Report.md`      #secrets management research artifact
 - `prompts/templates/generator-schema.xml`                    #existing generator prompt template
 - SDLC phases artifacts templates:
     - `prompts/templates/product-vision-template.xml`       #product vision template

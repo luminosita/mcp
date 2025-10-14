@@ -4,4 +4,3 @@
 - C2: evaluate if product-vision-generator and generator-schema-template contain instructions for human to confirm all ASSUMPTIONS before proceeding with generation of artifacts and next-generator
 
 **CRITICAL** Analyze my critiques, and perform clarification loop by asking questions until all statements are clarified. Give clear answer to evaluate requests. Only proceed with updates upon confirmation.
- 

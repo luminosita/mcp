@@ -124,7 +124,7 @@ def load_prompt(prompt_name: str) -> str:
 def get_prompt(prompt_name: str):
     """
     Retrieves a versioned prompt template by its name.
-    
+
     This endpoint allows an AI agent to fetch standardized prompts
     for tasks like initializing a new repository or generating a CI/CD manifest.
     """
@@ -142,7 +142,7 @@ author: "DevOps Team"
 description: "System prompt for initializing a new Python project repository."
 template: |
   You are an expert software engineering assistant. Your task is to initialize a new Python project repository.
-  
+
   Follow these guidelines strictly:
   1. Create a root directory named `{repo_name}`.
   2. Inside, create a `pyproject.toml` file with basic metadata (name, version 0.1.0, description).
@@ -192,12 +192,12 @@ async def rag_add_tool(file: UploadFile = File(...)):
     """
     if not file.filename.endswith(('.md', '.txt', '.pdf')):
         raise HTTPException(status_code=400, detail="Invalid file type.")
-    
+
     content = await file.read()
     try:
         # The rag_service.add method handles chunking, embedding, and indexing
         document_id = await rag_service.add(
-            content=content, 
+            content=content,
             metadata={"source": file.filename}
         )
         return {"message": "File processed successfully.", "document_id": document_id}
@@ -251,7 +251,7 @@ def call_rag_tool_safely(user_prompt: str) -> dict:
     calls the MCP Server's tool endpoint.
     """
     print(f"Agent is thinking about the prompt: '{user_prompt}'")
-    
+
     # 3. Let the LLM generate the structured request object.
     #    `instructor` ensures the output matches the `RAGQuery` model.
     rag_request = client.chat.completions.create(

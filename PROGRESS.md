@@ -56,7 +56,7 @@
 ## Finalization
 - [X] remove CLAUDE-*.md lazy generation instructions, keep "if exists" verification
 - [X] remove next-generator instructions, keep only reference to next-generator to be invoked in the report
-- [ ] Validation checks migration to a validation tool 
+- [ ] Validation checks migration to a validation tool
 - [ ] strategy doc update
 - [ ] GRADUATION.md review
 - [ ] IMPORTANT: compare with dot-ai, prp, portal projects from sandbox
@@ -77,18 +77,18 @@
 ### QA Test Plan test plan creation
 
 ## Next Phases
-### Phase 2 
+### Phase 2
     * software implementation generator prompts (source code, unit tests, deployments)
-    * specialed CLAUDE.md files in `claude.md` project 
+    * specialed CLAUDE.md files in `claude.md` project
     * TODO.md tasks
     * strategy doc update
     * GRADUATION.md
 ### Phase 3
-    * generate MCP Server implementation 
-    * TODO.md tasks 
+    * generate MCP Server implementation
+    * TODO.md tasks
     * strategy doc update
 ### Phase 4
-    * move AI artifacts to MCP server 
+    * move AI artifacts to MCP server
     * tracking strategy (tracking TODO.md files, PRDs, USs ...)
     * strategy doc update
     * add new product repo initialization tool to MCP Server
@@ -96,18 +96,18 @@
     * Backlog product
     * make all product management artifact related and trackable
         * PRD has multiple sections, each sections should be linked to something within sub-artifact (Functional req from PRD is linked to functional req of user story). This gives a clear pictures of general requirement coverage (analogus to Code coverage with tests)
-    * Backlog event should trigger re-indexing of document repository items within RAG system 
+    * Backlog event should trigger re-indexing of document repository items within RAG system
         * adding of a new User Story, can add new feature in PRD, which shell trigger PRD re-index
 ### Phase 6
     * SHH tool using MCP Server (final MCP server end-to-end test)
     * add full git support (PR merge requests)
-    * add CI/CD 
+    * add CI/CD
 ### Phase 7
     * add RAG tool to MCP server
         * every RAG indexed item should have re-index trigger defined to prohibit out-of-sync RAG results
-    * index all AI artifacts 
+    * index all AI artifacts
     * index source code
-### Phase 8 
+### Phase 8
     * MCP server graduation to semi-automation/full automation software implementation
-    * Task orchestration automatization with Backlog tasks 
+    * Task orchestration automatization with Backlog tasks
     * Sub-agents

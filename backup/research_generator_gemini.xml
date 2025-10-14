@@ -17,11 +17,11 @@
 
   <task_context>
     <background>
-      This generator creates a comprehensive Product Research Artifact. 
-      This artifact is the foundational document for a new product initiative, 
-      providing the market context, competitive analysis, strategic recommendations, 
-      and architectural blueprints necessary to inform all subsequent 
-      SDLC phases (Vision, Epics, PRDs, ADRs, etc.). 
+      This generator creates a comprehensive Product Research Artifact.
+      This artifact is the foundational document for a new product initiative,
+      providing the market context, competitive analysis, strategic recommendations,
+      and architectural blueprints necessary to inform all subsequent
+      SDLC phases (Vision, Epics, PRDs, ADRs, etc.).
       The quality and depth of this research are critical for the product's success.
     </background>
 
