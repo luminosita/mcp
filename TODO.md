@@ -8,10 +8,10 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: TODO-037, TODO-038, TODO-039 COMPLETED; US-001 core modules implemented; Setup script orchestrator ready
-**Last Completed**: TODO-039 (Main Orchestrator), TODO-038 (Configuration & Validation), TODO-037 (UV Installation & Venv Setup)
-**Next Task**: TODO-040 (Integration Tests) OR TODO-041 (Documentation) OR TODO-042 (Edge Cases) OR test setup.nu execution
-**Completion**: 26/33 tasks (79%)
+**Current Status**: TODO-037, TODO-038, TODO-039, TODO-040 (partial), TODO-041 (docs) COMPLETED; US-001 core modules + setup script complete
+**Last Completed**: TODO-041 (SETUP.md documentation), TODO-040 (Integration test framework), TODO-039 (Main Orchestrator)
+**Next Task**: TODO-041 (TROUBLESHOOTING.md) OR TODO-042 (Edge Cases) OR TODO-043 (Performance) OR run full setup test
+**Completion**: 27/33 tasks (82%)
 **Archived Tasks**: See `/TODO-completed.md` for 16 completed tasks
 
 ---

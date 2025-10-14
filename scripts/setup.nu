@@ -26,21 +26,6 @@ use lib/config_setup.nu
 use lib/validation.nu
 use lib/interactive.nu
 
-# Parse command line arguments
-def parse_args [] {
-    let args = ($env.args? | default [])
-
-    mut silent = false
-
-    for arg in $args {
-        if $arg == "--silent" {
-            $silent = true
-        }
-    }
-
-    return {silent: $silent}
-}
-
 # Display welcome banner
 def display_welcome [silent: bool] {
     if not $silent {
@@ -89,12 +74,10 @@ def display_next_steps [] {
 }
 
 # Main setup orchestrator
-def main [...args: string] {
+def main [
+    --silent (-s)  # Run in silent mode (no prompts, use defaults)
+] {
     let start_time = (date now)
-
-    # Parse arguments
-    let parsed_args = (parse_args)
-    let silent = $parsed_args.silent
 
     # Display welcome
     display_welcome $silent
