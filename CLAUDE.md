@@ -356,6 +356,91 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 ---
 
+## ID Assignment Strategy
+
+**Global Sequential Numbering:** All artifact IDs within a type (US, SPEC, ADR, TASK, SPIKE) are globally unique and sequential across the entire project.
+
+**Purpose:** Prevents ID clashing when multiple HLS stories generate backlog stories. Ensures unique identification across all artifacts.
+
+**Assignment Process:**
+1. **Planning Phase:** Assign IDs in TODO.md when creating generator tasks
+2. **Registry:** TODO.md acts as the authoritative ID registry
+3. **Immutability:** Once assigned, IDs never change (even if artifact deleted)
+4. **Sequence:** Next available ID = (last assigned ID + 1)
+
+**ID Allocation Example:**
+
+| HLS | Backlog Stories | US IDs Assigned |
+|-----|-----------------|-----------------|
+| HLS-001 | 2 stories | US-001, US-002 |
+| HLS-002 | 6 stories | US-003 → US-008 |
+| HLS-003 | 5 stories | US-009 → US-013 |
+| HLS-004 | 6 stories | US-014 → US-019 |
+| HLS-005 | 6 stories | US-020 → US-025 |
+
+**Next Available IDs (as of 2025-10-14):**
+- US: US-009 (HLS-002 in progress through US-008, US-003 generated)
+- SPEC: SPEC-002 (SPEC-001 used by US-001)
+- TASK: TASK-004 (TASK-001/002/003 used by US-001)
+- ADR: ADR-001 (none assigned yet)
+- SPIKE: SPIKE-001 (none assigned yet)
+
+**Note:** TODO.md tracks only active/upcoming work. Completed work archived to TODO-completed.md.
+
+**Checking Next Available ID:**
+```bash
+# Find last assigned US ID in TODO.md
+grep -oE "US-[0-9]+" TODO.md | sort -t- -k2 -n | tail -1
+
+# Find last assigned SPEC ID in TODO.md
+grep -oE "SPEC-[0-9]+" TODO.md | sort -t- -k2 -n | tail -1
+
+# Find last assigned TASK ID in TODO.md
+grep -oE "TASK-[0-9]+" TODO.md | sort -t- -k2 -n | tail -1
+
+# Check for duplicate US IDs in artifacts (should return nothing)
+find artifacts/backlog_stories -name "US-*.md" | sed 's/.*US-/US-/' | sed 's/_.*//' | sort | uniq -d
+```
+
+**Parent Relationship Tracking:**
+Parent tracked in artifact metadata (not in ID):
+
+```markdown
+## Metadata
+- **Story ID:** US-002
+- **Parent HLS:** HLS-002 (CI/CD Pipeline)
+- **Parent PRD:** PRD-000
+```
+
+**Child Artifact ID Assignment:**
+- **Tech Spec:** One SPEC per complex US (typically 5+ SP or marked [REQUIRES TECH SPEC])
+- **Spike:** One SPIKE per investigation (US with [REQUIRES SPIKE] marker)
+- **ADR:** One ADR per major technical decision ([REQUIRES ADR] marker)
+- **Task:** Multiple TASKs per US (decomposed from Tech Spec, typically 4-16 hours each)
+
+**Example Lineage:**
+```
+PRD-000 (Project Foundation)
+  └─ HLS-002 (CI/CD Pipeline)
+       ├─ US-002 (Pipeline Infrastructure, 5 SP)
+       │    ├─ SPEC-XXX (Pipeline Architecture) [if needed]
+       │    ├─ TASK-XXX (Create workflow YAML)
+       │    └─ TASK-YYY (Configure branch protection)
+       ├─ US-003 (Code Quality Checks, 3 SP)
+       │    └─ TASK-ZZZ (Configure Ruff)
+       └─ US-004 (Type Safety, 3 SP)
+            ├─ SPIKE-XXX (MyPy strict mode impact)
+            ├─ ADR-XXX (Type checking strategy)
+            └─ SPEC-YYY (MyPy configuration)
+```
+
+**Generator Guidance:**
+- **Backlog Story Generator:** Receives explicit US-XXX ID as input parameter from TODO.md (never auto-generates IDs)
+- **Tech Spec Generator:** Receives explicit SPEC-XXX ID as input parameter from TODO.md
+- **Task Generator:** Receives range of TASK-XXX IDs as input parameter from TODO.md
+
+---
+
 **Status Value Standards**:
 - Research (Business/Implementation): Draft → In Review → Finalized
 - Strategic (Vision/Initiative/Epic): Draft → In Review → Approved → Planned/Active → In Progress → Completed
@@ -367,12 +452,13 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 ---
 
-**Document Version**: 1.5
-**Last Updated**: 2025-10-13
+**Document Version**: 1.6
+**Last Updated**: 2025-10-14
 **Maintained By**: Context Engineering PoC Team
 **Next Review**: End of Phase 1
 
 **Version History:**
+- v1.6 (2025-10-14): Added ID Assignment Strategy section - documents global sequential numbering to prevent ID clashing across HLS stories (Issue #4 - ID Management)
 - v1.5 (2025-10-13): Added Input Classification System - replaced ambiguous `required` attribute with clear `classification` tiers (Issue #3 - Input Classification)
 - v1.4 (2025-10-13): Added centralized Artifact Path Patterns section (Issue #2 - Path Consolidation)
 - v1.3 (2025-10-12): Standardized artifact IDs, file naming conventions, and status values across all templates
