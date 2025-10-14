@@ -8,6 +8,7 @@ Thank you for your interest in contributing to the AI Agent MCP Server project! 
 - [Development Workflow](#development-workflow)
 - [CI/CD Pipeline](#cicd-pipeline)
 - [Code Quality Standards](#code-quality-standards)
+- [Dependency Management](#dependency-management)
 - [Pull Request Process](#pull-request-process)
 
 ## Getting Started
@@ -816,6 +817,137 @@ task hooks:update
 ```
 
 **Note**: You can bypass hooks in exceptional cases with `git commit --no-verify`, but this is discouraged.
+
+### Dependency Management
+
+We use **Renovate bot** to automatically manage project dependencies and security updates. Renovate creates pull requests automatically when new versions are available, reducing manual maintenance burden and keeping dependencies current.
+
+#### How Renovate Works
+
+Renovate runs daily and scans `pyproject.toml` and `uv.lock` for outdated dependencies. When updates are available, it creates pull requests with:
+
+- Changelogs and release notes
+- Compatibility information
+- Breaking changes warnings (for major updates)
+- CI/CD validation results
+
+#### Update Batching Strategy
+
+Renovate uses an intelligent batching strategy to balance security responsiveness with PR volume:
+
+| Update Type | Behavior | Priority | Schedule |
+|-------------|----------|----------|----------|
+| **Security vulnerabilities** | Individual PR created immediately | High | Any time |
+| **Major version updates** | Individual PR for careful review | Medium-High | Immediate |
+| **Minor/patch updates** | Batched weekly in single PR | Medium | Monday 6am |
+| **Pre-1.0 packages** | Individual PR (minor = breaking) | Medium | Immediate |
+| **Lock file maintenance** | Weekly refresh of transitive deps | Low | Monday 6am |
+
+#### PR Types and Labels
+
+**Security Updates** (`[Security]` prefix):
+- Created within 24 hours of CVE publication
+- Individual PRs (not batched)
+- Labels: `dependencies`, `security`, `priority-high`
+- **Action Required:** Review and merge promptly
+
+**Major Updates** (`[Major]` prefix):
+- Individual PRs with breaking changes warnings
+- Labels: `dependencies`, `major-update`, `breaking-changes`
+- **Action Required:** Review changelog, test thoroughly, check for deprecations
+
+**Weekly Batch Updates** (`Update Python dependencies (weekly batch)`):
+- Combines multiple minor/patch updates
+- Labels: `dependencies`, `maintenance`
+- **Action Required:** Review combined changelog, verify tests pass
+
+**Pre-1.0 Updates** (`[Pre-1.0]` prefix):
+- Pre-release packages where minor = breaking
+- Individual PRs for safer review
+- Labels: `dependencies`, `pre-release`, `review-required`
+- **Action Required:** Treat like major updates
+
+#### Reviewing Renovate PRs
+
+1. **Check the PR description** - Renovate includes:
+   - Package name and version change
+   - Link to changelog/release notes
+   - Breaking changes (if any)
+   - Compatibility status
+
+2. **Review the CI/CD pipeline** - All checks must pass:
+   - ✅ Linting (Ruff)
+   - ✅ Type checking (MyPy)
+   - ✅ Tests (pytest with >80% coverage)
+
+3. **For major updates, review carefully**:
+   - Read the changelog for breaking changes
+   - Check migration guide (if provided)
+   - Test manually if needed
+   - Look for deprecation warnings in test output
+
+4. **Merge when satisfied**:
+   - All CI/CD checks pass
+   - Breaking changes understood
+   - No unexpected behavior
+
+#### Dependency Dashboard
+
+Renovate maintains a **Dependency Dashboard** issue showing:
+- All outdated dependencies
+- Pending Renovate PRs
+- Update status (current, outdated, vulnerable)
+
+Find the dashboard at: `Issues` → `🔄 Dependency Updates Dashboard`
+
+#### Manual Dependency Updates
+
+If you need to update a dependency manually (rare):
+
+```bash
+# Update a specific package
+uv add "package-name>=new-version"
+
+# Regenerate lock file
+uv lock
+
+# Run tests to verify
+task test
+
+# Commit changes
+git add pyproject.toml uv.lock
+git commit -m "chore(deps): update package-name to new-version"
+```
+
+#### Renovate Configuration
+
+Renovate behavior is configured in `renovate.json` at the repository root. Key settings:
+
+- **Auto-merge:** Disabled (manual review required for all updates)
+- **Unstable versions:** Ignored (alpha/beta/rc excluded)
+- **Schedule:** Daily scans during off-peak hours (10pm-5am weekdays, all weekend)
+- **Concurrent PRs:** Limited to 10 to prevent overwhelming the team
+- **Python support:** pep621 format (pyproject.toml)
+
+#### Troubleshooting Renovate Issues
+
+**Problem: Renovate PR failing CI/CD checks**
+- **Solution:** Review the test failures - the dependency update may have introduced breaking changes or incompatibilities. Check the package changelog for required code changes.
+
+**Problem: Renovate creating too many PRs**
+- **Solution:** This shouldn't happen with our batching strategy. If it does, check if the weekly batch schedule is working. Most updates should be batched.
+
+**Problem: Security update not appearing**
+- **Solution:** Renovate scans daily. Security PRs should appear within 24 hours of CVE publication. Check the Dependency Dashboard for status.
+
+**Problem: Want to ignore a specific dependency update**
+- **Solution:** Add the package to the ignore list in `renovate.json`. Document why in a comment.
+
+**Problem: Renovate PR has merge conflicts**
+- **Solution:** Rebase the PR branch on main (Renovate does this automatically every 2 hours). If manual rebase needed, close PR and Renovate will recreate it.
+
+**Problem: Need to test Renovate configuration changes**
+- **Solution:** Renovate validates configuration on every commit. Check for syntax errors in `renovate.json`. Use [Renovate config validator](https://docs.renovatebot.com/config-validation/).
 
 ## Pull Request Process
 
