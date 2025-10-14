@@ -8,10 +8,10 @@
 
 ## Current Phase: Phase 1 - Bootstrap & Foundation
 
-**Current Status**: US-002 v2 ready for implementation; SDLC guideline updated with Tech Spec skip criteria; Ready to generate US-001 Tech Spec per Section 11 recommendations
-**Last Completed**: TASK-029 (Taskfile Integration) + PRD-000 v3, US-001 v2, US-002 v2, SDLC guideline v1.3
-**Next Task**: TASK-031 (US-002 Implementation) OR TASK-032 (US-001 Tech Spec) OR TASK-019-022 (Generate remaining HLS stories) OR TASK-025-028 (Generate remaining US stories)
-**Completion**: 16/33 tasks (48%)
+**Current Status**: US-002 COMPLETED; SPEC-001 v1 generated; Implementation tasks partially generated (TASK-034, TASK-035 of 10 total); Ready to complete TASK-033 or proceed with implementation
+**Last Completed**: TASK-033 (partial - 2/10 implementation tasks generated), TASK-032 (SPEC-001 Tech Spec), TASK-031 (US-002 Implementation - repository structure created)
+**Next Task**: Complete TASK-033 (generate remaining 8 implementation tasks) OR proceed with US-001 implementation OR TASK-019-022 (Generate remaining HLS stories) OR TASK-025-028 (Generate remaining US stories)
+**Completion**: 19/33 tasks (58%)
 **Archived Tasks**: See `/TODO-completed.md` for 16 completed tasks
 
 ---
@@ -297,13 +297,14 @@ Address feedback from PRD-000_v2_comments.md: Update PRD generator and template 
 
 ---
 
-## Phase 1.9: Implementation (Pending)
+## Phase 1.9: Implementation (In Progress)
 
 ### TASK-031: US-002 Implementation (Repository Directory Structure)
 **Priority**: Critical - Foundation enabler blocking US-001
 **Dependencies**: None (foundation story)
 **Estimated Time**: 1-2 hours
-**Status**: ⏳ Pending
+**Status**: ✅ Completed (2025-10-14)
+**Actual Time**: ~1 hour
 **Context**: Current session
 
 **Description**:
@@ -413,13 +414,14 @@ Implement US-002 v2 - Establish Repository Directory Structure following Python 
 
 ---
 
-## Phase 1.10: Technical Design for Complex Stories
+## Phase 1.10: Technical Design for Complex Stories (In Progress)
 
 ### TASK-032: Generate Tech Spec for US-001 (Automated Setup Script)
 **Priority**: High
 **Dependencies**: TASK-014 (US-001 v2 generated), TASK-031 (US-002 implemented - optional but recommended)
 **Estimated Time**: 30-45 minutes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed (2025-10-14)
+**Actual Time**: ~30 minutes
 **Context**: New session C10 required
 **Generator Name**: tech-spec
 
@@ -483,7 +485,7 @@ Generate Technical Specification for US-001 (Automated Setup Script) per SDLC gu
 **Priority**: High
 **Dependencies**: TASK-032 (SPEC-001 Tech Spec generated)
 **Estimated Time**: 30-45 minutes
-**Status**: ⏳ Pending
+**Status**: 🔄 In Progress (2/10 tasks generated: TASK-034, TASK-035)
 **Context**: New session C11 required
 **Generator Name**: implementation-task
 
@@ -545,6 +547,11 @@ Generate Implementation Tasks (TASK-XXX) decomposing Tech Spec SPEC-001 into gra
 **Output Artifacts:**
 - `/artifacts/tasks/TASK-XXX_*.md` (8-10 implementation task files)
 - Task dependency graph (optional visualization)
+
+**Progress (2025-10-14):**
+- ✅ TASK-034: NuShell Module Structure and OS Detection (Phase 1)
+- ✅ TASK-035: Prerequisites Checking Module (Phase 1)
+- ⏳ TASK-036-043: Remaining 8 tasks (Phases 2-7) - pending generation
 
 **Reference:**
 - Tech Spec: `/artifacts/tech_specs/SPEC-001_automated_setup_script_v1.md`
