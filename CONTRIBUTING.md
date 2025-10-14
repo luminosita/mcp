@@ -66,6 +66,237 @@ task type-check        # MyPy type checking
 task test:coverage     # Tests with coverage (80% minimum)
 ```
 
+### Pre-commit Hooks
+
+Pre-commit hooks are Git hooks that run automatically before every commit, providing immediate feedback on code quality issues while changes are still fresh in your working memory. This "shift-left" approach catches problems at the earliest possible stage, reducing CI/CD pipeline failures and accelerating the development feedback loop.
+
+**Why Pre-commit Hooks?**
+- **Instant Feedback**: Get results in <10 seconds vs. waiting for 5-minute CI/CD pipeline
+- **Prevent Bad Commits**: Catch quality issues before they enter version control
+- **Reduce CI Failures**: Fix problems locally before pushing
+- **Save Time**: Eliminate "commit → push → CI fails → fix → repeat" cycles
+
+#### Installation
+
+Pre-commit hooks are installed automatically when running the setup script:
+
+```bash
+# Automated setup (recommended)
+nu scripts/setup.nu
+
+# Manual installation
+task hooks:install
+```
+
+**Verification**: After installation, hooks are active in `.git/hooks/pre-commit` and `.git/hooks/pre-push`.
+
+#### What Gets Checked
+
+Pre-commit hooks run **lightweight quality checks only** on staged files:
+
+1. **Ruff Linting** (`ruff check --fix`)
+   - Catches unused imports, undefined variables, naming violations
+   - Auto-fixes issues when possible
+   - Runs same rules as CI/CD pipeline
+
+2. **Ruff Formatting** (`ruff format`)
+   - Enforces consistent code formatting
+   - Auto-formats code to match project style
+   - Ensures clean diffs in pull requests
+
+3. **MyPy Type Checking** (`mypy --strict`)
+   - Validates type hints on production code (`src/`)
+   - Test code (`tests/`) exempt from strict checking
+   - Catches type errors before runtime
+
+4. **General File Checks**
+   - Trailing whitespace removal
+   - End-of-file fixer (ensures newline at EOF)
+   - YAML/JSON/TOML syntax validation
+   - Merge conflict detection
+   - Private key detection (prevents credential leaks)
+
+**Performance**: Hooks run only on **staged files** (not entire codebase) for <10 second execution time on typical commits (1-10 changed files).
+
+#### Hook Workflow
+
+```bash
+# 1. Make changes to code
+vim src/mcp_server/core.py
+
+# 2. Stage changes
+git add src/mcp_server/core.py
+
+# 3. Attempt commit (hooks run automatically)
+git commit -m "Add new feature"
+
+# If hooks pass:
+# ✅ Commit created successfully
+
+# If hooks fail:
+# ❌ Commit blocked
+# Error messages displayed with file paths, line numbers, and suggested fixes
+# Fix issues and retry commit
+```
+
+#### Example Hook Failure
+
+When a hook fails, you'll see actionable error messages:
+
+```bash
+$ git commit -m "Add validation logic"
+
+ruff.....................................................................Failed
+- hook id: ruff
+- exit code: 1
+
+src/mcp_server/validation.py:42:8: F401 [*] `typing.Dict` imported but unused
+src/mcp_server/validation.py:45:12: F841 [*] Local variable `result` is assigned to but never used
+
+mypy.....................................................................Failed
+- hook id: mypy
+- exit code: 1
+
+src/mcp_server/validation.py:53: error: Function is missing a type annotation  [no-untyped-def]
+```
+
+**Fix the issues**:
+
+```bash
+# Auto-fix linting issues
+task lint:fix
+
+# Fix type errors manually (add type hints)
+# Then retry commit
+git commit -m "Add validation logic"
+```
+
+#### Manual Hook Execution
+
+Run hooks on all files without committing:
+
+```bash
+# Run all hooks on all files
+task hooks:run
+
+# Update hook versions to latest
+task hooks:update
+```
+
+#### Bypassing Hooks (Exceptional Cases)
+
+In rare situations, you may need to bypass hooks:
+
+```bash
+# Skip hooks with --no-verify flag
+git commit --no-verify -m "WIP: work in progress"
+```
+
+**When to bypass**:
+- Creating work-in-progress commits for backup
+- Urgent hotfixes where CI will catch issues
+- Committing intentionally broken code for collaboration
+
+**Warning**: Bypassed commits will still be checked by CI/CD pipeline. You are responsible for fixing issues before merging to `main`.
+
+#### Hook Configuration
+
+Hooks are configured in `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  # Ruff - Fast Python linter and formatter
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # MyPy - Static type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.14.1
+    hooks:
+      - id: mypy
+        exclude: ^tests/  # Tests exempt from strict checking
+        args: [--strict]
+```
+
+**Synchronization**: Hook configuration mirrors CI/CD pipeline checks (US-004, US-005, US-006). Changes to pipeline validation should be reflected in hooks.
+
+#### Troubleshooting
+
+**Problem**: Hooks not running on commit
+
+```bash
+# Solution: Reinstall hooks
+task hooks:install
+
+# Verify installation
+ls -la .git/hooks/pre-commit
+```
+
+**Problem**: Hooks running too slowly (>10 seconds)
+
+```bash
+# Cause: Checking too many files
+# Solution: Hooks run only on staged files by default
+# If slow, check if you're staging large numbers of files
+
+# Check what's staged
+git status
+
+# Stage selectively
+git add src/mcp_server/specific_file.py
+```
+
+**Problem**: Hook fails but error message unclear
+
+```bash
+# Solution: Run check manually with verbose output
+task lint          # See detailed linting errors
+task type-check    # See detailed type errors
+task format:check  # See formatting issues
+```
+
+**Problem**: Want to skip hooks temporarily during rapid iteration
+
+```bash
+# Solution: Use --no-verify flag
+git commit --no-verify -m "WIP: experimenting"
+
+# Remember: Fix issues before pushing!
+# CI/CD will catch problems anyway
+```
+
+**Problem**: Hook modifies files automatically (Ruff auto-fix, formatter)
+
+```bash
+# This is expected behavior!
+# Solution: Review changes and re-stage
+
+# Check what changed
+git diff
+
+# Re-stage modified files
+git add src/mcp_server/file.py
+
+# Retry commit
+git commit -m "Your message"
+```
+
+**Problem**: MyPy hook fails with missing type stubs
+
+```bash
+# Solution: Install missing type stubs
+task type-check:install
+
+# Or add library to mypy overrides in pyproject.toml
+# [[tool.mypy.overrides]]
+# module = "library_name"
+# ignore_missing_imports = true
+```
+
 ## CI/CD Pipeline
 
 ### Pipeline Architecture
