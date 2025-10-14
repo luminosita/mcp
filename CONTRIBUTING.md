@@ -299,10 +299,275 @@ def test_greet():
 ```
 
 ### Testing and Coverage
-- **Framework**: pytest
-- **Minimum Coverage**: 80%
-- **Test Types**: Unit, integration, and end-to-end tests
-- **Enforcement**: Automatically checked in CI pipeline
+
+**Framework**: pytest with pytest-cov and pytest-asyncio
+**Configuration**: `pyproject.toml`
+**Enforcement**: Automatically checked in CI pipeline
+
+pytest is our testing framework with support for async tests, fixtures, and coverage reporting. All code must include comprehensive tests to maintain >80% coverage threshold.
+
+**Testing Philosophy**:
+- **Test-Driven Development**: Write tests first, then implementation
+- **Testing Pyramid**: 70% unit tests, 20% integration tests, 10% end-to-end tests
+- **Deterministic Tests**: No flaky tests - all tests must be reproducible
+- **Async Support**: Full support for testing async/await patterns with pytest-asyncio
+
+**Test Categories (pytest markers)**:
+- `@pytest.mark.unit` - Unit tests (test individual functions/methods in isolation)
+- `@pytest.mark.integration` - Integration tests (test component interactions)
+- `@pytest.mark.e2e` - End-to-end tests (test complete user workflows)
+- `@pytest.mark.slow` - Slow tests (>1 second, run selectively)
+- `@pytest.mark.asyncio` - Async tests (automatically handled by pytest-asyncio)
+
+**Commands**:
+```bash
+# Run all tests with coverage
+task test
+
+# Run tests and enforce 80% coverage threshold
+task test:coverage
+
+# Run specific test categories
+task test:unit           # Unit tests only
+task test:integration    # Integration tests only
+task test:e2e            # End-to-end tests only
+
+# Run tests by marker
+pytest -m "not slow"     # Skip slow tests
+pytest -m "unit"         # Only unit tests
+pytest -m "integration"  # Only integration tests
+
+# Useful test commands
+task test:verbose        # Verbose output
+task test:failed         # Re-run only failed tests
+task test:watch          # Watch mode (re-run on file changes)
+```
+
+**Coverage Requirements**:
+- **Minimum threshold**: 80% line coverage (enforced by `--cov-fail-under=80`)
+- **Coverage reports**: Generated in 3 formats:
+  - Terminal summary (shown after test run)
+  - HTML report (browsable at `htmlcov/index.html`)
+  - XML report (for CI/CD integration)
+- **Excluded from coverage**:
+  - Test files (`tests/*`)
+  - `__init__.py` files
+  - `__main__.py` files
+  - Lines marked with `# pragma: no cover`
+
+**Test Organization**:
+```
+tests/
+├── conftest.py              # Shared fixtures and configuration
+├── unit/                    # Unit tests (70% of tests)
+│   ├── test_models.py
+│   ├── test_services.py
+│   └── test_utils.py
+├── integration/             # Integration tests (20% of tests)
+│   ├── test_api_endpoints.py
+│   └── test_database.py
+└── e2e/                     # End-to-end tests (10% of tests)
+    └── test_workflows.py
+```
+
+**Test Fixtures**:
+All tests have access to comprehensive fixtures defined in `tests/conftest.py`:
+
+**FastAPI Test Clients**:
+```python
+def test_endpoint(client):
+    """Synchronous TestClient for sync endpoints."""
+    response = client.get("/api/endpoint")
+    assert response.status_code == 200
+
+@pytest.mark.asyncio
+async def test_async_endpoint(async_client):
+    """Async client for async endpoints, SSE, WebSockets."""
+    response = await async_client.get("/api/endpoint")
+    assert response.status_code == 200
+```
+
+**Database Fixtures**:
+```python
+def test_repository(db_session):
+    """Mocked database session for unit tests."""
+    db_session.query.return_value.filter.return_value.first.return_value = User(id=1)
+    user = repo.get_by_id(db_session, 1)
+    assert user.id == 1
+
+@pytest.mark.asyncio
+async def test_async_repository(async_db_session):
+    """Mocked async database session."""
+    async_db_session.execute.return_value.scalar.return_value = User(id=1)
+    user = await repo.get_by_id(async_db_session, 1)
+    assert user.id == 1
+```
+
+**Mock External Services**:
+```python
+def test_external_api(mock_http_client):
+    """Mocked HTTP client for external APIs."""
+    mock_http_client.get.return_value.json.return_value = {"data": "value"}
+    result = service.fetch_data(mock_http_client)
+    assert result["data"] == "value"
+
+def test_jira_integration(mock_jira_client):
+    """Pre-configured JIRA client mock."""
+    issue = mock_jira_client.create_issue(fields={...})
+    assert issue["key"] == "PROJ-123"
+
+def test_ci_cd_integration(mock_ci_cd_client):
+    """Pre-configured CI/CD client mock."""
+    run = mock_ci_cd_client.trigger_workflow(workflow_id="ci.yml")
+    assert run["run_id"] == 123
+```
+
+**Sample Data Fixtures**:
+```python
+def test_with_sample_data(sample_user_data, sample_tool_request):
+    """Pre-configured sample data for testing."""
+    user = User(**sample_user_data)
+    assert user.email == "test@example.com"
+
+    result = tool.execute(sample_tool_request)
+    assert result["status"] == "success"
+```
+
+**Fixture Factories**:
+```python
+def test_multiple_instances(user_factory):
+    """Factory function to create multiple instances with custom data."""
+    user1 = user_factory(email="user1@example.com")
+    user2 = user_factory(email="user2@example.com")
+    assert user1["email"] != user2["email"]
+```
+
+**Test Naming Convention**:
+```python
+# Format: test_should_<expected_behavior>_when_<condition>
+def test_should_return_user_when_id_exists():
+    """Test retrieves user successfully when ID exists in database."""
+    pass
+
+def test_should_raise_error_when_id_invalid():
+    """Test raises ValueError when user ID is negative."""
+    pass
+
+def test_should_filter_active_users_when_status_active():
+    """Test filters only active users when status parameter is 'active'."""
+    pass
+```
+
+**Arrange-Act-Assert Pattern**:
+```python
+def test_user_email_update(sample_user_data):
+    """Test user email update with valid input."""
+    # Arrange - set up test data and preconditions
+    user = User(**sample_user_data)
+    new_email = "newemail@example.com"
+
+    # Act - execute the code under test
+    user.update_email(new_email)
+
+    # Assert - verify expected outcomes
+    assert user.email == new_email
+    assert user.email_verified is False  # Email change resets verification
+```
+
+**Parametrized Tests**:
+```python
+@pytest.mark.parametrize("age,expected_eligible", [
+    (17, False),  # Below minimum
+    (18, True),   # At minimum
+    (65, True),   # Within range
+    (66, False),  # Above maximum
+])
+def test_age_eligibility(age, expected_eligible):
+    """Test age eligibility validation for different ages."""
+    result = is_eligible(age)
+    assert result == expected_eligible
+```
+
+**Exception Testing**:
+```python
+def test_invalid_user_id_raises_error():
+    """Test ValueError raised when user ID is negative."""
+    with pytest.raises(ValueError, match="User ID must be positive"):
+        get_user(-1)
+```
+
+**Async Test Patterns**:
+```python
+@pytest.mark.asyncio
+async def test_async_function():
+    """Test async function execution."""
+    result = await async_process_data(["item1", "item2"])
+    assert len(result) == 2
+
+@pytest.mark.asyncio
+async def test_concurrent_processing():
+    """Test concurrent task processing."""
+    tasks = [process_item(1), process_item(2), process_item(3)]
+    results = await asyncio.gather(*tasks)
+    assert len(results) == 3
+```
+
+**Coverage Enforcement**:
+The test suite automatically enforces the 80% coverage threshold:
+```bash
+$ task test:coverage
+============================= test session starts ==============================
+...
+---------- coverage: platform darwin, python 3.11.13-final-0 -----------
+Name                Stmts   Miss  Cover   Missing
+-------------------------------------------------
+src/module.py          50      2    96%   23, 45
+-------------------------------------------------
+TOTAL                 200     10    95%
+
+Required test coverage of 80% reached. Total coverage: 95.00%
+============================== 33 passed in 0.15s ===============================
+```
+
+If coverage falls below 80%, the build fails:
+```bash
+ERROR: Coverage failure: total of 75 is less than fail-under=80
+FAIL Required test coverage of 80% not reached. Total coverage: 75.00%
+```
+
+**Viewing Coverage Reports**:
+```bash
+# Generate and view HTML coverage report
+task test:coverage
+open htmlcov/index.html
+
+# The HTML report shows:
+# - Coverage percentage per file
+# - Highlighted uncovered lines in source code
+# - Branch coverage details
+# - Links to source files
+```
+
+**Writing Good Tests**:
+1. **One assertion per test** (when possible) - Makes failures easier to diagnose
+2. **Test one thing** - Each test should validate a single behavior
+3. **Use descriptive names** - Test name should describe what it tests and when
+4. **Avoid test interdependence** - Tests should run in any order
+5. **Use fixtures for setup** - Don't duplicate setup code across tests
+6. **Test edge cases** - Empty lists, None values, boundary conditions
+7. **Test error paths** - Verify error handling works correctly
+8. **Mock external dependencies** - Tests should not require network, database, or file system
+
+**Common Testing Patterns**:
+
+See `tests/unit/test_example_fixtures.py` and `tests/integration/test_api_endpoints.py` for comprehensive examples demonstrating:
+- Fixture usage patterns
+- FastAPI endpoint testing
+- Async test patterns
+- Mock service configuration
+- Parametrized tests
+- Exception testing
+- Coverage strategies
 
 ### Pre-commit Hooks
 
@@ -548,6 +813,9 @@ task type-check
 
 ### Pipeline Failure: Test Execution and Coverage
 
+**Symptoms**: `test-and-coverage` job fails with exit code 1
+
+**Diagnosis**:
 ```bash
 # Run locally to reproduce
 task test:coverage
@@ -557,6 +825,127 @@ task test:verbose
 
 # Run only failed tests
 task test:failed
+```
+
+**Common Issues**:
+
+1. **Test Failures** (assertion errors, exceptions)
+   ```bash
+   # Run failed tests with full traceback
+   task test:verbose --tb=long
+
+   # Common causes:
+   # - Assertions that don't match expected values
+   # - Exceptions raised during test execution
+   # - Fixture configuration issues
+   # - Mock return values not configured correctly
+   ```
+
+2. **Coverage Below 80% Threshold**
+   ```bash
+   # Check which files need more coverage
+   task test:coverage
+
+   # View detailed HTML coverage report
+   open htmlcov/index.html
+
+   # The report shows:
+   # - Files with low coverage (red highlighting)
+   # - Uncovered lines (line numbers listed in Missing column)
+   # - Branch coverage details
+
+   # Add tests for uncovered code paths:
+   # 1. Identify uncovered lines in HTML report
+   # 2. Write tests that execute those lines
+   # 3. Re-run coverage to verify improvement
+   ```
+
+3. **Import Errors** (module not found, circular imports)
+   ```bash
+   # Check Python path configuration
+   # pyproject.toml should have: pythonpath = ["src"]
+
+   # Verify test file imports:
+   from mcp_server.module import function  # Correct (uses package name)
+   # NOT: from src.mcp_server.module import function
+   ```
+
+4. **Fixture Not Found** (fixture 'name' not found)
+   ```bash
+   # Verify fixture defined in conftest.py
+   # Check fixture scope (function, class, module, session)
+   # Ensure conftest.py is in correct directory
+
+   # Fixture resolution order:
+   # 1. Test file's conftest.py
+   # 2. Parent directory's conftest.py
+   # 3. Root tests/ conftest.py
+   ```
+
+5. **Async Tests Not Running** (@pytest.mark.asyncio)
+   ```bash
+   # Verify pytest-asyncio installed:
+   uv add --dev pytest-asyncio
+
+   # Check pyproject.toml configuration:
+   # [tool.pytest.ini_options]
+   # asyncio_mode = "auto"
+
+   # Async test example:
+   @pytest.mark.asyncio
+   async def test_async_function():
+       result = await async_function()
+       assert result is not None
+   ```
+
+6. **Flaky Tests** (intermittent failures)
+   ```bash
+   # Run test multiple times to reproduce:
+   pytest tests/test_flaky.py::test_name -x --count=10
+
+   # Common causes:
+   # - Relying on timing/sleep (use proper async patterns)
+   # - Shared state between tests (use isolated fixtures)
+   # - Non-deterministic random values (use fixed seeds)
+   # - External service dependencies (use mocks)
+
+   # Fix patterns:
+   # - Use fixtures with autouse=True to reset state
+   # - Use pytest-mock for deterministic mocking
+   # - Use asyncio.wait_for() for timeout handling
+   ```
+
+7. **Slow Tests** (timeout exceeded)
+   ```bash
+   # Mark slow tests with @pytest.mark.slow
+   # Run without slow tests locally:
+   pytest -m "not slow"
+
+   # Optimize test performance:
+   # - Use mocks instead of real I/O
+   # - Minimize fixture setup/teardown
+   # - Run tests in parallel: task test:parallel
+   ```
+
+**Quick Fix Workflow**:
+```bash
+# 1. Run tests and identify failures
+task test:verbose
+
+# 2. Check coverage report
+task test:coverage
+open htmlcov/index.html
+
+# 3. Fix failing tests and add missing coverage
+
+# 4. Re-run specific test
+pytest tests/path/to/test_file.py::test_name -v
+
+# 5. Re-run full suite
+task test:coverage
+
+# 6. Verify coverage ≥80%
+# Output should show: "Required test coverage of 80% reached"
 ```
 
 ### Slow Pipeline Execution

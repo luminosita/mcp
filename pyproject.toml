@@ -121,10 +121,18 @@ addopts = [
     "--cov-report=term-missing",
     "--cov-report=html",
     "--cov-report=xml",
+    "--cov-fail-under=80",
 ]
 testpaths = ["tests"]
 pythonpath = ["src"]
 asyncio_mode = "auto"
+markers = [
+    "unit: Unit tests - test individual functions/methods in isolation",
+    "integration: Integration tests - test component interactions",
+    "e2e: End-to-end tests - test complete user workflows",
+    "slow: Slow tests - tests that take >1 second to complete",
+    "asyncio: Async tests - tests that use async/await patterns",
+]
 
 [tool.coverage.run]
 source = ["src/mcp_server"]
