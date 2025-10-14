@@ -513,6 +513,154 @@ Implement automated type safety validation with mypy strict mode integrated into
 
 ---
 
+### TODO-032: Implement US-006 - Test Execution and Coverage Reporting
+**Priority**: High
+**Dependencies**: TODO-026 (US-006 generated), TODO-029 (US-003 CI/CD pipeline infrastructure)
+**Estimated Time**: 4-6 hours (5 SP)
+**Status**: ⏳ Pending
+**Context**: Current session OK
+**Type**: Implementation
+
+**Description**:
+Implement automated test execution using pytest with coverage reporting integrated into the CI/CD pipeline. Configure pytest in pyproject.toml, add test-and-coverage job to GitHub Actions workflow, enforce >80% coverage threshold, and provide detailed coverage reports.
+
+**User Story**: `/artifacts/backlog_stories/US-006_test_execution_coverage_reporting_v1.md`
+
+**Implementation Tasks** (from US-006 Definition of Done):
+1. Configure pytest in pyproject.toml with test discovery rules
+2. Update .github/workflows/ci.yml with test-and-coverage job
+3. Configure pytest cache caching strategy (.pytest_cache)
+4. Create conftest.py with common fixtures (FastAPI test client, database session, mock services)
+5. Add local Taskfile commands: `task test`, `task test:coverage`, `task test:unit`, `task test:integration`, `task test:watch`
+6. Write example unit tests demonstrating fixture usage and async patterns
+7. Write example integration tests for FastAPI endpoints
+8. Test with intentional test failure to verify error reporting
+9. Verify coverage threshold enforcement (reduce coverage below 80%, confirm build fails)
+10. Document testing strategy and fixture usage in CONTRIBUTING.md
+
+**Acceptance Criteria** (8 Gherkin scenarios in US-006):
+- Scenario 1: Automatic test execution on feature branch commit
+- Scenario 2: Test failure blocks build
+- Scenario 3: Coverage threshold enforcement
+- Scenario 4: Coverage threshold met allows build to pass
+- Scenario 5: Coverage reports accessible
+- Scenario 6: Pytest cache improves performance
+- Scenario 7: Local test execution matches CI/CD behavior
+- Scenario 8: Async test support validated
+
+**Technical References**:
+- CLAUDE-testing.md: Testing patterns (80% coverage minimum, fixture patterns, async test support)
+- CLAUDE-tooling.md: Taskfile commands and pytest configuration
+- Implementation Research §7.1: Unit Testing with pytest
+- US-006 v1: Complete acceptance criteria and technical specifications
+
+**Performance Targets**:
+- Full test suite execution: <2 minutes (including coverage calculation)
+- Coverage report generation: <10 seconds additional overhead
+- Parallel test execution to maximize CI/CD pipeline efficiency
+
+**Notes**:
+- No Tech Spec or Implementation Tasks needed (configuration work, clear scope)
+- Implement directly from backlog story
+- Test suite establishes foundation for all feature development
+
+---
+
+### TODO-033: Implement US-007 - Pre-commit Hooks Configuration
+**Priority**: Medium
+**Dependencies**: TODO-027 (US-007 generated), TODO-030 (US-004 Ruff config), TODO-031 (US-005 MyPy config)
+**Estimated Time**: 1-2 hours (2 SP)
+**Status**: ⏳ Pending
+**Context**: Current session OK
+**Type**: Implementation
+
+**Description**:
+Configure pre-commit hooks that automatically execute on every local commit, running lightweight quality checks (linting, formatting, type checking) before the commit is finalized. Provide immediate feedback (<10 seconds) to catch issues while code changes are still in working memory.
+
+**User Story**: `/artifacts/backlog_stories/US-007_pre_commit_hooks_configuration_v1.md`
+
+**Implementation Tasks** (from US-007 Definition of Done):
+1. Install pre-commit framework: `uv add --dev pre-commit`
+2. Create .pre-commit-config.yaml configuration file
+3. Add Taskfile commands: `task hooks:install`, `task hooks:run`, `task hooks:update`
+4. Update setup script (scripts/setup.nu) to run `pre-commit install` automatically
+5. Configure pre-commit cache strategy (.cache/pre-commit)
+6. Test hooks with intentional violations (linting error, formatting issue, type error)
+7. Verify hooks block commit on failure
+8. Verify hooks can be bypassed with `git commit --no-verify`
+9. Verify hooks run only on staged files (not entire codebase)
+10. Document pre-commit hooks usage in CONTRIBUTING.md
+
+**Acceptance Criteria** (8 Gherkin scenarios in US-007):
+- Scenario 1: Hooks run automatically on every commit
+- Scenario 2: Linting violation blocks commit
+- Scenario 3: Formatting violation blocks commit
+- Scenario 4: Type checking violation blocks commit
+- Scenario 5: Clean code allows commit
+- Scenario 6: Hooks can be bypassed for exceptional cases
+- Scenario 7: Hooks run only on staged files for performance
+- Scenario 8: Manual hook execution for all files
+
+**Technical References**:
+- CLAUDE-tooling.md: Pre-commit hooks configuration (Ruff, MyPy integration)
+- CLAUDE-testing.md: Pre-commit runs lightweight checks only; full tests in CI/CD
+- US-007 v1: Complete acceptance criteria and technical specifications
+
+**Performance Targets**:
+- Pre-commit hook execution: <10 seconds for typical commit (1-10 changed files)
+
+**Notes**:
+- Simplest story in HLS-002 (2 SP)
+- Hooks mirror CI/CD checks from US-004/US-005
+- No Tech Spec or Implementation Tasks needed
+
+---
+
+### TODO-034: Implement US-008 - Automated Dependency Management
+**Priority**: Medium
+**Dependencies**: TODO-028 (US-008 generated), TODO-029 (US-003 CI/CD pipeline), TODO-032 (US-006 test suite)
+**Estimated Time**: 2-3 hours (3 SP)
+**Status**: ⏳ Pending
+**Context**: Current session OK
+**Type**: Implementation
+
+**Description**:
+Implement Renovate bot to automatically detect outdated dependencies and security vulnerabilities in project dependencies. Renovate creates pull requests automatically with dependency updates, providing changelogs, release notes, and compatibility information.
+
+**User Story**: `/artifacts/backlog_stories/US-008_automated_dependency_management_v1.md`
+
+**Implementation Tasks** (from US-008 Definition of Done):
+1. Create renovate.json configuration file in repository root
+2. Configure batching strategy (security: immediate, minor: weekly, major: individual)
+3. Configure PR behavior (auto-merge disabled, team review required)
+4. Configure compatibility checks (CI/CD pipeline, Python version)
+5. Configure ignore patterns (alpha/beta versions excluded)
+6. Enable Renovate GitHub App for repository
+7. Test Renovate configuration (manually trigger run, verify PR creation)
+8. Document Renovate workflow in CONTRIBUTING.md
+
+**Acceptance Criteria** (8 Gherkin scenarios in US-008):
+- Scenario 1: Renovate detects outdated dependencies
+- Scenario 2: Security vulnerability creates immediate PR
+- Scenario 3: Minor updates batched weekly
+- Scenario 4: Major updates create individual PRs
+- Scenario 5: PRs respect CI/CD pipeline
+- Scenario 6: PRs include comprehensive update information
+- Scenario 7: Auto-merge disabled requiring manual review
+- Scenario 8: Dependency dashboard provides visibility
+
+**Technical References**:
+- CLAUDE-tooling.md: UV package manager and dependency management standards
+- PRD-000 Decision D2: Organizational platform standards (Renovate hosted by organization)
+- US-008 v1: Complete acceptance criteria and technical specifications
+
+**Notes**:
+- Final story in HLS-002
+- No Tech Spec or Implementation Tasks needed
+- Enables ongoing project maintenance after core CI/CD pipeline operational
+
+---
+
 ## Task Status Legend
 
 - ✅ Completed (archived in TODO-completed.md)
