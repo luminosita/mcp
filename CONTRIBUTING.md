@@ -132,15 +132,171 @@ The pipeline uses GitHub Actions concurrency groups to:
 All code contributions must meet the following standards:
 
 ### Linting and Formatting
-- **Tool**: Ruff (replaces Black, isort, Flake8)
-- **Configuration**: `pyproject.toml`
-- **Enforcement**: Automatically checked in CI pipeline
+
+**Tool**: Ruff (replaces Black, isort, Flake8)
+**Configuration**: `pyproject.toml`
+**Enforcement**: Automatically checked in CI pipeline
+
+Ruff is a fast Python linter and formatter (10-100x faster than alternatives) that enforces consistent code style and catches common errors.
+
+**Enabled Rule Categories**:
+- `E`, `W` - pycodestyle errors and warnings
+- `F` - Pyflakes (unused imports, undefined variables)
+- `I` - isort (import sorting)
+- `B` - flake8-bugbear (common bugs and design problems)
+- `C4` - flake8-comprehensions (better list/set/dict comprehensions)
+- `UP` - pyupgrade (modern Python syntax)
+- `N` - pep8-naming (naming conventions)
+- `S` - flake8-bandit (security issues)
+- `T20` - flake8-print (print statements)
+- `SIM` - flake8-simplify (code simplification)
+- `ARG` - flake8-unused-arguments (unused function arguments)
+- `PTH` - flake8-use-pathlib (prefer pathlib over os.path)
+- `RUF` - Ruff-specific rules
+
+**Commands**:
+```bash
+# Check for linting issues
+task lint
+
+# Auto-fix linting issues
+task lint:fix
+
+# Check formatting
+task format:check
+
+# Auto-format code
+task format
+
+# Run both lint and format together
+task lint:all
+```
+
+**Error Message Format**:
+```
+F401 [*] `os` imported but unused
+ --> src/module.py:3:8
+  |
+3 | import os
+  |        ^^
+  |
+help: Remove unused import: `os`
+```
+
+Each error includes:
+- **Rule Code** (e.g., `F401`) - Look up with `ruff rule F401`
+- **File Path** - Exact location of the issue
+- **Line Number** - Specific line with the problem
+- **Code Snippet** - Visual context
+- **Help Message** - Suggested fix
+
+**Per-File Ignores**:
+- Test files: Allow `assert`, unused arguments, and `print` statements
+- Scripts: Allow `print` statements
+
+**Suppressing Warnings**:
+When a rule violation is intentional (e.g., binding to `0.0.0.0` for a server), add inline comments:
+```python
+uvicorn.run(app, host="0.0.0.0", port=8000)  # noqa: S104
+```
 
 ### Type Safety
-- **Tool**: MyPy (strict mode)
-- **Requirement**: All code must include type hints
-- **Configuration**: `pyproject.toml`
-- **Enforcement**: Automatically checked in CI pipeline
+
+**Tool**: MyPy (strict mode)
+**Configuration**: `pyproject.toml`
+**Enforcement**: Automatically checked in CI pipeline
+
+MyPy is a static type checker that catches type-related errors before runtime, improves code documentation, and enables better IDE support through comprehensive type annotations.
+
+**Strict Mode Checks Enabled**:
+- `disallow_untyped_defs` - All functions must have type hints
+- `disallow_incomplete_defs` - Functions with some typed params must have all typed
+- `check_untyped_defs` - Check bodies of untyped functions
+- `disallow_untyped_decorators` - Decorators must preserve type information
+- `no_implicit_optional` - Require explicit `Optional[T]` (use `T | None` in Python 3.10+)
+- `warn_redundant_casts` - Warn about unnecessary type casts
+- `warn_unused_ignores` - Warn about unused `# type: ignore` comments
+- `warn_no_return` - Warn about functions that don't return
+- `warn_unreachable` - Warn about unreachable code
+- `strict_equality` - Prohibit equality checks between incompatible types
+- `warn_return_any` - Warn about returning `Any` from typed function
+- `disallow_any_generics` - Require type parameters for generic types
+
+**Type Hint Requirements**:
+- **All production code** (`src/` directory) must pass strict type checking
+- **Test code** (`tests/` directory) exempt from strict checks for testing flexibility
+- Use modern Python 3.11+ syntax:
+  - `list[str]` instead of `typing.List[str]`
+  - `dict[str, int]` instead of `typing.Dict[str, int]`
+  - `str | None` instead of `Optional[str]`
+  - `str | int` instead of `Union[str, int]`
+
+**Commands**:
+```bash
+# Run type checking
+task type-check
+
+# Generate HTML coverage report
+task type-check:report
+
+# Install missing type stubs
+task type-check:install
+```
+
+**Error Message Format**:
+```
+src/module.py:13: error: "int" has no attribute "upper"  [attr-defined]
+src/module.py:18: error: Incompatible types in assignment (expression has type "int", variable has type "str")  [assignment]
+```
+
+Each error includes:
+- **File Path** - Exact location of the issue (e.g., `src/module.py:13`)
+- **Error Type** - Clear description of the problem
+- **Error Code** - Reference code in brackets (e.g., `[attr-defined]`)
+
+**Common Type Hints**:
+```python
+# Function signatures
+def greet(name: str) -> str:
+    return f"Hello, {name}"
+
+# Optional parameters (use | None for Python 3.10+)
+def find_user(user_id: int) -> User | None:
+    return database.get_user(user_id)
+
+# Lists, dicts, sets
+def process_items(items: list[str]) -> dict[str, int]:
+    return {item: len(item) for item in items}
+
+# Async functions
+async def fetch_data(url: str) -> dict[str, Any]:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        return response.json()
+
+# Generic types
+from typing import TypeVar
+
+T = TypeVar('T')
+
+def first_item(items: list[T]) -> T | None:
+    return items[0] if items else None
+```
+
+**Suppressing Type Errors**:
+When type errors are unavoidable (e.g., interacting with untyped third-party libraries):
+```python
+result = untyped_library_call()  # type: ignore[no-untyped-call]
+```
+
+**Test Code Exemption**:
+Test files automatically exempt from strict type checking but encouraged to use type hints where practical:
+```python
+# tests/test_example.py - type hints optional but recommended
+def test_greet():
+    result = greet("Alice")  # Type hints inferred from source
+    assert result == "Hello, Alice"
+```
 
 ### Testing and Coverage
 - **Framework**: pytest
@@ -247,27 +403,147 @@ The `main` branch is protected with the following rules:
 
 ### Pipeline Failure: Code Quality Checks
 
+**Symptoms**: `lint-and-format` job fails with exit code 1
+
+**Diagnosis**:
 ```bash
 # Run locally to reproduce
-task lint
-task format:check
+task lint           # Check for linting issues
+task format:check   # Check for formatting issues
+```
 
-# Auto-fix linting issues
-task lint:fix
+**Common Issues**:
 
-# Auto-fix formatting issues
-task format
+1. **Unused Imports** (F401)
+   ```bash
+   task lint:fix  # Auto-removes unused imports
+   ```
+
+2. **Formatting Issues** (line length, quotes, spacing)
+   ```bash
+   task format  # Auto-formats all files
+   ```
+
+3. **Naming Violations** (N801, N802, N803)
+   - Fix manually: Use `PascalCase` for classes, `snake_case` for functions/variables
+
+4. **Security Issues** (S104, S105, S106)
+   - Review the violation and suppress if intentional:
+     ```python
+     host: str = "0.0.0.0"  # noqa: S104
+     ```
+
+5. **Print Statements** (T20)
+   - Replace `print()` with proper logging:
+     ```python
+     import logging
+     logger = logging.getLogger(__name__)
+     logger.info("Message")
+     ```
+
+**Quick Fix Workflow**:
+```bash
+# Fix most issues automatically
+task lint:fix && task format
+
+# Re-run checks
+task lint && task format:check
+
+# If any issues remain, fix manually and re-run
 ```
 
 ### Pipeline Failure: Type Safety Validation
 
+**Symptoms**: `type-check` job fails with exit code 1
+
+**Diagnosis**:
 ```bash
 # Run locally to reproduce
 task type-check
 
 # Generate HTML report for detailed analysis
 task type-check:report
-# Open mypy-report/index.html
+# Open mypy-report/index.html in browser
+```
+
+**Common Issues**:
+
+1. **Missing Type Hints** (no-untyped-def)
+   ```python
+   # Bad
+   def calculate(x, y):
+       return x + y
+
+   # Good
+   def calculate(x: int, y: int) -> int:
+       return x + y
+   ```
+
+2. **Incompatible Types** (assignment, return-value)
+   ```python
+   # Bad
+   result: str = 42  # Type error: int assigned to str
+
+   # Good
+   result: int = 42
+   ```
+
+3. **Missing Return Type**
+   ```python
+   # Bad
+   def greet(name: str):
+       return f"Hello, {name}"
+
+   # Good
+   def greet(name: str) -> str:
+       return f"Hello, {name}"
+   ```
+
+4. **Optional Values** (arg-type, union-attr)
+   ```python
+   # Bad
+   def get_length(value: str | None) -> int:
+       return len(value)  # Error: value might be None
+
+   # Good
+   def get_length(value: str | None) -> int:
+       return len(value) if value is not None else 0
+   ```
+
+5. **Third-Party Library Missing Stubs**
+   ```bash
+   # Install type stubs
+   task type-check:install
+
+   # Or suppress for specific library
+   # Add to pyproject.toml:
+   # [[tool.mypy.overrides]]
+   # module = "library_name.*"
+   # ignore_missing_imports = true
+   ```
+
+6. **Generic Types** (type-arg)
+   ```python
+   # Bad
+   items: list = [1, 2, 3]
+
+   # Good
+   items: list[int] = [1, 2, 3]
+   ```
+
+**Quick Fix Workflow**:
+```bash
+# Check errors
+task type-check
+
+# For detailed analysis with line-by-line coverage
+task type-check:report
+
+# Fix errors in code, then re-run
+task type-check
+
+# If stuck, suppress specific errors (last resort)
+# Add: # type: ignore[error-code]
 ```
 
 ### Pipeline Failure: Test Execution and Coverage

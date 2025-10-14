@@ -65,6 +65,14 @@ jobs:
           restore-keys: |
             mypy-${{ runner.os }}-
 
+      - name: Cache Ruff cache
+        uses: actions/cache@v4
+        with:
+          path: .ruff_cache
+          key: ruff-${{ runner.os }}-${{ hashFiles('**/*.py') }}
+          restore-keys: |
+            ruff-${{ runner.os }}-
+
   # Lint and format validation job
   lint-and-format:
     name: Code Quality Checks
@@ -93,6 +101,14 @@ jobs:
           key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
           restore-keys: |
             uv-${{ runner.os }}-
+
+      - name: Restore Ruff cache
+        uses: actions/cache@v4
+        with:
+          path: .ruff_cache
+          key: ruff-${{ runner.os }}-${{ hashFiles('**/*.py') }}
+          restore-keys: |
+            ruff-${{ runner.os }}-
 
       - name: Install dependencies
         run: |

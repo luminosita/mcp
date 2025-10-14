@@ -19,8 +19,11 @@ repos:
       - id: mypy
         additional_dependencies:
           - pydantic>=2.0.0
+          - pydantic-settings>=2.0.0
+          - fastapi>=0.100.0
+          - uvicorn>=0.24.0
           - types-requests
-        args: [--ignore-missing-imports]
+        args: [--strict]
 
   # General file checks
   - repo: https://github.com/pre-commit/pre-commit-hooks

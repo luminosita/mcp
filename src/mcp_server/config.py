@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     app_version: str = "0.1.0"
     debug: bool = False
 
-    host: str = "0.0.0.0"
+    host: str = "0.0.0.0"  # noqa: S104
     port: int = 8000
 
     database_url: str = "postgresql+asyncpg://user:pass@localhost:5432/mcp"
@@ -22,10 +22,11 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     log_format: str = "json"
 
-    secret_key: str = "change-me-in-production"
+    secret_key: str = "change-me-in-production"  # noqa: S105
 
     class Config:
         """Pydantic configuration."""
+
         env_file = ".env"
         case_sensitive = False
 
