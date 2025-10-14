@@ -44,7 +44,8 @@ def install_with_retry [
 
         # Use uv pip install with pyproject.toml
         # The -e . flag installs the package in editable mode
-        let result = (^uv pip install -e . | complete)
+        # --extra dev includes development dependencies (ruff, mypy, pytest, pre-commit, etc.)
+        let result = (^uv pip install -e ".[dev]" | complete)
 
         if $result.exit_code == 0 {
             let end_time = (date now)

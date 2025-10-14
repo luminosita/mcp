@@ -16,15 +16,16 @@
 #   ./setup.nu              # Interactive mode
 #   ./setup.nu --silent     # Silent mode (CI/CD)
 
-use lib/os_detection.nu
-use lib/prerequisites.nu
-use lib/taskfile_install.nu
-use lib/uv_install.nu
-use lib/venv_setup.nu
-use lib/deps_install.nu
-use lib/config_setup.nu
-use lib/validation.nu
-use lib/interactive.nu
+use lib/os_detection.nu *
+use lib/prerequisites.nu *
+use lib/taskfile_install.nu *
+use lib/uv_install.nu *
+use lib/venv_setup.nu *
+use lib/deps_install.nu *
+use lib/config_setup.nu *
+use lib/validation.nu *
+use lib/interactive.nu *
+use lib/common.nu *
 
 # Display welcome banner
 def display_welcome [silent: bool] {

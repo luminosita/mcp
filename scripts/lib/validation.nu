@@ -42,10 +42,11 @@ export def validate_python_version [venv_path: string = ".venv"] {
     let validation = (common validate_python_version $version_result.version 3 11)
 
     if $validation.valid {
+        let requirement = ">= 3.11"
         return {
             name: $check_name,
             passed: true,
-            message: $"Python ($validation.version.full) meets requirement (>= 3.11)",
+            message: $"Python ($validation.version.full) meets requirement \(($requirement)\)",
             error: ""
         }
     } else {
