@@ -7,10 +7,11 @@
 
 ## Current Phase: Phase 1.6 - Implementation (HLS-002 Stories)
 
-**Current Status**: US-003 implemented, ready for GitHub deployment testing
-**Last Completed**: TODO-029 (US-003 CI/CD Pipeline Infrastructure implemented)
-**Next Task**: Connect GitHub remote and test pipeline, or proceed with TODO-024 (Generate US-004)
-**Completion**: 1/6 stories implemented (US-003 complete)
+**Current Status**: Parallel track - US-003 implemented, backlog story generation in progress
+**Last Completed**: TODO-025 (US-005 Automated Type Safety Validation generated)
+**Next Task**: TODO-026 (Generate US-006: Test Execution and Coverage Reporting)
+**Implementation**: 1/6 stories implemented (US-003 complete)
+**Generation**: 3/6 stories generated (US-003, US-004, US-005 complete)
 
 **Parallel Track**: Continue backlog story generation (TODO-024 through TODO-028) while implementation begins
 
@@ -33,10 +34,11 @@
 **Summary**: Development environment foundation complete. Setup automation, repository structure, and core tooling (UV, Taskfile, testing frameworks) operational.
 
 ### Phase 1.5: Backlog Story Generation (HLS-002)
-**Status**: 🔄 In Progress (1/6 stories generated)
+**Status**: 🔄 In Progress (2/6 stories generated)
 
 **Artifacts:**
 - ✅ US-003: CI/CD Pipeline Infrastructure (Generated, Draft)
+- ✅ US-004: Automated Code Quality Checks (Generated, Draft)
 
 ---
 
@@ -77,7 +79,7 @@ Generate detailed backlog story for CI/CD Pipeline Infrastructure configuration 
 **Priority**: High
 **Dependencies**: TODO-019 (HLS-002 generated)
 **Estimated Time**: 25 minutes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed (2025-10-14)
 **Context**: New session recommended
 **Generator Name**: backlog-story
 **ID Assignment**: US-004 (next after US-003)
@@ -97,13 +99,19 @@ Generate detailed backlog story for Automated Code Quality Checks from HLS-002.
 - Enforce project coding standards
 - Integrate with CI/CD pipeline
 
+**Completion Notes:**
+- ✅ Generated US-004 v1 at /artifacts/backlog_stories/US-004_automated_code_quality_checks_v1.md
+- ✅ All 27 validation criteria passed (Content Quality: 13/13, Upstream Traceability: 8/8, Consistency: 6/6)
+- ⚠️ Parent PRD-000 v3 status is "Draft" (acceptable for PoC phase, may require rework if PRD changes)
+- ✅ Status set to Draft, ready for Product Owner review
+
 ---
 
 ### TODO-025: Generate Backlog Story US-005 - Automated Type Safety Validation
 **Priority**: High
 **Dependencies**: TODO-019 (HLS-002 generated)
 **Estimated Time**: 25 minutes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed (2025-10-14)
 **Context**: New session recommended
 **Generator Name**: backlog-story
 **ID Assignment**: US-005 (next after US-004)
@@ -122,6 +130,16 @@ Generate detailed backlog story for Automated Type Safety Validation from HLS-00
 - Catch type errors before code review
 - Integrate with CI/CD pipeline
 - Provide actionable error messages
+
+**Completion Notes:**
+- ✅ Generated US-005 v1 at /artifacts/backlog_stories/US-005_automated_type_safety_validation_v1.md
+- ✅ All 27 validation criteria passed (Content Quality: 13/13, Upstream Traceability: 8/8, Consistency: 6/6)
+- ⚠️ Parent PRD-000 v3 status is "Draft" (acceptable for PoC phase, may require rework if PRD changes)
+- ✅ Implementation Research referenced: §2.1 (Type Safety), §2.2 (FastAPI + Pydantic)
+- ✅ CLAUDE.md standards referenced: CLAUDE-typing.md (Type hints), CLAUDE-tooling.md (MyPy config, Taskfile)
+- ✅ 7 Gherkin acceptance criteria scenarios defined
+- ✅ Story points: 3 SP (Medium complexity)
+- ✅ Status set to Draft, ready for Product Owner review
 
 ---
 
@@ -285,6 +303,148 @@ Implement CI/CD pipeline infrastructure for the AI Agent MCP Server project usin
 - Implement directly from backlog story
 - Subsequent stories (US-004, US-005, US-006) will add specific validation stages to this pipeline
 - This story establishes the infrastructure; validation configs come in later stories
+
+---
+
+### TODO-030: Implement US-004 - Automated Code Quality Checks
+**Priority**: High
+**Dependencies**: TODO-024 (US-004 generated), TODO-029 (US-003 CI/CD pipeline infrastructure)
+**Estimated Time**: 2-3 hours (3 SP)
+**Status**: ⏳ Pending
+**Context**: Current session OK
+**Type**: Implementation
+
+**Description**:
+Implement automated code quality checks with Ruff linting and formatting validation integrated into the CI/CD pipeline. Configure Ruff in pyproject.toml, add lint-and-format job to GitHub Actions workflow, and enforce project coding standards on every commit.
+
+**User Story**: `/artifacts/backlog_stories/US-004_automated_code_quality_checks_v1.md`
+
+**Implementation Tasks** (from US-004 Definition of Done):
+1. Configure Ruff in pyproject.toml with project-specific rule set
+   - Enable rules: E (pycodestyle errors), W (warnings), F (pyflakes), I (isort), B (bugbear), C4 (comprehensions), UP (pyupgrade), N (naming), S (security), T20 (print), SIM (simplify), ARG (unused args), PTH (pathlib), RUF (ruff-specific)
+   - Configure per-file-ignores for tests/ directory
+   - Set line length: 88, target version: py311
+2. Update .github/workflows/ci.yml with lint-and-format job
+   - Run `ruff check . --output-format=github` for linting
+   - Run `ruff format --check .` for formatting validation
+   - Configure job to run in parallel with type-check job
+   - Add dependency on setup job for cache restoration
+3. Configure Ruff cache caching strategy (~/.cache/ruff)
+4. Add local Taskfile commands: `task lint`, `task lint:fix`, `task format`, `task format:check`
+5. Test linting job with intentional violations (unused import, formatting issue)
+6. Verify error messages are actionable with file paths and line numbers
+7. Validate GitHub Actions annotations display correctly on PR
+8. Document code quality standards in CONTRIBUTING.md
+
+**Acceptance Criteria** (7 Gherkin scenarios in US-004):
+- Scenario 1: Linting executes on feature branch commit
+- Scenario 2: Linting error fails build with actionable feedback
+- Scenario 3: Valid code passes linting checks
+- Scenario 4: Formatting validation detects unformatted code
+- Scenario 5: Auto-fix mode available locally (`task lint:fix`)
+- Scenario 6: Cache improves subsequent run performance
+- Scenario 7: Local linting matches CI/CD behavior
+
+**Technical References**:
+- CLAUDE-tooling.md: Ruff configuration (lines 457-538), Taskfile commands (lines 59-77)
+- Implementation Research §2.2: FastAPI development workflow
+- US-004 v1: Complete acceptance criteria and technical specifications
+
+**Performance Targets**:
+- Lint job execution: <30 seconds for codebase <5,000 LOC
+- Format check: <10 seconds
+- Cache hit reduces runtime by >50%
+
+**Validation**:
+- [ ] Ruff configured in pyproject.toml with project rule set
+- [ ] lint-and-format job added to .github/workflows/ci.yml
+- [ ] Ruff cache cached in CI/CD workflow
+- [ ] Local Taskfile commands work: `task lint`, `task lint:fix`, `task format`
+- [ ] Linting errors fail build with GitHub Actions annotations
+- [ ] Error messages include file path, line number, rule ID
+- [ ] Test code has appropriate per-file-ignores
+- [ ] Documentation updated in CONTRIBUTING.md
+- [ ] All acceptance criteria validated
+
+**Notes**:
+- Ruff replaces multiple tools: Black (formatter), isort (import sorting), Flake8 (linting)
+- 10-100x faster than traditional Python linters
+- Configuration already partially defined in CLAUDE-tooling.md - implement and adapt
+
+---
+
+### TODO-031: Implement US-005 - Automated Type Safety Validation
+**Priority**: High
+**Dependencies**: TODO-025 (US-005 generated), TODO-029 (US-003 CI/CD pipeline infrastructure)
+**Estimated Time**: 2-3 hours (3 SP)
+**Status**: ⏳ Pending
+**Context**: Current session OK
+**Type**: Implementation
+
+**Description**:
+Implement automated type safety validation with mypy strict mode integrated into the CI/CD pipeline. Configure mypy in pyproject.toml, add type-check job to GitHub Actions workflow, and enforce comprehensive type checking on all production code.
+
+**User Story**: `/artifacts/backlog_stories/US-005_automated_type_safety_validation_v1.md`
+
+**Implementation Tasks** (from US-005 Definition of Done):
+1. Configure mypy in pyproject.toml with strict mode
+   - Enable strict mode: disallow_untyped_defs, disallow_incomplete_defs, check_untyped_defs, disallow_untyped_decorators, no_implicit_optional, warn_redundant_casts, warn_unused_ignores, warn_no_return, warn_unreachable, strict_equality
+   - Set Python version: 3.11
+   - Configure test directory exemption: [[tool.mypy.overrides]] for tests.* (disallow_untyped_defs = false)
+   - Configure third-party library overrides: ignore_missing_imports for libraries without type stubs
+2. Update .github/workflows/ci.yml with type-check job
+   - Run `mypy src/ --strict`
+   - Configure job to run in parallel with lint-and-format job
+   - Add dependency on setup job for cache restoration
+   - Format output for GitHub Actions annotations
+3. Configure mypy cache caching strategy (~/.mypy_cache)
+4. Add local Taskfile commands: `task type-check`, `task type-check:report`, `task type-check:install`
+5. Add type hints to existing code in src/ directory (if not already present)
+6. Test type-check job with intentional type error (e.g., calling .upper() on int)
+7. Verify error messages include file path, line number, and clear description
+8. Validate test code remains exempt from strict type checking
+9. Install missing type stubs: `mypy --install-types`
+10. Document type checking standards in CONTRIBUTING.md
+
+**Acceptance Criteria** (7 Gherkin scenarios in US-005):
+- Scenario 1: Type checking executes on feature branch commit
+- Scenario 2: Type error fails build with actionable feedback
+- Scenario 3: Valid type annotations pass type checking
+- Scenario 4: Test code exempt from strict type checking
+- Scenario 5: Third-party libraries without stubs don't block build
+- Scenario 6: Mypy cache improves subsequent run performance
+- Scenario 7: Local type checking matches CI/CD behavior
+
+**Technical References**:
+- CLAUDE-tooling.md: MyPy configuration (lines 542-602), Taskfile commands (lines 79-89)
+- CLAUDE-typing.md: Type hints philosophy, patterns, best practices (entire document)
+- Implementation Research §2.1: Python 3.11+ type safety benefits
+- US-005 v1: Complete acceptance criteria and technical specifications
+
+**Performance Targets**:
+- Type-check job execution: <30 seconds for codebase <10,000 LOC
+- Cache hit reduces runtime to <15 seconds
+- First run (cold cache): <60 seconds
+
+**Validation**:
+- [ ] Mypy configured in pyproject.toml with strict mode enabled
+- [ ] Test directory exempt from strict checking via overrides
+- [ ] Third-party libraries configured with ignore_missing_imports
+- [ ] type-check job added to .github/workflows/ci.yml
+- [ ] Mypy cache cached in CI/CD workflow
+- [ ] Local Taskfile commands work: `task type-check`, `task type-check:report`
+- [ ] Type errors fail build with actionable error messages
+- [ ] Error messages formatted as GitHub Actions annotations
+- [ ] All src/ code passes strict type checking
+- [ ] Test code exempt from strict checks (validated)
+- [ ] Documentation updated in CONTRIBUTING.md
+- [ ] All acceptance criteria validated
+
+**Notes**:
+- Mypy strict mode enforces comprehensive type safety across entire codebase
+- Type hints serve dual purpose: static analysis + inline documentation
+- Configuration already defined in CLAUDE-tooling.md and CLAUDE-typing.md - implement and validate
+- May require adding type hints to existing code in src/ directory
 
 ---
 
