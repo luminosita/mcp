@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Tech_Spec_Generator</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <sdlc_phase>Technical_Design</sdlc_phase>
-    <depends_on>Backlog Story (mandatory), Implementation Research (mandatory), Spike (conditional), ADR (conditional)</depends_on>
+    <depends_on>Backlog Story (mandatory), Implementation Research (mandatory), Spike (conditional), ADR (conditional), Specialized CLAUDE.md files (conditional)</depends_on>
     <generated_by>Context Engineering Framework v1.5</generated_by>
-    <date>2025-10-13</date>
-    <changes>v1.3: Replaced required attribute with classification system - Backlog Story and Implementation Research mandatory, Spike and ADR conditional (Issue #3)</changes>
+    <date>2025-10-14</date>
+    <changes>v1.4: Added Hybrid CLAUDE.md approach - Technical design aligns with specialized CLAUDE-*.md implementation standards (TASK-030)</changes>
   </metadata>
 
   <system_role>
@@ -58,6 +58,27 @@
 
         **Classification**: CONDITIONAL - Load if relevant ADRs exist for this component. ADRs provide architectural constraints and technology decisions that Tech Spec must follow.
       </artifact>
+
+      <artifact classification="conditional" type="specialized_claude_standards">
+        Specialized CLAUDE.md files provide (IMPLEMENTATION STANDARDS):
+        - CLAUDE-core.md: Core development philosophy and orchestration
+        - CLAUDE-tooling.md: Unified CLI (Taskfile), UV, Ruff, MyPy, pytest configuration
+        - CLAUDE-testing.md: Testing strategy, fixtures, coverage requirements
+        - CLAUDE-typing.md: Type hints, annotations, type safety patterns
+        - CLAUDE-validation.md: Pydantic models, input validation, security
+        - CLAUDE-architecture.md: Project structure, modularity, design patterns
+        - Additional domain-specific files per CLAUDE.md
+
+        Use for Technical Design alignment, ensuring spec references established implementation standards.
+
+        **Classification**: CONDITIONAL - Load when Tech Spec includes technical design that should align with project implementation standards. Treats CLAUDE.md content as authoritative - spec supplements (not duplicates) these standards.
+
+        **Hybrid CLAUDE.md Approach:**
+        - Component architecture aligns with CLAUDE-architecture.md patterns
+        - Testing strategy references CLAUDE-testing.md requirements
+        - Type safety follows CLAUDE-typing.md and CLAUDE-validation.md
+        - Implementation guidance supplements CLAUDE.md with component-specific details
+      </artifact>
     </input_artifacts>
   </task_context>
 
@@ -65,6 +86,7 @@
     <guideline category="grounding">Base component design on Backlog Story requirements. Base patterns on Implementation Research §4.</guideline>
     <guideline category="verification">For code examples, adapt from Implementation Research §8. Reference specific sections.</guideline>
     <guideline category="scope">Tech Spec defines HOW to implement (design, APIs, data models). Detailed code goes in Implementation Tasks.</guideline>
+    <guideline category="claude_standards">When CLAUDE.md files exist, align component design with established standards. Reference (not duplicate) CLAUDE.md content. Only reference files that exist.</guideline>
   </anti_hallucination_guidelines>
 
   <instructions>
@@ -72,12 +94,57 @@
     <step priority="2"><action>Load Implementation Research</action></step>
     <step priority="3"><action>Load relevant ADRs</action></step>
     <step priority="4"><action>Load Technical Specification template (path defined in CLAUDE.md Folder Structure section )</action></step>
-    <step priority="5"><action>Design Component Architecture</action></step>
+    <step priority="4.5">
+      <action>Review Specialized CLAUDE.md files (CONDITIONAL)</action>
+      <purpose>Align Technical Design with established implementation standards</purpose>
+      <guidance>
+        **When to Load:** Tech Spec includes component architecture, testing strategy, or implementation patterns.
+
+        **Files to Review (paths per CLAUDE.md):**
+        - CLAUDE-architecture.md (Project structure, modularity patterns)
+        - CLAUDE-testing.md (Testing strategy, coverage, fixtures)
+        - CLAUDE-typing.md (Type hints, type safety)
+        - CLAUDE-validation.md (Pydantic models, input validation)
+        - CLAUDE-tooling.md (Taskfile commands, development workflow)
+        - Additional domain-specific files as needed per CLAUDE.md
+
+        **Hybrid CLAUDE.md Approach:**
+        - Treat CLAUDE.md content as authoritative implementation standards
+        - Component architecture should align with CLAUDE-architecture.md patterns
+        - Testing strategy must reference CLAUDE-testing.md requirements
+        - Type safety follows CLAUDE-typing.md and CLAUDE-validation.md standards
+        - Tech Spec supplements CLAUDE.md with component-specific design details
+      </guidance>
+      <anti_hallucination>Only reference CLAUDE.md files that exist. If files don't exist, omit references.</anti_hallucination>
+    </step>
+    <step priority="5">
+      <action>Design Component Architecture</action>
+      <guidance>
+        - Define component structure, responsibilities, interfaces
+        - **HYBRID APPROACH:** Align with CLAUDE-architecture.md patterns (if exists)
+        - Reference Implementation Research §4 for architecture patterns
+        - Supplement with component-specific design decisions
+      </guidance>
+    </step>
     <step priority="6"><action>Define API Contracts (endpoints, schemas)</action></step>
     <step priority="7"><action>Design Data Models (database schemas)</action></step>
     <step priority="8"><action>Document Error Handling Strategy</action></step>
-    <step priority="9"><action>Add Code Examples from Implementation Research</action></step>
-    <step priority="10"><action>Define Testing Strategy</action></step>
+    <step priority="9">
+      <action>Add Code Examples from Implementation Research</action>
+      <guidance>
+        - Adapt code examples from Implementation Research §8
+        - **HYBRID APPROACH:** Reference CLAUDE-typing.md for type annotations, CLAUDE-validation.md for Pydantic models
+        - Provide component-specific implementation patterns
+      </guidance>
+    </step>
+    <step priority="10">
+      <action>Define Testing Strategy</action>
+      <guidance>
+        - Define unit tests, integration tests, test coverage targets
+        - **HYBRID APPROACH:** Reference CLAUDE-testing.md requirements (80% coverage, fixture patterns)
+        - Supplement with component-specific test scenarios
+      </guidance>
+    </step>
     <step priority="11">
       <action>Identify Open Questions (Implementation-Level Only)</action>
       <guidance>
@@ -143,6 +210,7 @@
         <criterion id="CQ-05" category="content_quality">Code examples included (adapted from Implementation Research §8)</criterion>
         <criterion id="CQ-06" category="content_quality">Testing strategy defined (unit, integration tests)</criterion>
         <criterion id="CQ-07" category="content_quality">Open Questions appropriate for implementation phase (granular details, not re-opening PRD/ADR decisions)</criterion>
+        <criterion id="CQ-08" category="content_quality">CLAUDE.md Alignment: When Tech Spec includes technical design, component architecture and testing strategy align with specialized CLAUDE-*.md standards; treats CLAUDE.md content as authoritative</criterion>
 
         <!-- Upstream Traceability -->
         <criterion id="UT-01" category="upstream_traceability">References to Implementation Research §X present</criterion>

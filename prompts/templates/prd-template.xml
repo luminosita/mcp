@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Product_Requirements_Document_Template</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
     <sdlc_phase>PRD</sdlc_phase>
-    <last_updated>2025-10-13</last_updated>
-    <changes>v1.4: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
+    <last_updated>2025-10-14</last_updated>
+    <changes>v1.5: Added Hybrid CLAUDE.md approach to Technical Considerations section - references specialized CLAUDE-*.md standards (TASK-030)</changes>
   </metadata>
 
   <instructions>
@@ -106,10 +106,39 @@
 [Link to designs]
 
 ## Technical Considerations
-- **Architecture:** [high-level approach]
-- **Dependencies:** [systems, services]
-- **Technical Constraints:** [limitations]
-- **Data Model:** [key entities]
+
+**HYBRID CLAUDE.md APPROACH:** When specialized CLAUDE-*.md files exist, align this section with established implementation standards. Reference (not duplicate) CLAUDE.md content. PRD supplements CLAUDE.md with product-specific context.
+
+### Architecture
+[High-level architecture approach]
+
+**Alignment with CLAUDE.md Standards:**
+- Reference CLAUDE-architecture.md for project structure, modularity, design patterns
+- Reference CLAUDE-core.md for core development philosophy
+- Supplement with product-specific architecture decisions
+
+### Dependencies
+**System Dependencies:**
+[Systems, services, databases]
+
+**External Dependencies:**
+[Third-party integrations]
+
+**Implementation Standards (when applicable):**
+- CLAUDE-tooling.md: Unified CLI interface (Taskfile), package management (UV), linting/formatting (Ruff), type checking (MyPy), testing (pytest)
+- CLAUDE-testing.md: Testing strategy, coverage requirements, fixture patterns
+- CLAUDE-typing.md: Type hints, annotations, type safety enforcement
+- CLAUDE-validation.md: Input validation (Pydantic), security patterns
+- CLAUDE-architecture.md: Project structure, modularity patterns
+- *Additional domain-specific files may be added during development (e.g., CLAUDE-security.md, CLAUDE-auth.md, CLAUDE-messaging.md)*
+
+**Note:** Treat CLAUDE.md content as "Decisions Made" - authoritative for implementation. PRD supplements (not duplicates) these standards.
+
+### Technical Constraints
+[Limitations, platform requirements, technology constraints]
+
+### Data Model
+[Key entities, relationships]
 
 ## Risks & Mitigations
 | Risk | Impact | Probability | Mitigation |

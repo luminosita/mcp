@@ -102,18 +102,38 @@
 
 ## Implementation Guidance
 
+**HYBRID CLAUDE.md APPROACH:** When specialized CLAUDE-*.md files exist, reference (not duplicate) established implementation standards. Supplement with task-specific execution steps.
+
+### Development Workflow (when applicable)
+- **CLAUDE-tooling.md:** Use Taskfile commands for development workflow
+  - `task test` - Run test suite
+  - `task lint` - Run linting
+  - `task lint:fix` - Auto-fix linting issues
+  - `task type-check` - Run type checking
+  - `task format` - Format code
+  - `task test:coverage` - Run tests with coverage report
+
+### Implementation Standards (when applicable)
+- **CLAUDE-architecture.md:** Follow project structure, modularity patterns
+- **CLAUDE-typing.md:** Apply type hints (strict mode), use Pydantic for data validation
+- **CLAUDE-validation.md:** Input validation with Pydantic models, security patterns
+- **CLAUDE-testing.md:** Testing requirements (80% coverage minimum, fixture patterns, async test support)
+- **Additional domain-specific files:** Reference as needed per CLAUDE.md
+
+**Note:** Treat CLAUDE.md content as authoritative - supplement with task-specific implementation steps.
+
 ### Code Example / Pseudo-code
 ```[language]
 // Example implementation approach
-[Show key code structure or algorithm]
+[Show key code structure or algorithm following CLAUDE-*.md patterns]
 ```
 
 ### Reference Implementation
 [Link to similar existing code or pattern in codebase]
 
 ### Design Patterns to Use
-- [Pattern 1: e.g., "Use Repository pattern for data access"]
-- [Pattern 2: e.g., "Follow existing error handling pattern in auth service"]
+- [Pattern 1: e.g., "Use Repository pattern per CLAUDE-architecture.md"]
+- [Pattern 2: e.g., "Follow error handling pattern from CLAUDE-core.md"]
 
 ### Implementation Research Reference
 [If applicable, reference Implementation Research sections]
@@ -158,10 +178,18 @@
 
 ## Testing Requirements
 
+**HYBRID CLAUDE.md APPROACH:** When CLAUDE-testing.md exists, follow established testing standards. Supplement with task-specific test scenarios.
+
+### Testing Standards (when applicable)
+- **CLAUDE-testing.md:** Follow testing requirements (80% coverage minimum, fixture patterns, async test support)
+- **CLAUDE-tooling.md:** Use Taskfile commands for test execution (`task test`, `task test:coverage`, `task test:unit`, `task test:integration`)
+- Task-specific test scenarios supplement standard requirements
+
 ### Unit Tests
 - [ ] Test [scenario 1]
 - [ ] Test [scenario 2]
 - [ ] Test [error handling]
+- [ ] Achieve minimum coverage target per CLAUDE-testing.md (if exists)
 
 ### Integration Tests (if applicable)
 - [ ] Test [integration scenario 1]
@@ -171,6 +199,7 @@
 1. [Step 1: Setup condition]
 2. [Step 2: Perform action]
 3. [Step 3: Verify outcome]
+4. Run `task check` to validate all quality checks pass
 
 ## Non-Functional Requirements
 

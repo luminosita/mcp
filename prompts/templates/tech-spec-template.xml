@@ -71,6 +71,8 @@
 
 ## System Architecture
 
+**HYBRID CLAUDE.md APPROACH:** When specialized CLAUDE-*.md files exist, align component architecture with established implementation standards. Reference (not duplicate) CLAUDE.md content. Supplement with component-specific design details.
+
 ### High-Level Architecture
 ```mermaid
 graph TD
@@ -81,6 +83,14 @@ graph TD
 
 ### Component Diagram
 [Detailed component interactions]
+
+### Alignment with Implementation Standards (when applicable)
+- **CLAUDE-architecture.md:** Follow project structure patterns, modularity principles
+- **CLAUDE-typing.md:** Apply type hints and type safety patterns
+- **CLAUDE-validation.md:** Use Pydantic models for data validation
+- **Additional domain-specific files:** Reference as needed per CLAUDE.md
+
+**Note:** Treat CLAUDE.md content as authoritative - supplement with component-specific architecture, don't duplicate.
 
 ## API Specifications
 
@@ -133,9 +143,20 @@ interface User {
 - **Availability:** 99.9% uptime
 
 ## Testing Strategy
-- **Unit Tests:** [Coverage target: 80%]
+
+**HYBRID CLAUDE.md APPROACH:** When CLAUDE-testing.md exists, reference established testing requirements. Supplement with component-specific test scenarios.
+
+### Testing Requirements
+- **Unit Tests:** [Coverage target - reference CLAUDE-testing.md minimum (e.g., 80%)]
 - **Integration Tests:** [Critical paths]
 - **Load Tests:** [Scenarios]
+
+### Alignment with Testing Standards (when applicable)
+- **CLAUDE-testing.md:** Follow testing strategy, coverage requirements, fixture patterns
+- **CLAUDE-tooling.md:** Use Taskfile commands for test execution (`task test`, `task test:coverage`)
+- Component-specific test scenarios supplement standard requirements
+
+**Note:** Treat CLAUDE-testing.md requirements as baseline - supplement with component-specific tests.
 
 ## Deployment Strategy
 - **Environment Progression:** Dev → Staging → Production

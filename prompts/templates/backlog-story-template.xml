@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>Backlog_Story_Template</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <source>Section 6.4 of advanced_prompt_engineering_software_docs_code_final.md (lines 1063-1112), enhanced for Context Engineering Framework</source>
     <sdlc_phase>Backlog_Story</sdlc_phase>
     <note>This template is for DETAILED backlog user stories, not high-level stories in PRDs</note>
-    <last_updated>2025-10-13</last_updated>
-    <changes>v1.4: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
+    <last_updated>2025-10-14</last_updated>
+    <changes>v1.5: Added Hybrid CLAUDE.md approach to Technical Notes section - references specialized CLAUDE-*.md standards (TASK-030)</changes>
   </metadata>
 
   <instructions>
@@ -85,6 +85,23 @@ As [role], I want [feature], so that [benefit].
 - **Maintainability:** [Code quality, documentation standards]
 
 ## Technical Requirements
+
+**HYBRID CLAUDE.md APPROACH:** When specialized CLAUDE-*.md files exist, reference (not duplicate) established implementation standards. Supplement with story-specific technical guidance.
+
+### Implementation Guidance
+[Story-specific technical approach, patterns, considerations]
+
+**References to Implementation Standards (when applicable):**
+- CLAUDE-tooling.md: Use Taskfile commands (`task test`, `task lint`, `task type-check`, `task format`)
+- CLAUDE-testing.md: Follow testing patterns (80% coverage minimum, fixtures for database, async test support)
+- CLAUDE-typing.md: Apply type hints (strict mode, Pydantic models for validation per CLAUDE-validation.md)
+- CLAUDE-architecture.md: Follow project structure, modularity patterns
+- CLAUDE-validation.md: Input validation with Pydantic, security patterns
+- *Reference additional domain-specific files as needed (e.g., CLAUDE-security.md, CLAUDE-auth.md)*
+
+**Note:** Treat CLAUDE.md content as authoritative - supplement with story-specific context, don't duplicate.
+
+### Technical Tasks
 - [Frontend task 1]
 - [Backend task 1]
 - [Database change 1]
