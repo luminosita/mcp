@@ -1000,6 +1000,246 @@ def validate_environment [] {
 }
 ```
 
+### NuShell Module Organization
+
+**CRITICAL: Use explicit exports for all modules (Decision D1 from SPEC-001 v1)**
+
+NuShell supports module-based code organization for better maintainability and reusability. Follow these guidelines:
+
+#### Module Structure Pattern
+
+```
+scripts/
+├── setup.nu                 # Main entry point (orchestrator)
+└── lib/
+    ├── os_detection.nu      # Module: OS detection (export def detect_os)
+    ├── prerequisites.nu     # Module: Prerequisites validation (export def check_prerequisites)
+    ├── validation.nu        # Module: Environment validation (export def validate_environment)
+    └── error_handler.nu     # Module: Error handling (export def retry_with_backoff)
+```
+
+#### Import Strategy: `use` vs `source`
+
+**✅ ALWAYS use `use` with explicit imports (Decision D1)**
+- Provides namespace isolation
+- Better IDE support and autocomplete
+- Clear function dependencies
+- Prevents namespace pollution
+
+**❌ NEVER use `source`**
+- Pollutes namespace with all functions
+- No explicit dependency management
+- Harder to track function origins
+
+#### Explicit Exports (REQUIRED)
+
+All public functions must use `export def`:
+
+```nu
+# ✅ CORRECT: Explicit export
+# scripts/lib/os_detection.nu
+
+# Detect operating system, architecture, and version
+# Returns: record<os: string, arch: string, version: string>
+export def detect_os [] -> record<os: string, arch: string, version: string> {
+    let sys_info = (sys | get host)
+
+    return {
+        os: $sys_info.name,
+        arch: $sys_info.arch,
+        version: $sys_info.kernel_version
+    }
+}
+
+# ❌ WRONG: Plain def (not exported, cannot be imported)
+def detect_os [] {
+    # ... implementation
+}
+```
+
+#### Module Import Pattern
+
+```nu
+# ✅ CORRECT: Explicit function import
+use scripts/lib/os_detection.nu detect_os
+use scripts/lib/prerequisites.nu check_prerequisites
+use scripts/lib/validation.nu validate_environment
+
+# Call imported functions
+let os_info = (detect_os)
+let prereqs = (check_prerequisites)
+let validation = (validate_environment)
+
+# ❌ WRONG: source (pollutes namespace)
+source scripts/lib/os_detection.nu
+source scripts/lib/prerequisites.nu
+```
+
+#### Helper Functions (Private)
+
+Helper functions that should NOT be exported use plain `def`:
+
+```nu
+# scripts/lib/prerequisites.nu
+
+# Public function (exported)
+export def check_prerequisites [] -> record {
+    let python_check = check_python  # Call private helper
+
+    return {
+        python: $python_check.ok,
+        python_version: $python_check.version
+    }
+}
+
+# Private helper function (NOT exported)
+def check_python [] -> record {
+    let version_output = (python --version | complete)
+
+    if $version_output.exit_code != 0 {
+        return {ok: false, version: ""}
+    }
+
+    return {ok: true, version: $version_output.stdout}
+}
+```
+
+#### Complete Module Example
+
+**scripts/lib/validation.nu:**
+```nu
+# Environment validation module
+# Provides comprehensive health checks for development environment
+
+# Public function: Validate entire environment
+export def validate_environment [] -> record {
+    print "Validating environment..."
+
+    mut checks = []
+
+    # Run all validation checks
+    $checks = ($checks | append (check_python_version))
+    $checks = ($checks | append (check_venv_exists))
+    $checks = ($checks | append (check_dependencies_importable))
+
+    let passed = ($checks | where passed == true | length)
+    let failed = ($checks | where passed == false | length)
+
+    return {
+        passed: $passed,
+        failed: $failed,
+        checks: $checks
+    }
+}
+
+# Private helper: Check Python version
+def check_python_version [] -> record {
+    let version = (python --version | parse "Python {version}" | get version.0)
+
+    if ($version >= "3.11") {
+        return {name: "Python version", passed: true, message: $"Python ($version)"}
+    } else {
+        return {name: "Python version", passed: false, message: $"Python ($version) < 3.11"}
+    }
+}
+
+# Private helper: Check venv exists
+def check_venv_exists [] -> record {
+    if (".venv" | path exists) {
+        return {name: "Virtual environment", passed: true, message: ".venv directory exists"}
+    } else {
+        return {name: "Virtual environment", passed: false, message: ".venv directory missing"}
+    }
+}
+
+# Private helper: Check dependencies importable
+def check_dependencies_importable [] -> record {
+    let result = (uv run python -c "import fastapi; import pydantic" | complete)
+
+    if $result.exit_code == 0 {
+        return {name: "Dependencies", passed: true, message: "All dependencies importable"}
+    } else {
+        return {name: "Dependencies", passed: false, message: "Import failed"}
+    }
+}
+```
+
+**scripts/setup.nu:**
+```nu
+#!/usr/bin/env nu
+
+# Main setup script (orchestrator)
+# Usage: nu setup.nu [--silent]
+
+# Import modules with explicit function imports (per Decision D1)
+use scripts/lib/os_detection.nu detect_os
+use scripts/lib/prerequisites.nu check_prerequisites
+use scripts/lib/validation.nu validate_environment
+
+def main [--silent] {
+    print "🚀 Starting environment setup..."
+
+    # Use imported functions
+    let os_info = (detect_os)
+    print $"Detected OS: ($os_info.os) ($os_info.arch)"
+
+    let prereqs = (check_prerequisites)
+    if ($prereqs.errors | length) > 0 {
+        print "❌ Prerequisites check failed:"
+        $prereqs.errors | each { |err| print $"  - ($err)" }
+        exit 1
+    }
+
+    # ... rest of setup logic
+
+    let validation = (validate_environment)
+    print $"Validation: ($validation.passed)/($validation.passed + $validation.failed) checks passed"
+
+    if $validation.failed > 0 {
+        print "❌ Environment validation failed"
+        exit 1
+    }
+
+    print "✅ Setup complete!"
+}
+```
+
+#### Best Practices
+
+1. **One module per responsibility** - Each .nu file should have a single, clear purpose
+2. **Use explicit exports** - Always use `export def` for public functions
+3. **Document function signatures** - Include parameter and return types
+4. **Keep modules focused** - Avoid large, multi-purpose modules
+5. **Use helper functions** - Private helpers (plain `def`) for internal logic
+6. **Import explicitly** - Use `use module.nu function_name`, not `use module.nu *`
+7. **Test modules independently** - Each module should be unit-testable
+
+#### Module Import Examples
+
+```nu
+# ✅ CORRECT: Import specific functions
+use scripts/lib/os_detection.nu detect_os
+use scripts/lib/prerequisites.nu [check_prerequisites check_python]
+
+# ✅ CORRECT: Import all exports from module (when needed)
+use scripts/lib/validation.nu *
+
+# ❌ WRONG: source pollutes namespace
+source scripts/lib/os_detection.nu
+
+# ❌ WRONG: Plain def without export (cannot be imported)
+# In module:
+def my_function [] {  # Missing 'export'
+    print "This cannot be imported!"
+}
+```
+
+#### References
+
+- **NuShell Modules Documentation:** https://www.nushell.sh/book/modules.html
+- **SPEC-001 v2 Decision D1:** Use `use` with explicit exports for maintainability
+- **Implementation Guide:** See `/artifacts/tech_specs/SPEC-001_automated_setup_script_v2.md`
+
 ### NuShell vs Bash Comparison
 
 | Feature | Bash | NuShell |

@@ -100,9 +100,19 @@ project-root/
 │   ├── architecture.md
 │   └── deployment.md
 │
-└── scripts/                    # Development scripts
-    ├── setup.sh
-    └── deploy.sh
+└── scripts/                    # Development scripts (NuShell)
+    ├── setup.nu                # Main setup script (orchestrator)
+    └── lib/                    # NuShell modules (use explicit exports)
+        ├── os_detection.nu     # OS detection (export def detect_os)
+        ├── prerequisites.nu    # Prerequisites validation (export def check_prerequisites)
+        ├── taskfile_install.nu # Taskfile installation (export def ensure_taskfile)
+        ├── uv_install.nu       # uv installation (export def ensure_uv)
+        ├── venv_setup.nu       # Python venv creation (export def create_venv)
+        ├── deps_install.nu     # Dependency installation (export def install_dependencies)
+        ├── config_setup.nu     # Environment configuration (export def setup_config)
+        ├── validation.nu       # Environment validation (export def validate_environment)
+        ├── interactive.nu      # Interactive prompts (export def prompt_user)
+        └── error_handler.nu    # Error handling and retries (export def retry_with_backoff)
 ```
 
 ---
