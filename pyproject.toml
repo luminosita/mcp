@@ -26,6 +26,7 @@ dependencies = [
     "structlog>=23.0.0",
     "sqlalchemy[asyncio]>=2.0.0",
     "asyncpg>=0.29.0",
+    "mcp>=0.1.0",
 ]
 
 [project.optional-dependencies]
@@ -123,6 +124,10 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "sqlalchemy.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "mcp.*"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
