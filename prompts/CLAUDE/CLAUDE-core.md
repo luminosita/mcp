@@ -10,6 +10,7 @@
 - **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Development tools: Taskfile, UV, Ruff, MyPy, pytest, Renovate, NuShell, Devbox, Podman
 - **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing strategy, fixtures, and coverage requirements
 - **[CLAUDE-typing.md](./CLAUDE-typing.md)** - Type hints, annotations, and type safety patterns
+- **[CLAUDE-mcp.md](./CLAUDE-mcp.md)** - Model Context Protocol (MCP) tool implementation patterns with FastMCP
 
 ### Architecture & Design
 - **[CLAUDE-architecture-structure.md](./CLAUDE-architecture-structure.md)** - Project structure, folder organization, and layout strategies
