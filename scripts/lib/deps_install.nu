@@ -10,6 +10,96 @@
 
 use common.nu *
 
+# Install Python dependencies from pyproject.toml
+# Args:
+#   venv_path: string - Path to virtual environment (default: .venv)
+# Returns: record {success: bool, packages: int, duration: duration, error: string}
+export def install_dependencies [venv_path: string = ".venv"] {
+    print "📦 Installing Python dependencies..."
+
+    # Verify venv exists
+    let venv_full_path = ($venv_path | path expand)
+    let python_bin = (get_python_bin_path $venv_full_path)
+
+    if not ($python_bin | path exists) {
+        return {
+            success: false,
+            packages: 0,
+            duration: 0sec,
+            error: $"Virtual environment not found at ($venv_path). Run create_venv first."
+        }
+    }
+
+    # Verify pyproject.toml exists
+    if not ("pyproject.toml" | path exists) {
+        return {
+            success: false,
+            packages: 0,
+            duration: 0sec,
+            error: "pyproject.toml not found in current directory"
+        }
+    }
+
+    # Install with retry logic
+    let result = (install_with_retry $venv_full_path)
+
+    if $result.success {
+        print $"✅ Installed ($result.packages) packages in ($result.duration)"
+        return {
+            success: true,
+            packages: $result.packages,
+            duration: $result.duration,
+            error: ""
+        }
+    } else {
+        print $"❌ Dependency installation failed: ($result.error)"
+        return {
+            success: false,
+            packages: 0,
+            duration: $result.duration,
+            error: $result.error
+        }
+    }
+}
+
+# Sync dependencies using uv sync
+# Args:
+#   venv_path: string - Path to virtual environment (default: .venv)
+# Returns: record {success: bool, packages: int, duration: duration, error: string}
+export def sync_dependencies [venv_path: string = ".venv"] {
+    print "🔄 Syncing Python dependencies..."
+
+    let start_time = (date now)
+
+    # Use uv sync command which reads from pyproject.toml
+    let result = (^uv sync | complete)
+
+    let end_time = (date now)
+    let duration = ($end_time - $start_time)
+
+    if $result.exit_code == 0 {
+        # Parse package count from output
+        let output = ($result.stdout + $result.stderr)
+        let packages = (parse_package_count $output)
+
+        print $"✅ Dependencies synced in ($duration)"
+
+        return {
+            success: true,
+            packages: $packages,
+            duration: $duration,
+            error: ""
+        }
+    } else {
+        return {
+            success: false,
+            packages: 0,
+            duration: $duration,
+            error: $"Dependency sync failed: ($result.stderr)"
+        }
+    }
+}
+
 # Parse package count from uv output
 # Args:
 #   output: string - UV command output
@@ -99,95 +189,5 @@ def install_with_retry [
         duration: $duration,
         error: "Unexpected error in retry logic",
         attempts: $max_attempts
-    }
-}
-
-# Install Python dependencies from pyproject.toml
-# Args:
-#   venv_path: string - Path to virtual environment (default: .venv)
-# Returns: record {success: bool, packages: int, duration: duration, error: string}
-export def install_dependencies [venv_path: string = ".venv"] {
-    print "📦 Installing Python dependencies..."
-
-    # Verify venv exists
-    let venv_full_path = ($venv_path | path expand)
-    let python_bin = (get_python_bin_path $venv_full_path)
-
-    if not ($python_bin | path exists) {
-        return {
-            success: false,
-            packages: 0,
-            duration: 0sec,
-            error: $"Virtual environment not found at ($venv_path). Run create_venv first."
-        }
-    }
-
-    # Verify pyproject.toml exists
-    if not ("pyproject.toml" | path exists) {
-        return {
-            success: false,
-            packages: 0,
-            duration: 0sec,
-            error: "pyproject.toml not found in current directory"
-        }
-    }
-
-    # Install with retry logic
-    let result = (install_with_retry $venv_full_path)
-
-    if $result.success {
-        print $"✅ Installed ($result.packages) packages in ($result.duration)"
-        return {
-            success: true,
-            packages: $result.packages,
-            duration: $result.duration,
-            error: ""
-        }
-    } else {
-        print $"❌ Dependency installation failed: ($result.error)"
-        return {
-            success: false,
-            packages: 0,
-            duration: $result.duration,
-            error: $result.error
-        }
-    }
-}
-
-# Sync dependencies using uv sync
-# Args:
-#   venv_path: string - Path to virtual environment (default: .venv)
-# Returns: record {success: bool, packages: int, duration: duration, error: string}
-export def sync_dependencies [venv_path: string = ".venv"] {
-    print "🔄 Syncing Python dependencies..."
-
-    let start_time = (date now)
-
-    # Use uv sync command which reads from pyproject.toml
-    let result = (^uv sync | complete)
-
-    let end_time = (date now)
-    let duration = ($end_time - $start_time)
-
-    if $result.exit_code == 0 {
-        # Parse package count from output
-        let output = ($result.stdout + $result.stderr)
-        let packages = (parse_package_count $output)
-
-        print $"✅ Dependencies synced in ($duration)"
-
-        return {
-            success: true,
-            packages: $packages,
-            duration: $duration,
-            error: ""
-        }
-    } else {
-        return {
-            success: false,
-            packages: 0,
-            duration: $duration,
-            error: $"Dependency sync failed: ($result.stderr)"
-        }
     }
 }

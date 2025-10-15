@@ -10,6 +10,52 @@
 
 use common.nu *
 
+# Complete configuration setup (env file + pre-commit hooks)
+# Args:
+#   venv_path: string - Path to virtual environment (default: .venv)
+# Returns: record {success: bool, env_created: bool, hooks_installed: bool, errors: list}
+export def setup_configuration [venv_path: string = ".venv"] {
+    print "\n⚙️  Setting up configuration...\n"
+
+    mut errors = []
+    mut env_created = false
+    mut hooks_installed = false
+
+    # Setup .env file
+    let env_result = (setup_env_file)
+
+    if $env_result.success {
+        $env_created = $env_result.created
+    } else {
+        $errors = ($errors | append $env_result.error)
+    }
+
+    # Install pre-commit hooks
+    let hooks_result = (install_precommit_hooks $venv_path)
+
+    if $hooks_result.success {
+        $hooks_installed = $hooks_result.installed
+    } else {
+        $errors = ($errors | append $hooks_result.error)
+    }
+
+    # Overall success if no errors
+    let success = (($errors | length) == 0)
+
+    if $success {
+        print "\n✅ Configuration setup completed successfully\n"
+    } else {
+        print $"\n⚠️  Configuration setup completed with ($errors | length) errors\n"
+    }
+
+    return {
+        success: $success,
+        env_created: $env_created,
+        hooks_installed: $hooks_installed,
+        errors: $errors
+    }
+}
+
 # Check if .env file exists
 # Returns: record {exists: bool, path: string}
 def check_env_exists [] {
@@ -21,7 +67,7 @@ def check_env_exists [] {
 
 # Create .env file from .env.example
 # Returns: record {success: bool, created: bool, path: string, error: string}
-export def setup_env_file [] {
+def setup_env_file [] {
     print "📝 Setting up .env configuration..."
 
     # Check if .env already exists
@@ -88,7 +134,7 @@ def check_precommit_installed [venv_path: string = ".venv"] {
 # Args:
 #   venv_path: string - Path to virtual environment (default: .venv)
 # Returns: record {success: bool, installed: bool, error: string}
-export def install_precommit_hooks [venv_path: string = ".venv"] {
+def install_precommit_hooks [venv_path: string = ".venv"] {
     print "🪝 Installing pre-commit hooks..."
 
     # Check if pre-commit is installed in venv
@@ -118,51 +164,5 @@ export def install_precommit_hooks [venv_path: string = ".venv"] {
             installed: false,
             error: $"Pre-commit installation failed: ($result.stderr)"
         }
-    }
-}
-
-# Complete configuration setup (env file + pre-commit hooks)
-# Args:
-#   venv_path: string - Path to virtual environment (default: .venv)
-# Returns: record {success: bool, env_created: bool, hooks_installed: bool, errors: list}
-export def setup_configuration [venv_path: string = ".venv"] {
-    print "\n⚙️  Setting up configuration...\n"
-
-    mut errors = []
-    mut env_created = false
-    mut hooks_installed = false
-
-    # Setup .env file
-    let env_result = (setup_env_file)
-
-    if $env_result.success {
-        $env_created = $env_result.created
-    } else {
-        $errors = ($errors | append $env_result.error)
-    }
-
-    # Install pre-commit hooks
-    let hooks_result = (install_precommit_hooks $venv_path)
-
-    if $hooks_result.success {
-        $hooks_installed = $hooks_result.installed
-    } else {
-        $errors = ($errors | append $hooks_result.error)
-    }
-
-    # Overall success if no errors
-    let success = (($errors | length) == 0)
-
-    if $success {
-        print "\n✅ Configuration setup completed successfully\n"
-    } else {
-        print $"\n⚠️  Configuration setup completed with ($errors | length) errors\n"
-    }
-
-    return {
-        success: $success,
-        env_created: $env_created,
-        hooks_installed: $hooks_installed,
-        errors: $errors
     }
 }

@@ -21,6 +21,18 @@ export def get_python_bin_path [venv_path: string] {
     }
 }
 
+# Get installed uv version (convenience function)
+# Returns: string (version) or error
+export def get_uv_version [] {
+    let version_result = (get_binary_version "uv" "--version")
+
+    if $version_result.success {
+       return $version_result.version
+    } else {
+        error make {msg: "UV is not installed"}
+    }
+}
+
 # Get pre-commit binary path for virtual environment
 # Args:
 #   venv_path: string - Path to virtual environment
@@ -82,6 +94,8 @@ export def get_binary_version [
 #   version_string: string - Version string like "Python 3.11.6"
 # Returns: record {major: int, minor: int, patch: int, full: string}
 export def parse_python_version [version_string: string] {
+    ### REFACTOR: This method should be universal in parsing any binary version, not only Python
+
     # Remove "Python " prefix if present
     let clean_version = ($version_string | str replace "Python " "")
 
@@ -125,6 +139,9 @@ export def validate_python_version [
     min_major: int = 3
     min_minor: int = 11
 ] {
+
+    ### REFACTOR: This method should be universal in validating any binary version, not only Python
+
     try {
         let version = (parse_python_version $version_string)
 

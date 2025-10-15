@@ -10,6 +10,110 @@
 
 use common.nu *
 
+
+# Create Python virtual environment using uv
+# Args:
+#   venv_path: string - Path where virtual environment should be created (default: .venv)
+#   python_version: string - Python version to use (default: 3.11)
+# Returns: record {success: bool, path: string, python_version: string, error: string}
+export def create_venv [
+    venv_path: string = ".venv"
+    python_version: string = "3.11"
+] {
+    print $"🐍 Creating Python virtual environment at ($venv_path)..."
+
+    ### REFACTOR: Duplication D1 has to blocks (START -> END) within this method, which has only minor differences
+    ### DUPLICATION D1 - START
+    # Check if venv already exists
+    let check = (check_venv_exists $venv_path)
+
+    if $check.exists {
+        print $"ℹ️  Virtual environment already exists at ($check.path)"
+
+        # Get Python version
+        let py_ver = (get_venv_python_version $check.path)
+
+        if $py_ver.success {
+            print $"✅ Using existing venv with Python ($py_ver.version)"
+            return {
+                success: true,
+                path: $check.path,
+                python_version: $py_ver.version,
+                error: ""
+            }
+        } else {
+            print $"⚠️  Warning: Could not verify Python version in existing venv"
+            return {
+                success: true,
+                path: $check.path,
+                python_version: "unknown",
+                error: ""
+            }
+        }
+    }
+    ### DUPLICATION D1 - END
+
+    # Create virtual environment using uv
+    print $"📦 Running: uv venv ($venv_path) --python ($python_version)"
+
+    let result = (^uv venv $venv_path --python $python_version | complete)
+
+    if $result.exit_code != 0 {
+        return {
+            success: false,
+            path: "",
+            python_version: "",
+            error: $"Virtual environment creation failed: ($result.stderr)"
+        }
+    }
+
+    ### DUPLICATION D1 - START
+
+    # Verify creation
+    let verify = (check_venv_exists $venv_path)
+
+    if not $verify.exists {
+        return {
+            success: false,
+            path: "",
+            python_version: "",
+            error: $"Virtual environment creation failed - directory not found at ($venv_path)"
+        }
+    }
+
+    # Get Python version
+    let py_ver = (get_venv_python_version $verify.path)
+
+    if $py_ver.success {
+        print $"✅ Virtual environment created with Python ($py_ver.version)"
+        return {
+            success: true,
+            path: $verify.path,
+            python_version: $py_ver.version,
+            error: ""
+        }
+    } else {
+        # Venv exists but can't get version - non-fatal
+        print "⚠️  Virtual environment created but Python version check failed"
+        return {
+            success: true,
+            path: $verify.path,
+            python_version: "unknown",
+            error: ""
+        }
+    }
+    ### DUPLICATION D1 - START
+
+}
+
+# Check if virtual environment exists (exported version)
+# Args:
+#   venv_path: string - Path to virtual environment (default: .venv)
+# Returns: record {exists: bool, path: string}
+export def check_venv [venv_path: string = ".venv"] {
+    return (check_venv_exists $venv_path)
+}
+
 # Check if virtual environment exists
 # Args:
 #   venv_path: string - Path to virtual environment (default: .venv)
@@ -51,100 +155,4 @@ export def get_venv_python_version [venv_path: string = ".venv"] {
             error: $version_result.error
         }
     }
-}
-
-# Create Python virtual environment using uv
-# Args:
-#   venv_path: string - Path where virtual environment should be created (default: .venv)
-#   python_version: string - Python version to use (default: 3.11)
-# Returns: record {success: bool, path: string, python_version: string, error: string}
-export def create_venv [
-    venv_path: string = ".venv"
-    python_version: string = "3.11"
-] {
-    print $"🐍 Creating Python virtual environment at ($venv_path)..."
-
-    # Check if venv already exists
-    let check = (check_venv_exists $venv_path)
-
-    if $check.exists {
-        print $"ℹ️  Virtual environment already exists at ($check.path)"
-
-        # Get Python version
-        let py_ver = (get_venv_python_version $check.path)
-
-        if $py_ver.success {
-            print $"✅ Using existing venv with Python ($py_ver.version)"
-            return {
-                success: true,
-                path: $check.path,
-                python_version: $py_ver.version,
-                error: ""
-            }
-        } else {
-            print $"⚠️  Warning: Could not verify Python version in existing venv"
-            return {
-                success: true,
-                path: $check.path,
-                python_version: "unknown",
-                error: ""
-            }
-        }
-    }
-
-    # Create virtual environment using uv
-    print $"📦 Running: uv venv ($venv_path) --python ($python_version)"
-
-    let result = (^uv venv $venv_path --python $python_version | complete)
-
-    if $result.exit_code != 0 {
-        return {
-            success: false,
-            path: "",
-            python_version: "",
-            error: $"Virtual environment creation failed: ($result.stderr)"
-        }
-    }
-
-    # Verify creation
-    let verify = (check_venv_exists $venv_path)
-
-    if not $verify.exists {
-        return {
-            success: false,
-            path: "",
-            python_version: "",
-            error: $"Virtual environment creation failed - directory not found at ($venv_path)"
-        }
-    }
-
-    # Get Python version
-    let py_ver = (get_venv_python_version $verify.path)
-
-    if $py_ver.success {
-        print $"✅ Virtual environment created with Python ($py_ver.version)"
-        return {
-            success: true,
-            path: $verify.path,
-            python_version: $py_ver.version,
-            error: ""
-        }
-    } else {
-        # Venv exists but can't get version - non-fatal
-        print "⚠️  Virtual environment created but Python version check failed"
-        return {
-            success: true,
-            path: $verify.path,
-            python_version: "unknown",
-            error: ""
-        }
-    }
-}
-
-# Check if virtual environment exists (exported version)
-# Args:
-#   venv_path: string - Path to virtual environment (default: .venv)
-# Returns: record {exists: bool, path: string}
-export def check_venv [venv_path: string = ".venv"] {
-    return (check_venv_exists $venv_path)
 }

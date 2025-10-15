@@ -17,6 +17,8 @@
 #       exit 1
 #   }
 
+use common.nu *
+
 # Check if all prerequisites are available and meet version requirements
 # Returns structured record with validation results and errors
 #
@@ -51,6 +53,24 @@ export def check_prerequisites [] {
         $errors = ($errors | append $git_check.error)
     }
 
+    # Check Taskfile
+    let task_check = (check_taskfile)
+    let task_ok = $task_check.ok
+    let task_version = $task_check.version
+
+    if not $task_ok {
+        $errors = ($errors | append $task_check.error)
+    }
+
+    # Check UV package manager
+    let uv_check = (check_uv)
+    let uv_ok = $uv_check.ok
+    let uv_version = $uv_check.version
+
+    if not $uv_ok {
+        $errors = ($errors | append $uv_check.error)
+    }
+
     return {
         python: $python_ok,
         python_version: $python_version,
@@ -58,6 +78,10 @@ export def check_prerequisites [] {
         podman_version: $podman_version,
         git: $git_ok,
         git_version: $git_version,
+        task: $task_ok,
+        task_version: $task_version,
+        uv: $uv_ok,
+        uv_version: $uv_version,
         errors: $errors
     }
 }
@@ -68,56 +92,31 @@ export def check_prerequisites [] {
 # Returns: record<ok: bool, version: string, error: string>
 def check_python [] {
     # Check if Python is available
-    let python_result = (which python)
+    let binary_check = (check_binary_exists "python")
 
-    if ($python_result | is-empty) {
+    if not $binary_check.exists {
         return {
-            ok: false,
+            installed: false,
             version: "",
             error: "Python not found. Add 'python@3.11' to devbox.json packages."
         }
     }
 
-    # Get Python version
-    let version_output = (python --version | complete)
+    # Get version
+    let version_result = (get_binary_version "python" "--version")
 
-    if $version_output.exit_code != 0 {
-        return {
-            ok: false,
-            version: "",
-            error: "Python version check failed. Ensure Python is properly installed."
-        }
-    }
-
-    # Parse version (format: "Python 3.11.5" or "Python 3.11.5+")
-    try {
-        let version_str = ($version_output.stdout | str trim | split row " " | get 1)
-
-        # Remove any + or rc suffixes for version parsing
-        let clean_version = ($version_str | split row "+" | get 0 | split row "rc" | get 0)
-        let version_parts = ($clean_version | split row ".")
-
-        let major = ($version_parts | get 0 | into int)
-        let minor = ($version_parts | get 1 | into int)
-
-        if $major < 3 or ($major == 3 and $minor < 11) {
-            return {
-                ok: false,
-                version: $version_str,
-                error: $"Python ($version_str) is too old. Python 3.11+ required. Update devbox.json to use python@3.11."
-            }
-        }
-
+    if $version_result.success {
+        print $"✅ Python installed: ($version_result.version)"
         return {
             ok: true,
-            version: $version_str,
+            version: $version_result.version,
             error: ""
         }
-    } catch {
+    } else {
         return {
             ok: false,
             version: "",
-            error: "Failed to parse Python version. Ensure Python is properly installed."
+            error: $"Python found but version check failed: ($version_result.error)"
         }
     }
 }
@@ -127,9 +126,9 @@ def check_python [] {
 #
 # Returns: record<ok: bool, version: string, error: string>
 def check_podman [] {
-    let podman_result = (which podman)
+    let binary_check = (check_binary_exists "podman")
 
-    if ($podman_result | is-empty) {
+    if not $binary_check.exists {
         return {
             ok: false,
             version: "",
@@ -137,31 +136,21 @@ def check_podman [] {
         }
     }
 
-    # Get Podman version
-    let version_output = (podman --version | complete)
+    # Get version
+    let version_result = (get_binary_version "podman" "--version")
 
-    if $version_output.exit_code != 0 {
+    if $version_result.success {
+        print $"✅ Podman installed: ($version_result.version)"
+        return {
+            ok: true,
+            version: $version_result.version,
+            error: ""
+        }
+    } else {
         return {
             ok: false,
             version: "",
-            error: "Podman version check failed. Ensure Podman is properly installed."
-        }
-    }
-
-    # Parse version (format: "podman version 4.7.0")
-    try {
-        let version_str = ($version_output.stdout | str trim | split row " " | get 2)
-        return {
-            ok: true,
-            version: $version_str,
-            error: ""
-        }
-    } catch {
-        # If parsing fails, still consider it OK (any version is acceptable)
-        return {
-            ok: true,
-            version: "unknown",
-            error: ""
+            error: $"Podman found but version check failed: ($version_result.error)"
         }
     }
 }
@@ -171,9 +160,9 @@ def check_podman [] {
 #
 # Returns: record<ok: bool, version: string, error: string>
 def check_git [] {
-    let git_result = (which git)
+    let binary_check = (check_binary_exists "git")
 
-    if ($git_result | is-empty) {
+    if not $binary_check.exists {
         return {
             ok: false,
             version: "",
@@ -181,31 +170,85 @@ def check_git [] {
         }
     }
 
-    # Get Git version
-    let version_output = (git --version | complete)
+    # Get version
+    let version_result = (get_binary_version "git" "--version")
 
-    if $version_output.exit_code != 0 {
+    if $version_result.success {
+        print $"✅ Git installed: ($version_result.version)"
+        return {
+            ok: true,
+            version: $version_result.version,
+            error: ""
+        }
+    } else {
         return {
             ok: false,
             version: "",
-            error: "Git version check failed. Ensure Git is properly installed."
+            error: $"Git found but version check failed: ($version_result.error)"
+        }
+    }
+}
+
+# Check if Taskfile is installed
+# Returns: record {installed: bool, version: string, error: string}
+def check_taskfile [] {
+    # Check if task binary exists
+    let binary_check = (check_binary_exists "task")
+
+    if not $binary_check.exists {
+        return {
+            ok: false,
+            version: "",
+            error: "Taskfile not found in PATH. Please add 'go-task' to devbox.json"
         }
     }
 
-    # Parse version (format: "git version 2.42.0")
-    try {
-        let version_str = ($version_output.stdout | str trim | split row " " | get 2)
+    # Get version
+    let version_result = (get_binary_version "task" "--version")
+
+    if $version_result.success {
+        print $"✅ Taskfile installed: ($version_result.version)"
         return {
             ok: true,
-            version: $version_str,
+            version: $version_result.version,
             error: ""
         }
-    } catch {
-        # If parsing fails, still consider it OK (any version is acceptable)
+    } else {
+        return {
+            ok: false,
+            version: "",
+            error: $"Taskfile found but version check failed: ($version_result.error)"
+        }
+    }
+}
+
+def check_uv [] {
+    # Check if uv binary exists
+    let binary_check = (check_binary_exists "uv")
+
+    if not $binary_check.exists {
+        return {
+            ok: false,
+            version: "",
+            error: "UV package manager not found in PATH. Please add 'uv' to devbox.json"
+        }
+    }
+
+    # Get version
+    let version_result = (get_binary_version "uv" "--version")
+
+    if $version_result.success {
+        print $"✅ UV installed: ($version_result.version)"
         return {
             ok: true,
-            version: "unknown",
+            version: $version_result.version,
             error: ""
+        }
+    } else {
+        return {
+            ok: false,
+            version: "",
+            error: $"UV found but version check failed: ($version_result.error)"
         }
     }
 }

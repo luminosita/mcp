@@ -18,8 +18,6 @@
 
 use lib/os_detection.nu *
 use lib/prerequisites.nu *
-use lib/taskfile_install.nu *
-use lib/uv_install.nu *
 use lib/venv_setup.nu *
 use lib/deps_install.nu *
 use lib/config_setup.nu *
@@ -119,39 +117,9 @@ def main [
 
     print "✅ All prerequisites validated\n"
 
-    # Phase 3: Taskfile Validation
+    # Phase 3: Virtual Environment Creation
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    print "Phase 3: Taskfile Validation"
-    print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-
-    let taskfile = (check_taskfile_installed)
-
-    if not $taskfile.installed {
-        print $"❌ Taskfile not found: ($taskfile.error)"
-        print "  Please add 'go-task' to devbox.json\n"
-        exit 1
-    } else {
-        print $"✅ Taskfile ready: ($taskfile.version)\n"
-    }
-
-    # Phase 4: UV Validation
-    print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    print "Phase 4: UV Package Manager Validation"
-    print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-
-    let uv_result = (check_uv_installed)
-
-    if not $uv_result.installed {
-        print $"❌ UV not found: ($uv_result.error)"
-        print "  Please add 'uv' to devbox.json\n"
-        exit 1
-    }
-
-    print $"✅ UV ready: ($uv_result.version)\n"
-
-    # Phase 5: Virtual Environment Creation
-    print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    print "Phase 5: Python Virtual Environment Setup"
+    print "Phase 3: Python Virtual Environment Setup"
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 
     let venv_result = (create_venv ".venv" "3.11")
@@ -163,9 +131,9 @@ def main [
 
     print $"✅ Virtual environment ready: Python ($venv_result.python_version)\n"
 
-    # Phase 6: Dependency Installation
+    # Phase 4: Dependency Installation
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    print "Phase 6: Dependency Installation"
+    print "Phase 4: Dependency Installation"
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 
     let deps_result = (install_dependencies ".venv")
@@ -177,9 +145,9 @@ def main [
 
     print $"✅ Dependencies installed: ($deps_result.packages) packages\n"
 
-    # Phase 7: Configuration Setup
+    # Phase 5: Configuration Setup
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    print "Phase 7: Configuration Setup"
+    print "Phase 5: Configuration Setup"
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 
     let config_result = (setup_configuration ".venv")
@@ -193,9 +161,9 @@ def main [
         print "✅ Configuration complete\n"
     }
 
-    # Phase 8: Environment Validation
+    # Phase 6: Environment Validation
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    print "Phase 8: Environment Validation"
+    print "Phase 6: Environment Validation"
     print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 
     let validation = (validate_environment ".venv")
