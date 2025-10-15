@@ -510,6 +510,706 @@ async def generate_items(n: int) -> AsyncGenerator[int, None]:
 
 ---
 
+## 🔄 Async Context Managers & Patterns
+
+### Basic Async Context Manager
+
+```python
+from typing import AsyncContextManager, Self
+from types import TracebackType
+
+class AsyncResource:
+    """
+    Basic async context manager for resource management.
+
+    Ensures proper cleanup with async/await.
+    """
+
+    def __init__(self, name: str) -> None:
+        self.name = name
+        self.is_open = False
+
+    async def __aenter__(self) -> Self:
+        """Acquire resource asynchronously."""
+        print(f"Opening {self.name}")
+        await self._open()
+        self.is_open = True
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
+        """Release resource asynchronously."""
+        print(f"Closing {self.name}")
+        await self._close()
+        self.is_open = False
+
+        # Return False to propagate exceptions
+        # Return True to suppress exceptions
+        return None
+
+    async def _open(self) -> None:
+        """Open resource."""
+        # Simulate async operation
+        import asyncio
+        await asyncio.sleep(0.1)
+
+    async def _close(self) -> None:
+        """Close resource."""
+        # Simulate async operation
+        import asyncio
+        await asyncio.sleep(0.1)
+
+# Usage
+async def example() -> None:
+    async with AsyncResource("database") as resource:
+        print(f"Using {resource.name}")
+        # Resource automatically closed on exit
+```
+
+### Database Connection Async Context Manager
+
+```python
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from typing import AsyncIterator
+from contextlib import asynccontextmanager
+
+class DatabaseConfig:
+    """Database configuration."""
+    database_url: str = "postgresql+asyncpg://user:pass@localhost/db"
+    pool_size: int = 10
+    max_overflow: int = 20
+    echo: bool = False
+
+class Database:
+    """
+    Database connection manager with async context.
+
+    Provides async session lifecycle management.
+    """
+
+    def __init__(self, config: DatabaseConfig) -> None:
+        self.config = config
+        self._engine = create_async_engine(
+            config.database_url,
+            pool_size=config.pool_size,
+            max_overflow=config.max_overflow,
+            echo=config.echo,
+        )
+        self._session_maker = async_sessionmaker(
+            self._engine,
+            class_=AsyncSession,
+            expire_on_commit=False,
+        )
+
+    async def __aenter__(self) -> AsyncSession:
+        """Create new database session."""
+        self._session = self._session_maker()
+        return self._session
+
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
+        """Close database session."""
+        await self._session.close()
+
+    async def close(self) -> None:
+        """Close database engine."""
+        await self._engine.dispose()
+
+# Usage
+db = Database(DatabaseConfig())
+
+async def get_user(user_id: int) -> dict[str, any]:
+    async with db as session:
+        result = await session.execute(
+            select(User).where(User.id == user_id)
+        )
+        user = result.scalar_one_or_none()
+        return {"id": user.id, "name": user.name} if user else {}
+```
+
+### asynccontextmanager Decorator
+
+```python
+from contextlib import asynccontextmanager
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import AsyncIterator
+
+@asynccontextmanager
+async def get_db_session() -> AsyncIterator[AsyncSession]:
+    """
+    Create database session with automatic cleanup.
+
+    Decorator-based async context manager - simpler than class-based.
+    """
+    engine = create_async_engine("postgresql+asyncpg://localhost/db")
+    async_session = async_sessionmaker(engine, class_=AsyncSession)
+
+    session = async_session()
+    try:
+        yield session
+        await session.commit()
+    except Exception:
+        await session.rollback()
+        raise
+    finally:
+        await session.close()
+        await engine.dispose()
+
+# Usage
+async def create_user(name: str, email: str) -> User:
+    async with get_db_session() as session:
+        user = User(name=name, email=email)
+        session.add(user)
+        # Automatic commit on success, rollback on error
+        return user
+```
+
+### HTTP Client Session Management
+
+```python
+import aiohttp
+from typing import AsyncIterator
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def http_session(
+    base_url: str,
+    timeout: int = 30,
+    headers: dict[str, str] | None = None
+) -> AsyncIterator[aiohttp.ClientSession]:
+    """
+    Create HTTP client session with automatic cleanup.
+
+    Features:
+    - Connection pooling
+    - Automatic cookie handling
+    - Timeout configuration
+    - Header management
+    """
+    timeout_config = aiohttp.ClientTimeout(total=timeout)
+
+    async with aiohttp.ClientSession(
+        base_url=base_url,
+        timeout=timeout_config,
+        headers=headers or {}
+    ) as session:
+        yield session
+
+# Usage
+async def fetch_user_data(user_id: int) -> dict[str, any]:
+    """Fetch user data from API."""
+    async with http_session("https://api.example.com") as session:
+        async with session.get(f"/users/{user_id}") as response:
+            response.raise_for_status()
+            return await response.json()
+
+# Multiple requests with same session
+async def fetch_multiple_users(user_ids: list[int]) -> list[dict[str, any]]:
+    """Fetch multiple users efficiently with connection pooling."""
+    results: list[dict[str, any]] = []
+
+    async with http_session("https://api.example.com") as session:
+        for user_id in user_ids:
+            async with session.get(f"/users/{user_id}") as response:
+                if response.status == 200:
+                    data = await response.json()
+                    results.append(data)
+
+    return results
+```
+
+### File I/O Async Context Manager
+
+```python
+import aiofiles
+from typing import AsyncIterator
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+@asynccontextmanager
+async def async_open_file(
+    filepath: str | Path,
+    mode: str = "r",
+    encoding: str = "utf-8"
+) -> AsyncIterator[aiofiles.threadpool.text.AsyncTextIOWrapper]:
+    """
+    Open file asynchronously with automatic closure.
+
+    Uses aiofiles for non-blocking file I/O.
+    """
+    file = await aiofiles.open(filepath, mode=mode, encoding=encoding)
+    try:
+        yield file
+    finally:
+        await file.close()
+
+# Usage
+async def read_config(config_path: str) -> dict[str, any]:
+    """Read configuration file asynchronously."""
+    async with async_open_file(config_path, "r") as f:
+        content = await f.read()
+        return json.loads(content)
+
+async def write_log(log_path: str, message: str) -> None:
+    """Write to log file asynchronously."""
+    async with async_open_file(log_path, "a") as f:
+        timestamp = datetime.now().isoformat()
+        await f.write(f"[{timestamp}] {message}\n")
+```
+
+### Resource Pool Async Context Manager
+
+```python
+import asyncio
+from typing import AsyncIterator, Generic, TypeVar
+from contextlib import asynccontextmanager
+
+T = TypeVar('T')
+
+class AsyncPool(Generic[T]):
+    """
+    Generic async resource pool with context management.
+
+    Features:
+    - Resource pooling
+    - Automatic cleanup
+    - Size limits
+    - Timeout handling
+    """
+
+    def __init__(self, max_size: int = 10) -> None:
+        self._available: asyncio.Queue[T] = asyncio.Queue(maxsize=max_size)
+        self._in_use: set[T] = set()
+        self._max_size = max_size
+
+    async def add_resource(self, resource: T) -> None:
+        """Add resource to pool."""
+        await self._available.put(resource)
+
+    @asynccontextmanager
+    async def acquire(self, timeout: float = 10.0) -> AsyncIterator[T]:
+        """
+        Acquire resource from pool with timeout.
+
+        Automatically returns resource to pool on exit.
+        """
+        try:
+            resource = await asyncio.wait_for(
+                self._available.get(),
+                timeout=timeout
+            )
+            self._in_use.add(resource)
+            yield resource
+        except asyncio.TimeoutError:
+            raise TimeoutError(f"Failed to acquire resource within {timeout}s")
+        finally:
+            if resource in self._in_use:
+                self._in_use.remove(resource)
+                await self._available.put(resource)
+
+    async def close_all(self) -> None:
+        """Close all resources in pool."""
+        while not self._available.empty():
+            resource = await self._available.get()
+            if hasattr(resource, 'close'):
+                await resource.close()
+
+# Usage with database connections
+db_pool: AsyncPool[AsyncSession] = AsyncPool(max_size=10)
+
+async def init_pool() -> None:
+    """Initialize connection pool."""
+    for _ in range(10):
+        session = create_async_session()
+        await db_pool.add_resource(session)
+
+async def query_with_pool(query: str) -> list[dict]:
+    """Execute query using pooled connection."""
+    async with db_pool.acquire(timeout=5.0) as session:
+        result = await session.execute(query)
+        return [dict(row) for row in result]
+```
+
+### Nested Async Context Managers
+
+```python
+from contextlib import asynccontextmanager
+from typing import AsyncIterator
+
+@asynccontextmanager
+async def transaction_context(
+    session: AsyncSession
+) -> AsyncIterator[AsyncSession]:
+    """Transaction context with automatic commit/rollback."""
+    async with session.begin():
+        try:
+            yield session
+        except Exception:
+            await session.rollback()
+            raise
+
+@asynccontextmanager
+async def audit_context(
+    session: AsyncSession,
+    user_id: int,
+    action: str
+) -> AsyncIterator[AsyncSession]:
+    """Audit context that logs actions."""
+    start_time = datetime.now()
+    try:
+        yield session
+        # Log successful action
+        await log_audit(session, user_id, action, "success", start_time)
+    except Exception as e:
+        # Log failed action
+        await log_audit(session, user_id, action, f"failed: {e}", start_time)
+        raise
+
+# Usage with nested contexts
+async def update_user_with_audit(
+    user_id: int,
+    data: dict[str, any],
+    admin_id: int
+) -> User:
+    """Update user with transaction and audit logging."""
+    async with get_db_session() as session:
+        async with transaction_context(session):
+            async with audit_context(session, admin_id, "update_user"):
+                user = await session.get(User, user_id)
+                if not user:
+                    raise ValueError(f"User {user_id} not found")
+
+                for key, value in data.items():
+                    setattr(user, key, value)
+
+                return user
+```
+
+### Async Generator Context Manager
+
+```python
+from typing import AsyncGenerator
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def stream_large_file(
+    filepath: str,
+    chunk_size: int = 8192
+) -> AsyncGenerator[bytes, None]:
+    """
+    Stream large file in chunks with context management.
+
+    Combines async generator with context manager.
+    """
+    async with aiofiles.open(filepath, 'rb') as f:
+        try:
+            while chunk := await f.read(chunk_size):
+                yield chunk
+        finally:
+            # Cleanup handled by aiofiles context
+            pass
+
+# Usage
+async def process_large_file(filepath: str) -> int:
+    """Process large file without loading entire content."""
+    total_bytes = 0
+
+    async with stream_large_file(filepath) as chunks:
+        async for chunk in chunks:
+            total_bytes += len(chunk)
+            await process_chunk(chunk)
+
+    return total_bytes
+```
+
+### Timeout Async Context Manager
+
+```python
+import asyncio
+from typing import AsyncIterator
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def timeout_context(
+    seconds: float
+) -> AsyncIterator[None]:
+    """
+    Timeout context manager for async operations.
+
+    Raises TimeoutError if operation exceeds limit.
+    """
+    try:
+        async with asyncio.timeout(seconds):
+            yield
+    except asyncio.TimeoutError:
+        raise TimeoutError(f"Operation exceeded {seconds}s timeout")
+
+# Usage
+async def fetch_with_timeout(url: str) -> dict[str, any]:
+    """Fetch data with 5-second timeout."""
+    async with timeout_context(5.0):
+        async with http_session(url) as session:
+            async with session.get("/data") as response:
+                return await response.json()
+
+# Nested with other contexts
+async def safe_database_operation(user_id: int) -> User:
+    """Database operation with timeout and transaction."""
+    async with timeout_context(10.0):
+        async with get_db_session() as session:
+            async with transaction_context(session):
+                return await get_user(session, user_id)
+```
+
+### Lock Async Context Manager
+
+```python
+import asyncio
+from typing import AsyncIterator
+from contextlib import asynccontextmanager
+
+class AsyncLock:
+    """
+    Async lock with context manager support.
+
+    Prevents race conditions in async code.
+    """
+
+    def __init__(self) -> None:
+        self._lock = asyncio.Lock()
+
+    async def __aenter__(self) -> None:
+        """Acquire lock."""
+        await self._lock.acquire()
+
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
+        """Release lock."""
+        self._lock.release()
+
+# Usage
+user_locks: dict[int, AsyncLock] = {}
+
+async def get_user_lock(user_id: int) -> AsyncLock:
+    """Get or create lock for user."""
+    if user_id not in user_locks:
+        user_locks[user_id] = AsyncLock()
+    return user_locks[user_id]
+
+async def update_user_balance(user_id: int, amount: float) -> None:
+    """Update user balance with lock to prevent race conditions."""
+    lock = await get_user_lock(user_id)
+
+    async with lock:
+        # Critical section - only one coroutine can execute this
+        async with get_db_session() as session:
+            user = await session.get(User, user_id)
+            user.balance += amount
+            await session.commit()
+```
+
+### Error Handling in Async Context Managers
+
+```python
+from typing import AsyncIterator
+from contextlib import asynccontextmanager
+import logging
+
+logger = logging.getLogger(__name__)
+
+@asynccontextmanager
+async def resilient_connection(
+    url: str,
+    max_retries: int = 3,
+    retry_delay: float = 1.0
+) -> AsyncIterator[aiohttp.ClientSession]:
+    """
+    Connection with automatic retry and error handling.
+
+    Handles connection failures gracefully.
+    """
+    session: aiohttp.ClientSession | None = None
+
+    for attempt in range(max_retries):
+        try:
+            session = aiohttp.ClientSession()
+            # Test connection
+            async with session.get(url) as response:
+                response.raise_for_status()
+
+            yield session
+            break
+
+        except aiohttp.ClientError as e:
+            logger.warning(f"Connection attempt {attempt + 1} failed: {e}")
+
+            if session:
+                await session.close()
+                session = None
+
+            if attempt == max_retries - 1:
+                raise ConnectionError(f"Failed to connect after {max_retries} attempts")
+
+            await asyncio.sleep(retry_delay * (attempt + 1))
+
+    finally:
+        if session:
+            await session.close()
+
+# Usage
+async def fetch_with_retry(url: str) -> dict[str, any]:
+    """Fetch data with automatic retry."""
+    async with resilient_connection(url) as session:
+        async with session.get("/api/data") as response:
+            return await response.json()
+```
+
+### Async Context Manager Protocol
+
+```python
+from typing import Protocol, Self, TypeVar
+from types import TracebackType
+
+T = TypeVar('T', covariant=True)
+
+class AsyncContextManagerProtocol(Protocol[T]):
+    """
+    Protocol for async context managers.
+
+    Defines the interface any async context manager must implement.
+    """
+
+    async def __aenter__(self) -> T:
+        """Enter async context."""
+        ...
+
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> bool | None:
+        """Exit async context."""
+        ...
+
+# Usage with protocol
+async def use_async_context(
+    context: AsyncContextManagerProtocol[AsyncSession]
+) -> None:
+    """Use any object that implements async context manager protocol."""
+    async with context as session:
+        # Use session
+        pass
+```
+
+### Complete Example: Multi-Resource Manager
+
+```python
+from typing import AsyncIterator
+from contextlib import asynccontextmanager
+from dataclasses import dataclass
+
+@dataclass
+class Resources:
+    """Container for multiple managed resources."""
+    db_session: AsyncSession
+    cache: Redis
+    http_client: aiohttp.ClientSession
+
+@asynccontextmanager
+async def managed_resources(
+    db_url: str,
+    redis_url: str,
+    api_base_url: str
+) -> AsyncIterator[Resources]:
+    """
+    Manage multiple resources with single context.
+
+    All resources properly cleaned up even if one fails.
+    """
+    db_session: AsyncSession | None = None
+    cache: Redis | None = None
+    http_client: aiohttp.ClientSession | None = None
+
+    try:
+        # Initialize resources
+        engine = create_async_engine(db_url)
+        async_session = async_sessionmaker(engine, class_=AsyncSession)
+        db_session = async_session()
+
+        cache = await aioredis.from_url(redis_url)
+
+        http_client = aiohttp.ClientSession(base_url=api_base_url)
+
+        # Yield all resources
+        yield Resources(
+            db_session=db_session,
+            cache=cache,
+            http_client=http_client
+        )
+
+    finally:
+        # Cleanup in reverse order
+        if http_client:
+            await http_client.close()
+
+        if cache:
+            await cache.close()
+
+        if db_session:
+            await db_session.close()
+            await engine.dispose()
+
+# Usage
+async def complex_operation(user_id: int) -> dict[str, any]:
+    """Operation using multiple resources."""
+    async with managed_resources(
+        "postgresql://localhost/db",
+        "redis://localhost",
+        "https://api.example.com"
+    ) as resources:
+        # Check cache first
+        cached = await resources.cache.get(f"user:{user_id}")
+        if cached:
+            return json.loads(cached)
+
+        # Query database
+        result = await resources.db_session.execute(
+            select(User).where(User.id == user_id)
+        )
+        user = result.scalar_one_or_none()
+
+        if user:
+            # Fetch additional data from API
+            async with resources.http_client.get(f"/users/{user_id}/extra") as resp:
+                extra_data = await resp.json()
+
+            # Combine and cache
+            data = {"id": user.id, "name": user.name, **extra_data}
+            await resources.cache.set(
+                f"user:{user_id}",
+                json.dumps(data),
+                ex=3600
+            )
+            return data
+
+        return {}
+```
+
+---
+
 ## 🛡️ Avoiding Common Pitfalls
 
 ### Mutable Default Arguments
