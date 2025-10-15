@@ -9,9 +9,10 @@
 
 **Current Status**: Phase 2: Backlog Story Implementation - In Progress
 **Last Completed**: TODO-HLS-005-IMPL-003 (US-026 implemented - 2025-10-15)
-**Next Task**: TODO-HLS-005-IMPL-004 (US-025 - Validate Container Deployment in Staging)
-**Implementation Progress**: 3/4 batches completed (75%)
-**Story Sequence**: US-020 ✅ → US-021 ✅ → US-022 ✅ → US-023 ✅ → US-024 ✅ → US-026 ✅ → US-025 ⏳
+**Next Task**: TODO-HLS-005-IMPL-004 (US-027 - Container Security Scanning in CI/CD Pipeline)
+**Implementation Progress**: 3/5 batches completed (60%)
+**Story Sequence**: US-020 ✅ → US-021 ✅ → US-022 ✅ → US-023 ✅ → US-024 ✅ → US-026 ✅ → US-027 ⏳ → US-025 ⏳
+**Note**: US-027 added to close HLS-005 Definition of Done gap (container security scanning requirement)
 
 **Implementation TODOs Created:**
 
@@ -166,15 +167,23 @@
     - ✅ README.md updated with deployment documentation
     - ✅ All acceptance criteria met
 
-- [ ] **TODO-HLS-005-IMPL-004**: Implement US-025 (Validate Container Deployment in Staging)
+- [ ] **TODO-HLS-005-IMPL-004**: Implement US-027 (Container Security Scanning in CI/CD Pipeline)
+  - **Story**: US-027 (2 SP)
+  - **Artifact**: `artifacts/backlog_stories/US-027_container_security_scanning_ci_pipeline_v1.md`
+  - **Context**: New session CX required
+  - **Dependencies**: US-026 (Automated Container Build) completed - provides container images to scan
+  - **Note**: Closes HLS-005 Definition of Done gap - "Container security scanning integrated in CI/CD pipeline"
+  - **Acceptance**: Trivy scans all container builds, blocks deployment on critical/high CVEs, uploads SARIF to GitHub Security tab
+
+- [ ] **TODO-HLS-005-IMPL-005**: Implement US-025 (Validate Container Deployment in Staging)
   - **Story**: US-025 (2 SP)
   - **Artifact**: `artifacts/backlog_stories/US-025_validate_container_deployment_staging_v1.md`
   - **Context**: New session CX required
-  - **Dependencies**: US-020, US-021, US-022, US-023, US-024, US-026 all completed
-  - **Note**: MUST complete last - validates complete end-to-end container workflow including automated builds
-  - **Acceptance**: Container deployed to staging, all smoke tests pass, team confirms production readiness
+  - **Dependencies**: US-020, US-021, US-022, US-023, US-024, US-026, US-027 all completed
+  - **Note**: MUST complete last - validates complete end-to-end container workflow including automated builds and security scanning
+  - **Acceptance**: Container deployed to staging, all smoke tests pass, security scan passes, team confirms production readiness
 
-**Total Implementation Story Points**: 21 SP
+**Total Implementation Story Points**: 23 SP (added US-027: 2 SP)
 **Estimated Implementation Time**: 2-3 sprints (assuming 2-week sprints, 2 engineers)
 
 ---
