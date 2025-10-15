@@ -63,6 +63,39 @@ mcp/
 
 ```
 
+## Deployment
+
+Container images are automatically built and published to GitHub Container Registry on every merge to the main branch.
+
+### Using Pre-built Images
+
+```bash
+# Pull latest image
+podman pull ghcr.io/USERNAME/REPO:latest
+
+# Pull specific version
+podman pull ghcr.io/USERNAME/REPO:0.1.0
+
+# Pull by commit SHA
+podman pull ghcr.io/USERNAME/REPO:abc123def
+
+# Run container
+podman run -d -p 8000:8000 ghcr.io/USERNAME/REPO:latest
+```
+
+### Building Locally
+
+```bash
+# Build with Taskfile
+task container:build
+
+# Build with custom tag
+TAG=custom task container:build
+
+# Run locally built image
+task container:run
+```
+
 ## Documentation
 
 - [Setup Guide](docs/SETUP.md) - Detailed setup instructions
