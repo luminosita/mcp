@@ -2031,6 +2031,23 @@ task devbox:update
 
 ### CI/CD Pipeline
 
+**Pipeline Triggers:**
+- **Feature/Bugfix/Chore branches** (`feature/*`, `bugfix/*`, `chore/*`): Run all validation jobs + container build (no push)
+- **Release branches** (`release/*`): Run all validation jobs + container build + push to registry
+- **Pull Requests to main**: Run all validation jobs + container build (no push)
+- **Main branch pushes**: NO automated container builds (documentation/TODO updates should not trigger builds)
+
+**Container Build Strategy:**
+- ✅ **Builds on ALL branches** - Validates Containerfile changes early
+- ✅ **Pushes ONLY on release branches** - Clean, intentional releases
+- ❌ **NO builds on main branch pushes** - Avoids unnecessary builds for docs/TODO updates
+
+**Release Process:**
+1. Create release branch: `git checkout -b release/v0.1.0`
+2. Update version in `pyproject.toml` to match release tag
+3. Push to trigger automated build and push: `git push -u origin release/v0.1.0`
+4. Container image automatically pushed to `ghcr.io` with tags: `latest`, `v0.1.0`, `<commit-sha>`
+
 ```bash
 # Run all CI checks (uses frozen lockfile)
 task check:ci
@@ -2041,9 +2058,26 @@ task lint                      # Check linting
 task type-check                # Check types
 task test:coverage             # Run tests with coverage enforcement
 task build                     # Build package
+task container:build           # Build container (local only - CI handles push)
 ```
 
+**CI/CD Jobs:**
+1. **Containerfile Validation** - Hadolint linter for Dockerfile best practices
+2. **Code Quality Checks** - Ruff linting and formatting
+3. **Type Safety Validation** - MyPy strict mode type checking
+4. **Test Execution and Coverage** - pytest with 80% coverage requirement
+5. **Container Build** - Builds on all branches, pushes only on release branches
+6. **Build Status Report** - Aggregates results, posts PR comment with status table
+
 ### Pre-commit Workflow
+
+**Pre-commit Hooks:**
+- **Ruff** - Linting with auto-fix
+- **Ruff Format** - Code formatting
+- **YAML/JSON/TOML checks** - Syntax validation
+- **Hadolint** - Containerfile linting for best practices
+- **Type checking** - MyPy strict mode via Taskfile
+- **Security checks** - Detect private keys, large files
 
 ```bash
 # Install pre-commit hooks (done automatically in task setup)

@@ -573,14 +573,17 @@ Upon completion, update relevant task status in `/TODO.md`:
 | HLS-002 | 6 stories | US-003 → US-008 |
 | HLS-003 | 5 stories | US-009 → US-013 |
 | HLS-004 | 6 stories | US-014 → US-019 |
-| HLS-005 | 7 stories | US-020 → US-026 |
+| HLS-005 | 8 stories | US-020 → US-027 |
 
 **Next Available IDs (as of 2025-10-15):**
-- US: US-027 (US-001 through US-026 allocated; HLS-005 complete through US-026)
+- US: US-028 (US-001 through US-027 allocated; HLS-005 complete through US-027)
 - SPEC: SPEC-002 (SPEC-001 used by US-001)
 - TASK: TASK-004 (TASK-001/002/003 used by US-001)
 - ADR: ADR-001 (none assigned yet)
 - SPIKE: SPIKE-001 (none assigned yet)
+
+**Recent ID Assignments:**
+- US-027: Container Security Scanning in CI/CD Pipeline (added 2025-10-15 to close HLS-005 Definition of Done gap)
 
 **Note:** TODO.md tracks only active/upcoming work. Completed work archived to TODO-completed.md.
 

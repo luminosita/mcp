@@ -5,7 +5,8 @@
     "nushell@latest",
     "go-task@latest",
     "uv@latest",
-    "podman@latest"
+    "podman@latest",
+    "hadolint@latest"
   ],
   "shell": {
     "init_hook": [
@@ -18,6 +19,7 @@
       "echo 'Taskfile version:' $(task --version)",
       "echo 'UV version:' $(uv --version)",
       "echo 'Podman version:' $(podman --version)",
+      "echo 'Hadolint version:' $(hadolint --version)",
       "echo ''",
       "echo 'Quick start:'",
       "echo '  1. Run setup: nu scripts/setup.nu'",

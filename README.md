@@ -63,6 +63,46 @@ mcp/
 
 ```
 
+## Deployment
+
+Container images are automatically built on all branches and pushed to GitHub Container Registry only on `release/*` branches.
+
+### Release Process
+
+1. Create release branch: `git checkout -b release/v0.1.0`
+2. Update version in `pyproject.toml`
+3. Push to trigger automated build and push: `git push -u origin release/v0.1.0`
+4. Container image automatically pushed to `ghcr.io` with version tags
+
+### Using Pre-built Images
+
+```bash
+# Pull latest image
+podman pull ghcr.io/USERNAME/REPO:latest
+
+# Pull specific version
+podman pull ghcr.io/USERNAME/REPO:0.1.0
+
+# Pull by commit SHA
+podman pull ghcr.io/USERNAME/REPO:abc123def
+
+# Run container
+podman run -d -p 8000:8000 ghcr.io/USERNAME/REPO:latest
+```
+
+### Building Locally
+
+```bash
+# Build with Taskfile
+task container:build
+
+# Build with custom tag
+TAG=custom task container:build
+
+# Run locally built image
+task container:run
+```
+
 ## Documentation
 
 - [Setup Guide](docs/SETUP.md) - Detailed setup instructions
