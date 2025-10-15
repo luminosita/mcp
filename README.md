@@ -65,7 +65,14 @@ mcp/
 
 ## Deployment
 
-Container images are automatically built and published to GitHub Container Registry on every merge to the main branch.
+Container images are automatically built on all branches and pushed to GitHub Container Registry only on `release/*` branches.
+
+### Release Process
+
+1. Create release branch: `git checkout -b release/v0.1.0`
+2. Update version in `pyproject.toml`
+3. Push to trigger automated build and push: `git push -u origin release/v0.1.0`
+4. Container image automatically pushed to `ghcr.io` with version tags
 
 ### Using Pre-built Images
 

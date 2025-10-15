@@ -1,12 +1,13 @@
 name: CI/CD Pipeline
 
-# Trigger on feature branch pushes and PRs to main
+# Trigger on feature branch pushes, release branches, and PRs to main
 on:
   push:
     branches:
       - 'feature/**'
       - 'bugfix/**'
       - 'chore/**'
+      - 'release/**'
   pull_request:
     branches:
       - main
@@ -72,6 +73,20 @@ jobs:
           key: ruff-${{ runner.os }}-${{ hashFiles('**/*.py') }}
           restore-keys: |
             ruff-${{ runner.os }}-
+
+  # Containerfile linting job
+  lint-containerfile:
+    name: Containerfile Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ./Containerfile
+          failure-threshold: warning
 
   # Lint and format validation job
   lint-and-format:
@@ -237,7 +252,7 @@ jobs:
   report:
     name: Build Status Report
     runs-on: ubuntu-latest
-    needs: [lint-and-format, type-check, test-and-coverage, build-container]
+    needs: [lint-containerfile, lint-and-format, type-check, test-and-coverage, build-container]
     if: always()
     permissions:
       pull-requests: write
@@ -245,17 +260,13 @@ jobs:
     steps:
       - name: Check job results
         run: |
-          # Container build is optional (only runs on main)
-          CONTAINER_RESULT="${{ needs.build-container.result }}"
-          if [ "$CONTAINER_RESULT" = "skipped" ]; then
-            CONTAINER_RESULT="success"
-          fi
-
-          if [ "${{ needs.lint-and-format.result }}" != "success" ] || \
+          if [ "${{ needs.lint-containerfile.result }}" != "success" ] || \
+             [ "${{ needs.lint-and-format.result }}" != "success" ] || \
              [ "${{ needs.type-check.result }}" != "success" ] || \
              [ "${{ needs.test-and-coverage.result }}" != "success" ] || \
-             [ "$CONTAINER_RESULT" != "success" ]; then
+             [ "${{ needs.build-container.result }}" != "success" ]; then
             echo "❌ Build failed - one or more validation jobs failed"
+            echo "- Containerfile Validation: ${{ needs.lint-containerfile.result }}"
             echo "- Lint and Format: ${{ needs.lint-and-format.result }}"
             echo "- Type Check: ${{ needs.type-check.result }}"
             echo "- Test and Coverage: ${{ needs.test-and-coverage.result }}"
@@ -276,27 +287,33 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const containerfileResult = '${{ needs.lint-containerfile.result }}';
             const lintResult = '${{ needs.lint-and-format.result }}';
             const typeResult = '${{ needs.type-check.result }}';
             const testResult = '${{ needs.test-and-coverage.result }}';
-            const containerResult = '${{ needs.build-container.result }}';
+            const containerBuildResult = '${{ needs.build-container.result }}';
 
-            // Container build is skipped on PRs (only runs on main)
-            const containerStatus = containerResult === 'skipped' ? '⏭️ Skipped (runs on main)' :
-                                   containerResult === 'success' ? '✅' : '❌';
+            const allPassed = containerfileResult === 'success' && lintResult === 'success' &&
+                             typeResult === 'success' && testResult === 'success' &&
+                             containerBuildResult === 'success';
 
-            const status = (lintResult === 'success' && typeResult === 'success' && testResult === 'success')
-              ? '✅ Build Passed'
-              : '❌ Build Failed';
+            const status = allPassed ? '✅ Build Passed' : '❌ Build Failed';
+
+            // Show push status in container build result
+            const isReleaseBranch = '${{ github.ref }}'.startsWith('refs/heads/release/');
+            const containerNote = isReleaseBranch ? ' (pushed to registry)' : ' (build only)';
 
             const body = `## ${status}
 
             | Job | Status |
             |-----|--------|
+            | Containerfile Validation | ${containerfileResult === 'success' ? '✅' : '❌'} |
             | Code Quality Checks | ${lintResult === 'success' ? '✅' : '❌'} |
             | Type Safety Validation | ${typeResult === 'success' ? '✅' : '❌'} |
             | Test Execution and Coverage | ${testResult === 'success' ? '✅' : '❌'} |
-            | Container Build and Push | ${containerStatus} |
+            | Container Build | ${containerBuildResult === 'success' ? '✅' + containerNote : '❌'} |
+
+            **Note:** Container images are pushed to registry only on \`release/*\` branches.
 
             [View detailed logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
 
@@ -307,12 +324,11 @@ jobs:
               body: body
             });
 
-  # Container build and push job - runs only on main branch after all checks pass
+  # Container build and push job - builds on all branches, pushes only on release branches
   build-container:
     name: Build and Push Container Image
     runs-on: ubuntu-latest
-    needs: [lint-and-format, type-check, test-and-coverage]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [lint-containerfile, lint-and-format, type-check, test-and-coverage]
     permissions:
       contents: read
       packages: write
@@ -324,6 +340,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to GitHub Container Registry
+        if: startsWith(github.ref, 'refs/heads/release/') && github.event_name == 'push'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -342,7 +359,7 @@ jobs:
         with:
           context: .
           file: ./Containerfile
-          push: true
+          push: ${{ startsWith(github.ref, 'refs/heads/release/') && github.event_name == 'push' }}
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
@@ -352,9 +369,14 @@ jobs:
 
       - name: Image build summary
         run: |
-          echo "✅ Container image built and pushed successfully"
-          echo "Registry: ghcr.io/${{ github.repository }}"
-          echo "Tags:"
-          echo "  - latest"
-          echo "  - ${{ steps.version.outputs.version }}"
-          echo "  - ${{ github.sha }}"
+          if [[ "${{ github.ref }}" == refs/heads/release/* ]] && [ "${{ github.event_name }}" = "push" ]; then
+            echo "✅ Container image built and pushed successfully"
+            echo "Registry: ghcr.io/${{ github.repository }}"
+            echo "Tags:"
+            echo "  - latest"
+            echo "  - ${{ steps.version.outputs.version }}"
+            echo "  - ${{ github.sha }}"
+          else
+            echo "✅ Container image built successfully (not pushed - not a release branch)"
+            echo "Build verified - image will be pushed on release branch"
+          fi
