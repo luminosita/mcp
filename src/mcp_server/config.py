@@ -57,6 +57,12 @@ class Settings(BaseSettings):
         description="Server bind port (1-65535)",
     )
 
+    # Database configuration (US-010)
+    database_url: str = Field(
+        default="postgresql+asyncpg://user:pass@localhost:5432/mcp",
+        description="Database connection URL",
+    )
+
     # Logging configuration
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = Field(
         default="INFO",
@@ -65,6 +71,19 @@ class Settings(BaseSettings):
     log_format: Literal["json", "text"] = Field(
         default="json",
         description="Log output format (json for production, text for development)",
+    )
+
+    # Security
+    secret_key: str = Field(
+        default="change-me-in-production",
+        description="Secret key for session management",
+    )
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore",
     )
 
     @field_validator("log_level", mode="before")

@@ -1,8 +1,8 @@
 """
 FastAPI application entry point.
 
-Defines the main FastAPI application instance and configuration.
-Implements health check endpoint, structured logging, and CORS middleware.
+Defines the main FastAPI application instance with dependency injection support,
+health check endpoint, structured logging, and CORS middleware.
 """
 
 import sys
@@ -25,6 +25,12 @@ from mcp_server.core.constants import (
     CORS_ALLOW_METHODS,
     CORS_ALLOW_ORIGINS,
     HEALTH_STATUS_HEALTHY,
+)
+from mcp_server.core.dependencies import (
+    close_db_session_maker,
+    close_http_client,
+    initialize_db_session_maker,
+    initialize_http_client,
 )
 
 # Application startup time for uptime calculation
@@ -80,8 +86,10 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     """
     Application lifespan manager.
 
-    Handles startup and shutdown events.
-    Configures logging and tracks application startup time.
+    Handles startup and shutdown events:
+    - Configures structured logging
+    - Initializes dependency injection resources (HTTP client, database)
+    - Tracks application startup time for health check uptime
     """
     global _startup_time
 
@@ -101,10 +109,27 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
         log_format=settings.log_format,
     )
 
+    # Initialize dependency injection resources
+    await initialize_http_client()
+    logger.info("http_client_initialized")
+
+    await initialize_db_session_maker()
+    logger.info("database_session_maker_initialized")
+
+    logger.info("application_startup_complete")
+
     yield
 
     # Shutdown
-    logger.info("application_shutdown", uptime_seconds=time.time() - _startup_time)
+    logger.info("application_shutdown_started")
+
+    await close_http_client()
+    logger.info("http_client_closed")
+
+    await close_db_session_maker()
+    logger.info("database_session_maker_closed")
+
+    logger.info("application_shutdown_complete", uptime_seconds=time.time() - _startup_time)
 
 
 # FastAPI application instance
