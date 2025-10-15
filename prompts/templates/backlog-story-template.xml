@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>Backlog_Story_Template</name>
-    <version>1.5</version>
+    <version>1.6</version>
     <source>Section 6.4 of advanced_prompt_engineering_software_docs_code_final.md (lines 1063-1112), enhanced for Context Engineering Framework</source>
     <sdlc_phase>Backlog_Story</sdlc_phase>
     <note>This template is for DETAILED backlog user stories, not high-level stories in PRDs</note>
-    <last_updated>2025-10-14</last_updated>
-    <changes>v1.5: Added Hybrid CLAUDE.md approach to Technical Notes section - references specialized CLAUDE-*.md standards (TASK-030)</changes>
+    <last_updated>2025-10-15</last_updated>
+    <changes>v1.6: Added Implementation Tasks Evaluation section (before Definition of Done) per SDLC Guideline v1.3 Section 11 - evaluates if story needs decomposition into TASK-XXX artifacts based on decision matrix (story points, developer count, domain span, complexity, override factors)</changes>
   </metadata>
 
   <instructions>
@@ -129,6 +129,28 @@ As [role], I want [feature], so that [benefit].
 - [ ] [Specific testable criterion 1]
 - [ ] [Specific testable criterion 2]
 - [ ] [Specific testable criterion 3]
+
+## Implementation Tasks Evaluation
+
+**Purpose:** Determine if this backlog story should be decomposed into separate Implementation Tasks (TASK-XXX artifacts) per SDLC Guideline v1.3 Section 11.
+
+**Decision:** [Tasks Needed / No Tasks Needed / Consider Tasks]
+
+**Rationale:**
+[Explain decision based on the following criteria from SDLC Section 11.6:]
+- **Story Points:** [1-2 SP (SKIP) | 3-5 SP (CONSIDER) | 5+ SP (DON'T SKIP)]
+- **Developer Count:** [Single developer | Multiple developers]
+- **Domain Span:** [Single domain (backend/frontend/infra only) | Cross-domain (multiple)]
+- **Complexity:** [Low - straightforward implementation | High - complex architecture/integration]
+- **Uncertainty:** [Low - clear path | High - requires investigation]
+- **Override Factors:** [None | Cross-domain | High uncertainty | Unfamiliar tech | Security-critical | Multi-system integration]
+
+**Proposed Implementation Tasks** (if applicable):
+- **TASK-XXX:** [Brief description, estimated 4-16 hours]
+- **TASK-YYY:** [Brief description, estimated 4-16 hours]
+- **TASK-ZZZ:** [Brief description, estimated 4-16 hours]
+
+**Note:** TASK-XXX IDs should be pre-allocated in TODO.md during story planning. If no IDs allocated, list task descriptions only.
 
 ## Definition of Done
 - [ ] Code implemented and reviewed

@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Backlog_Story_Generator</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <sdlc_phase>Backlog_Story</sdlc_phase>
     <depends_on>High-Level Story (mandatory), PRD (conditional), Implementation Research (recommended), Specialized CLAUDE.md files (conditional)</depends_on>
     <generated_by>Context Engineering Framework v1.5</generated_by>
-    <date>2025-10-14</date>
-    <changes>v1.4: Added Hybrid CLAUDE.md approach - Technical Notes reference specialized CLAUDE-*.md standards when available (TASK-030)</changes>
+    <date>2025-10-15</date>
+    <changes>v1.5: Added Implementation Tasks Evaluation step (step 14) per SDLC Guideline v1.3 Section 11 - evaluates if story needs decomposition into TASK-XXX artifacts based on story points, developer count, domain span, and complexity</changes>
   </metadata>
 
   <system_role>
@@ -272,6 +272,40 @@
     </step>
 
     <step priority="14">
+      <action>Evaluate Implementation Tasks Decomposition</action>
+      <guidance>
+        Determine if this backlog story should be decomposed into separate Implementation Tasks (TASK-XXX artifacts) per SDLC Guideline v1.3 Section 11.
+
+        **Evaluation Criteria (from SDLC Section 11.6 Decision Matrix):**
+
+        | Story Characteristics | Decision | Rationale |
+        |----------------------|----------|-----------|
+        | 1-2 SP, single dev, single domain | SKIP | Overhead not justified |
+        | 3-5 SP, single dev, familiar domain | CONSIDER | Depends on complexity |
+        | 3-5 SP, multiple devs, familiar domain | DON'T SKIP | Coordination requires tasks |
+        | 5+ SP, any team size | DON'T SKIP | Complexity requires decomposition |
+
+        **Override Factors (Any of these → Don't Skip):**
+        - Cross-domain changes (frontend + backend + database)
+        - High uncertainty (after Spike completion)
+        - Unfamiliar technology or domain
+        - Security-critical changes
+        - Multiple system integrations
+        - Performance-critical optimizations
+
+        **Output Requirements:**
+        1. **Decision:** [Tasks Needed / No Tasks Needed / Consider Tasks]
+        2. **Rationale:** Explain decision based on story points, developer count, domain span, complexity
+        3. **If Tasks Needed:** List proposed tasks with pre-allocated TASK-XXX IDs from TODO.md (4-16 hours each)
+        4. **If Tasks Not Needed:** Document why (e.g., "2 SP story with single developer, straightforward implementation")
+
+        **Format in Artifact:**
+        Add "Implementation Tasks Evaluation" section before "Definition of Done" with decision, rationale, and proposed tasks (if applicable).
+      </guidance>
+      <anti_hallucination>Base decision on objective criteria from SDLC Section 11. Do not invent TASK-XXX IDs - use pre-allocated IDs specified in TODO.md task description. If no TASK IDs provided in TODO.md, note "TASK IDs to be allocated" and list task descriptions only.</anti_hallucination>
+    </step>
+
+    <step priority="15">
       <action>Add Traceability References</action>
       <guidance>
         - Parent High-Level Story: [HLS-XXX]
@@ -281,7 +315,7 @@
       </guidance>
     </step>
 
-    <step priority="15">
+    <step priority="16">
       <action>Generate backlog story document</action>
       <format>Markdown following Backlog Story template structure (see CLAUDE.md Template Paths)</format>
       <guidance>
@@ -292,11 +326,12 @@
         - Include "Functional Requirements Covered" field listing FR-XX from PRD
         - Include "Informed By Implementation Research" field with document link
         - Add Implementation Research References section with § citations
+        - Include "Implementation Tasks Evaluation" section (from step 14) before "Definition of Done"
         - Do NOT include validation checklist in artifact (checklist is for generator validation only)
       </guidance>
     </step>
 
-    <step priority="16">
+    <step priority="17">
       <action>Validate generated artifact</action>
       <guidance>
         IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
@@ -330,6 +365,7 @@
         <criterion id="CQ-11" category="content_quality">Sprint-ready: Can be completed in 1 sprint by team</criterion>
         <criterion id="CQ-12" category="content_quality">For non-PRD-derived stories: Justification and Implementation Research reference per Section 1.5.7</criterion>
         <criterion id="CQ-13" category="content_quality">CLAUDE.md Alignment: When story includes technical guidance, Technical Notes section references (not duplicates) specialized CLAUDE-*.md standards; treats CLAUDE.md content as authoritative</criterion>
+        <criterion id="CQ-14" category="content_quality">Implementation Tasks Evaluation: Section present before Definition of Done with clear decision (Tasks Needed/No Tasks Needed/Consider Tasks), rationale based on SDLC Section 11 criteria (story points, developer count, domain span, complexity), and proposed tasks with TASK-XXX IDs if applicable</criterion>
 
         <!-- Upstream Traceability -->
         <criterion id="UT-01" category="upstream_traceability">"Parent PRD" field populated with valid PRD ID (PRD-XXX)</criterion>
