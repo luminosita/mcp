@@ -20,13 +20,6 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from mcp_server.config import Settings
 
-# Type aliases for dependency injection (improves readability and type safety)
-SettingsDep = Annotated[Settings, Depends(lambda: get_settings())]
-LoggerDep = Annotated[logging.Logger, Depends(lambda: get_logger())]
-SessionDep = Annotated[AsyncSession, Depends(lambda: get_db_session())]
-HttpClientDep = Annotated[httpx.AsyncClient, Depends(lambda: get_http_client())]
-
-
 # Module-level variables for application-scoped resources
 _http_client: httpx.AsyncClient | None = None
 _session_maker: async_sessionmaker[AsyncSession] | None = None
@@ -174,6 +167,14 @@ def get_http_client() -> httpx.AsyncClient:
             "HTTP client not initialized. Call initialize_http_client() during app startup."
         )
     return _http_client
+
+
+# Type aliases for dependency injection (improves readability and type safety)
+# Note: Defined after functions to avoid forward reference issues
+SettingsDep = Annotated[Settings, Depends(get_settings)]
+LoggerDep = Annotated[logging.Logger, Depends(get_logger)]
+SessionDep = Annotated[AsyncSession, Depends(get_db_session)]
+HttpClientDep = Annotated[httpx.AsyncClient, Depends(get_http_client)]
 
 
 # Application lifecycle management functions
