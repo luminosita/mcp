@@ -600,6 +600,557 @@ def test_with_debug(debug_fixture):
 
 ---
 
+## ⚡ Parallel Testing with pytest-xdist
+
+### Installation and Basic Setup
+
+```bash
+# Install pytest-xdist
+uv add --dev pytest-xdist
+
+# Run tests in parallel (auto-detect CPU count)
+pytest -n auto
+
+# Run tests with specific number of workers
+pytest -n 4
+
+# Run tests with load balancing
+pytest -n auto --dist loadscope
+```
+
+### Configuration in pyproject.toml
+
+```toml
+[tool.pytest.ini_options]
+# Basic parallel configuration
+addopts = [
+    "-n", "auto",              # Auto-detect CPU count
+    "--dist", "loadscope",     # Distribution strategy
+    "--maxfail", "5",          # Stop after 5 failures
+]
+
+# Parallel test markers
+markers = [
+    "serial: marks tests that must run serially (not in parallel)",
+    "parallel: marks tests that can run in parallel",
+]
+```
+
+### Distribution Strategies
+
+```python
+"""
+pytest-xdist Distribution Strategies:
+
+1. load (default)
+   - Distributes tests evenly across workers
+   - Best for tests of similar duration
+   - Command: pytest -n auto --dist load
+
+2. loadscope
+   - Distributes test classes/modules together
+   - Keeps related tests on same worker
+   - Better for tests with expensive fixtures
+   - Command: pytest -n auto --dist loadscope
+
+3. loadfile
+   - Distributes entire test files to workers
+   - All tests in file run on same worker
+   - Good for file-scoped fixtures
+   - Command: pytest -n auto --dist loadfile
+
+4. loadgroup
+   - Distributes tests by xdist_group marker
+   - Manual control over test grouping
+   - Command: pytest -n auto --dist loadgroup
+
+5. each
+   - Runs all tests on each worker
+   - Used for cross-platform testing
+   - Command: pytest -n 3 --dist each
+"""
+
+# Example: Grouping related tests
+import pytest
+
+@pytest.mark.xdist_group(name="database")
+def test_user_creation():
+    """Runs in same group as other database tests."""
+    pass
+
+@pytest.mark.xdist_group(name="database")
+def test_user_query():
+    """Runs in same group as other database tests."""
+    pass
+
+@pytest.mark.xdist_group(name="api")
+def test_api_endpoint():
+    """Runs in different group."""
+    pass
+```
+
+### Fixture Scope with Parallel Tests
+
+```python
+import pytest
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+
+# Session-scoped fixture (shared across worker)
+@pytest.fixture(scope="session")
+def event_loop():
+    """
+    Create event loop for entire test session.
+
+    Each worker gets its own event loop.
+    """
+    import asyncio
+    loop = asyncio.new_event_loop()
+    yield loop
+    loop.close()
+
+# Worker-scoped database engine
+@pytest.fixture(scope="session")
+def db_engine(worker_id):
+    """
+    Create separate database per worker.
+
+    Prevents database conflicts in parallel tests.
+    """
+    # Use worker_id to create unique database
+    if worker_id == "master":
+        db_url = "postgresql+asyncpg://localhost/test_db"
+    else:
+        db_url = f"postgresql+asyncpg://localhost/test_db_{worker_id}"
+
+    engine = create_async_engine(db_url)
+    yield engine
+    engine.sync_engine.dispose()
+
+# Session factory per worker
+@pytest.fixture(scope="session")
+def session_factory(db_engine):
+    """Create session factory for worker."""
+    return sessionmaker(
+        db_engine,
+        class_=AsyncSession,
+        expire_on_commit=False
+    )
+
+# Function-scoped session
+@pytest.fixture
+async def db_session(session_factory):
+    """Create fresh session for each test."""
+    async with session_factory() as session:
+        yield session
+```
+
+### Database Isolation Per Worker
+
+```python
+import pytest
+from sqlalchemy import create_engine, text
+from sqlalchemy.ext.asyncio import create_async_engine
+
+@pytest.fixture(scope="session")
+def worker_db_url(worker_id):
+    """
+    Generate unique database URL per worker.
+
+    Pattern: test_db_gw0, test_db_gw1, etc.
+    """
+    if worker_id == "master":
+        return "postgresql+asyncpg://localhost/test_db"
+    return f"postgresql+asyncpg://localhost/test_db_{worker_id}"
+
+@pytest.fixture(scope="session", autouse=True)
+async def setup_worker_database(worker_db_url, worker_id):
+    """
+    Create and setup database for worker.
+
+    Runs once per worker at session start.
+    """
+    if worker_id == "master":
+        yield
+        return
+
+    # Extract database name
+    db_name = worker_db_url.split("/")[-1]
+
+    # Create database
+    admin_engine = create_async_engine(
+        "postgresql+asyncpg://localhost/postgres"
+    )
+
+    async with admin_engine.connect() as conn:
+        await conn.execution_options(isolation_level="AUTOCOMMIT")
+
+        # Drop existing database
+        await conn.execute(text(f"DROP DATABASE IF EXISTS {db_name}"))
+
+        # Create new database
+        await conn.execute(text(f"CREATE DATABASE {db_name}"))
+
+    await admin_engine.dispose()
+
+    # Run migrations on worker database
+    worker_engine = create_async_engine(worker_db_url)
+    async with worker_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    await worker_engine.dispose()
+
+    yield
+
+    # Cleanup: Drop database after tests
+    async with admin_engine.connect() as conn:
+        await conn.execution_options(isolation_level="AUTOCOMMIT")
+        await conn.execute(text(f"DROP DATABASE IF EXISTS {db_name}"))
+
+    await admin_engine.dispose()
+```
+
+### Test Data Management for Parallel Runs
+
+```python
+import pytest
+from typing import Generator
+
+# Shared test data (read-only)
+@pytest.fixture(scope="session")
+def reference_data():
+    """
+    Reference data shared across all workers.
+
+    Should be read-only to avoid conflicts.
+    """
+    return {
+        "countries": ["USA", "UK", "Canada"],
+        "currencies": ["USD", "GBP", "CAD"],
+    }
+
+# Worker-specific test data
+@pytest.fixture(scope="session")
+def worker_test_data(worker_id):
+    """
+    Generate unique test data per worker.
+
+    Prevents ID conflicts in parallel tests.
+    """
+    base_id = 0 if worker_id == "master" else int(worker_id.replace("gw", "")) + 1
+    offset = base_id * 1000
+
+    return {
+        "user_id_start": 1000 + offset,
+        "order_id_start": 5000 + offset,
+        "product_id_start": 10000 + offset,
+    }
+
+# Function-scoped unique IDs
+@pytest.fixture
+def unique_user_id(worker_test_data) -> Generator[int, None, None]:
+    """
+    Generate unique user ID for test.
+
+    Uses worker offset + counter to ensure uniqueness.
+    """
+    import itertools
+    counter = itertools.count(start=worker_test_data["user_id_start"])
+    yield next(counter)
+
+# Usage
+def test_create_user(db_session, unique_user_id):
+    """Test user creation with unique ID."""
+    user = User(id=unique_user_id, name=f"User_{unique_user_id}")
+    db_session.add(user)
+    # No ID conflicts with other workers
+```
+
+### Marking Tests for Serial Execution
+
+```python
+import pytest
+
+# Mark test to run serially (not in parallel)
+@pytest.mark.serial
+def test_global_state_modification():
+    """
+    Test that modifies global state.
+
+    Must run serially to avoid conflicts.
+    """
+    import os
+    os.environ["GLOBAL_CONFIG"] = "test_value"
+    # Test logic
+    del os.environ["GLOBAL_CONFIG"]
+
+# Configure pytest to run serial tests separately
+# In pyproject.toml:
+"""
+[tool.pytest.ini_options]
+markers = [
+    "serial: marks tests that must run serially",
+]
+"""
+
+# Run parallel tests excluding serial
+# pytest -n auto -m "not serial"
+
+# Then run serial tests alone
+# pytest -m serial
+```
+
+### Handling Shared Resources
+
+```python
+import pytest
+import filelock
+from pathlib import Path
+
+@pytest.fixture(scope="session")
+def shared_file_lock(tmp_path_factory):
+    """
+    Create file lock for shared resource access.
+
+    Prevents race conditions when accessing shared files.
+    """
+    lockfile = tmp_path_factory.getbasetemp().parent / "shared.lock"
+    return filelock.FileLock(str(lockfile))
+
+def test_shared_resource_access(shared_file_lock, tmp_path):
+    """
+    Test that safely accesses shared resource.
+
+    Uses lock to prevent parallel access conflicts.
+    """
+    shared_file = tmp_path.parent / "shared_data.json"
+
+    with shared_file_lock:
+        # Critical section - only one worker at a time
+        data = {}
+        if shared_file.exists():
+            data = json.loads(shared_file.read_text())
+
+        data["test_run"] = datetime.now().isoformat()
+
+        shared_file.write_text(json.dumps(data))
+```
+
+### Troubleshooting Parallel Tests
+
+```python
+"""
+Common Issues and Solutions:
+
+1. Flaky Tests (Pass/Fail Randomly)
+   Issue: Race conditions, shared state
+   Solution:
+   - Use worker-specific test data
+   - Ensure test independence
+   - Use locks for shared resources
+
+   # Debug flaky tests
+   pytest -n auto --looponfail  # Repeat failing tests
+
+2. Fixture Scope Issues
+   Issue: Session fixtures not working
+   Solution:
+   - Check fixture scope compatibility
+   - Use pytest-xdist compatible scopes
+   - Avoid module-scoped fixtures with parallel tests
+
+3. Database Conflicts
+   Issue: Multiple workers accessing same DB
+   Solution:
+   - Create separate DB per worker
+   - Use worker_id in database name
+   - Implement setup_worker_database fixture
+
+4. Port Conflicts
+   Issue: Tests binding to same port
+   Solution:
+   # Generate unique port per worker
+   @pytest.fixture
+   def worker_port(worker_id):
+       if worker_id == "master":
+           return 8000
+       return 8000 + int(worker_id.replace("gw", ""))
+
+5. File System Conflicts
+   Issue: Tests writing to same files
+   Solution:
+   - Use tmp_path fixture (unique per test)
+   - Add worker_id to filenames
+   - Use file locks for shared files
+
+6. Slower Than Expected
+   Issue: Parallel tests not faster
+   Solution:
+   - Check distribution strategy (try loadscope)
+   - Profile tests to find bottlenecks
+   - Ensure tests are truly independent
+
+   # Profile test duration
+   pytest -n auto --durations=10
+"""
+
+# Debugging helper
+@pytest.fixture
+def worker_info(worker_id, request):
+    """Print worker information for debugging."""
+    print(f"\nWorker: {worker_id}")
+    print(f"Test: {request.node.name}")
+    return worker_id
+```
+
+### Performance Optimization
+
+```python
+"""
+Optimizing Parallel Test Performance:
+
+1. Choose Right Distribution Strategy
+   - loadscope: For tests with expensive fixtures
+   - loadfile: For file-scoped fixtures
+   - load: For uniform test duration
+
+2. Balance Test Duration
+   - Avoid mix of fast and slow tests
+   - Consider splitting slow test files
+
+   # Check test duration distribution
+   pytest --durations=20
+
+3. Minimize Fixture Overhead
+   - Use appropriate scope (session > module > function)
+   - Cache expensive operations
+   - Lazy initialization when possible
+
+4. Optimize Worker Count
+   # Test different worker counts
+   pytest -n 2  # Start conservative
+   pytest -n 4
+   pytest -n auto  # Usually optimal
+
+5. Use Test Grouping
+   # Group related tests for better caching
+   @pytest.mark.xdist_group(name="heavy_fixtures")
+   def test_with_expensive_setup():
+       pass
+"""
+
+# Example: Cached expensive fixture
+@pytest.fixture(scope="session")
+def ml_model(worker_id):
+    """
+    Load ML model once per worker.
+
+    Expensive operation cached at session level.
+    """
+    import joblib
+    cache_key = f"model_{worker_id}"
+
+    # Check cache
+    if cache_key in pytest.cache:
+        return pytest.cache.get(cache_key)
+
+    # Load model (expensive)
+    model = joblib.load("model.pkl")
+
+    # Cache for session
+    pytest.cache.set(cache_key, model)
+    return model
+```
+
+### Integration with CI/CD
+
+```yaml
+# .github/workflows/test.yml
+name: Test Suite
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: astral-sh/setup-uv@v1
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen
+          uv add --dev pytest-xdist
+
+      - name: Run parallel tests
+        run: |
+          # Run with parallel workers
+          uv run pytest -n auto --dist loadscope \
+            --maxfail=5 \
+            --tb=short \
+            --cov=src \
+            --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+```
+
+### Complete Example Configuration
+
+```toml
+# pyproject.toml
+[tool.pytest.ini_options]
+# Parallel test configuration
+addopts = [
+    "-n", "auto",                    # Auto-detect CPU count
+    "--dist", "loadscope",           # Keep related tests together
+    "--maxfail", "5",                # Stop after 5 failures
+    "--tb", "short",                 # Shorter traceback format
+    "--strict-markers",              # Enforce marker registration
+    "-v",                            # Verbose output
+]
+
+# Test markers
+markers = [
+    "serial: marks tests that must run serially (not in parallel)",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "database: marks tests that require database",
+    "integration: marks integration tests",
+]
+
+# Test discovery
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# Parallel test specific
+asyncio_mode = "auto"  # Auto-detect async tests
+```
+
+---
+
 ## ⚠️ Testing Best Practices
 
 1. **Test one thing at a time** - Single assertion per test when possible
