@@ -14,6 +14,7 @@ from datetime import UTC, datetime
 import structlog
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel
 
 from mcp_server.config import settings
@@ -27,14 +28,27 @@ from mcp_server.core.constants import (
     HEALTH_STATUS_HEALTHY,
 )
 from mcp_server.core.dependencies import (
+    LoggerDep,
+    SettingsDep,
     close_db_session_maker,
     close_http_client,
     initialize_db_session_maker,
     initialize_http_client,
 )
+from mcp_server.tools.example_tool import (
+    GreetingInput,
+    GreetingOutput,
+    generate_greeting,
+)
 
 # Application startup time for uptime calculation
 _startup_time: float = 0.0
+
+# Initialize FastMCP server
+# WHY FASTMCP: Handles MCP protocol complexities (initialization handshake,
+# bidirectional communication, JSON-RPC 2.0) while maintaining control over
+# authentication and observability.
+mcp = FastMCP(name="AI Agent MCP Server")
 
 
 def configure_logging() -> None:
@@ -153,6 +167,64 @@ app.add_middleware(
 )
 
 
+# Register MCP tools
+# WHY SEPARATE REGISTRATION: Keeps tool definitions modular while centralizing
+# registration for visibility. Tools can be organized by domain (jira, k8s, rag)
+# in separate modules.
+@mcp.tool(  # type: ignore[misc]
+    name="example.generate_greeting",
+    description="""
+    Generates a personalized greeting message (example tool for pattern demonstration).
+
+    Use this tool when:
+    - Demonstrating MCP tool patterns to developers
+    - Testing MCP server functionality
+    - Learning how to implement tools with validation and error handling
+
+    This is an example tool showing best practices:
+    - Pydantic input/output validation
+    - Error handling for validation and business logic errors
+    - Dependency injection for settings and logging
+    - Async patterns for consistency
+    - Comprehensive docstrings
+
+    Greeting styles:
+    - formal: "Good day, [name]"
+    - casual: "Hey, [name]"
+    - enthusiastic: "Hello there, [name]"
+
+    Returns structured greeting with metadata including style used and character count.
+    """,
+)
+async def example_greeting_tool(
+    params: GreetingInput,
+    settings: SettingsDep,
+    logger: LoggerDep,
+) -> GreetingOutput:
+    """
+    MCP tool wrapper for generate_greeting function.
+
+    WHY WRAPPER: Separates MCP tool registration (@mcp.tool decorator) from
+    business logic (generate_greeting function). This enables:
+    - Testing business logic without MCP protocol overhead
+    - Reusing business logic in different contexts (REST API, CLI)
+    - Clear separation between protocol concerns and domain logic
+
+    Args:
+        params: Validated greeting input parameters
+        settings: Application settings (injected by FastAPI)
+        logger: Structured logger (injected by FastAPI)
+
+    Returns:
+        GreetingOutput: Structured greeting response with metadata
+
+    Raises:
+        BusinessLogicError: If greeting generation fails business rules
+        ValidationError: If input validation fails (handled by Pydantic/FastMCP)
+    """
+    return await generate_greeting(params, settings, logger)
+
+
 class HealthCheckResponse(BaseModel):
     """
     Health check response schema.
@@ -192,3 +264,13 @@ async def health_check() -> HealthCheckResponse:
         uptime_seconds=uptime,
         timestamp=datetime.now(UTC).isoformat(),
     )
+
+
+# Mount MCP server using stdio transport
+# WHY STDIO: FastMCP primarily uses stdio (standard input/output) for communication
+# with MCP clients. This is the standard transport for server-side MCP implementations.
+# The server can be invoked directly by MCP clients using stdio communication.
+#
+# Note: For HTTP-based access, FastMCP can be wrapped with SSE or other transports,
+# but the basic FastMCP server works via stdio which is suitable for server-to-server
+# and CLI-based MCP client communication.
