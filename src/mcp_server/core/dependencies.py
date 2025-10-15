@@ -14,13 +14,9 @@ import logging
 from collections.abc import AsyncGenerator
 from typing import Annotated
 
-import httpx  # type: ignore[import-not-found]
+import httpx
 from fastapi import Depends
-from sqlalchemy.ext.asyncio import (  # type: ignore[import-not-found]
-    AsyncSession,
-    async_sessionmaker,
-    create_async_engine,
-)
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from mcp_server.config import Settings
 
@@ -175,7 +171,7 @@ def get_http_client() -> httpx.AsyncClient:
     """
     if _http_client is None:
         raise RuntimeError(
-            "HTTP client not initialized. " "Call initialize_http_client() during app startup."
+            "HTTP client not initialized. Call initialize_http_client() during app startup."
         )
     return _http_client
 
