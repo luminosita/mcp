@@ -8,11 +8,11 @@
 ## Current Phase: Implementation (HLS-005 Stories)
 
 **Current Status**: Phase 2: Backlog Story Implementation - In Progress
-**Last Completed**: TODO-HLS-005-IMPL-003 (US-026 implemented - 2025-10-15)
-**Next Task**: TODO-HLS-005-IMPL-004 (US-027 - Container Security Scanning in CI/CD Pipeline)
-**Implementation Progress**: 3/5 batches completed (60%)
-**Story Sequence**: US-020 ✅ → US-021 ✅ → US-022 ✅ → US-023 ✅ → US-024 ✅ → US-026 ✅ → US-027 ⏳ → US-025 ⏳
-**Note**: US-027 added to close HLS-005 Definition of Done gap (container security scanning requirement)
+**Last Completed**: TODO-HLS-005-IMPL-004 (US-027 implemented - 2025-10-15)
+**Next Task**: TODO-HLS-005-IMPL-005 (US-025 - Validate Container Deployment in Staging)
+**Implementation Progress**: 4/5 batches completed (80%)
+**Story Sequence**: US-020 ✅ → US-021 ✅ → US-022 ✅ → US-023 ✅ → US-024 ✅ → US-026 ✅ → US-027 ✅ → US-025 ⏳
+**Note**: US-025 is final validation story - completes HLS-005 implementation
 
 **Implementation TODOs Created:**
 
@@ -167,13 +167,28 @@
     - ✅ README.md updated with deployment documentation
     - ✅ All acceptance criteria met
 
-- [ ] **TODO-HLS-005-IMPL-004**: Implement US-027 (Container Security Scanning in CI/CD Pipeline)
+- [x] **TODO-HLS-005-IMPL-004**: Implement US-027 (Container Security Scanning in CI/CD Pipeline) ✅ 2025-10-15
   - **Story**: US-027 (2 SP)
   - **Artifact**: `artifacts/backlog_stories/US-027_container_security_scanning_ci_pipeline_v1.md`
   - **Context**: New session CX required
   - **Dependencies**: US-026 (Automated Container Build) completed - provides container images to scan
   - **Note**: Closes HLS-005 Definition of Done gap - "Container security scanning integrated in CI/CD pipeline"
   - **Acceptance**: Trivy scans all container builds, blocks deployment on critical/high CVEs, uploads SARIF to GitHub Security tab
+  - **Completed**: 2025-10-15
+  - **Branch**: feature/us-027-container-security-scanning
+  - **PR**: https://github.com/luminosita/mcp/pull/8
+  - **Results**:
+    - ✅ CI/CD security scanning integrated (scan-container job)
+    - ✅ Trivy scans all builds for CRITICAL, HIGH, MEDIUM, LOW CVEs
+    - ✅ Blocks deployment on fixable vulnerabilities
+    - ✅ SARIF reports uploaded to GitHub Security tab
+    - ✅ Local scanning with 4 Taskfile commands (scan, scan:critical, scan:sarif, scan:json)
+    - ✅ Automatic Podman socket detection
+    - ✅ Trivy v0.66.0 added to devbox.json
+    - ✅ .trivyignore created for vulnerability management (2 unfixed MEDIUM CVEs documented)
+    - ✅ Comprehensive documentation in CLAUDE-tooling.md and README.md
+    - ✅ Security posture: 0 CRITICAL, 0 HIGH, 0 fixable MEDIUM
+    - ✅ All acceptance criteria met
 
 - [ ] **TODO-HLS-005-IMPL-005**: Implement US-025 (Validate Container Deployment in Staging)
   - **Story**: US-025 (2 SP)
