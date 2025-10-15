@@ -10,8 +10,13 @@ vars:
   COVERAGE_MIN: 80
   PYTHON_VERSION: "3.11"
   PROJECT_NAME: mcp_server
+  IMAGE_NAME: ai-agent-mcp-server
+  TAG: latest
   CONTAINER_NAME: mcp-server
-  DB_CONTAINER_NAME: mcp-db
+  DB_CONTAINER_NAME: mcp-postgres
+  DB_USER: mcp_user
+  DB_PASSWORD: dev_password_change_in_production
+  DB_NAME: mcp_dev
 
 tasks:
   # ====================
@@ -222,9 +227,9 @@ tasks:
       - uv run python {{.SCRIPT | default "main.py"}}
 
   dev:
-    desc: Start development server with hot-reload
+    desc: Start development server with hot-reload in Devbox
     cmds:
-      - uv run uvicorn {{.PROJECT_NAME}}.main:app --reload --host 0.0.0.0 --port 8000
+      - uv run uvicorn {{.PROJECT_NAME}}.main:app --reload --reload-dir {{.SRC_DIR}}/ --reload-delay 0.25 --host 0.0.0.0 --port 8000 --log-level info
 
   shell:
     desc: Start Python REPL with project loaded
@@ -232,72 +237,174 @@ tasks:
       - uv run python
 
   # ====================
-  # Container Tasks (Podman)
+  # Container Tasks (Podman/Docker)
   # ====================
 
   container:build:
-    desc: Build Podman container image
+    desc: Build production container image using multi-stage Containerfile
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
+      TAG: '{{.TAG | default "latest"}}'
     cmds:
-      - podman build -t {{.CONTAINER_NAME}}:dev .
+      - '{{.RUNTIME}} build -t {{.IMAGE_NAME}}:{{.TAG}} -f Containerfile .'
+      - echo "✅ Built {{.IMAGE_NAME}}:{{.TAG}} using {{.RUNTIME}}"
 
   container:run:
-    desc: Run application in Podman container
+    desc: Run production container locally with port mapping
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
+      TAG: '{{.TAG | default "latest"}}'
+      ENV_FILE: '{{.ENV_FILE | default ".env"}}'
     cmds:
-      - podman run -d --name {{.CONTAINER_NAME}} -p 8000:8000 -e DATABASE_URL=postgresql://postgres:dev@localhost:5432/mcp {{.CONTAINER_NAME}}:dev
+      - |
+        if [ -f "{{.ENV_FILE}}" ]; then
+          {{.RUNTIME}} run -d --name {{.CONTAINER_NAME}} -p 8000:8000 --env-file {{.ENV_FILE}} {{.IMAGE_NAME}}:{{.TAG}}
+        else
+          {{.RUNTIME}} run -d --name {{.CONTAINER_NAME}} -p 8000:8000 {{.IMAGE_NAME}}:{{.TAG}}
+        fi
+      - echo "✅ Container {{.CONTAINER_NAME}} started using {{.RUNTIME}}"
+      - echo "Application available at http://localhost:8000"
 
   container:stop:
-    desc: Stop application container
+    desc: Stop running container
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
     cmds:
-      - podman stop {{.CONTAINER_NAME}}
-      - podman rm {{.CONTAINER_NAME}}
+      - '{{.RUNTIME}} stop {{.CONTAINER_NAME}} || true'
+      - '{{.RUNTIME}} rm {{.CONTAINER_NAME}} || true'
+      - echo "✅ Container {{.CONTAINER_NAME}} stopped"
 
   container:logs:
     desc: View container logs
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
     cmds:
-      - podman logs -f {{.CONTAINER_NAME}}
+      - '{{.RUNTIME}} logs -f {{.CONTAINER_NAME}}'
 
   container:shell:
-    desc: Execute shell in running container
+    desc: Open shell in running container for debugging
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
     cmds:
-      - podman exec -it {{.CONTAINER_NAME}} /bin/sh
+      - '{{.RUNTIME}} exec -it {{.CONTAINER_NAME}} /bin/sh'
 
   container:clean:
     desc: Remove all containers and images
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
     cmds:
-      - podman stop {{.CONTAINER_NAME}} || true
-      - podman rm {{.CONTAINER_NAME}} || true
-      - podman rmi {{.CONTAINER_NAME}}:dev || true
+      - '{{.RUNTIME}} stop {{.CONTAINER_NAME}} || true'
+      - '{{.RUNTIME}} rm {{.CONTAINER_NAME}} || true'
+      - '{{.RUNTIME}} rmi {{.IMAGE_NAME}}:latest || true'
+      - echo "✅ Cleaned up containers and images"
 
   # ====================
-  # Database Tasks (Podman)
+  # Database Tasks (Podman/Docker)
   # ====================
 
   db:start:
-    desc: Start PostgreSQL database in Podman
+    desc: Start PostgreSQL + pgvector container for local development
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
     cmds:
-      - podman run -d --name {{.DB_CONTAINER_NAME}} -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=mcp -p 5432:5432 postgres:15
+      - |
+        {{.RUNTIME}} run -d \
+          --name {{.DB_CONTAINER_NAME}} \
+          -e POSTGRES_USER={{.DB_USER}} \
+          -e POSTGRES_PASSWORD={{.DB_PASSWORD}} \
+          -e POSTGRES_DB={{.DB_NAME}} \
+          -p 5432:5432 \
+          -v pgdata:/var/lib/postgresql/data \
+          -v $(pwd)/scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro \
+          ankane/pgvector:latest
+      - echo "✅ PostgreSQL + pgvector container started"
+      - echo "Database accessible at localhost:5432"
+      - echo "Waiting for database to be ready..."
+      - sleep 5
 
   db:stop:
-    desc: Stop PostgreSQL database
+    desc: Stop database container gracefully
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
     cmds:
-      - podman stop {{.DB_CONTAINER_NAME}}
-      - podman rm {{.DB_CONTAINER_NAME}}
+      - '{{.RUNTIME}} stop {{.DB_CONTAINER_NAME}} || true'
+      - '{{.RUNTIME}} rm {{.DB_CONTAINER_NAME}} || true'
+      - echo "✅ Database container stopped"
+
+  db:reset:
+    desc: Reset database to clean state (WARNING - destroys data)
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
+    cmds:
+      - echo "⚠️  WARNING - This will destroy all database data!"
+      - echo "Press Ctrl+C to cancel, or wait 5 seconds to continue..."
+      - sleep 5
+      - task: db:stop
+      - '{{.RUNTIME}} volume rm pgdata || true'
+      - echo "✅ Database volume removed"
+      - task: db:start
+
+  db:logs:
+    desc: View database container logs
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
+    cmds:
+      - '{{.RUNTIME}} logs -f {{.DB_CONTAINER_NAME}}'
 
   db:shell:
     desc: Connect to PostgreSQL shell
+    vars:
+      RUNTIME:
+        sh: command -v podman >/dev/null 2>&1 && echo "podman" || echo "docker"
     cmds:
-      - podman exec -it {{.DB_CONTAINER_NAME}} psql -U postgres -d mcp
-
-  db:logs:
-    desc: View database logs
-    cmds:
-      - podman logs -f {{.DB_CONTAINER_NAME}}
+      - '{{.RUNTIME}} exec -it {{.DB_CONTAINER_NAME}} psql -U {{.DB_USER}} -d {{.DB_NAME}}'
 
   db:restart:
-    desc: Restart database
+    desc: Restart database container
     cmds:
       - task: db:stop
       - task: db:start
+
+  # ====================
+  # Database Migration Tasks (Alembic)
+  # ====================
+
+  db:migrate:create:
+    desc: Create new database migration
+    cmds:
+      - uv run alembic revision --autogenerate -m "{{.CLI_ARGS}}"
+      - echo "✅ Migration created - review generated file in migrations/versions/"
+
+  db:migrate:
+    desc: Apply pending database migrations
+    cmds:
+      - uv run alembic upgrade head
+      - echo "✅ Migrations applied successfully"
+
+  db:migrate:rollback:
+    desc: Rollback last database migration
+    cmds:
+      - uv run alembic downgrade -1
+      - echo "✅ Last migration rolled back"
+
+  db:migrate:status:
+    desc: Show migration status (applied and pending)
+    cmds:
+      - echo "Current migration version:"
+      - uv run alembic current
+      - echo ""
+      - echo "Migration history:"
+      - uv run alembic history
 
   # ====================
   # Devbox Tasks
