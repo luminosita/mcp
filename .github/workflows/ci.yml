@@ -110,13 +110,13 @@ jobs:
           restore-keys: |
             ruff-${{ runner.os }}-
 
-      - name: Install dependencies
-        run: |
-          uv sync --frozen
-
       - name: Install Task
         run: |
           sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen
 
       - name: Run linting checks
         run: |
@@ -163,13 +163,13 @@ jobs:
           restore-keys: |
             mypy-${{ runner.os }}-
 
-      - name: Install dependencies
-        run: |
-          uv sync --frozen
-
       - name: Install Task
         run: |
           sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen
 
       - name: Run type checking
         run: |
@@ -212,13 +212,13 @@ jobs:
           restore-keys: |
             pytest-${{ runner.os }}-
 
-      - name: Install dependencies
-        run: |
-          uv sync --frozen
-
       - name: Install Task
         run: |
           sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen
 
       - name: Run tests with coverage
         run: |
