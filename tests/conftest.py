@@ -329,3 +329,90 @@ def user_factory() -> Callable[..., dict[str, Any]]:
         }
 
     return _create_user
+
+
+# ====================
+# Example Tool Fixtures
+# ====================
+
+
+@pytest.fixture
+def sample_greeting_input() -> dict[str, Any]:
+    """
+    Provide sample greeting tool input data for testing.
+
+    Returns:
+        Dictionary with sample greeting input data
+
+    Example:
+        def test_greeting_tool(sample_greeting_input):
+            params = GreetingInput(**sample_greeting_input)
+            assert params.name == "Alice"
+    """
+    return {
+        "name": "Alice",
+        "style": "casual",
+        "message": None,
+    }
+
+
+@pytest.fixture
+def sample_greeting_input_with_message() -> dict[str, Any]:
+    """
+    Provide sample greeting tool input with custom message.
+
+    Returns:
+        Dictionary with greeting input including custom message
+
+    Example:
+        def test_greeting_with_message(sample_greeting_input_with_message):
+            params = GreetingInput(**sample_greeting_input_with_message)
+            assert params.message is not None
+    """
+    return {
+        "name": "Bob",
+        "style": "formal",
+        "message": "Hope you have a wonderful day",
+    }
+
+
+@pytest.fixture
+def mock_settings() -> Mock:
+    """
+    Provide a mocked Settings instance for testing.
+
+    Returns:
+        Mock Settings object with common attributes
+
+    Example:
+        def test_tool_with_settings(mock_settings):
+            result = tool_function(params, mock_settings, logger)
+            assert result.metadata["app_name"] == "TestApp"
+    """
+    settings = Mock()
+    settings.app_name = "TestApp"
+    settings.app_version = "1.0.0"
+    settings.environment = "test"
+    settings.log_level = "INFO"
+    return settings
+
+
+@pytest.fixture
+def mock_logger() -> Mock:
+    """
+    Provide a mocked logger for testing.
+
+    Returns:
+        Mock logger with common logging methods
+
+    Example:
+        def test_tool_logging(mock_logger):
+            tool_function(params, settings, mock_logger)
+            mock_logger.info.assert_called()
+    """
+    logger = Mock()
+    logger.info = Mock()
+    logger.error = Mock()
+    logger.warning = Mock()
+    logger.exception = Mock()
+    return logger
