@@ -573,10 +573,10 @@ Upon completion, update relevant task status in `/TODO.md`:
 | HLS-002 | 6 stories | US-003 → US-008 |
 | HLS-003 | 5 stories | US-009 → US-013 |
 | HLS-004 | 6 stories | US-014 → US-019 |
-| HLS-005 | 6 stories | US-020 → US-025 |
+| HLS-005 | 7 stories | US-020 → US-026 |
 
-**Next Available IDs (as of 2025-10-14):**
-- US: US-009 (HLS-002 in progress through US-008, US-003 generated)
+**Next Available IDs (as of 2025-10-15):**
+- US: US-027 (US-001 through US-026 allocated; HLS-005 complete through US-026)
 - SPEC: SPEC-002 (SPEC-001 used by US-001)
 - TASK: TASK-004 (TASK-001/002/003 used by US-001)
 - ADR: ADR-001 (none assigned yet)

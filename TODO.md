@@ -19,7 +19,7 @@
 
 ## Phase 1: Backlog Story Generation (HLS-005)
 
-### HLS-005: Containerized Deployment Enabling Production Readiness (6 stories, ~18 SP)
+### HLS-005: Containerized Deployment Enabling Production Readiness (7 stories, ~21 SP)
 
 **Story Generation Tasks:**
 
@@ -77,7 +77,16 @@
   - **Note**: MUST complete last - validates end-to-end container workflow
   - **Completed**: 2025-10-15, Status: Draft, All validation criteria passed
 
-**Total Story Points**: ~18 SP
+- [x] **TODO-HLS-005-007**: Generate US-026 (Automated Container Build in CI/CD Pipeline) ✅ 2025-10-15
+  - **Command**: Manual generation (quick story)
+  - **Input**: HLS-005, PRD-000 (mandatory)
+  - **Output**: `artifacts/backlog_stories/US-026_automated_container_build_ci_pipeline_v1.md`
+  - **Estimated SP**: 3
+  - **Context**: New session CX required
+  - **Note**: Extends US-003 (CI/CD) and US-020 (Containerfile) with automated image builds
+  - **Completed**: 2025-10-15, Status: Draft
+
+**Total Story Points**: ~21 SP
 **Estimated Sprints**: 2-3 sprints
 
 ## Phase 2: Backlog Story Implementation (HLS-005)
@@ -85,7 +94,8 @@
 **Implementation Sequence:**
 1. US-020 (Foundation - must complete first)
 2. US-021, US-022, US-023, US-024 (Combined - load all 4 stories into ONE context, implement together)
-3. US-025 (Validation - must complete last)
+3. US-026 (CI/CD automation - depends on US-024 for migrations)
+4. US-025 (Validation - must complete last)
 
 **Story Implementation Tasks:**
 
@@ -130,15 +140,23 @@
     - US-023: `task db:start` starts PostgreSQL+pgvector container
     - US-024: `task db:migrate` applies Alembic migrations
 
-- [ ] **TODO-HLS-005-IMPL-003**: Implement US-025 (Validate Container Deployment in Staging)
+- [ ] **TODO-HLS-005-IMPL-003**: Implement US-026 (Automated Container Build in CI/CD Pipeline)
+  - **Story**: US-026 (3 SP)
+  - **Artifact**: `artifacts/backlog_stories/US-026_automated_container_build_ci_pipeline_v1.md`
+  - **Context**: New session CX required
+  - **Dependencies**: US-024 (Database Migration) completed - ensures migrations ready before automated deployments
+  - **Note**: Adds automated container build job to GitHub Actions on main branch merge
+  - **Acceptance**: Container image builds automatically, tagged with version/SHA, pushed to ghcr.io successfully
+
+- [ ] **TODO-HLS-005-IMPL-004**: Implement US-025 (Validate Container Deployment in Staging)
   - **Story**: US-025 (2 SP)
   - **Artifact**: `artifacts/backlog_stories/US-025_validate_container_deployment_staging_v1.md`
   - **Context**: New session CX required
-  - **Dependencies**: US-020, US-021, US-022, US-023, US-024 all completed
-  - **Note**: MUST complete last - validates complete end-to-end container workflow
+  - **Dependencies**: US-020, US-021, US-022, US-023, US-024, US-026 all completed
+  - **Note**: MUST complete last - validates complete end-to-end container workflow including automated builds
   - **Acceptance**: Container deployed to staging, all smoke tests pass, team confirms production readiness
 
-**Total Implementation Story Points**: 18 SP
+**Total Implementation Story Points**: 21 SP
 **Estimated Implementation Time**: 2-3 sprints (assuming 2-week sprints, 2 engineers)
 
 ---
