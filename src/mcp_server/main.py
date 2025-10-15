@@ -28,8 +28,6 @@ from mcp_server.core.constants import (
     HEALTH_STATUS_HEALTHY,
 )
 from mcp_server.core.dependencies import (
-    LoggerDep,
-    SettingsDep,
     close_db_session_maker,
     close_http_client,
     initialize_db_session_maker,
@@ -196,11 +194,7 @@ app.add_middleware(
     Returns structured greeting with metadata including style used and character count.
     """,
 )
-async def example_greeting_tool(
-    params: GreetingInput,
-    settings: SettingsDep,
-    logger: LoggerDep,
-) -> GreetingOutput:
+async def example_greeting_tool(params: GreetingInput) -> GreetingOutput:
     """
     MCP tool wrapper for generate_greeting function.
 
@@ -210,10 +204,12 @@ async def example_greeting_tool(
     - Reusing business logic in different contexts (REST API, CLI)
     - Clear separation between protocol concerns and domain logic
 
+    WHY NO DEPENDENCY PARAMETERS: FastMCP generates JSON schema from function
+    signature, so only Pydantic-serializable types allowed. Dependencies
+    accessed directly inside function instead of as parameters.
+
     Args:
         params: Validated greeting input parameters
-        settings: Application settings (injected by FastAPI)
-        logger: Structured logger (injected by FastAPI)
 
     Returns:
         GreetingOutput: Structured greeting response with metadata
@@ -222,6 +218,12 @@ async def example_greeting_tool(
         BusinessLogicError: If greeting generation fails business rules
         ValidationError: If input validation fails (handled by Pydantic/FastMCP)
     """
+    import logging
+
+    # Access dependencies directly (not as function parameters)
+    # WHY: FastMCP requires all function parameters to be Pydantic-serializable
+    # for JSON schema generation. Logger and Settings can't be serialized to JSON.
+    logger = logging.getLogger("mcp_server.tools.example_tool")
     return await generate_greeting(params, settings, logger)
 
 
