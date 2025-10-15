@@ -6,7 +6,8 @@
     "go-task@latest",
     "uv@latest",
     "podman@latest",
-    "hadolint@latest"
+    "hadolint@latest",
+    "trivy@latest"
   ],
   "shell": {
     "init_hook": [
@@ -20,6 +21,7 @@
       "echo 'UV version:' $(uv --version)",
       "echo 'Podman version:' $(podman --version)",
       "echo 'Hadolint version:' $(hadolint --version)",
+      "echo 'Trivy version:' $(trivy --version | head -1)",
       "echo ''",
       "echo 'Quick start:'",
       "echo '  1. Run setup: nu scripts/setup.nu'",

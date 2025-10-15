@@ -194,7 +194,89 @@ task container:shell
 
 # Clean containers and images
 task container:clean
+
+# Scan container for security vulnerabilities (all severities)
+task container:scan
+
+# Scan for critical and high severity vulnerabilities only
+task container:scan:critical
+
+# Generate SARIF report for GitHub Security tab
+task container:scan:sarif
+
+# Generate JSON report for programmatic analysis
+task container:scan:json
 ```
+
+#### Container Security Scanning
+
+**Scanner:** Trivy (Aqua Security)
+**Purpose:** Detect vulnerabilities in container images before deployment
+
+**Installation:**
+```bash
+# macOS
+brew install aquasecurity/trivy/trivy
+
+# Linux (Ubuntu/Debian)
+sudo apt-get install wget apt-transport-https gnupg lsb-release
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update
+sudo apt-get install trivy
+
+# Docker/Podman (no installation)
+alias trivy="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy"
+```
+
+**Scanning Workflow:**
+1. Build container image: `task container:build`
+2. Scan for vulnerabilities: `task container:scan`
+3. Review findings and remediate critical/high CVEs
+4. Re-scan to verify fixes: `task container:scan:critical`
+
+**Severity Policy (CI/CD):**
+- **CRITICAL/HIGH:** Blocks deployment (build fails)
+- **MEDIUM/LOW:** Logged as warnings, deployment continues
+- **Unfixed vulnerabilities:** Ignored (no remediation available)
+
+**Scan Scope:**
+- OS packages (Alpine APK, Debian/Ubuntu APT, Red Hat RPM)
+- Application dependencies (Python, Node.js, Go, Rust)
+- Base image vulnerabilities
+- Known CVEs from NVD, Red Hat, Debian, Alpine databases
+
+**Local Development:**
+```bash
+# Full scan (all severities)
+task container:scan
+
+# Production-ready check (critical/high only)
+task container:scan:critical
+
+# Generate SARIF for GitHub Security tab
+task container:scan:sarif
+
+# Generate JSON for CI/CD integration
+task container:scan:json OUTPUT_FILE=scan-results.json
+
+# Scan specific tag
+task container:scan TAG=v1.0.0
+```
+
+**CI/CD Integration:**
+Container images are automatically scanned in GitHub Actions on every build. Scan results uploaded to **Repository → Security → Code Scanning**.
+
+**Vulnerability Database:**
+Trivy updates its vulnerability database daily. Force manual update:
+```bash
+trivy image --download-db-only
+```
+
+**Common Remediation Patterns:**
+- **OS packages:** Update base image (`FROM python:3.11-alpine` → `FROM python:3.11-alpine3.19`)
+- **Python dependencies:** Update in `pyproject.toml`, run `uv lock`, rebuild image
+- **Unfixed CVEs:** Document as accepted risk or use alternative package
 
 #### Database Operations (Podman)
 ```bash
@@ -257,7 +339,7 @@ The Taskfile is organized into logical sections:
 5. **Dependency Management** - UV operations
 6. **Pre-commit Hooks** - Git hook operations
 7. **Build & Run Tasks** - Application execution
-8. **Container Tasks** - Podman operations
+8. **Container Tasks** - Podman build, run, and security scanning
 9. **Database Tasks** - Database management
 10. **Devbox Tasks** - Environment management
 11. **Documentation Tasks** - Docs generation (placeholder)
