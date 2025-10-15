@@ -6,11 +6,24 @@
 
 ## 📚 Specialized Configuration Files
 
+### Development Tools & Practices
 - **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Development tools: Taskfile, UV, Ruff, MyPy, pytest, Renovate, NuShell, Devbox, Podman
 - **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing strategy, fixtures, and coverage requirements
 - **[CLAUDE-typing.md](./CLAUDE-typing.md)** - Type hints, annotations, and type safety patterns
-- **[CLAUDE-validation.md](./CLAUDE-validation.md)** - Pydantic models, input validation, and security
-- **[CLAUDE-architecture.md](./CLAUDE-architecture.md)** - Project structure, modularity, and design patterns
+
+### Architecture & Design
+- **[CLAUDE-architecture-structure.md](./CLAUDE-architecture-structure.md)** - Project structure, folder organization, and layout strategies
+- **[CLAUDE-architecture-patterns.md](./CLAUDE-architecture-patterns.md)** - Design patterns, dependency injection, and FastAPI structure
+- **[CLAUDE-architecture-middleware.md](./CLAUDE-architecture-middleware.md)** - Exception handling and CORS configuration
+- **[CLAUDE-architecture-data.md](./CLAUDE-architecture-data.md)** - Database transactions, isolation levels, and models
+- **[CLAUDE-architecture-observability.md](./CLAUDE-architecture-observability.md)** - Structured logging and caching strategies
+
+### Validation & Security
+- **[CLAUDE-validation-models.md](./CLAUDE-validation-models.md)** - Pydantic models, field validation, and CRUD patterns
+- **[CLAUDE-validation-security.md](./CLAUDE-validation-security.md)** - Input sanitization, SQL injection prevention, and path traversal protection
+- **[CLAUDE-validation-auth.md](./CLAUDE-validation-auth.md)** - JWT authentication, token validation, and authorization
+- **[CLAUDE-validation-files.md](./CLAUDE-validation-files.md)** - Secure file upload handling and storage
+- **[CLAUDE-validation-api.md](./CLAUDE-validation-api.md)** - API rate limiting, validation patterns, and security checklists
 
 ---
 
@@ -70,7 +83,7 @@ project-root/
     └── integration/
 ```
 
-**See [CLAUDE-architecture.md](./CLAUDE-architecture.md) for detailed structure patterns**
+**See [CLAUDE-architecture-structure.md](./CLAUDE-architecture-structure.md) for detailed structure patterns**
 
 ---
 
@@ -233,7 +246,7 @@ class UserCreate(BaseModel):
 - Keep dependencies updated with `uv`
 - Follow OWASP guidelines
 
-**See [CLAUDE-validation.md](./CLAUDE-validation.md) for comprehensive validation patterns**
+**See [CLAUDE-validation-models.md](./CLAUDE-validation-models.md) for comprehensive validation patterns**
 
 ---
 
@@ -342,4 +355,4 @@ task --list                # List all available tasks
 
 ---
 
-**For detailed examples, patterns, and advanced configurations, refer to the specialized CLAUDE-*.md files linked at the top of this document.**
+**For detailed examples, patterns, and advanced configurations, refer to the specialized CLAUDE-*.md files organized by category at the top of this document.**

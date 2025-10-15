@@ -5,15 +5,20 @@
 
 ---
 
-## Current Phase: Backlog Story Generation (HLS-003)
+## Current Phase: Implementation (HLS-003 Stories)
 
-**Current Status**: HLS-003 backlog story generation COMPLETE - All 5 stories generated
+**Current Status**: Ready to begin implementation - All 5 backlog stories generated and implementation TODOs created
 **Last Completed**: TODO-039 (US-013 Application Architecture Documentation - generated)
-**Next Phase**: Implementation Phase (HLS-003 Stories) - Ready to begin
-**Implementation**: 0/5 stories implemented
-**Generation**: 5/5 stories generated (US-009 ✅, US-010 ✅, US-011 ✅, US-012 ✅, US-013 ✅)
+**Next Task**: TODO-040 (Implement US-009 - FastAPI Application Structure with Health Check)
+**Implementation Progress**: 0/5 stories implemented (16 SP total)
+**Story Sequence**: US-009 → US-010 → US-011 + US-012 (parallel) → US-013
 
-**Parallel Track**: All 5 stories can be generated in parallel, then implemented sequentially per decomposition strategy
+**Implementation TODOs Created:**
+- TODO-040: US-009 (FastAPI Application Structure, 3 SP) ⏳
+- TODO-041: US-010 (Dependency Injection Foundation, 3 SP) ⏳
+- TODO-042: US-011 (Example MCP Tool Implementation, 5 SP) ⏳
+- TODO-043: US-012 (Test Suite for Example Tool, 3 SP) ⏳
+- TODO-044: US-013 (Application Architecture Documentation, 2 SP) ⏳
 
 ---
 
@@ -187,6 +192,197 @@ Generate detailed backlog story for Application Architecture Documentation from 
 ---
 
 ## Phase 2: Implementation (HLS-003 Stories)
+
+### TODO-040: Implement US-009 - FastAPI Application Structure with Health Check
+**Priority**: Critical
+**Dependencies**: HLS-001 (Development Environment Setup) - MUST be complete
+**Estimated Time**: 1.5 days (1 day dev + 0.5 day testing/docs)
+**Status**: ⏳ Pending
+**Context**: New session recommended
+**Story Points**: 3 SP
+
+**Description**:
+Implement foundational FastAPI application structure with health check endpoint. Establishes application entry point, Pydantic-based configuration management, structured logging, and Python src layout that all subsequent features build upon.
+
+**Implementation Scope:**
+- Create `src/main.py` with FastAPI application initialization
+- Create `src/config.py` with Pydantic BaseSettings model
+- Create `src/core/constants.py` with application constants
+- Implement `/health` endpoint returning system status JSON
+- Configure structured logging with structlog (JSON output)
+- Add startup event handler
+- Configure CORS middleware for development
+- Update `Taskfile.yml` with `task dev` command
+- Create `.env.example` with configuration template
+- Update `pyproject.toml` with dependencies (fastapi, uvicorn, pydantic-settings, structlog)
+
+**Acceptance Criteria:**
+- Application starts successfully with `task dev` command
+- Health check endpoint returns valid JSON response (status, version, uptime, timestamp)
+- Configuration validation works correctly (accepts valid, rejects invalid with clear errors)
+- Structured logging configured with JSON output support
+- Unit tests written and passing (>80% coverage)
+- Type checking passes with mypy --strict
+- Linting passes with ruff
+
+**Reference**: /artifacts/backlog_stories/US-009_story_v1.md
+
+---
+
+### TODO-041: Implement US-010 - Dependency Injection Foundation
+**Priority**: High
+**Dependencies**: US-009 (Application Structure) - MUST be complete
+**Estimated Time**: 1 day
+**Status**: ⏳ Pending
+**Context**: New session recommended
+**Story Points**: 3 SP
+
+**Description**:
+Implement FastAPI dependency injection infrastructure enabling MCP tools to access shared services (configuration, logging, database sessions, HTTP clients) through explicit injection rather than global variables.
+
+**Implementation Scope:**
+- Create `src/mcp_server/core/dependencies.py` module
+- Implement `get_settings()` dependency (singleton Settings instance)
+- Implement `get_logger()` dependency (structured logger with request context)
+- Implement `get_db_session()` async generator (SQLAlchemy AsyncSession with auto-cleanup)
+- Implement `get_http_client()` dependency (shared httpx.AsyncClient)
+- Update `main.py` with lifespan context manager (HTTP client and database initialization)
+- Create type aliases using `Annotated` syntax (SettingsDep, LoggerDep, SessionDep, etc.)
+- Document dependency injection process in inline docstrings
+- Add example usage demonstrating dependency injection
+
+**Acceptance Criteria:**
+- Settings dependency injection works (singleton pattern)
+- Logger dependency injection provides structured logging
+- Database session dependency injection with automatic cleanup
+- HTTP client dependency injection with connection pooling
+- Application lifespan management (startup/shutdown logic)
+- Dependency override for testing (app.dependency_overrides)
+- Unit tests written and passing (>80% coverage)
+- Integration tests demonstrate realistic dependency usage
+
+**Reference**: /artifacts/backlog_stories/US-010_story_v1.md
+
+---
+
+### TODO-042: Implement US-011 - Example MCP Tool Implementation
+**Priority**: High
+**Dependencies**: US-009 (Application Structure) + US-010 (Dependency Injection) - MUST be complete
+**Estimated Time**: 1 day
+**Status**: ⏳ Pending
+**Context**: New session recommended
+**Story Points**: 5 SP
+
+**Description**:
+Implement fully-featured example MCP tool serving as living documentation for all future tool implementations. Demonstrates FastMCP decorators, Pydantic validation, error handling, async patterns, and dependency injection access.
+
+**Implementation Scope:**
+- Create `src/tools/example_tool.py`
+- Define Pydantic input model with validation rules (min_length, max_length, pattern)
+- Define Pydantic output model for structured response
+- Implement tool function with @mcp.tool decorator
+- Add comprehensive docstrings explaining patterns
+- Add type hints throughout (100% coverage)
+- Implement error handling (validation errors, business errors)
+- Demonstrate dependency injection access (configuration, logging)
+- Register tool with FastMCP server in main.py
+- Update main.py to mount example tool
+- Validate tool works via health check endpoint
+
+**Acceptance Criteria:**
+- Example tool successfully registered with MCP server
+- Tool accepts valid input and returns Pydantic-validated response
+- Tool rejects invalid input with clear validation errors
+- Error handling for business logic errors demonstrated
+- Dependency injection access demonstrated (config, logging)
+- Code includes comprehensive docstrings explaining patterns
+- mypy --strict passes with zero errors
+- ruff check and ruff format pass with zero errors
+- Developer can understand key patterns in <15 minutes
+
+**Reference**: /artifacts/backlog_stories/US-011_story_v1.md
+
+---
+
+### TODO-043: Implement US-012 - Test Suite for Example MCP Tool
+**Priority**: High
+**Dependencies**: US-009 + US-010 + US-011 - MUST be complete
+**Estimated Time**: 1 day
+**Status**: ⏳ Pending
+**Context**: New session recommended
+**Story Points**: 3 SP
+
+**Description**:
+Create comprehensive test suite for example MCP tool demonstrating testing patterns (unit tests, Pydantic validation testing, mocking, error handling, async testing). Serves as living documentation for testing approach.
+
+**Implementation Scope:**
+- Create `tests/conftest.py` with shared fixtures (sample inputs, mocked dependencies)
+- Implement `tests/unit/test_example_tool.py`:
+  - Unit tests for tool business logic with mocked dependencies
+  - Pydantic validation tests (valid inputs, invalid inputs, edge cases)
+  - Error handling tests (validation errors, external failures)
+  - Async tests with @pytest.mark.asyncio
+- Implement `tests/integration/test_mcp_protocol.py`:
+  - MCP tool discovery tests
+  - MCP tool invocation tests
+  - MCP response validation tests
+- Configure coverage reporting in pyproject.toml
+- Add inline comments explaining testing patterns
+- Verify >80% coverage with `task test-cov`
+
+**Acceptance Criteria:**
+- Unit tests validate tool business logic (mocked dependencies)
+- Pydantic validation testing demonstrates type safety
+- Mocking patterns enable fast, isolated tests (<1 second per test)
+- Async tests demonstrate pytest-asyncio patterns
+- Error handling tests validate all failure modes
+- Test coverage >80% line and branch coverage
+- Test organization follows project standards (tests/unit/, tests/integration/, conftest.py)
+- Test suite serves as testing pattern reference for new tools
+
+**Open Questions:**
+- Test Data Management: Hardcoded fixtures vs. factory patterns? [REQUIRES TECH LEAD]
+- Integration Test Scope: Real MCP client-server handshake vs. mocked client? [REQUIRES TECH LEAD]
+
+**Reference**: /artifacts/backlog_stories/US-012_story_v1.md
+
+---
+
+### TODO-044: Implement US-013 - Application Architecture Documentation
+**Priority**: Medium
+**Dependencies**: US-009 + US-010 + US-011 + US-012 - SHOULD all be complete
+**Estimated Time**: 1 day (8-10 hours)
+**Status**: ⏳ Pending
+**Context**: New session recommended
+**Story Points**: 2 SP
+
+**Description**:
+Create architecture documentation extracting architectural concepts from implementation (US-009 through US-012). Explains WHY patterns were chosen, provides visual diagrams, and guides engineers to extension points.
+
+**Implementation Scope:**
+- Create /docs/architecture/ directory structure
+- Write overview.md with system architecture diagram (Mermaid)
+- Write dependency-injection.md with DI pattern explanation and extension guide
+- Write request-flow.md with Mermaid sequence diagram
+- Write design-decisions.md documenting technology choices with Implementation Research citations
+- Write extension-guides/:
+  - add-new-tool.md (references example tool)
+  - add-database-access.md (placeholder DI pattern)
+  - add-external-service.md (circuit breaker pattern reference)
+- Create Mermaid diagrams (architecture-overview, dependency-graph, request-flow-sequence)
+- Add "Last Updated" metadata to each document
+
+**Acceptance Criteria:**
+- New team member can explain architecture within 1 hour of reading docs
+- Architecture diagram shows FastAPI → FastMCP → Tools layer clearly
+- Dependency injection extension guide provides step-by-step process
+- Request flow diagram shows complete lifecycle from client to tool to response
+- Pattern rationale documented with Implementation Research citations
+- Extension guide references example tool and CLAUDE.md standards
+- Documentation links to CLAUDE.md files validated (no broken links)
+- All Mermaid diagrams render correctly in GitHub/VSCode
+
+**Reference**: /artifacts/backlog_stories/US-013_story_v1.md
 
 ---
 
