@@ -66,7 +66,7 @@ def cleanup_test_artifacts [] {
 }
 
 # Format duration in human-readable format
-def format_duration [duration: duration] -> string {
+def format_duration [duration] {
     let total_seconds = ($duration | into int) / 1_000_000_000
     let minutes = ($total_seconds / 60 | math floor)
     let seconds = ($total_seconds mod 60 | math floor)
@@ -79,7 +79,7 @@ def format_duration [duration: duration] -> string {
 }
 
 # Test 1: Measure first-time setup duration
-export def test_first_time_setup_duration [] {
+def test_first_time_setup_duration [] {
     print "\n🧪 Test 1: First-time setup duration (target: < 30 minutes)"
     print "⏱️  This test executes full setup from scratch...\n"
 
@@ -131,7 +131,7 @@ export def test_first_time_setup_duration [] {
 }
 
 # Test 2: Measure idempotent re-run duration
-export def test_idempotent_rerun_duration [] {
+def test_idempotent_rerun_duration [] {
     print "\n🧪 Test 2: Idempotent re-run duration (target: < 2 minutes)"
     print "⏱️  This test runs setup twice to measure re-run performance...\n"
 
@@ -178,7 +178,7 @@ export def test_idempotent_rerun_duration [] {
 }
 
 # Test 3: Measure validation phase duration
-export def test_validation_phase_duration [] {
+def test_validation_phase_duration [] {
     print "\n🧪 Test 3: Validation phase duration (target: < 10 seconds)"
 
     # Setup environment first
@@ -192,7 +192,7 @@ export def test_validation_phase_duration [] {
 
         # Measure validation directly
         let start_time = (date now)
-        let result = (^nu -c "use scripts/lib/validation.nu; validate_environment '.venv'" | complete)
+        let result = (^nu -c "use scripts/lib/validation.nu *; validate_environment '.venv'" | complete)
         let end_time = (date now)
         let duration = ($end_time - $start_time)
 
@@ -218,7 +218,7 @@ export def test_validation_phase_duration [] {
 }
 
 # Test 4: Measure OS detection performance
-export def test_os_detection_performance [] {
+def test_os_detection_performance [] {
     print "\n🧪 Test 4: OS detection performance (target: < 1 second)"
 
     let iterations = 10
@@ -228,7 +228,7 @@ export def test_os_detection_performance [] {
     let start_time = (date now)
 
     for i in 1..$iterations {
-        let result = (^nu -c "use scripts/lib/os_detection.nu; detect_os" | complete)
+        let result = (^nu -c "use scripts/lib/os_detection.nu *; detect_os" | complete)
         assert ($result.exit_code == 0) $"OS detection failed on iteration ($i)"
     }
 
@@ -250,7 +250,7 @@ export def test_os_detection_performance [] {
 }
 
 # Test 5: Measure prerequisites check performance
-export def test_prerequisites_check_performance [] {
+def test_prerequisites_check_performance [] {
     print "\n🧪 Test 5: Prerequisites check performance (target: < 2 seconds)"
 
     let iterations = 5
@@ -260,7 +260,7 @@ export def test_prerequisites_check_performance [] {
     let start_time = (date now)
 
     for i in 1..$iterations {
-        let result = (^nu -c "use scripts/lib/prerequisites.nu; check_prerequisites" | complete)
+        let result = (^nu -c "use scripts/lib/prerequisites.nu *; check_prerequisites" | complete)
         assert ($result.exit_code == 0) $"Prerequisites check failed on iteration ($i)"
     }
 

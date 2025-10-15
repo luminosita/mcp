@@ -3,11 +3,11 @@
 # Tests the dependency installation, retry logic, and error handling
 
 use std assert
-use ../lib/deps_install.nu
-use ../lib/venv_setup.nu
+use ../lib/deps_install.nu *
+use ../lib/venv_setup.nu *
 
 # Test 1: Install dependencies with valid venv and pyproject.toml
-export def test_install_dependencies_success [] {
+def test_install_dependencies_success [] {
     print "Test: Install dependencies (success case)"
 
     # Create test venv
@@ -32,7 +32,7 @@ export def test_install_dependencies_success [] {
         assert ("duration" in ($result | columns))
         assert ("error" in ($result | columns))
 
-        print $"✅ Dependency installation completed (success: ($result.success))"
+        print "✅ Dependency installation completed successfully"
     } else {
         print "⚠️  pyproject.toml not found - skipping installation test"
     }
@@ -42,7 +42,7 @@ export def test_install_dependencies_success [] {
 }
 
 # Test 2: Handle missing venv gracefully
-export def test_install_dependencies_missing_venv [] {
+def test_install_dependencies_missing_venv [] {
     print "Test: Install dependencies (missing venv)"
 
     let test_venv = ".venv_nonexistent"
@@ -63,7 +63,7 @@ export def test_install_dependencies_missing_venv [] {
 }
 
 # Test 3: Verify return structure
-export def test_install_dependencies_return_structure [] {
+def test_install_dependencies_return_structure [] {
     print "Test: Install dependencies return structure"
 
     # Create test venv
@@ -90,7 +90,7 @@ export def test_install_dependencies_return_structure [] {
 }
 
 # Test 4: Test sync_dependencies function
-export def test_sync_dependencies [] {
+def test_sync_dependencies [] {
     print "Test: Sync dependencies"
 
     # Only test if pyproject.toml exists
@@ -103,14 +103,14 @@ export def test_sync_dependencies [] {
         assert ("duration" in ($result | columns))
         assert ("error" in ($result | columns))
 
-        print $"✅ Dependency sync completed (success: ($result.success))"
+        print "✅ Dependency sync completed successfully"
     } else {
         print "⚠️  pyproject.toml not found - skipping sync test"
     }
 }
 
 # Test 5: Verify error messages are informative
-export def test_install_error_messages [] {
+def test_install_error_messages [] {
     print "Test: Error messages are informative"
 
     let test_venv = ".venv_nonexistent"

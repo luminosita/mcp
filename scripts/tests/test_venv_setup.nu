@@ -3,10 +3,10 @@
 # Tests the virtual environment creation, checking, and Python version detection
 
 use std assert
-use ../lib/venv_setup.nu
+use ../lib/venv_setup.nu *
 
 # Test 1: Create virtual environment
-export def test_create_venv [] {
+def test_create_venv [] {
     print "Test: Create virtual environment"
 
     # Use a test venv path
@@ -31,7 +31,7 @@ export def test_create_venv [] {
 }
 
 # Test 2: Check existing venv (idempotent)
-export def test_create_venv_idempotent [] {
+def test_create_venv_idempotent [] {
     print "Test: Create venv (idempotent)"
 
     let test_venv = ".venv_test"
@@ -52,7 +52,7 @@ export def test_create_venv_idempotent [] {
 }
 
 # Test 3: Check venv exists
-export def test_check_venv [] {
+def test_check_venv [] {
     print "Test: Check venv exists"
 
     let test_venv = ".venv_test"
@@ -75,7 +75,7 @@ export def test_check_venv [] {
 }
 
 # Test 4: Get Python version from venv
-export def test_get_venv_python_version [] {
+def test_get_venv_python_version [] {
     print "Test: Get Python version from venv"
 
     let test_venv = ".venv_test"
@@ -100,7 +100,7 @@ export def test_get_venv_python_version [] {
 }
 
 # Test 5: Handle non-existent venv
-export def test_get_version_nonexistent_venv [] {
+def test_get_version_nonexistent_venv [] {
     print "Test: Get version from non-existent venv"
 
     let test_venv = ".venv_nonexistent"
@@ -120,7 +120,7 @@ export def test_get_version_nonexistent_venv [] {
 }
 
 # Test 6: Verify venv structure
-export def test_venv_structure [] {
+def test_venv_structure [] {
     print "Test: Verify venv directory structure"
 
     let test_venv = ".venv_test"

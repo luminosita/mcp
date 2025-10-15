@@ -9,7 +9,7 @@ use std assert
 use ../lib/os_detection.nu detect_os
 
 # Test that detect_os returns correct structure
-export def test_detect_os_structure [] {
+def test_detect_os_structure [] {
     let result = (detect_os)
 
     # Verify return structure has correct fields
@@ -26,7 +26,7 @@ export def test_detect_os_structure [] {
 }
 
 # Test that OS is one of supported types
-export def test_detect_os_valid_os [] {
+def test_detect_os_valid_os [] {
     let result = (detect_os)
 
     # Verify OS is one of supported types
@@ -37,7 +37,7 @@ export def test_detect_os_valid_os [] {
 }
 
 # Test that architecture is valid
-export def test_detect_os_valid_arch [] {
+def test_detect_os_valid_arch [] {
     let result = (detect_os)
 
     # Verify arch is non-empty string
@@ -52,7 +52,7 @@ export def test_detect_os_valid_arch [] {
 }
 
 # Test that version is returned
-export def test_detect_os_version [] {
+def test_detect_os_version [] {
     let result = (detect_os)
 
     # Verify version is non-empty string
@@ -63,7 +63,7 @@ export def test_detect_os_version [] {
 }
 
 # Test that function is callable multiple times (idempotent)
-export def test_detect_os_idempotent [] {
+def test_detect_os_idempotent [] {
     let result1 = (detect_os)
     let result2 = (detect_os)
 

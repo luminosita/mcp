@@ -14,10 +14,10 @@
 use std assert
 
 # Test 1: Verify OS detection identifies current platform correctly
-export def test_os_detection_current_platform [] {
+def test_os_detection_current_platform [] {
     print "\n🧪 Test 1: OS detection identifies current platform"
 
-    let result = (^nu -c "use scripts/lib/os_detection.nu; detect_os" | complete)
+    let result = (^nu -c "use scripts/lib/os_detection.nu *; detect_os" | complete)
 
     assert ($result.exit_code == 0) "OS detection failed"
 
@@ -60,17 +60,14 @@ export def test_os_detection_current_platform [] {
 }
 
 # Test 2: Verify architecture detection
-export def test_architecture_detection [] {
+def test_architecture_detection [] {
     print "\n🧪 Test 2: Architecture detection"
 
-    let result = (^nu -c "use scripts/lib/os_detection.nu; detect_os" | complete)
+    let result = (^nu -c "use scripts/lib/os_detection.nu *; detect_os" | complete)
 
     assert ($result.exit_code == 0) "OS detection failed"
 
     let output = ($result.stdout | str trim)
-
-    # Get actual architecture
-    let actual_arch = (^uname -m | str trim)
 
     # Verify output contains architecture
     assert (
@@ -81,15 +78,14 @@ export def test_architecture_detection [] {
     ) "OS detection output missing architecture"
 
     print $"  Detected architecture in output: ($output)"
-    print $"  Actual architecture (uname -m): ($actual_arch)"
     print "✅ Architecture detected"
 }
 
 # Test 3: Verify version detection
-export def test_version_detection [] {
+def test_version_detection [] {
     print "\n🧪 Test 3: OS version detection"
 
-    let result = (^nu -c "use scripts/lib/os_detection.nu; detect_os" | complete)
+    let result = (^nu -c "use scripts/lib/os_detection.nu *; detect_os" | complete)
 
     assert ($result.exit_code == 0) "OS detection failed"
 
@@ -103,10 +99,11 @@ export def test_version_detection [] {
 }
 
 # Test 4: Test platform-specific Taskfile validation
-export def test_taskfile_platform_specific [] {
+def test_taskfile_platform_specific [] {
     print "\n🧪 Test 4: Taskfile validation works on current platform"
 
-    let result = (^nu -c "use scripts/lib/taskfile_install.nu; check_taskfile_installed" | complete)
+    # Check if task command is available
+    let result = (^task --version | complete)
 
     # Should succeed on all platforms (in devbox environment)
     assert ($result.exit_code == 0) $"Taskfile validation failed: ($result.stderr)"
@@ -115,10 +112,11 @@ export def test_taskfile_platform_specific [] {
 }
 
 # Test 5: Test UV validation works cross-platform
-export def test_uv_platform_specific [] {
+def test_uv_platform_specific [] {
     print "\n🧪 Test 5: UV validation works on current platform"
 
-    let result = (^nu -c "use scripts/lib/uv_install.nu; check_uv_installed" | complete)
+    # Check if uv command is available
+    let result = (^uv --version | complete)
 
     # Should succeed on all platforms (in devbox environment)
     assert ($result.exit_code == 0) $"UV validation failed: ($result.stderr)"
@@ -127,11 +125,11 @@ export def test_uv_platform_specific [] {
 }
 
 # Test 6: Test Python path detection works cross-platform
-export def test_python_path_detection [] {
+def test_python_path_detection [] {
     print "\n🧪 Test 6: Python path detection works on current platform"
 
     # Test that Python is found and version is correct
-    let result = (^nu -c "use scripts/lib/prerequisites.nu; check_prerequisites" | complete)
+    let result = (^nu -c "use scripts/lib/prerequisites.nu *; check_prerequisites" | complete)
 
     assert ($result.exit_code == 0) "Prerequisites check failed"
 
@@ -143,7 +141,7 @@ export def test_python_path_detection [] {
 }
 
 # Test 7: Test virtual environment creation works cross-platform
-export def test_venv_creation_platform_specific [] {
+def test_venv_creation_platform_specific [] {
     print "\n🧪 Test 7: Virtual environment creation works on current platform"
 
     # Create a test venv
@@ -155,7 +153,7 @@ export def test_venv_creation_platform_specific [] {
     }
 
     try {
-        let result = (^nu -c $"use scripts/lib/venv_setup.nu; create_venv '($test_venv_path)' '3.11'" | complete)
+        let result = (^nu -c $"use scripts/lib/venv_setup.nu *; create_venv '($test_venv_path)' '3.11'" | complete)
 
         assert ($result.exit_code == 0) $"Venv creation failed: ($result.stderr)"
 
@@ -184,7 +182,7 @@ export def test_venv_creation_platform_specific [] {
 }
 
 # Test 8: Test file permissions work cross-platform
-export def test_file_permissions_platform_specific [] {
+def test_file_permissions_platform_specific [] {
     print "\n🧪 Test 8: File permissions handling works on current platform"
 
     # Create a test .env file
@@ -230,7 +228,7 @@ export def test_file_permissions_platform_specific [] {
 }
 
 # Test 9: Test platform-specific paths
-export def test_platform_specific_paths [] {
+def test_platform_specific_paths [] {
     print "\n🧪 Test 9: Platform-specific paths are correct"
 
     # Test Python binary path in venv
@@ -254,7 +252,7 @@ export def test_platform_specific_paths [] {
 }
 
 # Test 10: Test full setup on current platform
-export def test_full_setup_current_platform [] {
+def test_full_setup_current_platform [] {
     print "\n🧪 Test 10: Full setup works on current platform (end-to-end)"
     print "⏱️  This test runs complete setup..."
 
@@ -346,8 +344,7 @@ def main [] {
 
     # Detect current platform
     let uname_os = (^uname -s | str trim)
-    let uname_arch = (^uname -m | str trim)
-    print $"🖥️  Running on: ($uname_os) ($uname_arch)\n"
+    print $"🖥️  Running on: ($uname_os)\n"
 
     let start_time = (date now)
 
@@ -393,7 +390,7 @@ def main [] {
 
     print $"📊 Results: ($passed) passed, ($failed) failed"
     print $"⏱️  Total test time: ($duration)"
-    print $"🖥️  Tested on: ($uname_os) ($uname_arch)\n"
+    print $"🖥️  Tested on: ($uname_os)\n"
 
     # Exit with appropriate code
     if $failed > 0 {

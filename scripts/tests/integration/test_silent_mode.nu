@@ -72,7 +72,7 @@ def cleanup_test_artifacts [] {
 }
 
 # Test 1: Verify --silent flag is recognized
-export def test_silent_flag_recognized [] {
+def test_silent_flag_recognized [] {
     print "\n🧪 Test 1: Verify --silent flag is recognized"
 
     let result = (^nu scripts/setup.nu --help | complete)
@@ -84,7 +84,7 @@ export def test_silent_flag_recognized [] {
 }
 
 # Test 2: Silent mode completes without user input
-export def test_silent_mode_no_prompts [] {
+def test_silent_mode_no_prompts [] {
     print "\n🧪 Test 2: Silent mode completes without user input"
     print "⏱️  Running full setup in silent mode..."
 
@@ -124,7 +124,7 @@ export def test_silent_mode_no_prompts [] {
 }
 
 # Test 3: Silent mode uses default preferences
-export def test_silent_mode_defaults [] {
+def test_silent_mode_defaults [] {
     print "\n🧪 Test 3: Silent mode uses default preferences"
 
     backup_environment
@@ -151,7 +151,7 @@ export def test_silent_mode_defaults [] {
 }
 
 # Test 4: Silent mode exit code indicates success/failure
-export def test_silent_mode_exit_codes [] {
+def test_silent_mode_exit_codes [] {
     print "\n🧪 Test 4: Silent mode exit codes indicate success/failure"
 
     backup_environment
@@ -175,7 +175,7 @@ export def test_silent_mode_exit_codes [] {
 }
 
 # Test 5: Silent mode output is structured
-export def test_silent_mode_output_structure [] {
+def test_silent_mode_output_structure [] {
     print "\n🧪 Test 5: Silent mode output is structured and parseable"
 
     backup_environment
@@ -207,7 +207,7 @@ export def test_silent_mode_output_structure [] {
 }
 
 # Test 6: Silent mode works in CI/CD environment simulation
-export def test_silent_mode_ci_cd_simulation [] {
+def test_silent_mode_ci_cd_simulation [] {
     print "\n🧪 Test 6: Silent mode works in CI/CD environment (simulated)"
     print "⏱️  Simulating CI/CD pipeline execution..."
 
@@ -241,7 +241,7 @@ export def test_silent_mode_ci_cd_simulation [] {
 }
 
 # Test 7: Silent mode is idempotent (safe for repeated runs)
-export def test_silent_mode_idempotent [] {
+def test_silent_mode_idempotent [] {
     print "\n🧪 Test 7: Silent mode is idempotent (safe for repeated runs)"
 
     backup_environment
@@ -270,11 +270,11 @@ export def test_silent_mode_idempotent [] {
 }
 
 # Test 8: Interactive module respects silent flag
-export def test_interactive_module_silent_flag [] {
+def test_interactive_module_silent_flag [] {
     print "\n🧪 Test 8: Interactive module respects silent flag"
 
     # Test the get_setup_preferences function directly
-    let result = (^nu -c "use scripts/lib/interactive.nu; get_setup_preferences true" | complete)
+    let result = (^nu -c "use scripts/lib/interactive.nu *; get_setup_preferences true" | complete)
 
     assert ($result.exit_code == 0) "Interactive module failed in silent mode"
 

@@ -9,7 +9,7 @@ use std assert
 use ../lib/prerequisites.nu check_prerequisites
 
 # Test that check_prerequisites returns correct structure
-export def test_prerequisites_structure [] {
+def test_prerequisites_structure [] {
     let result = (check_prerequisites)
 
     # Verify return structure has correct fields
@@ -35,7 +35,7 @@ export def test_prerequisites_structure [] {
 
 # Test that prerequisites check returns results
 # Note: This test runs in actual environment, so checks should pass if devbox is configured
-export def test_prerequisites_in_devbox [] {
+def test_prerequisites_in_devbox [] {
     let result = (check_prerequisites)
 
     # In properly configured devbox environment, all should be present
@@ -58,7 +58,7 @@ export def test_prerequisites_in_devbox [] {
 
 # Test that errors list is collected completely
 # This verifies Decision D4 behavior (collect all errors, fail-fast handled by caller)
-export def test_complete_error_collection [] {
+def test_complete_error_collection [] {
     let result = (check_prerequisites)
 
     # Verify errors is a list (even if empty)
@@ -84,7 +84,7 @@ export def test_complete_error_collection [] {
 }
 
 # Test that version strings are populated when tools are present
-export def test_version_strings_populated [] {
+def test_version_strings_populated [] {
     let result = (check_prerequisites)
 
     # If a prerequisite check passes, its version should be populated
@@ -106,7 +106,7 @@ export def test_version_strings_populated [] {
 }
 
 # Test that function is callable multiple times (idempotent)
-export def test_prerequisites_idempotent [] {
+def test_prerequisites_idempotent [] {
     let result1 = (check_prerequisites)
     let result2 = (check_prerequisites)
 

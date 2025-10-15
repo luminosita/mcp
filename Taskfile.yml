@@ -364,6 +364,27 @@ tasks:
       - task: hooks:install
       - echo "✅ Project setup complete"
 
+  setup:test:
+    desc: Run all Nushell setup script tests (unit + integration)
+    cmds:
+      - task: setup:test:unit
+      - task: setup:test:integration
+
+  setup:test:unit:
+    desc: Run Nushell setup script unit tests
+    cmds:
+      - 'failed=0; for test in scripts/tests/test_*.nu; do echo "Running: $test"; nu "$test" || { echo "❌ Test failed: $test"; failed=1; }; echo ""; done; if [ $failed -eq 1 ]; then echo "❌ Some tests failed"; exit 1; else echo "✅ All setup script tests passed"; fi'
+
+  setup:test:integration:
+    desc: Run Nushell integration tests for setup scripts
+    cmds:
+      - nu scripts/tests/integration/run_all_tests.nu
+
+  setup:test:integration:quick:
+    desc: Run Nushell integration tests (quick mode - skip performance tests)
+    cmds:
+      - nu scripts/tests/integration/run_all_tests.nu --quick
+
   info:
     desc: Show project environment information
     cmds:

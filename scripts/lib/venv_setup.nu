@@ -11,6 +11,48 @@
 use common.nu *
 
 
+# Verify venv and get its Python version (extracted common logic)
+# Args:
+#   venv_path: string - Path to virtual environment
+#   action_msg: string - Message describing the action ("Using existing venv" or "Virtual environment created")
+# Returns: record {success: bool, path: string, python_version: string, error: string}
+def verify_venv_and_get_version [
+    venv_path: string
+    action_msg: string
+] {
+    let check = (check_venv_exists $venv_path)
+
+    if not $check.exists {
+        return {
+            success: false,
+            path: "",
+            python_version: "",
+            error: $"Virtual environment not found at ($venv_path)"
+        }
+    }
+
+    # Get Python version
+    let py_ver = (get_venv_python_version $check.path)
+
+    if $py_ver.success {
+        print $"✅ ($action_msg) with Python ($py_ver.version)"
+        return {
+            success: true,
+            path: $check.path,
+            python_version: $py_ver.version,
+            error: ""
+        }
+    } else {
+        print $"⚠️  Warning: ($action_msg) but Python version check failed"
+        return {
+            success: true,
+            path: $check.path,
+            python_version: "unknown",
+            error: ""
+        }
+    }
+}
+
 # Create Python virtual environment using uv
 # Args:
 #   venv_path: string - Path where virtual environment should be created (default: .venv)
@@ -22,36 +64,13 @@ export def create_venv [
 ] {
     print $"🐍 Creating Python virtual environment at ($venv_path)..."
 
-    ### REFACTOR: Duplication D1 has to blocks (START -> END) within this method, which has only minor differences
-    ### DUPLICATION D1 - START
     # Check if venv already exists
     let check = (check_venv_exists $venv_path)
 
     if $check.exists {
         print $"ℹ️  Virtual environment already exists at ($check.path)"
-
-        # Get Python version
-        let py_ver = (get_venv_python_version $check.path)
-
-        if $py_ver.success {
-            print $"✅ Using existing venv with Python ($py_ver.version)"
-            return {
-                success: true,
-                path: $check.path,
-                python_version: $py_ver.version,
-                error: ""
-            }
-        } else {
-            print $"⚠️  Warning: Could not verify Python version in existing venv"
-            return {
-                success: true,
-                path: $check.path,
-                python_version: "unknown",
-                error: ""
-            }
-        }
+        return (verify_venv_and_get_version $venv_path "Using existing venv")
     }
-    ### DUPLICATION D1 - END
 
     # Create virtual environment using uv
     print $"📦 Running: uv venv ($venv_path) --python ($python_version)"
@@ -67,43 +86,8 @@ export def create_venv [
         }
     }
 
-    ### DUPLICATION D1 - START
-
-    # Verify creation
-    let verify = (check_venv_exists $venv_path)
-
-    if not $verify.exists {
-        return {
-            success: false,
-            path: "",
-            python_version: "",
-            error: $"Virtual environment creation failed - directory not found at ($venv_path)"
-        }
-    }
-
-    # Get Python version
-    let py_ver = (get_venv_python_version $verify.path)
-
-    if $py_ver.success {
-        print $"✅ Virtual environment created with Python ($py_ver.version)"
-        return {
-            success: true,
-            path: $verify.path,
-            python_version: $py_ver.version,
-            error: ""
-        }
-    } else {
-        # Venv exists but can't get version - non-fatal
-        print "⚠️  Virtual environment created but Python version check failed"
-        return {
-            success: true,
-            path: $verify.path,
-            python_version: "unknown",
-            error: ""
-        }
-    }
-    ### DUPLICATION D1 - START
-
+    # Verify creation and get version
+    return (verify_venv_and_get_version $venv_path "Virtual environment created")
 }
 
 # Check if virtual environment exists (exported version)

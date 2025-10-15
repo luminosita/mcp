@@ -89,15 +89,29 @@ export def get_binary_version [
     }
 }
 
-# Parse Python version string and extract major.minor.patch
+# Parse version string and extract major.minor.patch (universal)
 # Args:
-#   version_string: string - Version string like "Python 3.11.6"
+#   version_string: string - Version string like "3.11.6" or "Python 3.11.6" or "uv 0.1.35"
+#   prefix: string - Optional prefix to remove (e.g., "Python ", "uv ")
 # Returns: record {major: int, minor: int, patch: int, full: string}
-export def parse_python_version [version_string: string] {
-    ### REFACTOR: This method should be universal in parsing any binary version, not only Python
+export def parse_version [
+    version_string: string
+    prefix: string = ""
+] {
+    # Remove prefix if provided
+    let clean_version = if ($prefix | str length) > 0 {
+        ($version_string | str replace $prefix "" | str trim)
+    } else {
+        # Extract version number using regex pattern
+        # Matches: X.Y or X.Y.Z where X, Y, Z are numbers
+        let match_result = ($version_string | parse --regex '(\d+\.\d+(?:\.\d+)?)')
 
-    # Remove "Python " prefix if present
-    let clean_version = ($version_string | str replace "Python " "")
+        if ($match_result | is-empty) {
+            error make {msg: $"No version pattern found in: ($version_string)"}
+        }
+
+        ($match_result | first | get capture0)
+    }
 
     # Split by dot
     let parts = ($clean_version | split row ".")
@@ -128,22 +142,31 @@ export def parse_python_version [version_string: string] {
     }
 }
 
-# Validate Python version meets minimum requirement
+# Parse Python version string and extract major.minor.patch
 # Args:
 #   version_string: string - Version string like "Python 3.11.6"
-#   min_major: int - Minimum major version (default: 3)
-#   min_minor: int - Minimum minor version (default: 11)
+# Returns: record {major: int, minor: int, patch: int, full: string}
+export def parse_python_version [version_string: string] {
+    return (parse_version $version_string "Python ")
+}
+
+# Validate version meets minimum requirement (universal)
+# Args:
+#   version_string: string - Version string like "3.11.6" or "Python 3.11.6"
+#   min_major: int - Minimum major version
+#   min_minor: int - Minimum minor version (default: 0)
+#   prefix: string - Optional prefix to remove (default: "")
+#   binary_name: string - Binary name for error messages (default: "Binary")
 # Returns: record {valid: bool, version: record, error: string}
-export def validate_python_version [
+export def validate_version [
     version_string: string
-    min_major: int = 3
-    min_minor: int = 11
+    min_major: int
+    min_minor: int = 0
+    prefix: string = ""
+    binary_name: string = "Binary"
 ] {
-
-    ### REFACTOR: This method should be universal in validating any binary version, not only Python
-
     try {
-        let version = (parse_python_version $version_string)
+        let version = (parse_version $version_string $prefix)
 
         # Check if version meets requirement
         if ($version.major > $min_major) or (($version.major == $min_major) and ($version.minor >= $min_minor)) {
@@ -157,7 +180,7 @@ export def validate_python_version [
             return {
                 valid: false,
                 version: $version,
-                error: $"Python ($version.full) does not meet requirement (>= ($req_version))"
+                error: $"($binary_name) ($version.full) does not meet requirement (>= ($req_version))"
             }
         }
     } catch {|e|
@@ -167,6 +190,20 @@ export def validate_python_version [
             error: $"Failed to parse version: ($e.msg)"
         }
     }
+}
+
+# Validate Python version meets minimum requirement
+# Args:
+#   version_string: string - Version string like "Python 3.11.6"
+#   min_major: int - Minimum major version (default: 3)
+#   min_minor: int - Minimum minor version (default: 11)
+# Returns: record {valid: bool, version: record, error: string}
+export def validate_python_version [
+    version_string: string
+    min_major: int = 3
+    min_minor: int = 11
+] {
+    return (validate_version $version_string $min_major $min_minor "Python " "Python")
 }
 
 # Check if command executed successfully
