@@ -10,6 +10,7 @@ __pycache__/
 # Documentation
 docs/
 *.md
+!README.md
 
 # Git
 .git/
