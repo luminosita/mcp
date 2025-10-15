@@ -169,7 +169,7 @@ app.add_middleware(
 # WHY SEPARATE REGISTRATION: Keeps tool definitions modular while centralizing
 # registration for visibility. Tools can be organized by domain (jira, k8s, rag)
 # in separate modules.
-@mcp.tool(  # type: ignore[misc]
+@mcp.tool(
     name="example.generate_greeting",
     description="""
     Generates a personalized greeting message (example tool for pattern demonstration).
