@@ -685,39 +685,101 @@ uv run pytest -s
 
 ### Pre-commit Configuration
 
+**CRITICAL**: Pre-commit hooks run in isolated environments without access to project dependencies. For type checking with dependencies (like FastMCP SDK), use local hooks that run via Taskfile.
+
 ```yaml
 # .pre-commit-config.yaml
 repos:
+  # Ruff - Fast Python linter and formatter
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.3.0
+    rev: v0.8.4
     hooks:
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+        args: [--fix]
       - id: ruff-format
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
-    hooks:
-      - id: mypy
-        additional_dependencies: [types-requests, pydantic]
-        args: [--strict]
-
+  # General file checks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
-      - id: check-merge-conflict
+        args: [--maxkb=1000]
       - id: check-json
       - id: check-toml
+      - id: check-merge-conflict
+      - id: detect-private-key
 
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.5
+  # Local hooks - Run project tasks with full dependencies
+  - repo: local
     hooks:
-      - id: bandit
-        args: [-r, src, -ll]
+      # Run type checking via task (uses uv with full dependencies)
+      - id: type-check
+        name: Type checking (mypy via task)
+        entry: task type-check
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true
+```
+
+### Why Local Hook for MyPy?
+
+**Problem**: Pre-commit's mypy hook runs in isolated environment:
+```yaml
+# ❌ THIS PATTERN HAS ISSUES
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: v1.14.1
+  hooks:
+    - id: mypy
+      additional_dependencies: [pydantic, fastapi]  # Hard to maintain!
+      args: [--strict]
+```
+
+**Issues with Isolated MyPy:**
+1. Doesn't have access to project dependencies (mcp, httpx, sqlalchemy, etc.)
+2. Decorators from external packages appear untyped
+3. Must manually list all type stub packages in `additional_dependencies`
+4. Inconsistent with local type checking via `task type-check`
+
+**Solution**: Use local hook that runs `task type-check`:
+```yaml
+# ✅ CORRECT PATTERN
+- repo: local
+  hooks:
+    - id: type-check
+      name: Type checking (mypy via task)
+      entry: task type-check      # Uses project's uv environment
+      language: system             # Runs in project environment
+      types: [python]
+      pass_filenames: false        # Check entire codebase
+      always_run: true             # Run even if no Python files changed
+```
+
+**Benefits:**
+- ✅ Full access to all project dependencies
+- ✅ Consistent behavior (local = pre-commit = CI)
+- ✅ No need to maintain `additional_dependencies`
+- ✅ Uses same mypy configuration (pyproject.toml)
+
+**When This Matters:**
+- Projects with external package type hints (FastMCP, SQLAlchemy, etc.)
+- Decorators from external packages that need type information
+- Complex dependency graphs where listing all stubs is impractical
+
+**Real Example from US-011:**
+```python
+# With isolated mypy: decorator appears untyped
+@mcp.tool(name="example")  # ❌ Error: Untyped decorator
+async def tool(params: Input) -> Output:
+    pass
+
+# With task type-check: decorator properly typed
+@mcp.tool(name="example")  # ✅ Typed correctly
+async def tool(params: Input) -> Output:
+    pass
 ```
 
 ### Pre-commit Commands
@@ -726,19 +788,26 @@ repos:
 # Install pre-commit
 uv add --dev pre-commit
 
-# Install hooks
+# Install hooks (done automatically by task setup)
+task hooks:install
+# Or manually:
 uv run pre-commit install
 
 # Run hooks manually on all files
+task hooks:run
+# Or manually:
 uv run pre-commit run --all-files
 
 # Run specific hook
 uv run pre-commit run ruff --all-files
+uv run pre-commit run type-check --all-files
 
 # Update hooks to latest version
+task hooks:update
+# Or manually:
 uv run pre-commit autoupdate
 
-# Skip hooks for a commit
+# Skip hooks for a commit (use sparingly!)
 git commit --no-verify
 ```
 
