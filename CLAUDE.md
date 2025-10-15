@@ -73,6 +73,172 @@
 
 ---
 
+## Artifact Path Resolution Algorithm
+
+**Purpose:** Resolve path patterns from Folder Structure section to actual file paths during generator execution.
+
+### Variable Substitution Rules
+
+**Step 1: Extract Context Variables**
+
+From CLAUDE.md General section (lines 5-7):
+```
+product_name = "AI_Agent_MCP_Server"  (from line 5: **Product Name:** AI_Agent_MCP_Server)
+package_name = "mcp_server"            (from line 7: **Package Name:** mcp_server)
+```
+
+**Step 2: Apply Substitution**
+
+```
+Pattern: artifacts/research/{product_name}_implementation_research.md
+Substitute: {product_name} → AI_Agent_MCP_Server
+Result: artifacts/research/AI_Agent_MCP_Server_implementation_research.md
+```
+
+**Step 3: Validate File Exists**
+
+```bash
+# Method 1: Check resolved path directly
+ls artifacts/research/AI_Agent_MCP_Server_implementation_research.md
+
+# Method 2: Use glob pattern for fuzzy matching
+ls artifacts/research/*_implementation_research.md
+```
+
+**Step 4: Apply Input Classification Rules**
+
+Based on generator's `<input_artifacts>` section:
+- **MANDATORY** (`classification="mandatory"`): File MUST exist → EXIT with error code 1 if missing
+- **RECOMMENDED** (`classification="recommended"`): File SHOULD exist → WARN + confirm if missing (exit code 2 if user declines)
+- **CONDITIONAL** (`classification="conditional"`): File loaded only if condition met → No error if missing
+
+### Common Path Patterns
+
+| Artifact Type | Pattern | Resolved Example |
+|---------------|---------|------------------|
+| Business Research | `artifacts/research/{product_name}_business_research.md` | `artifacts/research/AI_Agent_MCP_Server_business_research.md` |
+| Implementation Research | `artifacts/research/{product_name}_implementation_research.md` | `artifacts/research/AI_Agent_MCP_Server_implementation_research.md` |
+| Product Vision | `artifacts/product_visions/VIS-{XXX}_product_vision_v{N}.md` | `artifacts/product_visions/VIS-001_product_vision_v1.md` |
+| Epic | `artifacts/epics/EPIC-{XXX}_epic_v{N}.md` | `artifacts/epics/EPIC-000_project_foundation_bootstrap_v2.md` |
+| PRD | `artifacts/prds/PRD-{XXX}_prd_v{N}.md` | `artifacts/prds/PRD-000_project_foundation_bootstrap_v3.md` |
+| High-Level Story | `artifacts/hls/HLS-{XXX}_story_v{N}.md` | `artifacts/hls/HLS-003_application_skeleton_implementation_v1.md` |
+| Backlog Story | `artifacts/backlog_stories/US-{XXX}_story_v{N}.md` | `artifacts/backlog_stories/US-009_story_v1.md` |
+| Spike | `artifacts/spikes/SPIKE-{XXX}_v{N}.md` | `artifacts/spikes/SPIKE-001_v1.md` |
+| ADR | `artifacts/adrs/ADR-{XXX}_v{N}.md` | `artifacts/adrs/ADR-001_v1.md` |
+| Tech Spec | `artifacts/tech_specs/SPEC-{XXX}_v{N}.md` | `artifacts/tech_specs/SPEC-001_v1.md` |
+| Implementation Task | `artifacts/tasks/TASK-{XXX}_v{N}.md` | `artifacts/tasks/TASK-001_v1.md` |
+
+### Glob Pattern Strategies
+
+```bash
+# Strategy 1: Specific artifact by ID and version (most precise)
+ls artifacts/hls/HLS-003_story_v1.md
+
+# Strategy 2: Latest version of specific artifact
+ls artifacts/hls/HLS-003_*.md | sort | tail -1
+
+# Strategy 3: All versions of specific artifact
+ls artifacts/hls/HLS-003_*.md
+
+# Strategy 4: All artifacts of type
+ls artifacts/hls/HLS-*.md
+
+# Strategy 5: Research by product name (when product_name known)
+ls artifacts/research/AI_Agent_MCP_Server_*.md
+
+# Strategy 6: Research by type suffix (when product_name unknown)
+ls artifacts/research/*_implementation_research.md
+ls artifacts/research/*_business_research.md
+
+# Strategy 7: Wildcard search across all artifact directories
+find artifacts -name "*HLS-003*"
+```
+
+### Error Message Formats
+
+**MANDATORY Input Missing (Exit Code 1):**
+
+```
+❌ ERROR: Mandatory input artifact not found
+
+Input Type: High-Level Story
+Expected Path: artifacts/hls/HLS-003_story_v1.md
+Classification: MANDATORY
+Status Requirement: Approved
+
+Generator cannot proceed without mandatory input.
+
+Action Required:
+1. Verify HLS-003 exists at expected path
+2. Ensure Status field = "Approved" in artifact metadata
+3. Retry generator execution
+
+Search Patterns Tried:
+- artifacts/hls/HLS-003_story_v1.md (exact path)
+- artifacts/hls/HLS-003_*.md (glob pattern)
+
+Exit Code: 1
+```
+
+**RECOMMENDED Input Missing (Warning + Confirmation):**
+
+```
+⚠️  WARNING: Recommended input artifact not found
+
+Input Type: Implementation Research
+Expected Path: artifacts/research/AI_Agent_MCP_Server_implementation_research.md
+Classification: RECOMMENDED
+Quality Impact: ~20-30% reduction in output quality without technical patterns and code examples
+
+Resolution Details:
+- Pattern: artifacts/research/{product_name}_implementation_research.md
+- Substituted: {product_name} → AI_Agent_MCP_Server
+- Resolved Path: artifacts/research/AI_Agent_MCP_Server_implementation_research.md
+
+Search Patterns Tried:
+- artifacts/research/AI_Agent_MCP_Server_implementation_research.md (exact)
+- artifacts/research/*_implementation_research.md (glob)
+
+Files Found: (none)
+
+Proceed without recommended input? (y/n)
+- If 'n': Exit Code 2
+- If 'y': Continue with quality degradation documented in generated artifact
+```
+
+**CONDITIONAL Input Skipped (No Error):**
+
+```
+ℹ️  INFO: Conditional input not loaded
+
+Input Type: Spike Findings
+Expected Path: artifacts/spikes/SPIKE-{id}_v{version}.md
+Classification: CONDITIONAL
+Condition: Story has [REQUIRES SPIKE] marker in Open Questions
+Condition Met: No
+
+Skipping conditional input (no error).
+```
+
+### Path Resolution Implementation Checklist
+
+For generator implementations:
+
+- [ ] Extract `product_name` from CLAUDE.md General section
+- [ ] Substitute `{product_name}` in research artifact paths
+- [ ] Substitute `{XXX}` artifact IDs from TODO.md task specification
+- [ ] Substitute `{N}` version numbers from TODO.md or latest available
+- [ ] Validate resolved paths before generator execution
+- [ ] Apply classification rules (MANDATORY, RECOMMENDED, CONDITIONAL)
+- [ ] Exit with appropriate error code:
+  - `0` - Success, all required inputs validated
+  - `1` - Error, mandatory input missing
+  - `2` - Warning, user declined to proceed without recommended input
+- [ ] Document quality degradation when RECOMMENDED inputs unavailable
+- [ ] Log all search patterns attempted for debugging
+
+---
+
 ## SDLC Artifact Dependency Flow
 
 **Purpose**: High-level view of artifact relationships and SDLC flow.
@@ -452,12 +618,13 @@ PRD-000 (Project Foundation)
 
 ---
 
-**Document Version**: 1.6
-**Last Updated**: 2025-10-14
+**Document Version**: 1.7
+**Last Updated**: 2025-10-15
 **Maintained By**: Context Engineering PoC Team
 **Next Review**: End of Phase 1
 
 **Version History:**
+- v1.7 (2025-10-15): Added Artifact Path Resolution Algorithm section - explicit rules for resolving path patterns with variable substitution, glob strategies, error message formats, and implementation checklist (Issue #5 - Path Resolution Failures)
 - v1.6 (2025-10-14): Added ID Assignment Strategy section - documents global sequential numbering to prevent ID clashing across HLS stories (Issue #4 - ID Management)
 - v1.5 (2025-10-13): Added Input Classification System - replaced ambiguous `required` attribute with clear `classification` tiers (Issue #3 - Input Classification)
 - v1.4 (2025-10-13): Added centralized Artifact Path Patterns section (Issue #2 - Path Consolidation)

@@ -2792,14 +2792,14 @@ Teams building AI products lack tools to track ML experiments. Current solutions
 - Description: No existing platforms provide first-class artifact types for ML workflows
 - Implementation Approach: Extend graph data model with MLExperiment nodes
 - Schema Example:
-  ```cypher
+```
+```cypher
   CREATE (exp:MLExperiment {
     id: 'EXP-001',
     datasetVersion: 'v2.1',
     modelAccuracy: 0.87,
     biasMetrics: {...}
   })
-  ```
 ```
 
 ---
