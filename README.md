@@ -65,14 +65,34 @@ mcp/
 
 ## Deployment
 
-Container images are automatically built on all branches and pushed to GitHub Container Registry only on `release/*` branches.
+Container images are automatically built on all branches and pushed to GitHub Container Registry only on `release/*` branches. All container images are scanned for security vulnerabilities before deployment.
+
+### Security Scanning
+
+All container builds are automatically scanned for vulnerabilities using Trivy:
+
+- **Scope:** CVEs in OS packages, Python dependencies, and base images
+- **Severity Policy:**
+  - **CRITICAL/HIGH:** Blocks deployment (build fails)
+  - **MEDIUM/LOW:** Logged as warnings, deployment continues
+- **Unfixed Vulnerabilities:** Ignored (no remediation available)
+- **Scan Results:** Uploaded to GitHub Security tab for centralized tracking
+- **Database Updates:** Trivy vulnerability database refreshed daily
+- **Documented Exceptions:** Tracked in `.trivyignore` with risk assessments
+
+View vulnerability reports: **Repository → Security → Code Scanning**
+
+**Known Issues (.trivyignore):**
+- CVE-2025-7709 (libsqlite3-0) - Awaiting Debian security update
+- CVE-2025-8869 (pip) - Awaiting Python base image update
 
 ### Release Process
 
 1. Create release branch: `git checkout -b release/v0.1.0`
 2. Update version in `pyproject.toml`
-3. Push to trigger automated build and push: `git push -u origin release/v0.1.0`
-4. Container image automatically pushed to `ghcr.io` with version tags
+3. Push to trigger automated build, security scan, and push: `git push -u origin release/v0.1.0`
+4. Security scan validates image (blocks if CRITICAL/HIGH CVEs found)
+5. Container image automatically pushed to `ghcr.io` with version tags (if scan passes)
 
 ### Using Pre-built Images
 

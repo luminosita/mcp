@@ -253,7 +253,7 @@ jobs:
   report:
     name: Build Status Report
     runs-on: ubuntu-latest
-    needs: [lint-containerfile, lint-and-format, type-check, test-and-coverage, build-container]
+    needs: [lint-containerfile, lint-and-format, type-check, test-and-coverage, build-container, scan-container]
     if: always()
     permissions:
       pull-requests: write
@@ -265,13 +265,15 @@ jobs:
              [ "${{ needs.lint-and-format.result }}" != "success" ] || \
              [ "${{ needs.type-check.result }}" != "success" ] || \
              [ "${{ needs.test-and-coverage.result }}" != "success" ] || \
-             [ "${{ needs.build-container.result }}" != "success" ]; then
+             [ "${{ needs.build-container.result }}" != "success" ] || \
+             [ "${{ needs.scan-container.result }}" != "success" ]; then
             echo "❌ Build failed - one or more validation jobs failed"
             echo "- Containerfile Validation: ${{ needs.lint-containerfile.result }}"
             echo "- Lint and Format: ${{ needs.lint-and-format.result }}"
             echo "- Type Check: ${{ needs.type-check.result }}"
             echo "- Test and Coverage: ${{ needs.test-and-coverage.result }}"
             echo "- Container Build: ${{ needs.build-container.result }}"
+            echo "- Container Security Scan: ${{ needs.scan-container.result }}"
             exit 1
           else
             echo "✅ Build passed - all validation jobs succeeded"
@@ -293,10 +295,11 @@ jobs:
             const typeResult = '${{ needs.type-check.result }}';
             const testResult = '${{ needs.test-and-coverage.result }}';
             const containerBuildResult = '${{ needs.build-container.result }}';
+            const scanResult = '${{ needs.scan-container.result }}';
 
             const allPassed = containerfileResult === 'success' && lintResult === 'success' &&
                              typeResult === 'success' && testResult === 'success' &&
-                             containerBuildResult === 'success';
+                             containerBuildResult === 'success' && scanResult === 'success';
 
             const status = allPassed ? '✅ Build Passed' : '❌ Build Failed';
 
@@ -313,10 +316,11 @@ jobs:
             | Type Safety Validation | ${typeResult === 'success' ? '✅' : '❌'} |
             | Test Execution and Coverage | ${testResult === 'success' ? '✅' : '❌'} |
             | Container Build | ${containerBuildResult === 'success' ? '✅' + containerNote : '❌'} |
+            | Container Security Scan | ${scanResult === 'success' ? '✅ No vulnerabilities' : '❌ Vulnerabilities detected'} |
 
             **Note:** Container images are pushed to registry only on \`release/*\` branches.
 
-            [View detailed logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            ${scanResult !== 'success' ? '⚠️ **Security Alert:** Vulnerabilities detected in container image. [View details](https://github.com/${{ github.repository }}/security/code-scanning)\n\n' : ''}[View detailed logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -381,3 +385,53 @@ jobs:
             echo "✅ Container image built successfully (not pushed - not a release branch)"
             echo "Build verified - image will be pushed on release branch"
           fi
+
+  # Container security scanning job - scans built images for vulnerabilities
+  scan-container:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    needs: build-container
+    permissions:
+      contents: read
+      security-events: write  # For SARIF upload to GitHub Security tab
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image for scanning
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Containerfile
+          load: true  # Load into local Docker daemon for Trivy scanning
+          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'ghcr.io/${{ github.repository }}:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+          exit-code: '1'  # Fail on vulnerabilities
+          ignore-unfixed: true  # Ignore vulnerabilities without available fixes
+          trivyignores: '.trivyignore'  # Use ignore file for documented exceptions
+
+      - name: Upload Trivy results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Generate vulnerability summary
+        if: failure()
+        run: |
+          echo "❌ Container security scan failed - vulnerabilities detected"
+          echo "View details in GitHub Security tab: https://github.com/${{ github.repository }}/security/code-scanning"
+          echo ""
+          echo "Vulnerabilities found. Please review and remediate before deployment."
