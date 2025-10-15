@@ -15,6 +15,7 @@
 - `{N}` = Version number (1, 2, 3)
 - `{product_name}` = Product name for research documents
 - `{artifact-type}` = Artifact type name (e.g., product-vision, epic, prd)
+- `{descriptive-slug}` = Lowercase, underscore-separated slug derived from artifact title (e.g., "Create Production Containerfile" → "production_containerfile")
 
 ```
 /
@@ -37,17 +38,17 @@
          {product_name}_business_research.md     # Format: ai_agent_mcp_server_business_research.md
          {product_name}_implementation_research.md
       product_visions/                           # Product Visions
-         VIS-{XXX}_product_vision_v{N}.md        # Format: VIS-001_product_vision_v1.md
+         VIS-{XXX}_{descriptive-slug}_v{N}.md    # Format: VIS-001_ai_agent_mcp_server_v1.md
       initiatives/                               # Initiatives
-         INIT-{XXX}_initiative_v{N}.md           # Format: INIT-042_initiative_v1.md
+         INIT-{XXX}_{descriptive-slug}_v{N}.md   # Format: INIT-001_ai_agent_mcp_infrastructure_v1.md
       epics/                                     # Epics
-         EPIC-{XXX}_epic_v{N}.md                 # Format: EPIC-123_epic_v1.md
+         EPIC-{XXX}_{descriptive-slug}_v{N}.md   # Format: EPIC-000_project_foundation_bootstrap_v2.md
       prds/                                      # PRDs
-         PRD-{XXX}_prd_v{N}.md                   # Format: PRD-005_prd_v1.md
+         PRD-{XXX}_{descriptive-slug}_v{N}.md    # Format: PRD-000_project_foundation_bootstrap_v3.md
       hls/                                       # High-level user stories
-         HLS-{XXX}_story_v{N}.md                 # Format: HLS-078_story_v1.md
+         HLS-{XXX}_{descriptive-slug}_v{N}.md    # Format: HLS-078_user_authentication_flow_v1.md
       backlog_stories/                           # Backlog user stories
-         US-{XXX}_story_v{N}.md                  # Format: US-234_story_v1.md
+         US-{XXX}_{descriptive-slug}_v{N}.md     # Format: US-234_implement_user_authentication_v1.md
       spikes/                                    # Time-boxed technical investigations (1-3 days)
          SPIKE-{XXX}_v{N}.md                     # Format: SPIKE-042_v1.md
       adrs/                                      # Architecture Decision Records
@@ -70,6 +71,30 @@
 - Feedback folder supports human-in-loop refinement
 - Consistent ID prefixes enable artifact type identification (VIS, EPIC, PRD, US, SPIKE, etc.)
 - File naming conventions inline with structure (single reference point)
+
+**Descriptive Slug Derivation Rules:**
+
+For artifacts that include `{descriptive-slug}` (Product Vision, Initiative, Epic, PRD, HLS, and US backlog stories), derive the slug from the artifact title:
+
+1. **Extract key words from title** (typically 2-5 words that capture essence)
+2. **Convert to lowercase**
+3. **Replace spaces with underscores**
+4. **Remove special characters** (parentheses, hyphens become underscores)
+5. **Keep concise** (aim for 20-40 characters)
+
+**Examples:**
+- Title: "Create Production Containerfile with Multi-Stage Build" → Slug: `production_containerfile_multi_stage_build`
+- Title: "Configure Container Build and Run Tasks in Taskfile" → Slug: `container_build_run_tasks_taskfile`
+- Title: "Automated Setup Script with Interactive Prompts" → Slug: `automated_setup_script`
+- Title: "Implement User Authentication (OAuth 2.0)" → Slug: `implement_user_authentication_oauth`
+
+**Purpose:** Descriptive slugs enable file identification without opening files, improve codebase navigation, and maintain consistency with existing artifacts (US-001 to US-008 pattern).
+
+**Note on Historical Naming:**
+- **Current standard (recommended)**: lowercase_with_underscores (e.g., `ai_agent_mcp_server`, `project_foundation_bootstrap`)
+- **Legacy artifacts**: Some Initiative and Product Vision files use Title_Case_With_Underscores (e.g., `AI_Agent_MCP_Infrastructure`)
+- **For new artifacts**: Always use lowercase_with_underscores for consistency
+- **For existing artifacts**: Maintain current format unless performing systematic rename
 
 ---
 
@@ -118,11 +143,12 @@ Based on generator's `<input_artifacts>` section:
 |---------------|---------|------------------|
 | Business Research | `artifacts/research/{product_name}_business_research.md` | `artifacts/research/AI_Agent_MCP_Server_business_research.md` |
 | Implementation Research | `artifacts/research/{product_name}_implementation_research.md` | `artifacts/research/AI_Agent_MCP_Server_implementation_research.md` |
-| Product Vision | `artifacts/product_visions/VIS-{XXX}_product_vision_v{N}.md` | `artifacts/product_visions/VIS-001_product_vision_v1.md` |
-| Epic | `artifacts/epics/EPIC-{XXX}_epic_v{N}.md` | `artifacts/epics/EPIC-000_project_foundation_bootstrap_v2.md` |
-| PRD | `artifacts/prds/PRD-{XXX}_prd_v{N}.md` | `artifacts/prds/PRD-000_project_foundation_bootstrap_v3.md` |
-| High-Level Story | `artifacts/hls/HLS-{XXX}_story_v{N}.md` | `artifacts/hls/HLS-003_application_skeleton_implementation_v1.md` |
-| Backlog Story | `artifacts/backlog_stories/US-{XXX}_story_v{N}.md` | `artifacts/backlog_stories/US-009_story_v1.md` |
+| Product Vision | `artifacts/product_visions/VIS-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/product_visions/VIS-001_ai_agent_mcp_server_v1.md` |
+| Initiative | `artifacts/initiatives/INIT-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/initiatives/INIT-001_ai_agent_mcp_infrastructure_v4.md` |
+| Epic | `artifacts/epics/EPIC-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/epics/EPIC-000_project_foundation_bootstrap_v2.md` |
+| PRD | `artifacts/prds/PRD-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/prds/PRD-000_project_foundation_bootstrap_v3.md` |
+| High-Level Story | `artifacts/hls/HLS-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/hls/HLS-003_application_skeleton_implementation_v1.md` |
+| Backlog Story | `artifacts/backlog_stories/US-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/backlog_stories/US-001_automated_setup_script_v1.md` |
 | Spike | `artifacts/spikes/SPIKE-{XXX}_v{N}.md` | `artifacts/spikes/SPIKE-001_v1.md` |
 | ADR | `artifacts/adrs/ADR-{XXX}_v{N}.md` | `artifacts/adrs/ADR-001_v1.md` |
 | Tech Spec | `artifacts/tech_specs/SPEC-{XXX}_v{N}.md` | `artifacts/tech_specs/SPEC-001_v1.md` |
@@ -132,16 +158,20 @@ Based on generator's `<input_artifacts>` section:
 
 ```bash
 # Strategy 1: Specific artifact by ID and version (most precise)
-ls artifacts/hls/HLS-003_story_v1.md
+ls artifacts/hls/HLS-003_application_skeleton_implementation_v1.md
+ls artifacts/backlog_stories/US-001_automated_setup_script_v1.md
 
 # Strategy 2: Latest version of specific artifact
 ls artifacts/hls/HLS-003_*.md | sort | tail -1
+ls artifacts/backlog_stories/US-001_*.md | sort | tail -1
 
 # Strategy 3: All versions of specific artifact
 ls artifacts/hls/HLS-003_*.md
+ls artifacts/backlog_stories/US-001_*.md
 
 # Strategy 4: All artifacts of type
 ls artifacts/hls/HLS-*.md
+ls artifacts/backlog_stories/US-*.md
 
 # Strategy 5: Research by product name (when product_name known)
 ls artifacts/research/AI_Agent_MCP_Server_*.md
@@ -152,6 +182,7 @@ ls artifacts/research/*_business_research.md
 
 # Strategy 7: Wildcard search across all artifact directories
 find artifacts -name "*HLS-003*"
+find artifacts -name "*US-001*"
 ```
 
 ### Error Message Formats
@@ -162,7 +193,7 @@ find artifacts -name "*HLS-003*"
 ❌ ERROR: Mandatory input artifact not found
 
 Input Type: High-Level Story
-Expected Path: artifacts/hls/HLS-003_story_v1.md
+Expected Path: artifacts/hls/HLS-003_application_skeleton_implementation_v1.md
 Classification: MANDATORY
 Status Requirement: Approved
 
@@ -174,7 +205,7 @@ Action Required:
 3. Retry generator execution
 
 Search Patterns Tried:
-- artifacts/hls/HLS-003_story_v1.md (exact path)
+- artifacts/hls/HLS-003_application_skeleton_implementation_v1.md (exact path)
 - artifacts/hls/HLS-003_*.md (glob pattern)
 
 Exit Code: 1
