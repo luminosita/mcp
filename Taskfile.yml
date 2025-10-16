@@ -143,10 +143,11 @@ tasks:
   check:ci:
     desc: Run CI/CD pipeline checks (frozen deps)
     cmds:
-      - uv sync --frozen
-      - uv run ruff check .
-      - uv run mypy {{.SRC_DIR}}/ --strict
-      - uv run pytest --cov={{.SRC_DIR}} --cov-report=xml --cov-fail-under={{.COVERAGE_MIN}}
+      - task: deps:install:ci
+      - task: lint
+      - task: format:check
+      - task: type-check
+      - task: test:coverage
 
   # ====================
   # Dependency Management
@@ -161,6 +162,11 @@ tasks:
     desc: Install all dependencies including extras
     cmds:
       - uv sync --all-extras
+
+  deps:install:ci:
+    desc: Install dependencies for CI (frozen lockfile with all extras)
+    cmds:
+      - uv sync --all-extras --frozen
 
   deps:add:
     desc: Add a new dependency (usage - task deps:add -- PKG=requests)
@@ -501,30 +507,6 @@ tasks:
       - echo ""
       - echo "Migration history:"
       - uv run alembic history
-
-  # ====================
-  # Devbox Tasks
-  # ====================
-
-  devbox:shell:
-    desc: Enter Devbox isolated environment shell
-    cmds:
-      - devbox shell
-
-  devbox:run:
-    desc: Run command in Devbox (usage - task devbox:run -- CMD=pytest)
-    cmds:
-      - devbox run {{.CMD}}
-
-  devbox:update:
-    desc: Update Devbox packages
-    cmds:
-      - devbox update
-
-  devbox:info:
-    desc: Show Devbox environment info
-    cmds:
-      - devbox info
 
   # ====================
   # Documentation Tasks

@@ -16,13 +16,14 @@ FROM python:3.11-slim AS builder
 # build-essential: Essential build tools (make, etc.)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    gcc \
-    build-essential \
-    curl \
+    gcc=4:12.2.0-3 \
+    build-essential=12.9 \
+    curl=7.88.1-10+deb12u8 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv - fast Python package installer
 # WHY UV: Significantly faster than pip for dependency resolution and installation
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:${PATH}"
 
@@ -49,8 +50,8 @@ FROM python:3.11-slim AS production
 # ca-certificates: SSL/TLS certificate validation
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    libpq5 \
-    ca-certificates \
+    libpq5=15.10-0+deb12u1 \
+    ca-certificates=20230311 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security

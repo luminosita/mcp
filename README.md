@@ -58,8 +58,7 @@ project-root/
 │   ├── integration/         # Integration tests
 │   └── e2e/                 # End-to-end tests
 ├── scripts/                 # Setup and utility scripts
-├── docs/                    # Documentation
-└── artifacts/               # SDLC artifacts
+└── docs/                    # Documentation
 
 ```
 
