@@ -9,7 +9,7 @@
 ### Repository Pattern
 
 ```python
-# src/project_name/repositories/base.py
+# src/mcp_server/repositories/base.py
 from typing import TypeVar, Generic, Optional, List
 from abc import ABC, abstractmethod
 
@@ -43,7 +43,7 @@ class BaseRepository(Generic[T], ABC):
         """Delete entity by ID."""
         pass
 
-# src/project_name/repositories/user_repository.py
+# src/mcp_server/repositories/user_repository.py
 from typing import Optional, List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -110,7 +110,7 @@ class UserRepository(BaseRepository[User]):
 ### Service Layer Pattern
 
 ```python
-# src/project_name/services/user_service.py
+# src/mcp_server/services/user_service.py
 from typing import Optional, List
 from ..repositories.user_repository import UserRepository
 from ..models.user import User
@@ -209,7 +209,7 @@ class UserService:
 ### Dependency Injection Pattern
 
 ```python
-# src/project_name/core/dependencies.py
+# src/mcp_server/core/dependencies.py
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -271,7 +271,7 @@ async def get_current_user_service(
 ### Application Factory
 
 ```python
-# src/project_name/main.py
+# src/mcp_server/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .api.routes import users, products, orders
@@ -313,7 +313,7 @@ app = create_app()
 ### API Routes Structure
 
 ```python
-# src/project_name/api/routes/users.py
+# src/mcp_server/api/routes/users.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 from ...services.user_service import UserService

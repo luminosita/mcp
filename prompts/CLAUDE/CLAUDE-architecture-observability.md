@@ -81,7 +81,7 @@ def configure_logging(environment: str = "development") -> None:
     )
 
 # Configure on application startup
-from project_name.config import settings
+from mcp_server.config import settings
 configure_logging(settings.environment)
 ```
 
@@ -219,7 +219,7 @@ def add_environment(
     logger: Any, name: str, event_dict: dict[str, Any]
 ) -> dict[str, Any]:
     """Add environment to all log entries."""
-    from project_name.config import settings
+    from mcp_server.config import settings
     event_dict["environment"] = settings.environment
     return event_dict
 
@@ -287,7 +287,7 @@ logger.error("error_message", error="something failed")
 logger.critical("critical_message", emergency="system down")
 
 # Dynamic log level based on environment
-from project_name.config import settings
+from mcp_server.config import settings
 
 if settings.environment == "development":
     logging.root.setLevel(logging.DEBUG)
@@ -605,12 +605,12 @@ configure_cloudwatch_logging(
 ### Complete Configuration Example
 
 ```python
-# src/project_name/logging_config.py
+# src/mcp_server/logging_config.py
 import structlog
 import logging
 import sys
 from typing import Any
-from project_name.config import settings
+from mcp_server.config import settings
 
 def configure_logging() -> None:
     """
@@ -663,7 +663,7 @@ def configure_logging() -> None:
 
 # Call on application startup
 # In main.py:
-from project_name.logging_config import configure_logging
+from mcp_server.logging_config import configure_logging
 
 configure_logging()
 logger = structlog.get_logger()
@@ -1538,7 +1538,7 @@ class UserCacheService:
 ### SQLAlchemy Models
 
 ```python
-# src/project_name/models/user.py
+# src/mcp_server/models/user.py
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.sql import func
 from ..core.database import Base

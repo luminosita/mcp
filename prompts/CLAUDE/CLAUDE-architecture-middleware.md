@@ -10,7 +10,7 @@
 ### Custom Exceptions
 
 ```python
-# src/project_name/core/exceptions.py
+# src/mcp_server/core/exceptions.py
 class AppException(Exception):
     """Base application exception."""
     def __init__(self, message: str, status_code: int = 500):
@@ -42,7 +42,7 @@ class ValidationError(AppException):
 ### Exception Handlers
 
 ```python
-# src/project_name/core/exception_handlers.py
+# src/mcp_server/core/exception_handlers.py
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from .exceptions import AppException

@@ -35,7 +35,7 @@ project-root/
 │   └── commands/               # Custom commands
 │
 ├── src/                        # Source code
-│   └── project_name/
+│   └── mcp_server/
 │       ├── __init__.py
 │       ├── __main__.py         # Entry point for -m execution
 │       ├── main.py             # Application entry
@@ -116,7 +116,7 @@ project-root/
 ```
 project-root/
 ├── src/
-│   └── project_name/
+│   └── mcp_server/
 │       ├── __init__.py
 │       ├── main.py
 │       │

@@ -44,7 +44,7 @@ task lint
 ## Project Structure
 
 ```
-mcp/
+project-root/
 ├── src/mcp_server/          # Main application package
 │   ├── core/                # Core utilities and exceptions
 │   ├── models/              # Data models

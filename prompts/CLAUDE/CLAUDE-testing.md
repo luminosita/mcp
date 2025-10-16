@@ -55,8 +55,8 @@ tests/
 import pytest
 from typing import Generator
 from datetime import datetime, UTC
-from project_name.models import User
-from project_name.database import DatabaseConnection
+from mcp_server.models import User
+from mcp_server.database import DatabaseConnection
 
 @pytest.fixture
 def sample_user() -> User:
@@ -265,7 +265,7 @@ def test_should_handle_api_error():
 def test_should_send_notification(mocker):
     """Test notification sending with pytest-mock."""
     # Mock external dependency
-    mock_email = mocker.patch('project_name.notifications.send_email')
+    mock_email = mocker.patch('mcp_server.notifications.send_email')
 
     # Execute code
     notify_user("user@example.com", "Welcome!")
@@ -279,7 +279,7 @@ def test_should_send_notification(mocker):
 
 def test_should_log_on_error(mocker):
     """Test logging with mocked logger."""
-    mock_logger = mocker.patch('project_name.services.logger')
+    mock_logger = mocker.patch('mcp_server.services.logger')
 
     service = UserService()
     service.process_invalid_data({})
@@ -292,7 +292,7 @@ def test_should_log_on_error(mocker):
 ```python
 from unittest.mock import patch
 
-@patch('project_name.services.ExternalAPI')
+@patch('mcp_server.services.ExternalAPI')
 def test_with_patched_api(mock_api_class):
     """Test with patched API class."""
     # Configure mock

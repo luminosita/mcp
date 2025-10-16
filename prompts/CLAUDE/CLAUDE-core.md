@@ -70,7 +70,7 @@ project-root/
 ├── .claude/
 │   └── commands/
 ├── src/
-│   └── project_name/       # Source code
+│   └── mcp_server/       # Source code
 │       ├── __init__.py
 │       ├── main.py
 │       ├── core/           # Core business logic

@@ -671,7 +671,7 @@ def configure_logging(environment: str = "development") -> None:
     )
 
 # Configure on application startup
-from project_name.config import settings
+from mcp_server.config import settings
 configure_logging(settings.environment)
 ```
 
@@ -809,7 +809,7 @@ def add_environment(
     logger: Any, name: str, event_dict: dict[str, Any]
 ) -> dict[str, Any]:
     """Add environment to all log entries."""
-    from project_name.config import settings
+    from mcp_server.config import settings
     event_dict["environment"] = settings.environment
     return event_dict
 
@@ -877,7 +877,7 @@ logger.error("error_message", error="something failed")
 logger.critical("critical_message", emergency="system down")
 
 # Dynamic log level based on environment
-from project_name.config import settings
+from mcp_server.config import settings
 
 if settings.environment == "development":
     logging.root.setLevel(logging.DEBUG)

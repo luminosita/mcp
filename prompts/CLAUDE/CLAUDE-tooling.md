@@ -429,17 +429,17 @@ docs = [
 ]
 
 [project.scripts]
-project-cli = "project_name.main:cli"
+project-cli = "mcp_server.main:cli"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-path = "src/project_name/__init__.py"
+path = "src/mcp_server/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/project_name"]
+packages = ["src/mcp_server"]
 
 [tool.uv]
 managed = true
@@ -582,7 +582,7 @@ line-ending = "auto"
 "scripts/**/*" = ["T20"]
 
 [tool.ruff.isort]
-known-first-party = ["project_name"]
+known-first-party = ["mcp_server"]
 
 [tool.ruff.mccabe]
 max-complexity = 10
