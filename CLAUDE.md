@@ -29,6 +29,14 @@
       refinements/                               # Refinement plans
 
    prompts/                                      # Generators (XML-formatted)
+      CLAUDE/                                    # Language-specific implementation guides
+         python/                                 # Python-specific CLAUDE.md files
+            CLAUDE-core.md                       # Main implementation orchestrator
+            CLAUDE-tooling.md                    # UV, Ruff, MyPy, pytest config
+            CLAUDE-*.md                          # Other Python-specific guides
+         go/                                     # Go-specific CLAUDE.md files
+            CLAUDE-core.md                       # Main implementation orchestrator
+            CLAUDE-*.md                          # Go-specific guides
       templates/                                 # Artifact templates (XML-formatted)
          {artifact-type}-template.xml            # Format: prd-template.xml, spike-template.xml
       {artifact-type}-generator.xml              # Format: product-vision-generator.xml, epic-generator.xml
@@ -71,6 +79,7 @@
 - Feedback folder supports human-in-loop refinement
 - Consistent ID prefixes enable artifact type identification (VIS, EPIC, PRD, US, SPIKE, etc.)
 - File naming conventions inline with structure (single reference point)
+- Language-specific implementation guides organized by subdirectory (Python, Go, etc.) enable multi-language project support
 
 **Descriptive Slug Derivation Rules:**
 
@@ -675,22 +684,26 @@ PRD-000 (Project Foundation)
 ## Implementation Phase Instructions
 
 **When to use Implementation Phase instructions:**
-- Writing Python code, tests, documentation
+- Writing code, tests, documentation
 - Setting up development environment, CI/CD, tooling
 - Implementing features from PRDs/Backlog Stories
 - Coding tasks after planning phase completes
 
-**Unified CLI Interface:**
-- **Use `task <command>` for all development operations** - Taskfile provides language-agnostic interface
-- **Run `task --list` to discover available commands** - Self-documenting workflow
-- **See [CLAUDE-tooling.md](prompts/CLAUDE/CLAUDE-tooling.md) for complete Taskfile reference**
+**Language-Specific Implementation Guides:**
 
-**Implementation Configuration Files:**
-- **[CLAUDE-core.md](prompts/CLAUDE/CLAUDE-core.md)** - Main implementation guide and orchestration (includes Taskfile usage)
-- **[CLAUDE-tooling.md](prompts/CLAUDE/CLAUDE-tooling.md)** - Taskfile (unified CLI), UV, Ruff, MyPy, pytest configuration
-- **[CLAUDE-testing.md](prompts/CLAUDE/CLAUDE-testing.md)** - Testing strategy, fixtures, coverage
-- **[CLAUDE-typing.md](prompts/CLAUDE/CLAUDE-typing.md)** - Type hints, annotations, type safety
-- **[CLAUDE-validation.md](prompts/CLAUDE/CLAUDE-validation.md)** - Pydantic models, input validation, security
-- **[CLAUDE-architecture.md](prompts/CLAUDE/CLAUDE-architecture.md)** - Project structure, modularity, design patterns
+Language-specific CLAUDE.md files are organized by programming language in subdirectories:
+- **Python Projects:** `prompts/CLAUDE/python/`
+- **Go Projects:** `prompts/CLAUDE/go/`
+- Additional languages added as needed (e.g., `prompts/CLAUDE/rust/`, `prompts/CLAUDE/java/`)
 
-**→ For implementation work, see [CLAUDE-core.md](prompts/CLAUDE/CLAUDE-core.md) which orchestrates all specialized configs.**
+**Implementation Configuration Files (Language-Specific):**
+- **CLAUDE-core.md** - Main implementation guide and orchestration
+- **CLAUDE-tooling.md** - Language-specific tooling (build tools, linters, formatters, test runners)
+- **CLAUDE-testing.md** - Testing strategy, fixtures, coverage
+- **CLAUDE-typing.md** - Type system patterns and type safety
+- **CLAUDE-validation.md** - Input validation, data models, security patterns
+- **CLAUDE-architecture.md** - Project structure, modularity, design patterns
+
+**→ For implementation work, navigate to the appropriate language subdirectory and see CLAUDE-core.md which orchestrates all specialized configs.**
+
+**Current Project Language:** Python (see `prompts/CLAUDE/python/` for implementation guides)

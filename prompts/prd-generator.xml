@@ -83,12 +83,14 @@
       <artifact classification="conditional" type="specialized_claude_standards">
         Specialized CLAUDE.md files provide (IMPLEMENTATION STANDARDS):
         - CLAUDE-core.md: Core development philosophy and orchestration
-        - CLAUDE-tooling.md: Unified CLI (Taskfile), UV, Ruff, MyPy, pytest configuration
+        - CLAUDE-tooling.md: Language-specific tooling configuration (build tools, linters, formatters, test runners)
         - CLAUDE-testing.md: Testing strategy, fixtures, coverage requirements
-        - CLAUDE-typing.md: Type hints, annotations, type safety patterns
-        - CLAUDE-validation.md: Pydantic models, input validation, security
+        - CLAUDE-typing.md: Type system patterns and type safety
+        - CLAUDE-validation.md: Input validation, data models, security patterns
         - CLAUDE-architecture.md: Project structure, modularity, design patterns
         - Additional domain-specific files: CLAUDE-security.md, CLAUDE-auth.md, CLAUDE-messaging.md, etc.
+
+        **Location:** Language-specific CLAUDE.md files are located in prompts/CLAUDE/{language}/ subdirectories (e.g., prompts/CLAUDE/python/, prompts/CLAUDE/go/). Main CLAUDE.md directs to appropriate language subdirectory based on project technology stack.
 
         Use for Technical Considerations section alignment, ensuring PRD references established implementation standards.
 
@@ -99,6 +101,7 @@
         - References specialized CLAUDE-*.md files as authoritative for implementation guidance
         - PRD supplements (not duplicates) CLAUDE.md standards
         - Enables extensibility: Additional domain-specific CLAUDE-*.md files may be added during development
+        - Language-agnostic: CLAUDE.md files adapt to project's chosen programming language via subdirectory structure
       </artifact>
     </input_artifacts>
 

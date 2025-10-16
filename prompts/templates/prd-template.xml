@@ -125,14 +125,14 @@
 [Third-party integrations]
 
 **Implementation Standards (when applicable):**
-- CLAUDE-tooling.md: Unified CLI interface (Taskfile), package management (UV), linting/formatting (Ruff), type checking (MyPy), testing (pytest)
+- CLAUDE-tooling.md: Language-specific tooling configuration (build tools, linters, formatters, test runners)
 - CLAUDE-testing.md: Testing strategy, coverage requirements, fixture patterns
-- CLAUDE-typing.md: Type hints, annotations, type safety enforcement
-- CLAUDE-validation.md: Input validation (Pydantic), security patterns
+- CLAUDE-typing.md: Type system patterns and type safety enforcement
+- CLAUDE-validation.md: Input validation, data models, security patterns
 - CLAUDE-architecture.md: Project structure, modularity patterns
 - *Additional domain-specific files may be added during development (e.g., CLAUDE-security.md, CLAUDE-auth.md, CLAUDE-messaging.md)*
 
-**Note:** Treat CLAUDE.md content as "Decisions Made" - authoritative for implementation. PRD supplements (not duplicates) these standards.
+**Note:** Language-specific CLAUDE.md files are located in prompts/CLAUDE/{language}/ subdirectories (e.g., prompts/CLAUDE/python/, prompts/CLAUDE/go/). Treat CLAUDE.md content as "Decisions Made" - authoritative for implementation. PRD supplements (not duplicates) these standards.
 
 ### Technical Constraints
 [Limitations, platform requirements, technology constraints]
