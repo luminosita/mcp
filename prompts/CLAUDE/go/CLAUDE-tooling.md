@@ -2,7 +2,7 @@
 
 > **Specialized Guide**: Comprehensive tooling setup for Go development with golangci-lint, wire, swag, and testing frameworks.
 >
-> **Taskfile Interface**: All CLI commands are consolidated in `/Taskfile-go.yml` for consistent cross-platform execution. Use `task <command>` as the primary interface; individual tool commands documented below for understanding and configuration.
+> **Taskfile Interface**: All CLI commands are consolidated in `/Taskfile.yml` for consistent cross-platform execution. Use `task <command>` as the primary interface; individual tool commands documented below for understanding and configuration.
 
 **← [Back to Go Development Guide](./CLAUDE-core.md)**
 
@@ -1732,7 +1732,7 @@ exclude: |
 ### CLI Interface (Primary)
 1. **Use Taskfile for all operations** - `task <command>` is the primary interface
 2. **Never use direct tool commands in docs** - Always reference Taskfile tasks
-3. **Extend Taskfile for new operations** - Add new tasks to `/Taskfile-go.yml`
+3. **Extend Taskfile for new operations** - Add new tasks to `/Taskfile.yml`
 
 ### Core Development Tools
 4. **Always use go modules** - never use GOPATH or vendor manually

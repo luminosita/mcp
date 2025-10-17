@@ -2,7 +2,7 @@
 
 > **Hybrid Approach**: This is the lean core configuration. For detailed examples and specialized guidance, see the specialized configuration files linked below.
 >
-> **Taskfile Interface**: Use `task <command>` for all development operations. Taskfile provides a unified CLI interface across all projects, abstracting underlying tools (go, golangci-lint, gosec, govulncheck) for consistency. Use **Taskfile-go.yml** for Go projects.
+> **Taskfile Interface**: Use `task <command>` for all development operations. Taskfile provides a unified CLI interface across all projects, abstracting underlying tools (go, golangci-lint, gosec, govulncheck) for consistency. Use **Taskfile.yml** for Go projects.
 
 ## 📚 Specialized Configuration Files
 
@@ -64,7 +64,7 @@ Follow Go's philosophy:
 project-root/
 ├── go.mod                  # Module definition
 ├── go.sum                  # Dependency checksums
-├── Taskfile-go.yml         # Task automation (Go version)
+├── Taskfile.yml         # Task automation (Go version)
 ├── .golangci.yml           # Linter configuration
 ├── CLAUDE.md               # This file
 ├── cmd/                    # Application entry points (one per executable)
@@ -223,7 +223,7 @@ func TestUserService_CreateUser(t *testing.T) {
 
 ### Taskfile (Primary Interface)
 ```bash
-# Essential commands - use Taskfile-go.yml for ALL operations
+# Essential commands - use Taskfile.yml for ALL operations
 task --list                # Show all available tasks
 task setup                 # Initial project setup (install tools)
 task check                 # Run all quality checks
@@ -410,7 +410,7 @@ task generate:all          # Run all code generators
 
 ### Show All Commands
 ```bash
-task --list                # List all available tasks (use Taskfile-go.yml)
+task --list                # List all available tasks (use Taskfile.yml)
 ```
 
 ---

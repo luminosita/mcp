@@ -6,6 +6,8 @@
 
 This document covers RESTful API design patterns, versioning strategies, API documentation, and best practices for building scalable HTTP APIs in Go.
 
+**Framework Recommendation**: This guide uses **Gin** (stdlib-compatible) for examples. See main [CLAUDE.md](../CLAUDE.md) for framework selection guidance.
+
 ## API Design Principles
 
 ### RESTful Resource Design
@@ -22,28 +24,28 @@ GET    /api/v1/users/:id/posts    # List user's posts
 POST   /api/v1/users/:id/posts    # Create post for user
 ```
 
-### HTTP Handler Pattern
+### HTTP Handler Pattern (Gin)
 
 ```go
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type UserHandler struct {
 	userUseCase application.UserUseCase
 	validator   *validator.Validate
-	logger      *slog.Logger
+	logger      *logger.Logger
 }
 
 func NewUserHandler(
 	userUseCase application.UserUseCase,
 	validator *validator.Validate,
-	logger *slog.Logger,
+	logger *logger.Logger,
 ) *UserHandler {
 	return &UserHandler{
 		userUseCase: userUseCase,
@@ -52,77 +54,123 @@ func NewUserHandler(
 	}
 }
 
-func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
+// Create godoc
+// @Summary Create a new user
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body CreateUserRequest true "User creation request"
+// @Success 201 {object} UserResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 409 {object} ErrorResponse
+// @Router /api/v1/users [post]
+func (h *UserHandler) Create(c *gin.Context) {
 	var req CreateUserRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		h.respondError(w, http.StatusBadRequest, "Invalid request body")
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Error:   "Bad Request",
+			Message: "Invalid request body",
+		})
 		return
 	}
 
 	if err := h.validator.Struct(req); err != nil {
-		h.respondValidationError(w, err)
+		h.respondValidationError(c, err)
 		return
 	}
 
-	user, err := h.userUseCase.Create(r.Context(), req.ToDTO())
+	user, err := h.userUseCase.Create(c.Request.Context(), req.ToDTO())
 	if err != nil {
-		h.handleError(w, err)
+		h.handleError(c, err)
 		return
 	}
 
-	h.respondJSON(w, http.StatusCreated, user)
+	c.JSON(http.StatusCreated, user)
 }
 
-func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
+// GetByID godoc
+// @Summary Get user by ID
+// @Tags users
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} UserResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /api/v1/users/{id} [get]
+func (h *UserHandler) GetByID(c *gin.Context) {
+	id := c.Param("id")
 
-	user, err := h.userUseCase.GetByID(r.Context(), id)
+	user, err := h.userUseCase.GetByID(c.Request.Context(), id)
 	if err != nil {
-		h.handleError(w, err)
+		h.handleError(c, err)
 		return
 	}
 
-	h.respondJSON(w, http.StatusOK, user)
+	c.JSON(http.StatusOK, user)
 }
 
-func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
-	filter := ParseListFilter(r.URL.Query())
+// List godoc
+// @Summary List users with pagination
+// @Tags users
+// @Produce json
+// @Param page query int false "Page number" default(1)
+// @Param limit query int false "Items per page" default(10)
+// @Success 200 {object} UserListResponse
+// @Router /api/v1/users [get]
+func (h *UserHandler) List(c *gin.Context) {
+	filter := ParseListFilter(c.Request.URL.Query())
 
-	result, err := h.userUseCase.List(r.Context(), filter)
+	result, err := h.userUseCase.List(c.Request.Context(), filter)
 	if err != nil {
-		h.handleError(w, err)
+		h.handleError(c, err)
 		return
 	}
 
-	h.respondJSON(w, http.StatusOK, result)
+	c.JSON(http.StatusOK, result)
 }
 
-func (h *UserHandler) respondJSON(w http.ResponseWriter, status int, data interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(data)
-}
-
-func (h *UserHandler) respondError(w http.ResponseWriter, status int, message string) {
-	h.respondJSON(w, status, ErrorResponse{
-		Error:   http.StatusText(status),
-		Message: message,
-	})
-}
-
-func (h *UserHandler) handleError(w http.ResponseWriter, err error) {
+func (h *UserHandler) handleError(c *gin.Context, err error) {
 	switch {
 	case errors.Is(err, domain.ErrUserNotFound):
-		h.respondError(w, http.StatusNotFound, err.Error())
+		c.JSON(http.StatusNotFound, ErrorResponse{
+			Error:   "Not Found",
+			Message: err.Error(),
+		})
 	case errors.Is(err, domain.ErrUserAlreadyExists):
-		h.respondError(w, http.StatusConflict, err.Error())
+		c.JSON(http.StatusConflict, ErrorResponse{
+			Error:   "Conflict",
+			Message: err.Error(),
+		})
 	case errors.Is(err, domain.ErrInvalidInput):
-		h.respondError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Error:   "Bad Request",
+			Message: err.Error(),
+		})
 	default:
-		h.logger.Error("Internal server error", "error", err)
-		h.respondError(w, http.StatusInternalServerError, "Internal server error")
+		h.logger.Errorw("Internal server error", "error", err)
+		c.JSON(http.StatusInternalServerError, ErrorResponse{
+			Error:   "Internal Server Error",
+			Message: "An unexpected error occurred",
+		})
 	}
+}
+
+func (h *UserHandler) respondValidationError(c *gin.Context, err error) {
+	if validationErrs, ok := err.(validator.ValidationErrors); ok {
+		errors := make([]string, 0, len(validationErrs))
+		for _, e := range validationErrs {
+			errors = append(errors, fmt.Sprintf("%s: %s", e.Field(), e.Tag()))
+		}
+		c.JSON(http.StatusBadRequest, ValidationErrorResponse{
+			Error:   "Validation Failed",
+			Message: "Input validation failed",
+			Errors:  errors,
+		})
+		return
+	}
+	c.JSON(http.StatusBadRequest, ErrorResponse{
+		Error:   "Bad Request",
+		Message: err.Error(),
+	})
 }
 ```
 
