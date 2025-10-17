@@ -1,5 +1,7 @@
 # CLAUDE.md - Database Patterns & Migrations
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Overview
 
 This document covers database interaction patterns, migration strategies, and best practices for Go applications using Clean Architecture.

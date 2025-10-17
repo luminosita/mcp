@@ -2,6 +2,8 @@
 
 Command-line application patterns using Cobra framework in Go.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Cobra Framework Setup
 
 ### Basic CLI Structure

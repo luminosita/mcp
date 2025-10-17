@@ -4,6 +4,8 @@
 >
 > **Taskfile Interface**: All CLI commands are consolidated in `/Taskfile-go.yml` for consistent cross-platform execution. Use `task <command>` as the primary interface; individual tool commands documented below for understanding and configuration.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ---
 
 ## 🎯 Taskfile - Unified CLI Interface

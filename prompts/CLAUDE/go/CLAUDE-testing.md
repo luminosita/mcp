@@ -2,6 +2,8 @@
 
 Comprehensive testing strategies and patterns for Go applications.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Testing Philosophy
 
 - Test behavior, not implementation

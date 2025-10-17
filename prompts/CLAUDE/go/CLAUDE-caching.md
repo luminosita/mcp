@@ -2,6 +2,8 @@
 
 Caching strategies and implementation patterns for Go applications.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Cache Strategies
 
 ### Cache-Aside (Lazy Loading)

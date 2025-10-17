@@ -2,6 +2,8 @@
 
 Security-critical code examples and best practices for Go applications.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Input Validation
 
 ### HTTP Request Validation

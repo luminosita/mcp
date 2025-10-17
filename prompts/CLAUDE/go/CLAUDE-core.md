@@ -1,116 +1,111 @@
-# CLAUDE.md - Go Clean Architecture
+# CLAUDE.md - Core Go Development Guide
 
-## Tech Stack
-- **Language**: Go 1.21+
-- **Architecture**: Clean Architecture with Domain-Driven Design
-- **Build Tool**: Go modules (go.mod/go.sum)
-- **Dependency Injection**: Google Wire (compile-time DI, preferred)
-- **Testing**: Standard library testing + testify + gomock
-- **HTTP Framework**: Standard library net/http, Gin, or Echo
-- **Database**: PostgreSQL with database/sql or GORM
-- **Documentation**: godoc + OpenAPI (swaggo)
-- **Quality Control**: golangci-lint + staticcheck + gosec + govulncheck
+> **Hybrid Approach**: This is the lean core configuration. For detailed examples and specialized guidance, see the specialized configuration files linked below.
+>
+> **Taskfile Interface**: Use `task <command>` for all development operations. Taskfile provides a unified CLI interface across all projects, abstracting underlying tools (go, golangci-lint, gosec, govulncheck) for consistency. Use **Taskfile-go.yml** for Go projects.
 
-## Project Structure
+## 📚 Specialized Configuration Files
 
-```
-cmd/                    # Application entry points (one per executable)
-├── api/main.go        # HTTP API server
-├── worker/main.go     # Background worker
-├── migrate/main.go    # Database migrations
+### Development Tools & Practices
+- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Development tools: Taskfile, Go toolchain, golangci-lint, gosec, govulncheck, staticcheck, Wire, Swagger, golang-migrate, testify, gomock, NuShell, Devbox, Podman, Trivy container security scanning
+- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing strategy: table-driven tests, testify/mock, gomock, race detection, benchmarks, integration tests with build tags
+- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Error patterns: custom errors, wrapping, errors.Is/As, HTTP error mapping, context handling, panic recovery
 
-internal/              # Private application code
-├── domain/            # Business entities and rules (NO external dependencies)
-│   ├── entities/      # Core business entities
-│   ├── repositories/  # Repository interfaces (defined here)
-│   └── services/      # Domain services
-├── application/       # Use cases and orchestration
-│   ├── usecases/      # Application use cases
-│   ├── commands/      # Command objects and DTOs
-│   └── queries/       # Query objects and read models
-├── infrastructure/    # External concerns
-│   ├── persistence/   # Database implementations
-│   └── external/      # External service integrations
-└── interfaces/        # Interface adapters
-    ├── http/          # HTTP handlers and middleware
-    ├── grpc/          # gRPC implementations
-    └── cli/           # CLI interfaces
+### Architecture & Design
+- **[CLAUDE-architecture.md](./CLAUDE-architecture.md)** - Clean Architecture: Domain/Application/Infrastructure/Interface layers, Wire dependency injection, CQRS pattern, project structure
+- **[CLAUDE-concurrency.md](./CLAUDE-concurrency.md)** - Concurrency patterns: goroutines, channels, worker pools, fan-out/fan-in, errgroup, graceful shutdown, race condition prevention
+- **[CLAUDE-database.md](./CLAUDE-database.md)** - Database patterns: Repository pattern, connection pooling, GORM/sqlx examples, golang-migrate setup, transaction patterns
 
-pkg/                   # Public libraries (if any)
-api/                   # API definitions (OpenAPI, protobuf)
-configs/              # Configuration files
-scripts/              # Build and deployment scripts
-```
+### Validation & Security
+- **[CLAUDE-security.md](./CLAUDE-security.md)** - Security patterns: input validation, auth (JWT, OAuth2, PKCE), CSRF protection, rate limiting, file upload security, SQL injection prevention
+- **[CLAUDE-api.md](./CLAUDE-api.md)** - REST API design: RESTful patterns, API versioning strategies, Swagger annotations, API key management, request/response handling
 
-## Core Commands
+---
 
-```bash
-# Module management
-go mod tidy                                      # Clean dependencies
-go mod vendor                                    # Vendor dependencies
+## 🎯 Core Development Philosophy
 
-# Build
-go build -o bin/api ./cmd/api                   # Development build
-CGO_ENABLED=0 go build -ldflags="-s -w" ./cmd/api  # Production build
+### KISS (Keep It Simple, Stupid)
+Simplicity is a key design goal. Choose straightforward solutions over complex ones. Simple solutions are easier to understand, maintain, and debug.
 
-# Testing (ALWAYS with race detection)
-go test -race -cover ./...                      # All tests with race detection
-go test -race -coverprofile=coverage.out ./...  # Generate coverage
-go tool cover -html=coverage.out                # View coverage report
+### YAGNI (You Aren't Gonna Need It)
+Implement features only when needed, not when anticipated for future use. Avoid speculative development.
 
-# Code quality (MUST pass before commit)
-golangci-lint run                               # Comprehensive linting
-go vet ./...                                    # Static analysis
-staticcheck ./...                               # Advanced analysis
-gosec ./...                                     # Security scanning
-govulncheck ./...                               # Vulnerability check
+### Go Proverbs (Guiding Principles)
+Follow Go's philosophy:
+- Clear is better than clever
+- Don't communicate by sharing memory, share memory by communicating
+- Concurrency is not parallelism
+- Errors are values
+- Don't just check errors, handle them gracefully
+- Make the zero value useful
+- Interface{} says nothing
+- A little copying is better than a little dependency
 
-# Documentation
-godoc -http=:6060                               # Local docs server
-swag init -g cmd/api/main.go                   # Generate OpenAPI docs
+### SOLID Principles
+- **Single Responsibility**: Each package, struct, and function has one clear purpose
+- **Open/Closed Principle**: Open for extension, closed for modification
+- **Liskov Substitution**: Interfaces replaceable with implementations
+- **Interface Segregation**: No forced dependencies on unused interfaces - keep interfaces small
+- **Dependency Inversion**: Depend on abstractions (interfaces), not concretions (structs)
 
-# Dependency injection (if using Wire)
-go generate ./...                               # Generate wire dependencies
-```
+---
 
-## Core Development Philosophy
-
-### Design Principles
-- **KISS**: Keep It Simple - choose straightforward solutions over complex ones
-- **YAGNI**: You Aren't Gonna Need It - implement only what's needed now
-- **DRY**: Don't Repeat Yourself - reuse through functions and packages
-- **SOLID**: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
-- **Fail Fast**: Validate early, return errors immediately
-- **Composition Over Inheritance**: Use embedding and interfaces
+## 🧱 Code Structure & Modularity
 
 ### File and Function Limits
-- **Files**: 200-400 lines, focused on related functionality
-- **Functions**: Under 50 lines for better comprehension
-- **Cyclomatic Complexity**: Maximum 10 per function
-- **Packages**: Single responsibility, one clear concept
+- **Files**: Maximum 200-400 lines - refactor by extracting packages if approaching this limit
+- **Functions**: Maximum 50 lines for better AI comprehension and maintainability
+- **Packages**: Focus on single responsibility, one clear concept
+- **Cyclomatic complexity**: Maximum 10 per function
 
-## 🚨 CRITICAL ARCHITECTURE RULES
+### Project Structure (Clean Architecture)
+```
+project-root/
+├── go.mod                  # Module definition
+├── go.sum                  # Dependency checksums
+├── Taskfile-go.yml         # Task automation (Go version)
+├── .golangci.yml           # Linter configuration
+├── CLAUDE.md               # This file
+├── cmd/                    # Application entry points (one per executable)
+│   ├── api/main.go        # HTTP API server
+│   ├── worker/main.go     # Background worker
+│   └── migrate/main.go    # Database migrations
+├── internal/              # Private application code
+│   ├── domain/            # Business entities and rules (NO external dependencies)
+│   │   ├── entities/      # Core business entities
+│   │   ├── repositories/  # Repository interfaces (defined here)
+│   │   └── services/      # Domain services
+│   ├── application/       # Use cases and orchestration
+│   │   ├── usecases/      # Application use cases
+│   │   ├── commands/      # Command objects and DTOs
+│   │   └── queries/       # Query objects and read models
+│   ├── infrastructure/    # External concerns
+│   │   ├── persistence/   # Database implementations
+│   │   └── external/      # External service integrations
+│   └── interfaces/        # Interface adapters
+│       ├── http/          # HTTP handlers and middleware
+│       ├── grpc/          # gRPC implementations
+│       └── cli/           # CLI interfaces
+├── pkg/                   # Public libraries (if any)
+├── api/                   # API definitions (OpenAPI, protobuf)
+├── configs/              # Configuration files
+├── scripts/              # Build and deployment scripts
+├── migrations/           # Database migrations
+└── tests/                # Integration/E2E tests (optional)
+    └── integration/
+```
 
-### Dependency Direction (STRICTLY ENFORCED)
-- **Domain layer**: NO external dependencies
-- **Application layer**: Can import Domain only
-- **Infrastructure layer**: Can import Domain and Application interfaces only
-- **Interfaces layer**: Can import Application and Domain only
-- **NEVER** import from outer to inner layers - **VIOLATION IS FORBIDDEN**
+**See [CLAUDE-architecture.md](./CLAUDE-architecture.md) for detailed Clean Architecture patterns and Wire DI setup**
 
-### Interface Definition
-- Define interfaces where CONSUMED, not where implemented
-- Repository interfaces MUST be in domain layer
-- Service interfaces MUST be in domain or application layer
-- Keep interfaces small and focused (Interface Segregation Principle)
+---
 
-## Code Style & Conventions
+## 📋 Code Style & Conventions
 
-### Formatting (Non-negotiable)
-- Use `gofmt` and `goimports` for ALL code
-- Line length: 80-100 characters (soft limit)
-- Indent: Tabs (gofmt default)
-- Braces: K&R style (same line)
+### Go Style Guide (Effective Go + Google/Uber)
+- **Line length**: 80-100 characters (soft limit)
+- **Indentation**: Tabs (gofmt default)
+- **Braces**: K&R style (same line)
+- **Formatting**: Use `gofmt` and `goimports` for ALL code (non-negotiable)
 
 ### Naming Conventions
 - **Packages**: lowercase, single word (e.g., `user`, `payment`)
@@ -122,6 +117,154 @@ go generate ./...                               # Generate wire dependencies
 - **No "Get" prefix**: If field is `owner`, getter is `Owner()`
 - **Avoid stuttering**: `user.ID` not `user.UserID` in user package
 
+---
+
+## 🎯 Type Safety & Interfaces
+
+### Interface Design Principles
+- **Keep interfaces small** - prefer single-method interfaces
+- **Define at point of use** - not at implementation (interfaces belong where consumed)
+- **Accept interfaces, return structs** - functions accept interfaces, return concrete types
+- Use interface composition for complex contracts
+- Repository interfaces MUST be in domain layer
+
+```go
+// Good: Small, focused interface defined where used
+type UserFinder interface {
+    FindByID(ctx context.Context, id string) (*User, error)
+}
+
+// Good: Accept interface, return struct
+func GetUser(ctx context.Context, finder UserFinder, id string) (*User, error) {
+    return finder.FindByID(ctx, id)
+}
+```
+
+**See [CLAUDE-architecture.md](./CLAUDE-architecture.md) for comprehensive interface and dependency inversion patterns**
+
+---
+
+## 📖 Documentation Standards
+
+### Godoc Requirements
+Every exported identifier MUST have a godoc comment:
+
+```go
+// UserService handles user-related business operations.
+// It coordinates between user repository and business rules.
+type UserService struct {
+    repo UserRepository
+}
+
+// CreateUser creates a new user with validation.
+// It returns an error if the email is already registered or validation fails.
+//
+// Parameters:
+//   - ctx: Request context for cancellation
+//   - req: User creation request with validated fields
+//
+// Returns:
+//   - *User: Created user with generated ID
+//   - error: Validation or persistence error
+func (s *UserService) CreateUser(ctx context.Context, req CreateUserRequest) (*User, error) {
+    // Implementation
+}
+```
+
+**See [CLAUDE-api.md](./CLAUDE-api.md) for Swagger/OpenAPI documentation patterns**
+
+---
+
+## 🧪 Testing Strategy
+
+### Test Requirements
+- Place tests alongside code with `_test.go` suffix
+- Use table-driven tests for multiple scenarios
+- Group related tests with `t.Run()` subtests
+- Mark helpers with `t.Helper()`
+- Use build tags for integration tests: `//go:build integration`
+- **ALWAYS run with race detector**: `go test -race ./...`
+- Minimum 80% coverage, 100% for critical business logic
+
+### Basic Test Structure (Table-Driven)
+```go
+func TestUserService_CreateUser(t *testing.T) {
+    tests := []struct {
+        name    string
+        req     CreateUserRequest
+        wantErr bool
+    }{
+        {
+            name: "valid user creation",
+            req:  CreateUserRequest{Email: "test@example.com", Name: "Test User"},
+            wantErr: false,
+        },
+        {
+            name: "duplicate email",
+            req:  CreateUserRequest{Email: "existing@example.com", Name: "Test User"},
+            wantErr: true,
+        },
+    }
+
+    for _, tt := range tests {
+        t.Run(tt.name, func(t *testing.T) {
+            // Arrange, Act, Assert
+        })
+    }
+}
+```
+
+**See [CLAUDE-testing.md](./CLAUDE-testing.md) for comprehensive testing patterns with testify/mock and gomock**
+
+---
+
+## 🛠️ Development Tools
+
+### Taskfile (Primary Interface)
+```bash
+# Essential commands - use Taskfile-go.yml for ALL operations
+task --list                # Show all available tasks
+task setup                 # Initial project setup (install tools)
+task check                 # Run all quality checks
+```
+
+### Dependency Management (via Taskfile)
+```bash
+task deps:tidy             # Tidy go.mod and go.sum
+task deps:download         # Download dependencies
+task deps:verify           # Verify dependency checksums
+task deps:update           # Update dependencies to latest
+```
+
+### Code Quality (via Taskfile)
+```bash
+# Linting and formatting
+task lint:fix              # Run golangci-lint with auto-fix
+task format                # Format with gofmt + goimports
+task lint:all              # Lint + format
+
+# Security scanning
+task security:all          # Run gosec, govulncheck, staticcheck
+
+# Testing
+task test                  # Run tests with race detection and coverage
+task test:coverage         # Run tests with 80%+ enforcement
+```
+
+### Code Generation (via Taskfile)
+```bash
+task generate:wire         # Generate Wire DI code
+task generate:mocks        # Generate gomock mocks
+task generate:swagger      # Generate Swagger/OpenAPI docs
+task generate:all          # Run all generators
+```
+
+**See [CLAUDE-tooling.md](./CLAUDE-tooling.md) for comprehensive Taskfile commands and tool configuration**
+
+---
+
+## 🔐 Error Handling & Security
+
 ### Error Handling (Critical)
 - **ALWAYS check errors** - never ignore with `_`
 - **Handle errors once** - log OR return, not both
@@ -129,89 +272,147 @@ go generate ./...                               # Generate wire dependencies
 - **Return errors, don't panic** - reserve `panic` for exceptional cases
 - Use `errors.Is()` and `errors.As()` for error inspection
 - Create custom error types for domain-specific errors
-- For detailed patterns, see `.claude/patterns/error-handling.md`
 
-### Interface Design
-- **Keep interfaces small** - prefer single-method interfaces
-- **Define at point of use** - not at implementation
-- **Accept interfaces, return structs** - functions accept interfaces, return concrete types
-- Use interface composition for complex contracts
-- For detailed patterns, see `.claude/patterns/interfaces.md`
+```go
+// Good: Wrap errors with context
+if err := repo.Save(ctx, user); err != nil {
+    return fmt.Errorf("failed to save user %s: %w", user.ID, err)
+}
 
-### Concurrency
-- Use `context.Context` as first parameter for cancellation/timeouts
-- Prefer channels for communication over mutexes
-- Make goroutine lifetimes obvious, prevent leaks
-- Use `sync.WaitGroup` for coordination
-- Implement graceful shutdown with context cancellation
-- For detailed patterns, see `.claude/patterns/concurrency.md`
+// Good: Custom domain errors
+var ErrUserNotFound = errors.New("user not found")
 
-## Testing Guidelines
+// Check with errors.Is
+if errors.Is(err, ErrUserNotFound) {
+    // Handle specifically
+}
+```
 
-### Test Organization
-- Place tests alongside code with `_test.go` suffix
-- Use table-driven tests for multiple scenarios
-- Group related tests with `t.Run()` subtests
-- Mark helpers with `t.Helper()`
-- Use build tags for integration tests: `//go:build integration`
+### Security Best Practices
+- Never log sensitive data (passwords, tokens, PII)
+- Use parameterized queries for database operations
+- Validate all user input at boundaries
+- Keep dependencies updated with `govulncheck`
+- Use `crypto/rand` for security (never `math/rand`)
+- Enforce HTTPS/TLS 1.2+
 
-### Test Quality Standards
-- Test behavior, not implementation
-- Use descriptive names explaining the scenario
-- Follow AAA pattern: Arrange, Act, Assert
-- Test both success and error cases
-- Mock external dependencies using interfaces
-- **Minimum 80% coverage** for production code
-- **100% coverage** for critical business logic
-- For detailed patterns, see `.claude/patterns/testing.md`
+**See [CLAUDE-error-handling.md](./CLAUDE-error-handling.md) for comprehensive error patterns**
+**See [CLAUDE-security.md](./CLAUDE-security.md) for comprehensive security patterns**
 
-## Documentation Standards
+---
 
-### Godoc Requirements
-- Every exported identifier MUST have a godoc comment
-- First sentence is summary, starting with identifier name
-- Use complete sentences with proper capitalization
-- Explain the "why", not just the "what"
-- Document parameters and return values clearly
-- For detailed patterns, see `.claude/patterns/documentation.md`
+## 🔄 Git Workflow
 
-### API Documentation
-- Use OpenAPI 3.0 specifications for HTTP APIs
-- Use swaggo annotations for generating docs
-- Keep specs in sync with code changes
-- For detailed patterns, see `.claude/patterns/api-docs.md`
+### Commit Message Format
+**Never include "claude code" or "written by claude code" in commit messages**
 
-## Security Best Practices
+```
+<type>(<scope>): <subject>
 
-### Critical Security Rules
-- **Never log sensitive data** - no passwords, tokens, or PII
-- **Use parameterized queries** - prevent SQL injection
-- **Validate all inputs** - sanitize user data at boundaries
-- **Use HTTPS only** - enforce TLS 1.2+
-- **Keep dependencies updated** - run `govulncheck` regularly
-- **Use crypto/rand** - never math/rand for security
-- For detailed patterns, see `.claude/patterns/security.md`
+<body>
 
-## Performance Guidelines
+<footer>
+```
 
-### Optimization Strategy
-- **Profile before optimizing** - measure, don't guess
-- Use `pprof` for CPU and memory profiling
-- Preallocate slices when size known: `make([]T, 0, capacity)`
-- Use `sync.Pool` for frequently allocated objects
-- Use `strings.Builder` for concatenation
-- For detailed patterns, see `.claude/patterns/performance.md`
+Types: feat, fix, docs, style, refactor, test, chore
 
-## Pre-commit Checklist
+Example:
+```
+feat(auth): add JWT token validation
 
-- [ ] All code formatted with `gofmt` and `goimports`
-- [ ] No `golangci-lint` warnings
-- [ ] All tests passing with race detection: `go test -race ./...`
-- [ ] Coverage above 80% for business logic
+- Implement JWT token validation middleware
+- Add token refresh endpoint
+- Update user authentication flow
+
+Closes #156
+```
+
+---
+
+## 🚨 CRITICAL ARCHITECTURE RULES
+
+### Dependency Direction (STRICTLY ENFORCED)
+- **Domain layer**: NO external dependencies (no database, HTTP, etc.)
+- **Application layer**: Can import Domain only
+- **Infrastructure layer**: Can import Domain and Application interfaces only
+- **Interfaces layer**: Can import Application and Domain only
+- **NEVER** import from outer to inner layers - **VIOLATION IS FORBIDDEN**
+
+### Interface Definition
+- Define interfaces where CONSUMED, not where implemented
+- Repository interfaces MUST be in domain layer
+- Service interfaces MUST be in domain or application layer
+- Keep interfaces small and focused (Interface Segregation Principle)
+
+**See [CLAUDE-architecture.md](./CLAUDE-architecture.md) for detailed Clean Architecture implementation**
+
+---
+
+## ⚠️ Critical Guidelines
+
+1. **Always use gofmt/goimports** - Non-negotiable formatting standard
+2. **Check all errors** - Never use `_` to ignore errors
+3. **Use context.Context** - First parameter for cancellation/timeouts
+4. **Define interfaces at consumption** - Not at implementation
+5. **Test with race detector** - Always run `go test -race ./...`
+6. **Document all exports** - Complete godoc comments mandatory
+7. **Minimum 80% coverage** - 100% for critical business logic
+8. **Run all linters** - golangci-lint, gosec, govulncheck before commit
+9. **Follow Clean Architecture** - Respect layer boundaries strictly
+10. **Secure by default** - No hardcoded secrets, validate all inputs
+
+---
+
+## 📋 Pre-commit Checklist
+
+Run `task check` to verify all requirements:
+
+- [ ] All code formatted (`gofmt` + `goimports`)
 - [ ] Godoc for all exported identifiers
-- [ ] No security issues: `gosec ./...`
-- [ ] `go mod tidy` executed
-- [ ] No vulnerable dependencies: `govulncheck ./...`
+- [ ] Tests written with 80%+ coverage (`task test:coverage` passes)
+- [ ] Linting passes (`task lint` passes)
+- [ ] Security scans pass (`task security:all` passes)
+- [ ] Race detector passes (`go test -race ./...`)
+- [ ] No vulnerable dependencies (`govulncheck`)
+- [ ] Dependencies tidied (`go mod tidy`)
+- [ ] Documentation updated if needed
+
+**Quick command**: `task check` runs all quality checks
+
+---
+
+## 🚀 Quick Reference
+
+### Development Setup
+```bash
+task setup                 # Install Go tools and dependencies
+task info                  # Show environment information
+```
+
+### Quality Checks
+```bash
+task check                 # Run all checks (lint, security, test)
+task lint:fix              # Fix linting issues
+task format                # Format code
+task security:all          # Run all security scans
+task test:coverage         # Run tests with coverage enforcement
+```
+
+### Development Workflow
+```bash
+task run                   # Run application
+task dev                   # Start with hot-reload (air)
+task db:start              # Start PostgreSQL database
+task container:build       # Build container image
+task generate:all          # Run all code generators
+```
+
+### Show All Commands
+```bash
+task --list                # List all available tasks (use Taskfile-go.yml)
+```
+
+---
 
 ## Anti-Patterns (Do NOT Do)
 
@@ -236,33 +437,7 @@ go generate ./...                               # Generate wire dependencies
 - ❌ Use mutexes when channels are more appropriate
 - ❌ Ignore memory allocations in hot paths
 
-## Specialized Pattern References
-
-For detailed code examples and advanced patterns, see:
-
-- **`.claude/patterns/architecture.md`** - Clean Architecture implementation examples
-- **`.claude/patterns/interfaces.md`** - Interface design patterns with code examples
-- **`.claude/patterns/error-handling.md`** - Comprehensive error handling patterns
-- **`.claude/patterns/testing.md`** - Test patterns with mocks and table-driven tests
-- **`.claude/patterns/concurrency.md`** - Goroutines, channels, and worker pools
-- **`.claude/patterns/security.md`** - Security-critical code examples
-- **`.claude/patterns/performance.md`** - Performance optimization patterns
-- **`.claude/patterns/documentation.md`** - Documentation examples and standards
-- **`.claude/patterns/api-docs.md`** - OpenAPI/Swagger documentation patterns
-- **`.claude/configs/linting.md`** - golangci-lint configuration
-- **`.claude/configs/docker.md`** - Dockerfile and Docker Compose templates
-- **`.claude/configs/wire.md`** - Wire dependency injection setup
-
-## Context Triggers
-
-**When working on specific tasks, reference specialized patterns**:
-
-- Implementing authentication → `.claude/patterns/security.md`
-- Setting up DI → `.claude/configs/wire.md`
-- Writing tests → `.claude/patterns/testing.md`
-- Refactoring to Clean Architecture → `.claude/patterns/architecture.md`
-- Performance issues → `.claude/patterns/performance.md`
-- API documentation → `.claude/patterns/api-docs.md`
+---
 
 ## External Resources
 
@@ -275,4 +450,4 @@ For detailed code examples and advanced patterns, see:
 
 ---
 
-*This is the lean core CLAUDE.md. For detailed examples and patterns, always reference the specialized files in `.claude/patterns/` and `.claude/configs/`*
+**For detailed examples, patterns, and advanced configurations, refer to the specialized CLAUDE-*.md files organized by category at the top of this document.**

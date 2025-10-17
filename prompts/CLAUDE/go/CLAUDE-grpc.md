@@ -2,6 +2,8 @@
 
 gRPC service implementation patterns and best practices for Go applications.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Proto Definitions
 
 ### Basic Service Definition

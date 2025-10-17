@@ -2,6 +2,8 @@
 
 Comprehensive concurrency patterns using goroutines, channels, and synchronization primitives.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Core Concurrency Principles
 
 - Use channels for communication between goroutines

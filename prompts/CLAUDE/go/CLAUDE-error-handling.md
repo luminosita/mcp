@@ -2,6 +2,8 @@
 
 Comprehensive error handling patterns and best practices for Go.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Core Error Handling Principles
 
 1. **Always check errors** - Never ignore error return values

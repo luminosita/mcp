@@ -2,6 +2,8 @@
 
 This file provides detailed Clean Architecture implementation patterns with comprehensive code examples.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Clean Architecture Layers
 
 ### Domain Layer (Innermost - No Dependencies)

@@ -1,5 +1,7 @@
 # CLAUDE.md - Observability Patterns
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Overview
 
 This document covers comprehensive observability patterns including structured logging, metrics collection, distributed tracing, and health checks for Go applications.

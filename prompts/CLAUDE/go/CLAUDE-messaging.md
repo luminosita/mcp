@@ -2,6 +2,8 @@
 
 Message queue integration patterns for RabbitMQ, Kafka, and NATS in Go applications.
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## RabbitMQ Patterns
 
 ### Basic RabbitMQ Setup

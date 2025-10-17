@@ -1,5 +1,7 @@
 # CLAUDE.md - API Patterns & Versioning
 
+**← [Back to Go Development Guide](./CLAUDE-core.md)**
+
 ## Overview
 
 This document covers RESTful API design patterns, versioning strategies, API documentation, and best practices for building scalable HTTP APIs in Go.
