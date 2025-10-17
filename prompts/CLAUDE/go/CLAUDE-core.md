@@ -13,6 +13,7 @@
 
 ### Architecture & Design
 - **[CLAUDE-architecture.md](./CLAUDE-architecture.md)** - Clean Architecture: Domain/Application/Infrastructure/Interface layers, Wire dependency injection, CQRS pattern, project structure
+- **[CLAUDE-http-frameworks.md](./CLAUDE-http-frameworks.md)** - HTTP framework comparison: Gin vs Chi vs Fiber, selection criteria, performance benchmarks, observability integration, migration paths
 - **[CLAUDE-concurrency.md](./CLAUDE-concurrency.md)** - Concurrency patterns: goroutines, channels, worker pools, fan-out/fan-in, errgroup, graceful shutdown, race condition prevention
 - **[CLAUDE-database.md](./CLAUDE-database.md)** - Database patterns: Repository pattern, connection pooling, GORM/sqlx examples, golang-migrate setup, transaction patterns
 
@@ -97,6 +98,25 @@ project-root/
 ```
 
 **See [CLAUDE-architecture.md](./CLAUDE-architecture.md) for detailed Clean Architecture patterns and Wire DI setup**
+
+---
+
+### HTTP Framework Selection
+
+**Recommended: Gin (stdlib-compatible, largest community)**
+
+Go offers several HTTP framework options. Choose based on your priorities:
+
+**Gin** (Recommended for most projects)
+- ✅ stdlib-compatible (works with net/http middleware)
+- ✅ Largest community (81k+ GitHub stars)
+- ✅ HTTP/2 & HTTP/3 support
+- ✅ Full observability ecosystem (OpenTelemetry, Prometheus)
+- ✅ Mature middleware ecosystem (auth, rate limiting, CORS)
+- ✅ Express.js-like API (familiar for Node.js developers)
+- Performance: Excellent (slight overhead vs fasthttp)
+
+**See [CLAUDE-http-frameworks.md](./CLAUDE-http-frameworks.md) for detailed framework comparison, benchmarks, and migration paths**
 
 ---
 
