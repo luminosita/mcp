@@ -7,7 +7,8 @@
     "uv@latest",
     "podman@latest",
     "hadolint@latest",
-    "trivy@latest"
+    "trivy@latest",
+    "pre-commit@latest"
   ],
   "shell": {
     "init_hook": [
@@ -22,6 +23,7 @@
       "echo 'Podman version:' $(podman --version)",
       "echo 'Hadolint version:' $(hadolint --version)",
       "echo 'Trivy version:' $(trivy --version | head -1)",
+      "echo 'Pre-commit version:' $(pre-commit --version)",
       "echo ''",
       "echo 'Quick start:'",
       "echo '  1. Run setup: nu scripts/setup.nu'",

@@ -1,130 +1,26 @@
 # Security Patterns
 
-Security-critical code examples and best practices for Go applications.
+Security-critical code examples and best practices for Go applications: authentication, authorization, encryption, CSRF protection, rate limiting, and secure file handling.
 
 **← [Back to Go Development Guide](./CLAUDE-core.md)**
 
-## Input Validation
+> **Note:** Input validation patterns (struct validation, SQL injection prevention, path traversal protection, sanitization) have been moved to **[CLAUDE-validation.md](./CLAUDE-validation.md)**. This file focuses on authentication, authorization, and security mechanisms.
 
-### HTTP Request Validation
+---
 
-```go
-import (
-    "github.com/go-playground/validator/v10"
-)
+## Overview
 
-type CreateUserRequest struct {
-    Email    string `json:"email" validate:"required,email"`
-    Name     string `json:"name" validate:"required,min=1,max=100"`
-    Password string `json:"password" validate:"required,min=8,max=72"`
-    Age      int    `json:"age" validate:"required,gte=18,lte=120"`
-}
+This document covers:
+- Authentication (password hashing, JWT, OAuth2, PKCE)
+- Authorization (RBAC, permission systems)
+- Cryptographic operations (AES-GCM encryption, secure random generation)
+- HTTPS/TLS configuration
+- Security headers middleware
+- CSRF protection
+- Rate limiting
+- Secure file upload/download patterns
 
-var validate = validator.New()
-
-func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
-    var req CreateUserRequest
-
-    // Decode JSON
-    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-        h.respondError(w, "invalid JSON", http.StatusBadRequest)
-        return
-    }
-
-    // Validate struct
-    if err := validate.Struct(req); err != nil {
-        validationErrors := err.(validator.ValidationErrors)
-        h.respondValidationError(w, validationErrors)
-        return
-    }
-
-    // Process validated request
-    // ...
-}
-
-func (h *UserHandler) respondValidationError(w http.ResponseWriter, errs validator.ValidationErrors) {
-    errors := make(map[string]string)
-    for _, err := range errs {
-        errors[err.Field()] = fmt.Sprintf("failed on %s validation", err.Tag())
-    }
-
-    h.respondJSON(w, map[string]interface{}{
-        "error":   "validation failed",
-        "details": errors,
-    }, http.StatusBadRequest)
-}
-```
-
-### SQL Injection Prevention
-
-```go
-// ✅ CORRECT: Use parameterized queries
-func (r *UserRepository) FindByEmail(ctx context.Context, email string) (*User, error) {
-    query := `SELECT id, email, name FROM users WHERE email = $1`
-
-    var user User
-    err := r.db.QueryRowContext(ctx, query, email).Scan(
-        &user.ID,
-        &user.Email,
-        &user.Name,
-    )
-
-    if err == sql.ErrNoRows {
-        return nil, fmt.Errorf("user not found")
-    }
-    if err != nil {
-        return nil, fmt.Errorf("query error: %w", err)
-    }
-
-    return &user, nil
-}
-
-// ❌ WRONG: Never concatenate user input into SQL
-func (r *UserRepository) FindByEmailDangerous(email string) (*User, error) {
-    // DON'T DO THIS - vulnerable to SQL injection
-    query := fmt.Sprintf("SELECT * FROM users WHERE email = '%s'", email)
-    // Attacker could use: ' OR '1'='1
-    // ...
-}
-```
-
-### Path Traversal Prevention
-
-```go
-import (
-    "path/filepath"
-    "strings"
-)
-
-func SafeFileRead(baseDir, userPath string) ([]byte, error) {
-    // Clean the user path
-    cleanPath := filepath.Clean(userPath)
-
-    // Join with base directory
-    fullPath := filepath.Join(baseDir, cleanPath)
-
-    // Ensure the final path is still within baseDir
-    if !strings.HasPrefix(fullPath, filepath.Clean(baseDir)+string(os.PathSeparator)) {
-        return nil, errors.New("invalid file path: attempted directory traversal")
-    }
-
-    // Safe to read
-    return os.ReadFile(fullPath)
-}
-
-// Example usage
-func (h *FileHandler) DownloadFile(w http.ResponseWriter, r *http.Request) {
-    filename := r.URL.Query().Get("file")
-
-    data, err := SafeFileRead("/var/app/files", filename)
-    if err != nil {
-        http.Error(w, "file not found", http.StatusNotFound)
-        return
-    }
-
-    w.Write(data)
-}
-```
+---
 
 ## Authentication and Authorization
 

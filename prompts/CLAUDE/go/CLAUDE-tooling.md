@@ -1512,17 +1512,20 @@ git pull origin main
 # 2. Create feature branch
 git checkout -b feature/new-feature
 
-# 3. Add dependencies if needed
+# 3. Install pre-commit hooks (first time only)
+task hooks:install
+
+# 4. Add dependencies if needed
 go get github.com/gin-gonic/gin@latest
 go mod tidy
 
-# 4. Make code changes
+# 5. Make code changes
 # ... edit files ...
 
-# 5. Generate code (if needed)
+# 6. Generate code (if needed)
 task generate
 
-# 6. Run quality checks
+# 7. Run quality checks
 task format     # Format code
 task lint       # Run linters
 task test       # Run tests
@@ -1530,11 +1533,12 @@ task test       # Run tests
 # Or run all checks
 task check
 
-# 7. Commit changes
+# 8. Commit changes (pre-commit hooks run automatically)
 git add .
 git commit -m "feat: add new feature"
+# Pre-commit hooks will run: gofmt, goimports, go vet, golangci-lint, gosec, tests
 
-# 8. Push changes
+# 9. Push changes
 git push origin feature/new-feature
 ```
 
@@ -1571,6 +1575,154 @@ task test:race          # Run tests with race detection
 task test:coverage      # Check coverage
 task build              # Build application
 task container:build    # Build container
+```
+
+---
+
+## 🪝 Pre-commit Hooks
+
+### Overview
+
+Pre-commit hooks automatically validate code quality before commits are accepted, catching issues early and ensuring consistent code standards across the team.
+
+**Configuration File:** `.pre-commit-config.go.yaml`
+
+### Installation
+
+**Using devbox (recommended):**
+```bash
+# pre-commit is already included in devbox.json
+devbox shell
+
+# Install hooks
+task hooks:install
+
+# Verify installation
+pre-commit --version
+```
+
+**Alternative installation methods:**
+```bash
+# Using pip
+pip install pre-commit
+task hooks:install
+
+# Using homebrew
+brew install pre-commit
+task hooks:install
+```
+
+### Configured Hooks
+
+The Go pre-commit configuration includes:
+
+**Code Quality:**
+- `go-fmt` - Format Go code with gofmt
+- `go-imports` - Organize imports with goimports
+- `go-vet` - Static analysis and type checking
+- `go-mod-tidy` - Clean up go.mod and go.sum
+- `go-unit-tests` - Run unit tests with race detector (`-short -race`)
+
+**Linting & Security:**
+- `golangci-lint` - Comprehensive linting (fast mode for pre-commit)
+- `gosec` - Security vulnerability scanning
+
+**File Validation:**
+- `check-yaml` - YAML syntax validation
+- `check-added-large-files` - Prevent large files (>1MB)
+- `check-merge-conflict` - Detect merge conflict markers
+- `end-of-file-fixer` - Ensure newline at end of files
+- `trailing-whitespace` - Remove trailing whitespace
+
+**Documentation:**
+- `markdownlint` - Markdown linting (excludes artifacts/)
+- `hadolint-docker` - Containerfile.go linting
+
+### Usage
+
+**Automatic (on commit):**
+```bash
+git add .
+git commit -m "feat: add new feature"
+# Pre-commit hooks run automatically
+# Commit blocked if any hook fails
+```
+
+**Manual execution:**
+```bash
+# Run all hooks on all files
+task hooks:run
+
+# Run specific hook
+pre-commit run --config .pre-commit-config.go.yaml go-fmt --all-files
+
+# Run hooks on staged files only
+pre-commit run --config .pre-commit-config.go.yaml
+```
+
+**Update hooks:**
+```bash
+# Update to latest hook versions
+task hooks:update
+```
+
+**Bypass hooks (use with caution):**
+```bash
+# Skip hooks for emergency commits
+git commit --no-verify -m "hotfix: critical bug"
+```
+
+### Excluded Files
+
+Pre-commit hooks skip:
+- `.git/` and `.github/` directories
+- `vendor/` directory
+- `node_modules/` directory
+- `artifacts/` directory (generated SDLC artifacts)
+- `docs/refinements/` directory
+- Test files (`*_test.go`)
+- Mock files (`mock_*.go`)
+- Wire-generated files (`wire_gen.go`)
+
+### Configuration
+
+Edit `.pre-commit-config.go.yaml` to customize:
+
+```yaml
+repos:
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.55.2
+    hooks:
+      - id: golangci-lint
+        args: ['--fast']  # Customize arguments here
+```
+
+### Troubleshooting
+
+**Hook fails but code looks correct:**
+```bash
+# Update hook repositories
+task hooks:update
+
+# Clear pre-commit cache
+pre-commit clean
+```
+
+**Hook takes too long:**
+```bash
+# Use --fast mode for golangci-lint (already configured)
+# Reduce test scope for go-unit-tests
+# Edit .pre-commit-config.go.yaml and add args
+```
+
+**Skip specific file:**
+```yaml
+# In .pre-commit-config.go.yaml
+exclude: |
+  (?x)^(
+      path/to/skip\.go|
+      another/path/.*
+  )
 ```
 
 ---

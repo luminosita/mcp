@@ -17,7 +17,8 @@
 - **[CLAUDE-database.md](./CLAUDE-database.md)** - Database patterns: Repository pattern, connection pooling, GORM/sqlx examples, golang-migrate setup, transaction patterns
 
 ### Validation & Security
-- **[CLAUDE-security.md](./CLAUDE-security.md)** - Security patterns: input validation, auth (JWT, OAuth2, PKCE), CSRF protection, rate limiting, file upload security, SQL injection prevention
+- **[CLAUDE-validation.md](./CLAUDE-validation.md)** - Input validation: struct tags, sanitization, SQL injection prevention, path traversal protection, request/response DTOs
+- **[CLAUDE-security.md](./CLAUDE-security.md)** - Security patterns: authentication (JWT, OAuth2, PKCE), authorization (RBAC), CSRF protection, rate limiting, encryption
 - **[CLAUDE-api.md](./CLAUDE-api.md)** - REST API design: RESTful patterns, API versioning strategies, Swagger annotations, API key management, request/response handling
 
 ---
@@ -411,6 +412,57 @@ task generate:all          # Run all code generators
 ```bash
 task --list                # List all available tasks (use Taskfile-go.yml)
 ```
+
+---
+
+## 🧭 When to Use Each File
+
+### Starting a New Go Project?
+1. **CLAUDE-tooling.md** - Set up development tools (golangci-lint, wire, air, etc.)
+2. **CLAUDE-architecture.md** - Structure your project with Clean Architecture
+
+### Implementing Features?
+
+**Need to validate input?**
+→ **CLAUDE-validation.md** - Struct validation, request/response models, sanitization
+
+**Building REST API?**
+→ **CLAUDE-api.md** - RESTful design, versioning, Swagger documentation
+
+**Database operations?**
+→ **CLAUDE-database.md** - Repository pattern, migrations, connection pooling
+
+**Background jobs or concurrent operations?**
+→ **CLAUDE-concurrency.md** - Goroutines, channels, worker pools, graceful shutdown
+
+**Handling errors?**
+→ **CLAUDE-error-handling.md** - Custom errors, wrapping, context, HTTP mapping
+
+### Adding Authentication/Security?
+→ **CLAUDE-security.md** - JWT, OAuth2, PKCE, CSRF protection, rate limiting, encryption
+
+### Writing Tests?
+→ **CLAUDE-testing.md** - Table-driven tests, testify/mock, gomock, benchmarks, race detection
+
+### Specialized Domains?
+
+**gRPC service?**
+→ **CLAUDE-grpc.md** - Proto definitions, server/client implementation, streaming
+
+**WebSocket server?**
+→ **CLAUDE-websockets.md** - Connection handling, broadcast patterns, room management
+
+**Message queues (RabbitMQ, Kafka, NATS)?**
+→ **CLAUDE-messaging.md** - Producer/consumer patterns, error handling, retries
+
+**Caching layer (Redis, in-memory)?**
+→ **CLAUDE-caching.md** - Cache-aside, write-through, TTL strategies
+
+**CLI tool (Cobra)?**
+→ **CLAUDE-cli.md** - Command structure, flags, configuration, subcommands
+
+**Observability (logging, metrics, tracing)?**
+→ **CLAUDE-observability.md** - Structured logging, Prometheus, OpenTelemetry, health checks
 
 ---
 

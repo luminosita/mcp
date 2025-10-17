@@ -728,7 +728,18 @@ migrate -path ./migrations -database "$DATABASE_URL" force 5
 # Fix dirty state by manually correcting database and forcing version
 ```
 
-## References
+## Related Files
+
+- **[CLAUDE-architecture.md](./CLAUDE-architecture.md)** - Repository pattern, Clean Architecture layer boundaries, dependency injection
+- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Database error handling, wrapping errors with context
+- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Database integration tests, test fixtures, transaction rollback patterns
+- **[CLAUDE-concurrency.md](./CLAUDE-concurrency.md)** - Connection pooling, goroutines with database operations
+- **[CLAUDE-validation.md](./CLAUDE-validation.md)** - SQL injection prevention, parameterized queries
+- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - golang-migrate setup, database migration tasks in Taskfile
+
+---
+
+## External References
 
 - [golang-migrate](https://github.com/golang-migrate/migrate)
 - [GORM Documentation](https://gorm.io/docs/)

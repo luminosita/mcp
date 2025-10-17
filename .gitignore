@@ -63,3 +63,5 @@ dmypy.json
 # Logs
 *.log
 coverage.xml
+
+code-review.csv

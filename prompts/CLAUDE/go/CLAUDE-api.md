@@ -693,7 +693,18 @@ func (h *UserHandlerV2) toV2Response(user *domain.User) *UserResponseV2 {
 }
 ```
 
-## References
+## Related Files
+
+- **[CLAUDE-validation.md](./CLAUDE-validation.md)** - Input validation, request/response DTOs, sanitization patterns
+- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - HTTP error responses, status code mapping, error wrapping
+- **[CLAUDE-security.md](./CLAUDE-security.md)** - API authentication (JWT, OAuth2), rate limiting, CSRF protection
+- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - API endpoint testing, integration tests, table-driven test patterns
+- **[CLAUDE-database.md](./CLAUDE-database.md)** - Repository pattern, database integration in handlers
+- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Swagger generation with swaggo, API documentation workflow
+
+---
+
+## External References
 
 - [REST API Tutorial](https://restfulapi.net/)
 - [OpenAPI Specification](https://swagger.io/specification/)

@@ -647,3 +647,24 @@ go test -run TestCreateUser ./internal/application/usecases
 go test -bench=. ./...
 go test -bench=BenchmarkUserRepository -benchmem ./...
 ```
+
+---
+
+## Related Files
+
+- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Test execution tasks (task test, task test:coverage), testify/gomock setup
+- **[CLAUDE-architecture.md](./CLAUDE-architecture.md)** - Testing each Clean Architecture layer independently
+- **[CLAUDE-database.md](./CLAUDE-database.md)** - Database integration tests, test fixtures, transaction rollback
+- **[CLAUDE-api.md](./CLAUDE-api.md)** - HTTP endpoint testing, API integration tests
+- **[CLAUDE-concurrency.md](./CLAUDE-concurrency.md)** - Race detector usage, testing goroutines safely
+- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Testing error cases, error assertions
+
+---
+
+## External References
+
+- **Testing Best Practices**: https://go.dev/doc/code#Testing
+- **testify/assert**: https://github.com/stretchr/testify
+- **testify/mock**: https://pkg.go.dev/github.com/stretchr/testify/mock
+- **gomock**: https://github.com/golang/mock
+- **Table-Driven Tests**: https://go.dev/wiki/TableDrivenTests

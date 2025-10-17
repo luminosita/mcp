@@ -561,3 +561,22 @@ func HandleError(err error) {
 - Don't use string matching for error types
 - Don't create error variables in loops
 - Don't forget to wrap errors with context
+
+---
+
+## Related Files
+
+- **[CLAUDE-api.md](./CLAUDE-api.md)** - HTTP error responses, status code mapping, error DTOs
+- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing error cases, error assertions with testify
+- **[CLAUDE-concurrency.md](./CLAUDE-concurrency.md)** - Error handling in goroutines, errgroup patterns
+- **[CLAUDE-database.md](./CLAUDE-database.md)** - Database error handling, transaction rollback
+- **[CLAUDE-observability.md](./CLAUDE-observability.md)** - Error logging with structured context
+
+---
+
+## External References
+
+- **Error Handling in Go**: https://go.dev/blog/error-handling-and-go
+- **errors Package**: https://pkg.go.dev/errors
+- **Working with Errors**: https://go.dev/blog/go1.13-errors
+- **Error Wrapping**: https://pkg.go.dev/fmt#Errorf

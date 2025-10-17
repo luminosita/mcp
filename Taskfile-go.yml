@@ -1,22 +1,26 @@
 version: '3'
 
-# AI Agent MCP Server - Development Tasks
-# Consolidated CLI interface for all development operations
-# See: /prompts/CLAUDE/CLAUDE-tooling.md for detailed documentation
+# AI Agent MCP Server - Go Development Tasks
+# Consolidated CLI interface for all Go development operations
+# See: /prompts/CLAUDE/go/CLAUDE-tooling.md for detailed documentation
 
 vars:
-  SRC_DIR: src
+  SRC_DIR: cmd
+  INTERNAL_DIR: internal
+  PKG_DIR: pkg
   TESTS_DIR: tests
   COVERAGE_MIN: 80
-  PYTHON_VERSION: "3.11"
+  GO_VERSION: "1.21"
   PROJECT_NAME: mcp_server
-  IMAGE_NAME: ai-agent-mcp-server
+  MODULE_PATH: github.com/yourusername/mcp_server
+  IMAGE_NAME: ai-agent-mcp-server-go
   TAG: latest
-  CONTAINER_NAME: mcp-server
-  DB_CONTAINER_NAME: mcp-postgres
+  CONTAINER_NAME: mcp-server-go
+  DB_CONTAINER_NAME: mcp-postgres-go
   DB_USER: mcp_user
   DB_PASSWORD: dev_password_change_in_production
   DB_NAME: mcp_dev
+  MIGRATION_DIR: migrations
 
 tasks:
   # ====================
@@ -24,76 +28,80 @@ tasks:
   # ====================
 
   lint:
-    desc: Run Ruff linter (check only, no fixes)
+    desc: Run golangci-lint (check only, no fixes)
     cmds:
-      - uv run ruff check .
+      - golangci-lint run ./...
 
   lint:fix:
-    desc: Run Ruff linter with auto-fix
+    desc: Run golangci-lint with auto-fix
     cmds:
-      - uv run ruff check --fix .
+      - golangci-lint run --fix ./...
 
-  lint:watch:
-    desc: Run Ruff linter in watch mode
+  lint:config:
+    desc: Show effective golangci-lint configuration
     cmds:
-      - uv run ruff check --watch .
+      - golangci-lint config path
 
   format:
-    desc: Format code with Ruff formatter
+    desc: Format code with gofmt and goimports
     cmds:
-      - uv run ruff format .
+      - gofmt -w .
+      - goimports -w .
 
   format:check:
     desc: Check formatting without changes
     cmds:
-      - uv run ruff format --check .
+      - |
+        UNFORMATTED=$(gofmt -l .)
+        if [ -n "$UNFORMATTED" ]; then
+          echo "❌ The following files are not formatted:"
+          echo "$UNFORMATTED"
+          exit 1
+        fi
+        echo "✅ All files are properly formatted"
 
   lint:all:
-    desc: Run linting and formatting together
+    desc: Run all linting and formatting together
     cmds:
-      - uv run ruff check --fix .
-      - uv run ruff format .
+      - task: format
+      - task: lint:fix
 
   # ====================
   # Security & Vulnerability Scanning
   # ====================
 
-  security:bandit:
-    desc: Run bandit security scanner for Python code
+  security:gosec:
+    desc: Run gosec security scanner
     cmds:
-      - uv run bandit -r {{.SRC_DIR}}/ -f json -o bandit-report.json || true
-      - uv run bandit -r {{.SRC_DIR}}/
+      - gosec -fmt=sarif -out=gosec-results.sarif -stdout -verbose=text ./...
 
-  security:safety:
-    desc: Check dependencies for known vulnerabilities
+  security:govulncheck:
+    desc: Run govulncheck for known vulnerabilities
     cmds:
-      - uv run safety check --json || true
+      - govulncheck ./...
+
+  security:staticcheck:
+    desc: Run staticcheck advanced static analysis
+    cmds:
+      - staticcheck ./...
 
   security:all:
-    desc: Run all security scans (bandit + safety)
+    desc: Run all security scans
     cmds:
-      - task: security:bandit
-      - task: security:safety
-
+      - task: security:gosec
+      - task: security:govulncheck
+      - task: security:staticcheck
   # ====================
   # Type Checking Tasks
   # ====================
 
+  # Type checking (Go has built-in type system)
   type-check:
-    desc: Run MyPy type checker (strict mode)
+    desc: Type check with Go's built-in type system (runs go vet)
     cmds:
-      - uv run mypy {{.SRC_DIR}}/ --strict
+      - go vet ./...
+      - echo "✅ Type checking complete (Go has compile-time type safety)"
 
-  type-check:report:
-    desc: Generate MyPy HTML type coverage report
-    cmds:
-      - uv run mypy {{.SRC_DIR}}/ --html-report ./mypy-report
-      - echo "Report generated at mypy-report/index.html"
-
-  type-check:install:
-    desc: Install missing type stubs
-    cmds:
-      - uv run mypy --install-types
 
   # ====================
   # Testing Tasks
@@ -102,132 +110,152 @@ tasks:
   test:
     desc: Run all tests with coverage
     cmds:
-      - uv run pytest --cov={{.SRC_DIR}} --cov-report=html --cov-report=term
+      - go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+      - go tool cover -html=coverage.out -o coverage.html
+      - echo "✅ Coverage report generated at coverage.html"
 
   test:unit:
-    desc: Run unit tests only
+    desc: Run unit tests only (exclude integration)
     cmds:
-      - uv run pytest {{.TESTS_DIR}}/unit -v
+      - go test -v -short ./...
 
   test:integration:
     desc: Run integration tests only
     cmds:
-      - uv run pytest {{.TESTS_DIR}}/integration -v
+      - go test -v -run Integration ./...
 
-  test:e2e:
-    desc: Run end-to-end tests only
+  test:race:
+    desc: Run tests with race detector
     cmds:
-      - uv run pytest {{.TESTS_DIR}}/e2e -v
+      - go test -v -race ./...
 
-  test:watch:
-    desc: Run tests in watch mode
+  test:bench:
+    desc: Run benchmarks
     cmds:
-      - uv run pytest-watch
+      - go test -v -bench=. -benchmem ./...
 
   test:verbose:
     desc: Run tests with verbose output
     cmds:
-      - uv run pytest -v
+      - go test -v ./...
 
   test:failed:
-    desc: Run only last failed tests
+    desc: Run only failed tests (requires gotestsum)
     cmds:
-      - uv run pytest --lf
+      - gotestsum --rerun-fails ./...
+
 
   test:coverage:
     desc: Run tests and enforce {{.COVERAGE_MIN}}% coverage
     cmds:
-      - uv run pytest --cov={{.SRC_DIR}} --cov-report=html --cov-report=xml --cov-fail-under={{.COVERAGE_MIN}}
+      - |
+        go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+        COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
+        COVERAGE_INT=${COVERAGE%.*}
+        if [ $COVERAGE_INT -lt {{.COVERAGE_MIN}} ]; then
+          echo "❌ Coverage $COVERAGE% is below minimum {{.COVERAGE_MIN}}%"
+          exit 1
+        fi
+        echo "✅ Coverage $COVERAGE% meets minimum {{.COVERAGE_MIN}}%"
 
-  test:parallel:
-    desc: Run tests in parallel
+  test:coverage:report:
+    desc: Generate coverage report and view in browser
     cmds:
-      - uv run pytest -n auto
+      - go test -v -coverprofile=coverage.out ./...
+      - go tool cover -html=coverage.out
 
-  test:mark:
-    desc: Run tests by marker (usage - task test:mark -- MARKER=integration)
+  test:e2e:
+    desc: Run end-to-end tests only
     cmds:
-      - uv run pytest -m "{{.MARKER}}"
+      - go test -v -tags=e2e ./tests/e2e/...
 
   # ====================
   # Quality Check (All)
   # ====================
 
   check:
-    desc: Run all quality checks (lint, format, type-check, test)
+    desc: Run all quality checks (lint, format, type-check, security, test)
     cmds:
       - task: format:check
       - task: lint
-      - task: security:all
       - task: type-check
+      - task: security:all
       - task: test:coverage
 
   check:ci:
-    desc: Run CI/CD pipeline checks (frozen deps)
+    desc: Run CI/CD pipeline checks
     cmds:
       - task: deps:install:ci
-      - task: lint
       - task: format:check
+      - task: lint
       - task: type-check
-      - task: test:coverage
       - task: security:all
+      - task: test:coverage
 
   # ====================
   # Dependency Management
   # ====================
 
   deps:install:
-    desc: Install project dependencies
+    desc: Install/download project dependencies
     cmds:
-      - uv sync
-
-  deps:install:all:
-    desc: Install all dependencies including extras
-    cmds:
-      - uv sync --all-extras
+      - go mod download
+      - go mod tidy
 
   deps:install:ci:
-    desc: Install dependencies for CI (frozen lockfile with all extras)
+    desc: Install dependencies for CI (verify checksums)
     cmds:
-      - uv sync --all-extras --frozen
+      - go mod download
+      - go mod verify
 
-  deps:add:
-    desc: Add a new dependency (usage - task deps:add -- PKG=requests)
+  deps:download:
+    desc: Download dependencies to module cache (alias for deps:install)
     cmds:
-      - uv add {{.PKG}}
+      - task: deps:install
 
-  deps:add:dev:
-    desc: Add a dev dependency (usage - task deps:add:dev -- PKG=pytest)
+  deps:tidy:
+    desc: Tidy go.mod and go.sum
     cmds:
-      - uv add --dev {{.PKG}}
+      - go mod tidy
 
-  deps:remove:
-    desc: Remove a dependency (usage - task deps:remove -- PKG=requests)
+  deps:verify:
+    desc: Verify dependencies have expected content
     cmds:
-      - uv remove {{.PKG}}
-
-  deps:lock:
-    desc: Update lockfile without installing
-    cmds:
-      - uv lock
+      - go mod verify
 
   deps:update:
-    desc: Update dependencies (via Renovate - manual fallback)
+    desc: Update all dependencies to latest minor/patch versions
     cmds:
-      - uv lock --upgrade
-      - uv sync
+      - go get -u ./...
+      - go mod tidy
 
-  deps:export:
-    desc: Export dependencies to requirements.txt
+  deps:update:major:
+    desc: Update all dependencies to latest major versions (use with caution)
     cmds:
-      - uv export --format requirements-txt --output-file requirements.txt
+      - go get -u=patch ./...
+      - go mod tidy
+
+  deps:vendor:
+    desc: Vendor dependencies into vendor/ directory
+    cmds:
+      - go mod vendor
+
+  deps:graph:
+    desc: Display module dependency graph
+    cmds:
+      - go mod graph
+
+  deps:why:
+    desc: Explain why package is needed (usage - task deps:why -- PKG=github.com/foo/bar)
+    cmds:
+      - go mod why {{.PKG}}
 
   # ====================
   # Pre-commit Hooks
   # ====================
 
   hooks:install:
-    desc: Install pre-commit hooks for Python (using pre-commit framework)
+    desc: Install pre-commit hooks for Go (using pre-commit framework)
     cmds:
       - pre-commit install
 
@@ -249,28 +277,92 @@ tasks:
       - echo "✅ Pre-commit hooks uninstalled"
 
   # ====================
-  # Build & Run Tasks
+  # Build Tasks
   # ====================
 
   build:
-    desc: Build Python package
+    desc: Build the application binary
     cmds:
-      - uv build
+      - go build -o bin/{{.PROJECT_NAME}} ./{{.SRC_DIR}}/...
+
+  build:all:
+    desc: Build all binaries in cmd/
+    cmds:
+      - |
+        for dir in {{.SRC_DIR}}/*; do
+          if [ -d "$dir" ]; then
+            BINARY_NAME=$(basename $dir)
+            echo "Building $BINARY_NAME..."
+            go build -o bin/$BINARY_NAME ./$dir
+          fi
+        done
+
+  build:release:
+    desc: Build optimized release binary
+    cmds:
+      - go build -ldflags="-s -w" -o bin/{{.PROJECT_NAME}} ./{{.SRC_DIR}}/...
+
+  build:cross:
+    desc: Cross-compile for multiple platforms
+    cmds:
+      - GOOS=linux GOARCH=amd64 go build -o bin/{{.PROJECT_NAME}}-linux-amd64 ./{{.SRC_DIR}}/...
+      - GOOS=darwin GOARCH=amd64 go build -o bin/{{.PROJECT_NAME}}-darwin-amd64 ./{{.SRC_DIR}}/...
+      - GOOS=darwin GOARCH=arm64 go build -o bin/{{.PROJECT_NAME}}-darwin-arm64 ./{{.SRC_DIR}}/...
+      - GOOS=windows GOARCH=amd64 go build -o bin/{{.PROJECT_NAME}}-windows-amd64.exe ./{{.SRC_DIR}}/...
+      - echo "✅ Cross-compilation complete"
+
+  # ====================
+  # Code Generation Tasks
+  # ====================
+
+  generate:
+    desc: Run go generate for the entire project
+    cmds:
+      - go generate ./...
+
+  generate:wire:
+    desc: Generate Wire dependency injection code
+    cmds:
+      - wire ./...
+      - echo "✅ Wire code generated"
+
+  generate:mocks:
+    desc: Generate mocks for interfaces using mockgen
+    cmds:
+      - go generate ./...
+      - echo "✅ Mocks generated"
+
+  generate:swagger:
+    desc: Generate Swagger/OpenAPI documentation
+    cmds:
+      - swag init -g {{.SRC_DIR}}/main.go --output ./docs/swagger
+      - echo "✅ Swagger docs generated at docs/swagger/swagger.json"
+
+  generate:all:
+    desc: Run all code generation tasks
+    cmds:
+      - task: generate:wire
+      - task: generate:mocks
+      - task: generate:swagger
+
+  # ====================
+  # Run Tasks
+  # ====================
 
   run:
-    desc: Run application (usage - task run -- SCRIPT=main.py)
+    desc: Run the application
     cmds:
-      - uv run python {{.SCRIPT | default "main.py"}}
+      - go run ./{{.SRC_DIR}}/...
 
   dev:
-    desc: Start development server with hot-reload in Devbox
+    desc: Run application with hot-reload using air
     cmds:
-      - uv run uvicorn {{.PROJECT_NAME}}.main:app --reload --reload-dir {{.SRC_DIR}}/ --reload-delay 0.25 --host 0.0.0.0 --port 8000 --log-level info
+      - air
 
-  shell:
-    desc: Start Python REPL with project loaded
+  dev:debug:
+    desc: Run application with delve debugger
     cmds:
-      - uv run python
+      - dlv debug ./{{.SRC_DIR}}/... --headless --listen=:2345 --api-version=2
 
   # ====================
   # Container Tasks (Podman/Docker)
@@ -508,60 +600,69 @@ tasks:
       - task: db:start
 
   # ====================
-  # Database Migration Tasks (Alembic)
+  # Database Migration Tasks (golang-migrate)
   # ====================
 
   db:migrate:create:
-    desc: Create new database migration
+    desc: Create new migration (usage - task db:migrate:create -- NAME=add_users_table)
     cmds:
-      - uv run alembic revision --autogenerate -m "{{.CLI_ARGS}}"
-      - echo "✅ Migration created - review generated file in migrations/versions/"
+      - migrate create -ext sql -dir {{.MIGRATION_DIR}} -seq {{.NAME}}
+      - echo "✅ Migration created in {{.MIGRATION_DIR}}/"
 
   db:migrate:up:
-    desc: "Apply pending database migrations (alias: db:migrate)"
+    desc: Apply all pending migrations
     cmds:
-      - uv run alembic upgrade head
+      - migrate -path {{.MIGRATION_DIR}} -database "postgresql://{{.DB_USER}}:{{.DB_PASSWORD}}@localhost:5432/{{.DB_NAME}}?sslmode=disable" up
       - echo "✅ Migrations applied successfully"
 
+  db:migrate:force:
+    desc: Force migration version (usage - task db:migrate:force -- VERSION=5)
+    cmds:
+      - migrate -path {{.MIGRATION_DIR}} -database "postgresql://{{.DB_USER}}:{{.DB_PASSWORD}}@localhost:5432/{{.DB_NAME}}?sslmode=disable" force {{.VERSION}}
+      - echo "✅ Migration version forced to {{.VERSION}}"
+
+  db:migrate:version:
+    desc: Show current migration version
+    cmds:
+      - migrate -path {{.MIGRATION_DIR}} -database "postgresql://{{.DB_USER}}:{{.DB_PASSWORD}}@localhost:5432/{{.DB_NAME}}?sslmode=disable" version
+
+  # Aliases for consistency with Python naming
   db:migrate:
-    desc: "Apply pending database migrations (alias for db:migrate:up)"
+    desc: Apply all pending migrations (alias for db:migrate:up)
     cmds:
       - task: db:migrate:up
 
   db:migrate:down:
-    desc: "Rollback last database migration (alias: db:migrate:rollback)"
+    desc: Rollback last migration
     cmds:
-      - uv run alembic downgrade -1
+      - migrate -path {{.MIGRATION_DIR}} -database "postgresql://{{.DB_USER}}:{{.DB_PASSWORD}}@localhost:5432/{{.DB_NAME}}?sslmode=disable" down 1
       - echo "✅ Last migration rolled back"
 
   db:migrate:rollback:
-    desc: "Rollback last database migration (alias for db:migrate:down)"
+    desc: Rollback last migration (alias for db:migrate:down)
     cmds:
       - task: db:migrate:down
 
   db:migrate:status:
-    desc: Show migration status (applied and pending)
+    desc: Show current migration version (alias for db:migrate:version)
     cmds:
-      - echo "Current migration version:"
-      - uv run alembic current
-      - echo ""
-      - echo "Migration history:"
-      - uv run alembic history
+      - task: db:migrate:version
 
   # ====================
   # Documentation Tasks
   # ====================
 
-  docs:build:
-    desc: Build documentation
-    cmds:
-      - echo "Documentation build not yet configured"
-      - echo "Add MkDocs or Sphinx configuration"
-
   docs:serve:
-    desc: Serve documentation locally
+    desc: Serve Swagger documentation locally
     cmds:
-      - echo "Documentation serve not yet configured"
+      - echo "Swagger UI available at http://localhost:8080/swagger/index.html"
+      - echo "Run application with 'task run' or 'task dev'"
+
+  docs:godoc:
+    desc: Start local godoc server
+    cmds:
+      - godoc -http=:6060
+      - echo "Documentation available at http://localhost:6060/pkg/{{.MODULE_PATH}}/"
 
   # ====================
   # Utility Tasks
@@ -570,38 +671,47 @@ tasks:
   clean:
     desc: Clean build artifacts and caches
     cmds:
-      - rm -rf build/ dist/ *.egg-info
-      - rm -rf .pytest_cache .mypy_cache .ruff_cache
-      - rm -rf htmlcov/ .coverage coverage.xml
-      - rm -rf mypy-report/
-      - find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+      - rm -rf bin/
+      - rm -rf coverage.out coverage.html
+      - rm -rf gosec-results.sarif
+      - rm -rf docs/swagger/
+      - go clean -cache -testcache -modcache
 
   clean:all:
-    desc: Clean everything including virtual environments
+    desc: Clean everything including vendor
     cmds:
       - task: clean
-      - rm -rf .venv venv
+      - rm -rf vendor/
 
   setup:
-    desc: Initial project setup (install deps and hooks)
+    desc: Initial project setup (install deps and tools)
     cmds:
-      - nu <(curl -fsSL file:///Users/gianni/dev/sandbox/setup-env/dist/setup.nu)
-      - uv sync --all-extras
-      - task: hooks:install
-      - echo "✅ Project setup complete"
+      - go mod download
+      - go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+      - go install github.com/securego/gosec/v2/cmd/gosec@latest
+      - go install golang.org/x/vuln/cmd/govulncheck@latest
+      - go install honnef.co/go/tools/cmd/staticcheck@latest
+      - go install github.com/google/wire/cmd/wire@latest
+      - go install github.com/swaggo/swag/cmd/swag@latest
+      - go install github.com/golang/mock/mockgen@latest
+      - go install github.com/cosmtrek/air@latest
+      - go install github.com/go-delve/delve/cmd/dlv@latest
+      - echo "✅ Go tools installed successfully"
+      - echo ""
+      - echo "Note: pre-commit is managed by devbox (devbox.json)"
+      - echo "If not using devbox, install with: pip install pre-commit"
 
   info:
     desc: Show project environment information
     cmds:
       - echo "Project - {{.PROJECT_NAME}}"
-      - echo "Python Version - {{.PYTHON_VERSION}}"
+      - echo "Go Version - {{.GO_VERSION}}"
       - echo "Coverage Minimum - {{.COVERAGE_MIN}}%"
       - echo ""
-      - uv --version
-      - python --version
-      - ruff --version
-      - mypy --version
-      - pytest --version
+      - go version
+      - golangci-lint version
+      - echo ""
+      - go env
 
   help:
     desc: Show available tasks

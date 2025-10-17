@@ -1,0 +1,97 @@
+# Markdownlint configuration
+# See https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+
+# Default state for all rules
+default: true
+
+# MD013/line-length - Line length
+MD013:
+  # Number of characters (default: 80)
+  line_length: 120
+  # Number of characters for headings (default: 80)
+  heading_line_length: 120
+  # Number of characters for code blocks (default: 80)
+  code_block_line_length: 120
+  # Include code blocks in line length check
+  code_blocks: false
+  # Include tables in line length check
+  tables: false
+  # Include headings in line length check
+  headings: true
+  # Strict length checking
+  strict: false
+  # Stern length checking (warn beyond line_length, error beyond line_length * 2)
+  stern: false
+
+# MD033/no-inline-html - Inline HTML
+MD033:
+  # Allowed inline HTML elements
+  allowed_elements:
+    - br
+    - details
+    - summary
+    - kbd
+    - sub
+    - sup
+    - img
+
+# MD024/no-duplicate-heading - Multiple headings with the same content
+MD024:
+  # Only check sibling headings (allow duplicate headings in different sections)
+  siblings_only: true
+
+# MD025/single-title - Multiple top-level headings in the same document
+MD025:
+  # Top-level heading must be level 1
+  level: 1
+  # Allow top-level heading anywhere in file (not just first line)
+  front_matter_title: ""
+
+# MD026/no-trailing-punctuation - Trailing punctuation in heading
+MD026:
+  # Punctuation characters that should not be at the end of a heading
+  punctuation: ".,;:!。，；：！"
+
+# MD029/ol-prefix - Ordered list item prefix
+MD029:
+  # List style (consistent, ordered, one, or one_or_ordered)
+  style: "ordered"
+
+# MD030/list-marker-space - Spaces after list markers
+MD030:
+  # Spaces for single-line unordered list items
+  ul_single: 1
+  # Spaces for single-line ordered list items
+  ol_single: 1
+  # Spaces for multi-line unordered list items
+  ul_multi: 1
+  # Spaces for multi-line ordered list items
+  ol_multi: 1
+
+# MD034/no-bare-urls - Bare URL used
+MD034: false
+
+# MD040/fenced-code-language - Fenced code blocks should have a language specified
+MD040: true
+
+# MD041/first-line-heading - First line in a file should be a top-level heading
+MD041:
+  # Top-level heading must be level 1
+  level: 1
+  # Allow front matter before heading
+  front_matter_title: ""
+
+# MD046/code-block-style - Code block style
+MD046:
+  # Code block style (consistent, fenced, indented)
+  style: "fenced"
+
+# MD049/emphasis-style - Emphasis style
+MD049:
+  # Emphasis style (consistent, asterisk, underscore)
+  style: "asterisk"
+
+# MD050/strong-style - Strong style
+MD050:
+  # Strong style (consistent, asterisk, underscore)
+  style: "asterisk"

@@ -16,17 +16,32 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
       - id: check-yaml
+        name: Check YAML syntax
+        description: Validate YAML files
+
       - id: check-added-large-files
-        args: [--maxkb=1000]
+        name: Check for large files
+        description: Prevent large files from being committed
+        args: ['--maxkb=1000']
+
       - id: check-json
       - id: check-toml
       - id: check-merge-conflict
+        name: Check for merge conflicts
+        description: Detect merge conflict markers
+
+      - id: end-of-file-fixer
+        name: Fix end of files
+        description: Ensure files end with newline
+
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+        description: Remove trailing whitespace
+
       - id: detect-private-key
 
-  # Hadolint - Dockerfile/Containerfile linter
+  # Containerfile linting
   - repo: https://github.com/hadolint/hadolint
     rev: v2.12.0
     hooks:
@@ -46,5 +61,32 @@ repos:
         pass_filenames: false
         always_run: true
 
-# Run pre-commit on all files initially
+# Configuration
 default_install_hook_types: [pre-commit, pre-push]
+
+# Default language versions
+default_language_version:
+  python: python3.11
+
+# Files to exclude from all hooks
+exclude: |
+  (?x)^(
+      \.git/|
+      \.github/|
+      __pycache__/|
+      \.pytest_cache/|
+      \.mypy_cache/|
+      \.ruff_cache/|
+      \.venv/|
+      venv/|
+      node_modules/|
+      artifacts/|
+      docs/refinements/|
+      .*\.pyc$|
+      .*\.pyo$|
+      .*\.egg-info/
+  )
+
+# Global settings
+fail_fast: false
+minimum_pre_commit_version: '3.0.0'

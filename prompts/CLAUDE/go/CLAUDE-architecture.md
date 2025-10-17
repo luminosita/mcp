@@ -676,3 +676,23 @@ type UserQueryService interface {
 - Don't put business logic in handlers or infrastructure
 - Don't create circular dependencies between layers
 - Don't skip the application layer (handlers shouldn't call repos directly)
+
+---
+
+## Related Files
+
+- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Wire dependency injection setup, code generation workflow
+- **[CLAUDE-database.md](./CLAUDE-database.md)** - Repository pattern implementation, database layer
+- **[CLAUDE-api.md](./CLAUDE-api.md)** - HTTP handlers (interface layer), REST API patterns
+- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing each layer independently with mocks
+- **[CLAUDE-validation.md](./CLAUDE-validation.md)** - Input validation at interface boundaries
+- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Error handling across layers
+
+---
+
+## External References
+
+- **Clean Architecture**: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+- **Hexagonal Architecture**: https://alistair.cockburn.us/hexagonal-architecture/
+- **Domain-Driven Design**: https://martinfowler.com/bliki/DomainDrivenDesign.html
+- **Dependency Inversion Principle**: https://en.wikipedia.org/wiki/Dependency_inversion_principle

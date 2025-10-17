@@ -744,3 +744,22 @@ func (c *MutexCounter) Increment() {
 - Don't use channels for synchronization (use WaitGroup)
 - Don't use sleep for synchronization
 - Don't forget defer for unlocking mutexes
+
+---
+
+## Related Files
+
+- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Race detector (`go test -race`), testing concurrent code safely
+- **[CLAUDE-database.md](./CLAUDE-database.md)** - Connection pooling, database operations with goroutines
+- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Error handling in goroutines, errgroup patterns
+- **[CLAUDE-api.md](./CLAUDE-api.md)** - Concurrent request handling, timeout patterns
+- **[CLAUDE-observability.md](./CLAUDE-observability.md)** - Logging from goroutines, structured logging best practices
+
+---
+
+## External References
+
+- **Go Concurrency Patterns**: https://go.dev/blog/pipelines
+- **Context Package**: https://pkg.go.dev/context
+- **errgroup**: https://pkg.go.dev/golang.org/x/sync/errgroup
+- **Go Concurrency Guide**: https://github.com/golang/go/wiki/CommonMistakes#concurrency
