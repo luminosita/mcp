@@ -583,22 +583,22 @@ Upon completion, update relevant task status in `/TODO.md`:
 | HLS-003 | 5 stories | US-009 → US-013 |
 | HLS-004 | 6 stories | US-014 → US-019 |
 | HLS-005 | 8 stories | US-020 → US-027 |
-| HLS-006 | 6 stories | US-028 → US-033 |
-| HLS-007 | 5 stories | US-034 → US-038 |
-| HLS-008 | 6 stories | US-039 → US-044 |
-| HLS-009 | 8 stories | US-045 → US-052 |
-| HLS-010 | 7 stories | US-053 → US-059 |
-| HLS-011 | 8 stories | US-060 → US-067 |
+| HLS-006 | 7 stories | US-028 → US-034 |
+| HLS-007 | 5 stories | US-035 → US-039 |
+| HLS-008 | 8 stories | US-040 → US-047 |
+| HLS-009 | 8 stories | US-048 → US-055 |
+| HLS-010 | 7 stories | US-056 → US-062 |
+| HLS-011 | 8 stories | US-063 → US-070 |
 
 **Next Available IDs (as of 2025-10-18):**
-- US: US-068 (US-001 through US-067 allocated; HLS-006 through HLS-011 allocated pending backlog decomposition)
+- US: US-071 (US-001 through US-070 allocated; HLS-006 through HLS-011 allocated pending backlog decomposition)
 - SPEC: SPEC-002 (SPEC-001 used by US-001)
 - TASK: TASK-004 (TASK-001/002/003 used by US-001)
 - ADR: ADR-001 (none assigned yet)
 - SPIKE: SPIKE-001 (none assigned yet)
 
 **Recent ID Assignments:**
-- US-028 through US-067: Allocated for HLS-006 through HLS-011 (MCP Server SDLC Framework Integration, 40 stories total, added 2025-10-18)
+- US-028 through US-070: Allocated for HLS-006 through HLS-011 (MCP Server SDLC Framework Integration, 43 stories total, updated 2025-10-18 v2)
 
 ---
 
