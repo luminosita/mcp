@@ -583,32 +583,115 @@ Upon completion, update relevant task status in `/TODO.md`:
 | HLS-003 | 5 stories | US-009 → US-013 |
 | HLS-004 | 6 stories | US-014 → US-019 |
 | HLS-005 | 8 stories | US-020 → US-027 |
+| HLS-006 | 6 stories | US-028 → US-033 |
+| HLS-007 | 5 stories | US-034 → US-038 |
+| HLS-008 | 6 stories | US-039 → US-044 |
+| HLS-009 | 8 stories | US-045 → US-052 |
+| HLS-010 | 7 stories | US-053 → US-059 |
+| HLS-011 | 8 stories | US-060 → US-067 |
 
-**Next Available IDs (as of 2025-10-15):**
-- US: US-028 (US-001 through US-027 allocated; HLS-005 complete through US-027)
+**Next Available IDs (as of 2025-10-18):**
+- US: US-068 (US-001 through US-067 allocated; HLS-006 through HLS-011 allocated pending backlog decomposition)
 - SPEC: SPEC-002 (SPEC-001 used by US-001)
 - TASK: TASK-004 (TASK-001/002/003 used by US-001)
 - ADR: ADR-001 (none assigned yet)
 - SPIKE: SPIKE-001 (none assigned yet)
 
 **Recent ID Assignments:**
-- US-027: Container Security Scanning in CI/CD Pipeline (added 2025-10-15 to close HLS-005 Definition of Done gap)
+- US-028 through US-067: Allocated for HLS-006 through HLS-011 (MCP Server SDLC Framework Integration, 40 stories total, added 2025-10-18)
+
+---
+
+### Tech Spec (SPEC) Allocation Tracking
+
+**Purpose:** Tech Specs decompose complex backlog stories (typically 5+ SP or marked [REQUIRES TECH SPEC]) into implementation tasks.
+
+| SPEC ID | Title | Parent US | Status | Tasks Generated | Created |
+|---------|-------|-----------|--------|-----------------|---------|
+| **SPEC-001** | Automated Setup Script | US-001 | ✅ Completed (v2) | TASK-001, TASK-002, TASK-003 | 2025-10-14 |
+
+**Next Available:** SPEC-002
+
+**Usage Pattern:** One SPEC per complex backlog story requiring technical decomposition.
+
+---
+
+### Architecture Decision Record (ADR) Allocation Tracking
+
+**Purpose:** ADRs document major technical decisions requiring long-term architectural implications.
+
+| ADR ID | Title | Decision Area | Parent US/SPEC | Status | Created |
+|--------|-------|---------------|----------------|--------|---------|
+| *(none assigned yet)* | | | | | |
+
+**Next Available:** ADR-001
+
+**Usage Pattern:** One ADR per major technical decision (marked [REQUIRES ADR] in backlog story Open Questions).
+
+**Trigger:** Backlog story or Tech Spec has [REQUIRES ADR] marker in Open Questions section.
+
+---
+
+### Spike (SPIKE) Allocation Tracking
+
+**Purpose:** Time-boxed technical investigations (1-3 days maximum) to reduce uncertainty before committing to implementation approach.
+
+| SPIKE ID | Title | Investigation Goal | Parent US/SPEC | Time Box | Status | Created |
+|----------|-------|-------------------|----------------|----------|--------|---------|
+| *(none assigned yet)* | | | | | | |
+
+**Next Available:** SPIKE-001
+
+**Usage Pattern:** One SPIKE per technical investigation (marked [REQUIRES SPIKE] in backlog story or tech spec Open Questions).
+
+**Trigger:** Backlog story or Tech Spec has [REQUIRES SPIKE] marker in Open Questions section.
+
+**Time Box Enforcement:** SPIKE MUST NOT exceed 3 days. If incomplete at expiration, document findings and recommend follow-up if needed.
+
+---
+
+### Implementation Task (TASK) Allocation Tracking
+
+**Purpose:** Implementation tasks decomposed from Tech Specs (typically 4-16 hours each, sprint-ready work items).
+
+| Parent SPEC | Tasks | TASK IDs Assigned | Status | Created |
+|-------------|-------|-------------------|--------|---------|
+| **SPEC-001** | 3 tasks | TASK-001, TASK-002, TASK-003 | ✅ Completed | 2025-10-14 |
+
+**Detailed Task Allocations:**
+
+**SPEC-001: Automated Setup Script (TASK-001 → TASK-003, 3 tasks)**
+- TASK-001: Nushell Module Structure and OS Detection (✅ Completed v2, 2025-10-14)
+- TASK-002: Prerequisites Checking Module (✅ Completed v2, 2025-10-14)
+- TASK-003: Taskfile Installation Module (✅ Completed v1, 2025-10-14)
+
+**Next Available:** TASK-004
+
+**Usage Pattern:** Multiple TASKs per SPEC (typically 3-8 tasks depending on SPEC complexity, each 4-16 hours).
 
 **Note:** TODO.md tracks only active/upcoming work. Completed work archived to TODO-completed.md.
 
 **Checking Next Available ID:**
 ```bash
-# Find last assigned US ID in TODO.md
-grep -oE "US-[0-9]+" TODO.md | sort -t- -k2 -n | tail -1
+# Find last assigned US ID in artifacts
+find artifacts/backlog_stories -name "US-*.md" | grep -oE "US-[0-9]+" | sort -t- -k2 -n | tail -1
 
-# Find last assigned SPEC ID in TODO.md
-grep -oE "SPEC-[0-9]+" TODO.md | sort -t- -k2 -n | tail -1
+# Find last assigned SPEC ID in artifacts
+find artifacts/tech_specs -name "SPEC-*.md" 2>/dev/null | grep -oE "SPEC-[0-9]+" | sort -t- -k2 -n | tail -1 || echo "SPEC-001 (next available)"
 
-# Find last assigned TASK ID in TODO.md
-grep -oE "TASK-[0-9]+" TODO.md | sort -t- -k2 -n | tail -1
+# Find last assigned ADR ID in artifacts
+find artifacts/adrs -name "ADR-*.md" 2>/dev/null | grep -oE "ADR-[0-9]+" | sort -t- -k2 -n | tail -1 || echo "ADR-001 (next available)"
 
-# Check for duplicate US IDs in artifacts (should return nothing)
+# Find last assigned SPIKE ID in artifacts
+find artifacts/spikes -name "SPIKE-*.md" 2>/dev/null | grep -oE "SPIKE-[0-9]+" | sort -t- -k2 -n | tail -1 || echo "SPIKE-001 (next available)"
+
+# Find last assigned TASK ID in artifacts
+find artifacts/tasks -name "TASK-*.md" 2>/dev/null | grep -oE "TASK-[0-9]+" | sort -t- -k2 -n | tail -1 || echo "TASK-001 (next available)"
+
+# Check for duplicate IDs in artifacts (should return nothing)
 find artifacts/backlog_stories -name "US-*.md" | sed 's/.*US-/US-/' | sed 's/_.*//' | sort | uniq -d
+find artifacts/tech_specs -name "SPEC-*.md" 2>/dev/null | sed 's/.*SPEC-/SPEC-/' | sed 's/_.*//' | sort | uniq -d
+find artifacts/tasks -name "TASK-*.md" 2>/dev/null | sed 's/.*TASK-/TASK-/' | sed 's/_.*//' | sort | uniq -d
 ```
 
 **Parent Relationship Tracking:**
@@ -661,12 +744,14 @@ PRD-000 (Project Foundation)
 
 ---
 
-**Document Version**: 1.7
-**Last Updated**: 2025-10-15
+**Document Version**: 1.9
+**Last Updated**: 2025-10-18
 **Maintained By**: Context Engineering PoC Team
 **Next Review**: End of Phase 1
 
 **Version History:**
+- v1.9 (2025-10-18): Added comprehensive tracking tables for SPEC, ADR, SPIKE, and TASK artifacts with purpose, usage patterns, triggers, and current allocations (Issue #6 - Artifact Tracking)
+- v1.8 (2025-10-18): Allocated US-028 through US-067 for EPIC-006 (MCP Server Integration) - 40 backlog stories across 6 HLS stories (HLS-006 through HLS-011) with detailed scope breakdown
 - v1.7 (2025-10-15): Added Artifact Path Resolution Algorithm section - explicit rules for resolving path patterns with variable substitution, glob strategies, error message formats, and implementation checklist (Issue #5 - Path Resolution Failures)
 - v1.6 (2025-10-14): Added ID Assignment Strategy section - documents global sequential numbering to prevent ID clashing across HLS stories (Issue #4 - ID Management)
 - v1.5 (2025-10-13): Added Input Classification System - replaced ambiguous `required` attribute with clear `classification` tiers (Issue #3 - Input Classification)
