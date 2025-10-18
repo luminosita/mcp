@@ -424,9 +424,9 @@ cat token_usage_report.md
 - **Depends On:** US-060 (Integration Testing) - workflow execution patterns reused for measurement
 - **Related:** HLS-011 (Production Readiness) - token cost validation critical for production pilot justification
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**No open implementation questions. All technical approaches clear from PRD-006 v3 §Goals & Success Metrics and §Appendix A: Token Cost Baseline Measurement Plan.**
+**All technical approaches clear from PRD-006 v3 §Goals & Success Metrics and §Appendix A: Token Cost Baseline Measurement Plan.**
 
 **Key Decisions Already Made:**
 - Workflows to measure: 10 workflows defined in PRD-006 Appendix A

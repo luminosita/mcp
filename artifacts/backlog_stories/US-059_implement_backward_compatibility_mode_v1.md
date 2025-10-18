@@ -356,9 +356,9 @@ Update CLAUDE.md orchestration instructions to include mode detection:
 - **Blocks:** US-062 (Regression Testing) - validates functional equivalence between modes
 - **Related:** All HLS-006 through HLS-009 stories (US-028 through US-055) - provide MCP Server implementation
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**No open implementation questions. All technical approaches clear from PRD-006 v3 §Requirements (FR-13) and §Non-Functional Requirements (NFR-Compatibility-01, NFR-Reliability-01).**
+**All technical approaches clear from PRD-006 v3 §Requirements (FR-13) and §Non-Functional Requirements (NFR-Compatibility-01, NFR-Reliability-01).**
 
 **Key Decisions Already Made:**
 - Configuration file location: `.mcp/config.json` in project root

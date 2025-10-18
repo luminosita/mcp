@@ -448,9 +448,9 @@ pytest tests/regression/ -v
 - **Related:** US-060 (Integration Testing) - complementary testing (MCP mode vs. local mode)
 - **Related:** US-061 (Token Usage Measurement) - validates functional equivalence and performance
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**No open implementation questions. All technical approaches clear from PRD-006 v3 §Non-Functional Requirements (NFR-Compatibility-01, NFR-Compatibility-02, NFR-Compatibility-03).**
+**All technical approaches clear from PRD-006 v3 §Non-Functional Requirements (NFR-Compatibility-01, NFR-Compatibility-02, NFR-Compatibility-03).**
 
 **Key Decisions Already Made:**
 - Baseline artifacts: Captured from pre-refactoring commit (before US-056)

@@ -219,9 +219,9 @@ Modify CLAUDE.md instructions for generator execution:
 - **Related:** US-035 (Expose Generators as MCP Prompts) - implements MCP Server prompt endpoints
 - **Related:** US-036 (Update /generate Command to Call MCP Prompts) - implements command logic changes
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**No open implementation questions. All technical approaches clear from PRD-006 v3 §Requirements (FR-05, FR-12).**
+**All technical approaches clear from PRD-006 v3 §Requirements (FR-05, FR-12).**
 
 **Key Decisions Already Made:**
 - MCP prompt URL pattern: `mcp://prompts/generator/{artifact_name}` per FR-05

@@ -124,7 +124,8 @@ Replace AI inference validation instructions with `validate_artifact` tool call:
 2. MCP Server returns validation results:
    - `{passed: true/false, results: [{id: "CQ-01", passed: true, details: "..."}]}`
 3. Report validation results with criterion-level details
-4. Manual review required for subjective criteria (CQ-11 appropriateness, CQ-12 readability)
+4. If `agent_review_required` flag present in response, AI Agent performs content review for specified criteria (CQ-11 appropriateness, CQ-12 readability)
+5. After AI Agent review, flag for human review only if needed
 
 **Tool Input Schema:**
 ```json
@@ -140,13 +141,13 @@ Replace AI inference validation instructions with `validate_artifact` tool call:
   "passed": "boolean",
   "results": [
     {"id": "CQ-01", "category": "content", "passed": true, "details": "All template sections present (8/8)"},
-    {"id": "CQ-11", "category": "content", "passed": null, "requires_manual_review": true}
+    {"id": "CQ-11", "category": "content", "passed": null, "requires_agent_review": true}
   ],
   "summary": {
     "total": 26,
     "automated_passed": 24,
     "automated_failed": 0,
-    "manual_review_required": 2
+    "agent_review_required": 2
   }
 }
 ```
@@ -478,13 +479,14 @@ Add section for centralized artifact storage:
 - **Related:** US-040 (Implement validate_artifact Tool), US-042 (Implement resolve_artifact_path Tool), US-043 (Implement store_artifact Tool), US-044 (Implement add_task Tool)
 - **Related:** US-048/049/050/051 (Task Tracking and ID Management REST API) - provides microservice backend for task/ID tools
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**No open implementation questions. All technical approaches clear from PRD-006 v3 §Requirements (FR-06 through FR-11, FR-12, FR-23, FR-24).**
+**All technical approaches clear from PRD-006 v3 §Requirements (FR-06 through FR-11, FR-12, FR-23, FR-24).**
 
 **Key Decisions Already Made:**
 - Tool input/output schemas: Defined in PRD-006 v3 FR-06 through FR-11, FR-23, FR-24
-- Validation approach: Automated criteria (24/26) + manual review flags (2/26) per FR-22
+- Validation approach: Automated criteria (24/26) + agent review flags (2/26) per FR-22
+- Validation workflow: Deterministic validation via script → AI Agent content review (if flagged) → Human review (only if needed)
 - Path resolution approach: Pattern matching with variable substitution per FR-07
 - Task management approach: Database-backed via Task Tracking microservice per FR-08, FR-09, FR-24
 - ID management approach: Database-backed ID registry per FR-10, FR-11

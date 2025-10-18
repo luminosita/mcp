@@ -477,17 +477,15 @@ jobs:
 - **Blocks:** HLS-011 (Production Readiness) - integration testing validation required before production pilot
 - **Related:** US-061 (Token Usage Measurement) - both validate MCP approach
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**Q1: Should integration tests use real Claude Code CLI or simulate workflow execution?** [REQUIRES TECH LEAD]
-- **Option A:** Use real Claude Code CLI (full integration, slower execution, harder to automate)
-- **Option B:** Simulate workflow execution (call MCP Server APIs directly, faster, easier CI integration)
-- **Recommendation:** Start with Option B (simulated execution) for faster iteration, add Option A (real CLI) for final validation before production pilot
+**Q1: Should integration tests use real Claude Code CLI or simulate workflow execution?**
 
-**Q2: Should test database be ephemeral (created/destroyed per test run) or persistent?** [REQUIRES TECH LEAD]
-- **Option A:** Ephemeral database (clean state per run, slower setup)
-- **Option B:** Persistent database (faster setup, requires cleanup logic)
-- **Recommendation:** Option A (ephemeral) for CI environment, Option B (persistent) for local development
+D1: Option B, simulation
+
+**Q2: Should test database be ephemeral (created/destroyed per test run) or persistent?**
+
+D2: Option A, ephemeral
 
 ## Related Documents
 - **Parent PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md` (§Appendix A: Token Cost Baseline Measurement Plan)

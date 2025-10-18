@@ -226,9 +226,9 @@ prompts/CLAUDE/go/CLAUDE-tooling.md     → prompts/CLAUDE/go/patterns-tooling.m
 - **Enables:** US-060 (Integration Testing) - requires refactored CLAUDE.md to test MCP resource loading
 - **Related:** US-029 (Rename CLAUDE Files to Patterns) - This story implements the renaming as part of the refactoring
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**No open implementation questions. All technical approaches clear from PRD-006 v3 §Requirements and §Technical Considerations.**
+**All technical approaches clear from PRD-006 v3 §Requirements and §Technical Considerations.**
 
 **Key Decisions Already Made:**
 - File naming convention: patterns-*.md per PRD-006 v3 Decision and Epic feedback
