@@ -14,11 +14,11 @@
 ## Parent Artifact Context
 
 **Parent Epic:** [EPIC-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
+- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
 - **Epic Contribution:** Replaces unbounded TODO.md file growth with database-backed task tracking and ID management, reducing token consumption by 40-60% (addresses Epic Acceptance Criterion 2 - MCP Tools Functional Equivalence)
 
 **Parent PRD:** [PRD-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md`
+- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md`
 - **PRD Section:** §Timeline & Milestones - Phase 4: Task Tracking Microservice (Weeks 5-6)
 - **Functional Requirements Coverage:**
   - **FR-08:** get_next_task tool (integrated with Task Tracking microservice)
@@ -310,8 +310,8 @@ Technical implementation questions (HTTP framework choice, database migration to
 - [ ] Product Owner acceptance obtained
 
 ## Related Documents
-- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
-- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md` (§Timeline & Milestones - Phase 4)
+- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
+- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md` (§Timeline & Milestones - Phase 4)
 - **Go Implementation Standards:** `/prompts/CLAUDE/go/CLAUDE-core.md`, `/prompts/CLAUDE/go/CLAUDE-tooling.md`
 - **User Personas:** PRD-006 §User Personas & Use Cases - Persona 1: Enterprise Development Team Lead
 - **Dependency:** HLS-006 (MCP Resources Migration), HLS-008 (MCP Tools - add_task tool)

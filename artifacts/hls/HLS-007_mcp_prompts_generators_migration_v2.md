@@ -14,11 +14,11 @@
 ## Parent Artifact Context
 
 **Parent Epic:** [EPIC-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
+- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
 - **Epic Contribution:** Migrates artifact generators to MCP prompts, enabling centralized generator management and automatic updates across all projects (addresses Epic Acceptance Criterion 1 - MCP Resources Migration)
 
 **Parent PRD:** [PRD-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md`
+- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md`
 - **PRD Section:** §Timeline & Milestones - Phase 2: MCP Prompts - Generators Migration (Week 3)
 - **Functional Requirements Coverage:**
   - **FR-05:** MCP Server SHALL expose all artifact generators (prompts/*-generator.xml) as MCP prompts
@@ -240,8 +240,8 @@ Technical implementation questions (MCP prompt protocol details, error handling 
 - [ ] Product Owner acceptance obtained
 
 ## Related Documents
-- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
-- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md` (§Timeline & Milestones - Phase 2)
+- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
+- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md` (§Timeline & Milestones - Phase 2)
 - **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (§1.1 - Integration Fragmentation)
 - **User Personas:** PRD-006 §User Personas & Use Cases - Persona 2: Framework Maintainer
 - **Dependency:** HLS-006 (MCP Resources Migration) - must complete first

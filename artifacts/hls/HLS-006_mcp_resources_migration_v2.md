@@ -14,11 +14,11 @@
 ## Parent Artifact Context
 
 **Parent Epic:** [EPIC-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
+- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
 - **Epic Contribution:** Establishes foundational MCP resources infrastructure, enabling framework centralization and eliminating per-project duplication (addresses Epic Acceptance Criterion 1 - MCP Resources Migration)
 
 **Parent PRD:** [PRD-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md`
+- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md`
 - **PRD Section:** §Timeline & Milestones - Phase 1: MCP Resources Migration (Weeks 1-2)
 - **Functional Requirements Coverage:**
   - **FR-01:** MCP Server SHALL expose all implementation pattern files (formerly CLAUDE.md files) as named MCP resources
@@ -260,8 +260,8 @@ Technical implementation questions (HTTP framework choice, exact caching library
 - [ ] Product Owner acceptance obtained
 
 ## Related Documents
-- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
-- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md` (§Timeline & Milestones - Phase 1)
+- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
+- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md` (§Timeline & Milestones - Phase 1)
 - **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (§1.1 - Integration Fragmentation)
 - **User Personas:** PRD-006 §User Personas & Use Cases - Persona 2: Framework Maintainer
 

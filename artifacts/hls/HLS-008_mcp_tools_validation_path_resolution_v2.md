@@ -14,11 +14,11 @@
 ## Parent Artifact Context
 
 **Parent Epic:** [EPIC-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
+- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
 - **Epic Contribution:** Replaces AI inference for validation and path resolution with deterministic tools, reducing error rate from 20-30% to <5% (addresses Epic Acceptance Criterion 2 - MCP Tools Functional Equivalence)
 
 **Parent PRD:** [PRD-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md`
+- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md`
 - **PRD Section:** §Timeline & Milestones - Phase 3: MCP Tools - Validation and Path Resolution (Week 4)
 - **Functional Requirements Coverage:**
   - **FR-06:** validate_artifact tool with deterministic checklist evaluation
@@ -115,7 +115,7 @@
 3. Claude Code needs to locate EPIC-006 artifact for PRD generation
 4. Claude Code calls MCP tool `resolve_artifact_path(type="epic", id="006", version="1")`
 5. MCP Server searches filesystem using glob pattern
-6. MCP Server finds exact match: `artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
+6. MCP Server finds exact match: `artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
 7. MCP Server returns JSON: `{path: "mcp://resources/artifacts/epic/006"}`
 8. Claude Code reads artifact from resolved path
 9. Claude Code executes PRD generator with EPIC-006 as input
@@ -162,7 +162,7 @@
 **Then** tool returns pass/fail results for all 26 criteria with criterion-level details
 
 ### Criterion 2: Path Resolution Tool Functional
-**Given** EPIC-006 artifact exists at `artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
+**Given** EPIC-006 artifact exists at `artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
 **When** Claude Code calls `resolve_artifact_path(type="epic", id="006", version="1")`
 **Then** tool returns exact path in <500ms
 
@@ -322,8 +322,8 @@ Technical implementation questions (validation rule logic, glob pattern optimiza
 - [ ] Product Owner acceptance obtained
 
 ## Related Documents
-- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
-- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md` (§Timeline & Milestones - Phase 3)
+- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
+- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md` (§Timeline & Milestones - Phase 3)
 - **Business Research:** `/artifacts/research/AI_Agent_MCP_Server_business_research.md` (§1.1 - Integration Fragmentation, §Token Overhead)
 - **User Personas:** PRD-006 §User Personas & Use Cases - Persona 3: AI Agent (Claude Code)
 - **Dependency:** HLS-006 (MCP Resources Migration) - resource infrastructure required

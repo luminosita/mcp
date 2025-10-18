@@ -14,11 +14,11 @@
 ## Parent Artifact Context
 
 **Parent Epic:** [EPIC-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
+- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
 - **Epic Contribution:** Integrates all MCP components (resources, prompts, tools) through updated CLAUDE.md orchestration, enabling end-to-end SDLC workflows with 40-60% token reduction (addresses Epic Acceptance Criteria 2 & 3)
 
 **Parent PRD:** [PRD-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md`
+- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md`
 - **PRD Section:** §Timeline & Milestones - Phase 5: CLAUDE.md Orchestration Update & Integration Testing (Week 7)
 - **Functional Requirements Coverage:**
   - **FR-12:** Main CLAUDE.md SHALL orchestrate MCP Server integration (resources/prompts/tools)
@@ -263,8 +263,8 @@
 - [ ] Product Owner acceptance obtained
 
 ## Related Documents
-- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
-- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md` (§Timeline & Milestones - Phase 5)
+- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
+- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md` (§Timeline & Milestones - Phase 5)
 - **Dependencies:** HLS-006, HLS-007, HLS-008, HLS-009 (all must complete first)
 - **User Personas:** PRD-006 §User Personas - Persona 2 (Framework Maintainer), Persona 3 (AI Agent)
 

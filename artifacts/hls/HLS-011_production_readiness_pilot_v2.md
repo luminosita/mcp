@@ -14,11 +14,11 @@
 ## Parent Artifact Context
 
 **Parent Epic:** [EPIC-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
+- **Link:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
 - **Epic Contribution:** Validates production readiness through performance benchmarking, security review, observability, and 30-day stability period before second pilot expansion (addresses Epic Acceptance Criterion 4 - Multi-Project Validation)
 
 **Parent PRD:** [PRD-006: MCP Server SDLC Framework Integration]
-- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md`
+- **Link:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md`
 - **PRD Section:** §Timeline & Milestones - Phase 6: Production Readiness and Pilot (Week 8+)
 - **Functional Requirements Coverage:**
   - **FR-03:** MCP Server SHALL expose shared artifacts as queryable resources
@@ -284,8 +284,8 @@
 - [ ] Product Owner approval for second pilot expansion
 
 ## Related Documents
-- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md`
-- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md` (§Timeline & Milestones - Phase 6)
+- **Parent Epic:** `/artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v2.md`
+- **PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md` (§Timeline & Milestones - Phase 6)
 - **Decision D1:** PRD-006 §Decisions Made - 30-day stability period before second pilot expansion
 - **Decision D2:** PRD-006 §Decisions Made - Keep Go microservices private for 3 months
 - **Decision D3:** PRD-006 §Decisions Made - Containerized PostgreSQL for pilot phase
