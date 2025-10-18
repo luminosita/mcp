@@ -606,9 +606,9 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 **Purpose:** Tech Specs decompose complex backlog stories (typically 5+ SP or marked [REQUIRES TECH SPEC]) into implementation tasks.
 
-| SPEC ID | Title | Parent US | Status | Tasks Generated | Created |
-|---------|-------|-----------|--------|-----------------|---------|
-| **SPEC-001** | Automated Setup Script | US-001 | ✅ Completed (v2) | TASK-001, TASK-002, TASK-003 | 2025-10-14 |
+| SPEC ID | Title | Parent US | Created |
+|---------|-------|-----------|---------|
+| **SPEC-001** | Automated Setup Script | US-001 | 2025-10-14 |
 
 **Next Available:** SPEC-002
 
@@ -620,9 +620,9 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 **Purpose:** ADRs document major technical decisions requiring long-term architectural implications.
 
-| ADR ID | Title | Decision Area | Parent US/SPEC | Status | Created |
-|--------|-------|---------------|----------------|--------|---------|
-| *(none assigned yet)* | | | | | |
+| ADR ID | Title | Decision Area | Parent US/SPEC | Created |
+|--------|-------|---------------|----------------|---------|
+| *(none assigned yet)* | | | | |
 
 **Next Available:** ADR-001
 
@@ -636,9 +636,9 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 **Purpose:** Time-boxed technical investigations (1-3 days maximum) to reduce uncertainty before committing to implementation approach.
 
-| SPIKE ID | Title | Investigation Goal | Parent US/SPEC | Time Box | Status | Created |
-|----------|-------|-------------------|----------------|----------|--------|---------|
-| *(none assigned yet)* | | | | | | |
+| SPIKE ID | Title | Investigation Goal | Parent US/SPEC | Time Box | Created |
+|----------|-------|-------------------|----------------|--------|---------|
+| *(none assigned yet)* | | | | | |
 
 **Next Available:** SPIKE-001
 
@@ -654,18 +654,14 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 **Purpose:** Implementation tasks decomposed from Tech Specs (typically 4-16 hours each, sprint-ready work items).
 
-| Parent SPEC | Tasks | TASK IDs Assigned | Status | Created |
-|-------------|-------|-------------------|--------|---------|
-| **SPEC-001** | 3 tasks | TASK-001, TASK-002, TASK-003 | ✅ Completed | 2025-10-14 |
+| Parent Story | Tasks | TASK IDs Assigned | Created |
+|--------------|-------|-------------------|---------|
+| **SPEC-001** | 3 tasks | TASK-001 → TASK-003 | 2025-10-14 |
+| **US-030** | 4 tasks | TASK-004 → TASK-007 | 2025-10-18 |
+| **US-035** | 4 tasks | TASK-008 → TASK-011 | 2025-10-18 |
 
-**Detailed Task Allocations:**
 
-**SPEC-001: Automated Setup Script (TASK-001 → TASK-003, 3 tasks)**
-- TASK-001: Nushell Module Structure and OS Detection (✅ Completed v2, 2025-10-14)
-- TASK-002: Prerequisites Checking Module (✅ Completed v2, 2025-10-14)
-- TASK-003: Taskfile Installation Module (✅ Completed v1, 2025-10-14)
-
-**Next Available:** TASK-004
+**Next Available:** TASK-012
 
 **Usage Pattern:** Multiple TASKs per SPEC (typically 3-8 tasks depending on SPEC complexity, each 4-16 hours).
 

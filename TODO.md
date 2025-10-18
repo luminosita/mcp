@@ -31,9 +31,9 @@
 
 ## Current Phase: Planning (EPIC-006)
 
-**Current Status**: Backlog Story Decomposition Ready
-**Last Completed**: TASK-058 (HLS-011 generation, 2025-10-18)
-**Next Task**: TASK-059 (Generate US-028 through US-034 from HLS-006)
+**Current Status**: Backlog Story Decomposition In Progress
+**Last Completed**: TASK-059 (US-028 through US-034 generation from HLS-006, 2025-10-18)
+**Next Task**: TASK-060 (Generate US-035 through US-039 from HLS-007)
 **Epic Focus**: MCP Server Integration - Migrate local files (CLAUDE.md, artifacts, generators, templates) to MCP Server resources, prompts, and tools
 **Parent Initiative**: INIT-001 (AI Agent MCP Infrastructure)
 **Note**: 6 HLS stories completed (HLS-006 through HLS-011, all v2). Ready to generate 43 backlog stories (US-028 through US-070) across 6 TODO tasks (TASK-059 through TASK-064)
@@ -60,7 +60,7 @@
 
 **Generation Tasks**:
 
-- [x] **TASK-050**: Generate EPIC-006
+- [X] **TASK-050**: Generate EPIC-006
   - Command: `/generate epic-generator`
   - Input: docs/additions/HLS-resources.md (resource document)
   - Parent: INIT-001 v4
@@ -69,7 +69,7 @@
   - Validation: 25/25 criteria passed
   - Context: Completed in current session
 
-- [x] **TASK-051**: Generate PRD-006 v1
+- [X] **TASK-051**: Generate PRD-006 v1
   - Command: `/generate prd-generator`
   - Input: artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md (parent epic)
   - Parent: EPIC-006 v1
@@ -79,7 +79,7 @@
   - Context: Completed in current session
   - Note: Comprehensive PRD with 24 functional requirements, 8 NFR categories, 5 open questions (3 business, 2 technical trade-offs)
 
-- [x] **TASK-052**: Refine PRD-006 v1 → v2
+- [X] **TASK-052**: Refine PRD-006 v1 → v2
   - Command: Manual refinement based on feedback
   - Input: feedback/PRD-006_v1_comments.md
   - Parent: PRD-006 v1
@@ -90,7 +90,7 @@
 
 **HLS Decomposition Tasks** (Next Available IDs: HLS-006 through HLS-011):
 
-- [x] **TASK-053**: Generate HLS-006 (MCP Resources Migration)
+- [X] **TASK-053**: Generate HLS-006 (MCP Resources Migration)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -100,7 +100,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [x] **TASK-054**: Generate HLS-007 (MCP Prompts - Generators Migration)
+- [X] **TASK-054**: Generate HLS-007 (MCP Prompts - Generators Migration)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -110,7 +110,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [x] **TASK-055**: Generate HLS-008 (MCP Tools - Validation and Path Resolution)
+- [X] **TASK-055**: Generate HLS-008 (MCP Tools - Validation and Path Resolution)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -120,7 +120,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [x] **TASK-056**: Generate HLS-009 (Task Tracking Microservice)
+- [X] **TASK-056**: Generate HLS-009 (Task Tracking Microservice)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -131,7 +131,7 @@
   - Context: Completed in current session
   - Note: Single microservice handling both task tracking and ID management
 
-- [x] **TASK-057**: Generate HLS-010 (CLAUDE.md Orchestration Update & Integration Testing)
+- [X] **TASK-057**: Generate HLS-010 (CLAUDE.md Orchestration Update & Integration Testing)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -141,7 +141,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [x] **TASK-058**: Generate HLS-011 (Production Readiness and Pilot)
+- [X] **TASK-058**: Generate HLS-011 (Production Readiness and Pilot)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -154,8 +154,7 @@
 
 **Backlog Story Decomposition Tasks** (Next Available IDs: US-028 through US-070):
 
-- [ ] **TASK-059**: Generate US-028 through US-034 (HLS-006: MCP Resources Migration)
-  - **🔴 BEFORE STARTING: Run `/clear` command 🔴**
+- [X] **TASK-059**: Generate US-028 through US-034 (HLS-006: MCP Resources Migration)
   - Command: `/generate backlog-story-generator` (7 iterations)
   - Input: artifacts/hls/HLS-006_mcp_resources_migration_v2.md
   - Parent: HLS-006 v2
@@ -169,12 +168,11 @@
     - US-032: Implement Resource Caching with TTL (~5 SP)
     - US-033: Resource Loading Performance Optimization (~3 SP)
     - US-034: Unit and Integration Testing for Resource Server (~5 SP)
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (2025-10-18)
+  - Context: Completed in current session
 
-- [ ] **TASK-060**: Generate US-035 through US-039 (HLS-007: MCP Prompts - Generators Migration)
-  - **🔴 BEFORE STARTING: Run `/clear` command 🔴**
-  - **⚠️ VERIFY ID ALLOCATION:** Check for duplicate US IDs: `find artifacts/backlog_stories -name "US-*.md" | sed 's/.*US-/US-/' | sed 's/_.*//' | sort | uniq -d` (should return nothing)
-  - Command: `/generate backlog-story-generator` (5 iterations)
+- [X] **TASK-060**: Generate US-035 through US-039 (HLS-007: MCP Prompts - Generators Migration)
+    - Command: `/generate backlog-story-generator` (5 iterations)
   - Input: artifacts/hls/HLS-007_mcp_prompts_generators_migration_v2.md
   - Parent: HLS-007 v2
   - IDs Allocated: US-035, US-036, US-037, US-038, US-039
@@ -185,11 +183,10 @@
     - US-037: Integration Testing for All Generator Types (~5 SP)
     - US-038: Backward Compatibility Mode Implementation (~3 SP)
     - US-039: Error Handling and User Messaging (~2 SP)
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (2025-10-18)
+  - Context: Completed in current session. Also applied feedback to US-034 (converted Open Questions to Decisions Made).
 
-- [ ] **TASK-061**: Generate US-040 through US-047 (HLS-008: MCP Tools - Validation and Path Resolution)
-  - **🔴 BEFORE STARTING: Run `/clear` command 🔴**
-  - **⚠️ VERIFY ID ALLOCATION:** Check for duplicate US IDs: `find artifacts/backlog_stories -name "US-*.md" | sed 's/.*US-/US-/' | sed 's/_.*//' | sort | uniq -d` (should return nothing)
+- [X] **TASK-061**: Generate US-040 through US-047 (HLS-008: MCP Tools - Validation and Path Resolution)
   - Command: `/generate backlog-story-generator` (8 iterations)
   - Input: artifacts/hls/HLS-008_mcp_tools_validation_path_resolution_v2.md
   - Parent: HLS-008 v2
@@ -204,14 +201,14 @@
     - US-045: Add Sub-artifact Evaluation Instructions to All Generators (~5 SP) [NEW - v2 addition]
     - US-046: Tool Invocation Logging (~3 SP)
     - US-047: Integration Testing for All Tools (~5 SP)
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (2025-10-18)
+  - Context: Completed in current session
 
-- [ ] **TASK-062**: Generate US-048 through US-055 (HLS-009: Task Tracking Microservice)
-  - **🔴 BEFORE STARTING: Run `/clear` command 🔴**
-  - **⚠️ VERIFY ID ALLOCATION:** Check for duplicate US IDs: `find artifacts/backlog_stories -name "US-*.md" | sed 's/.*US-/US-/' | sed 's/_.*//' | sort | uniq -d` (should return nothing)
+- [X] **TASK-062**: Generate US-048 through US-055 (HLS-009: Task Tracking Microservice)
   - Command: `/generate backlog-story-generator` (8 iterations)
   - Input: artifacts/hls/HLS-009_task_tracking_microservice_v2.md
   - Parent: HLS-009 v2
+  - Parent PRD: PRD-006 v3
   - IDs Allocated: US-048, US-049, US-050, US-051, US-052, US-053, US-054, US-055
   - Output: artifacts/backlog_stories/US-{048-055}_*.md
   - Scope:
@@ -223,15 +220,15 @@
     - US-053: MCP Server Integration (Python MCP Tools) (~5 SP)
     - US-054: Multi-Project Stress Testing (~3 SP)
     - US-055: Observability (Health Check, Logging) (~3 SP)
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (2025-10-18)
+  - Context: Completed in current session
   - Note: Single microservice handling both task tracking and ID management
 
-- [ ] **TASK-063**: Generate US-056 through US-062 (HLS-010: CLAUDE.md Orchestration Update & Integration Testing)
-  - **🔴 BEFORE STARTING: Run `/clear` command 🔴**
-  - **⚠️ VERIFY ID ALLOCATION:** Check for duplicate US IDs: `find artifacts/backlog_stories -name "US-*.md" | sed 's/.*US-/US-/' | sed 's/_.*//' | sort | uniq -d` (should return nothing)
+- [X] **TASK-063**: Generate US-056 through US-062 (HLS-010: CLAUDE.md Orchestration Update & Integration Testing)
   - Command: `/generate backlog-story-generator` (7 iterations)
   - Input: artifacts/hls/HLS-010_claude_orchestration_integration_testing_v2.md
   - Parent: HLS-010 v2
+  - Parent PRD: PRD-006 v3
   - IDs Allocated: US-056, US-057, US-058, US-059, US-060, US-061, US-062
   - Output: artifacts/backlog_stories/US-{056-062}_*.md
   - Scope:
@@ -242,14 +239,14 @@
     - US-060: End-to-End Integration Testing (10 Workflows) (~8 SP)
     - US-061: Token Usage Measurement and Validation (~3 SP)
     - US-062: Regression Testing (Local File Approach) (~5 SP)
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (2025-10-18)
+  - Context: Completed in current session
 
-- [ ] **TASK-064**: Generate US-063 through US-070 (HLS-011: Production Readiness and Pilot)
-  - **🔴 BEFORE STARTING: Run `/clear` command 🔴**
-  - **⚠️ VERIFY ID ALLOCATION:** Check for duplicate US IDs: `find artifacts/backlog_stories -name "US-*.md" | sed 's/.*US-/US-/' | sed 's/_.*//' | sort | uniq -d` (should return nothing)
+- [X] **TASK-064**: Generate US-063 through US-070 (HLS-011: Production Readiness and Pilot)
   - Command: `/generate backlog-story-generator` (8 iterations)
   - Input: artifacts/hls/HLS-011_production_readiness_pilot_v2.md
   - Parent: HLS-011 v2
+  - Parent PRD: PRD-006 v3
   - IDs Allocated: US-063, US-064, US-065, US-066, US-067, US-068, US-069, US-070
   - Output: artifacts/backlog_stories/US-{063-070}_*.md
   - Scope:
@@ -261,6 +258,67 @@
     - US-068: Documentation (Migration Guide, API Reference, Deployment) (~8 SP)
     - US-069: 30-Day Stability Period Monitoring (~5 SP)
     - US-070: Production Deployment Guide (~3 SP)
+  - Status: ✅ Completed (2025-10-18)
+  - Context: Completed in current session
+
+---
+
+## Implementation Tasks
+
+### US-030: Implement MCP Resource Server for Implementation Pattern Files
+
+**Note:** US-030 requires task decomposition per SDLC Section 11 (8 SP, security-critical, cross-domain).
+
+- [ ] **TASK-004**: Implement FastAPI resource endpoints with Pydantic validation
+  - Story: US-030
+  - Estimated Hours: 4-6 hours
+  - Description: FastAPI routes for patterns/{name} and sdlc/core, Pydantic models with path traversal protection, basic error handling
+  - Status: ⏳ Pending
+
+- [ ] **TASK-005**: Implement async file loading and error handling
+  - Story: US-030
+  - Estimated Hours: 3-4 hours
+  - Description: Async file I/O with aiofiles, file existence checks, distinguish 404 vs 500 errors
+  - Status: ⏳ Pending
+
+- [ ] **TASK-006**: Add structured logging and observability
+  - Story: US-030
+  - Estimated Hours: 2-3 hours
+  - Description: structlog integration, resource access event logging, security event logging (path traversal attempts)
+  - Status: ⏳ Pending
+
+- [ ] **TASK-007**: Comprehensive testing for US-030 (unit, integration, security)
+  - Story: US-030
+  - Estimated Hours: 4-5 hours
+  - Description: Unit tests for resource name validation, integration tests for file loading, security tests for path traversal attacks, 80% coverage target
+  - Status: ⏳ Pending
+
+### US-035: Expose Generators as MCP Prompts
+
+**Note:** US-035 requires task decomposition per SDLC Section 11 (8 SP, security-critical, performance-critical).
+
+- [ ] **TASK-008**: Implement prompt registration and file scanner module
+  - Story: US-035
+  - Estimated Hours: 4-6 hours
+  - Description: Scan prompts/ directory for *-generator.xml files, map filenames to artifact names (epic-generator.xml → epic), register prompts with FastMCP using @mcp.prompt() decorator
+  - Status: ⏳ Pending
+
+- [ ] **TASK-009**: Implement async file loading with security validation
+  - Story: US-035
+  - Estimated Hours: 4-6 hours
+  - Description: Use aiofiles for async I/O to load generator XML content, validate artifact_name parameter to prevent path traversal attacks, implement error handling for missing/malformed files
+  - Status: ⏳ Pending
+
+- [ ] **TASK-010**: Implement prompt caching layer with TTL
+  - Story: US-035
+  - Estimated Hours: 4-6 hours
+  - Description: In-memory cache for generator XML content with 5-minute TTL expiration, cache hit/miss metrics, automatic cache invalidation on TTL expiry
+  - Status: ⏳ Pending
+
+- [ ] **TASK-011**: Integration testing for all 10 generator prompts
+  - Story: US-035
+  - Estimated Hours: 4-8 hours
+  - Description: Test prompt discovery (list_prompts API), test retrieval for all 10 generators, test caching behavior, test error handling (missing file, malformed XML, path traversal), 80% coverage target
   - Status: ⏳ Pending
 
 ---
