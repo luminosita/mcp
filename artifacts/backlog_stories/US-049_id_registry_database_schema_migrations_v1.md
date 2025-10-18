@@ -237,8 +237,8 @@ The schema must enforce UNIQUE constraint on (artifact_type, project_id) to prev
 
 **Related PRD Section:** PRD-006 §Technical Considerations - Data Model - ID Registry Database Schema (lines 443-471)
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**No open implementation questions. All technical approaches clear from Implementation Research and PRD.**
+**All technical approaches clear from Implementation Research and PRD.**
 
 Database schema fully specified in PRD-006 §Data Model. SERIALIZABLE isolation level is standard PostgreSQL transaction isolation (no custom implementation required - configured via connection string or BEGIN TRANSACTION statement). UUID generation handled by PostgreSQL or Go libraries (standard approach).

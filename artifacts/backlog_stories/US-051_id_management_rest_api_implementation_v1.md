@@ -333,16 +333,14 @@ The API must use SERIALIZABLE transaction isolation to guarantee zero ID collisi
 
 **Related PRD Section:** PRD-006 §Technical Considerations - Architecture (lines 296-347), §Requirements - FR-15 (lines 164)
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
 **Q1: Should we implement automatic reservation expiration cleanup (cron job) or manual API call?**
-- **Type:** [REQUIRES TECH LEAD] - Operational decision
-- **Context:** Expired reservations waste database space. Options: (1) Cron job runs DELETE /ids/reservations/expired every 30 minutes, (2) Manual API call triggered by ops team, (3) Lazy cleanup (delete on next ID allocation query).
-- **Recommendation:** Start with manual API call endpoint (DELETE /ids/reservations/expired). Add cron job if expired reservations accumulate (>1000 rows). Lazy cleanup adds complexity to ID allocation queries (avoid).
+
+D1: Automatic
 
 **Q2: Should reservation expiration be configurable per request or global?**
-- **Type:** [REQUIRES TECH LEAD] - Design decision
-- **Context:** Current requirement: 15 minutes default. Some batch operations may need longer expiration (e.g., 30 minutes).
-- **Recommendation:** Start with global configuration (environment variable RESERVATION_EXPIRATION_MINUTES=15). Add per-request override (`{type: "US", count: 6, expiration_minutes: 30}`) only if business case emerges (YAGNI principle).
+
+D2: Start with global configuration (environment variable RESERVATION_EXPIRATION_MINUTES=15).
 
 All other technical approaches clear from PRD and Implementation Research. SERIALIZABLE isolation level standard PostgreSQL feature (no custom implementation). UUID generation handled by database (gen_random_uuid()) or Go libraries (google/uuid).

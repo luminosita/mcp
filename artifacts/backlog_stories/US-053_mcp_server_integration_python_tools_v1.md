@@ -374,8 +374,8 @@ session.mount("https://", adapter)
 
 **Related PRD Section:** PRD-006 §Technical Considerations - Architecture - MCP Tools Layer (lines 321-327)
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**No open implementation questions. All technical approaches clear from Implementation Research and PRD.**
+**All technical approaches clear from Implementation Research and PRD.**
 
 HTTP client patterns standard (requests library with Session). MCP tool decorator standard (FastMCP SDK). Error handling patterns standard (catch requests.exceptions, raise RuntimeError with clear message). Environment variable loading standard (os.getenv with validation).

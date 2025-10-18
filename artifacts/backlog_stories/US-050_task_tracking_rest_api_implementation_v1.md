@@ -367,16 +367,14 @@ The API must enforce project_id filtering for multi-project isolation, validate 
 
 **Related PRD Section:** PRD-006 §Technical Considerations - Architecture (lines 296-347), §Requirements - FR-14 (lines 163)
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
 **Q1: HTTP framework choice (chi vs. gin vs. gorilla/mux)?**
-- **Type:** [REQUIRES TECH LEAD] - Framework selection
-- **Context:** All three frameworks support required features (path parameters, query parameters, JSON middleware). Choice affects project dependencies and code style.
-- **Recommendation:** chi (lightweight, stdlib-compatible, widely used in Go community) - deferred to implementation
+
+D1: Recommendation: Gin (stdlib-compatible, widely used in Go community) - deferred to implementation
 
 **Q2: Should status transition validation be configurable (state machine) or hardcoded?**
-- **Type:** [REQUIRES TECH LEAD] - Design decision
-- **Context:** Current requirement: pending→in_progress→completed. Future may need additional states or custom workflows per project.
-- **Recommendation:** Start with hardcoded validation (simple map: allowed_transitions["pending"] = ["in_progress"]). Refactor to configurable state machine if requirements expand (YAGNI principle).
+
+D2: Start with hardcoded validation (simple map: allowed_transitions["pending"] = ["in_progress"]).
 
 All other technical approaches clear from PRD and Implementation Research. Database access patterns standard (pgx library, connection pooling). Error handling patterns standard (HTTP status codes, structured logging).

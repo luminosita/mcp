@@ -204,8 +204,8 @@ The schema must support multi-project isolation (project_id filtering), efficien
 
 **Related PRD Section:** PRD-006 §Technical Considerations - Data Model - Task Tracking Database Schema (lines 419-441)
 
-## Open Questions & Implementation Uncertainties
+## Decisions Made
 
-**No open implementation questions. All technical approaches clear from Implementation Research and PRD.**
+**All technical approaches clear from Implementation Research and PRD.**
 
 Database schema fully specified in PRD-006 §Data Model. Migration tool selection (goose vs. migrate) is a minor implementation detail that can be decided during story execution based on Go community recommendations and CLAUDE-tooling.md (Go) standards.
