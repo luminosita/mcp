@@ -84,7 +84,9 @@ Go-specific files are already created and ready for consumption as a architectur
 **Proposed Solution:**
 Update document to reflect upon the fact that Go-specific files are ready and to load them if required for this PRD update
 
-Decisions Made
+### Decisions Made
+
+**Note** Replace Open Questions with Decision Made section. Below are decisions based on open questions
 
 Business Questions
 [BUSINESS] Question 1: Pilot Project Expansion Timeline
