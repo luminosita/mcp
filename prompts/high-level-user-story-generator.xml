@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>High_Level_User_Story_Generator</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <sdlc_phase>High_Level_Story</sdlc_phase>
     <depends_on>Epic (mandatory, mutually exclusive with PRD) OR PRD (mandatory, mutually exclusive with Epic), Business Research (recommended)</depends_on>
-    <generated_by>Context Engineering Framework v1.5</generated_by>
-    <date>2025-10-13</date>
-    <changes>v1.3: Replaced required attribute with classification system - Epic OR PRD mandatory (mutually exclusive), Business Research recommended (Issue #3)</changes>
+    <generated_by>Context Engineering Framework v1.6</generated_by>
+    <date>2025-10-20</date>
+    <changes>v1.4: Reduced business context overlap (Lean Analysis Recommendation 3) - Removed User Context and Business Value generation steps; added Value Contribution cross-reference step (references Epic §1/§3 and PRD FR-XX). Net reduction: 16 sections → 14 sections (~35% review time savings).</changes>
   </metadata>
 
   <system_role>
@@ -90,6 +90,7 @@
     <guideline category="verification">For user value and business value, trace to Epic business impact or PRD success metrics. Keep quantification user-facing.</guideline>
     <guideline category="confidence">Identify areas requiring UX validation or user research. Mark as [REQUIRES UX VALIDATION].</guideline>
     <guideline category="scope">Stay purely functional. CRITICAL: Do NOT specify technical implementation, architecture, or technology choices. Those belong in Backlog Stories and Tech Specs.</guideline>
+    <guideline category="cross_referencing">When referencing Epic sections with § IDs (§1, §3) or PRD functional requirements (FR-XX), extract actual content from loaded artifacts. Do NOT fabricate content if sections missing. If Epic missing § IDs, extract from section headings "Business Value", "Success Metrics". Reference artifact IDs explicitly (e.g., "Epic-006 §1", "PRD-012 FR-05" not "parent epic/PRD"). Focus HLS user impact on story-specific benefits, avoid duplicating Epic §1.</guideline>
   </anti_hallucination_guidelines>
 
   <instructions>
@@ -122,23 +123,34 @@
     </step>
 
     <step priority="5">
-      <action>Define User Context</action>
+      <action>Generate Value Contribution Section (replaces User Context and Business Value)</action>
       <guidance>
-        - Target persona: Extract from Epic/PRD or Business Research §7
-        - User characteristics: Demographics, behaviors, pain points
-        - User journey context: Where does this fit in overall user experience?
-        - Keep focused on user perspective (not system internals)
-      </guidance>
-    </step>
+        **IMPORTANT:** This step replaces the old User Context and Business Value sections to reduce business context duplication.
 
-    <step priority="6">
-      <action>Articulate Business Value</action>
-      <guidance>
-        - User Value: What benefit does user get? (qualitative)
-        - Business Value: What business outcome results? (quantitative if available)
-        - Success Criteria: How do we measure success? (user-facing metrics)
-        - Trace to Epic business impact or PRD success metrics
+        **Generate "Value Contribution" section with:**
+
+        1. **Parent Epic Alignment (from Epic §1, §3):**
+           - Extract 1-2 success metrics from Epic §3. Success Metrics
+           - Show how THIS HLS contributes to each metric
+           - Format: "- **Success Metric from Epic §3:** [How this HLS contributes]"
+           - Add business value alignment from Epic §1: "- **Business Value from Epic §1:** [1-sentence alignment statement]"
+
+        2. **PRD Requirements Coverage (from PRD FR-XX):**
+           - List 2-3 functional requirements from PRD that this HLS implements
+           - Format: "- **FR-01:** [Requirement name from PRD]"
+
+        3. **User Impact:**
+           - Write 1-2 sentences on user benefit
+           - Avoid duplicating Epic §1. User Impact - focus on HLS-specific impact
+
+        4. **Closing Note:**
+           - Add: "For detailed business value, user personas, and market context, see Epic-XXX §1 (Business Value) and Business Research document. For comprehensive requirements, see PRD-XXX."
+
+        **DO NOT generate separate sections for:**
+        - User Context (covered in Value Contribution + Epic §1)
+        - Business Value (covered in Value Contribution + Epic §1/§3)
       </guidance>
+      <anti_hallucination>Apply cross_referencing guideline: Extract from Epic §1, §3 and PRD FR-XX. Focus on HLS-specific user impact, avoid duplicating Epic §1.</anti_hallucination>
     </step>
 
     <step priority="7">

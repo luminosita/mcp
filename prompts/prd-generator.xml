@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>PRD_Generator</name>
-    <version>1.5</version>
+    <version>1.6</version>
     <sdlc_phase>PRD</sdlc_phase>
     <depends_on>Epic (mandatory), Business Research (recommended), Implementation Research (recommended), Specialized CLAUDE.md files (mandatory for Technical Considerations)</depends_on>
-    <generated_by>Context Engineering Framework v1.5</generated_by>
+    <generated_by>Context Engineering Framework v1.6</generated_by>
     <date>2025-10-20</date>
-    <changes>v1.5: ENFORCED CLAUDE.md Precedence Hierarchy (Lean Analysis Recommendation 2) - Added Step 3.5 with 6-step enforcement process: Load CLAUDE.md files, extract decisions, create decisions register, cross-check Implementation Research, generate Technical Considerations with strict hierarchy (CLAUDE.md > Implementation Research > PRD-specific). Prevents US-050 problem (suggesting alternatives for decided topics).</changes>
+    <changes>v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3) - Removed Background & Context, Problem Statement, User Personas generation steps; added Epic Context cross-reference step (references Epic §1-§4); updated Risks step to reference Epic §4 for business risks. Net reduction: 19 sections → 16 sections (~35% review time savings).</changes>
   </metadata>
 
   <system_role>
@@ -120,6 +120,7 @@
     <guideline category="verification">For performance targets and technical NFRs, reference Implementation Research sections. For user needs and functional requirements, reference Business Research sections.</guideline>
     <guideline category="confidence">Identify areas requiring stakeholder input (business decisions) vs. technical validation (feasibility). Mark each appropriately.</guideline>
     <guideline category="scope">PRD defines WHAT to build and WHY, plus technical NFRs (HOW WELL). Do not specify detailed implementation (HOW)—that belongs in Tech Specs and ADRs.</guideline>
+    <guideline category="cross_referencing">When referencing Epic sections with § IDs (§1-§4), extract actual content from loaded Epic artifact. Do NOT fabricate content if sections missing. If Epic missing § IDs, extract from section headings "Business Value", "Problem Being Solved", "Success Metrics", "Business Risks". Reference Epic ID explicitly (e.g., "Epic-006 §1" not "parent epic"). For risks, reference Epic §4 for business/market risks; PRD focuses on technical/delivery risks only.</guideline>
   </anti_hallucination_guidelines>
 
   <instructions>
@@ -234,6 +235,43 @@
     </step>
 
     <step priority="5">
+      <action>Generate Epic Context Section (replaces Background & Context, Problem Statement, User Personas)</action>
+      <guidance>
+        **IMPORTANT:** This step replaces the old Background & Context, Problem Statement, and User Personas sections to reduce business context duplication.
+
+        **Generate "Epic Context" section with:**
+
+        1. **Parent Epic Reference:**
+           - Link to Epic-XXX with {SDLC_DOCUMENTS_URL}/epic/{id} format
+           - Example: Epic-006 "User Engagement Optimization"
+
+        2. **Business Value (from Epic §1):**
+           - Extract 1-2 sentence summary from Epic §1. Business Value
+           - Do NOT duplicate full Epic content
+           - Add reference: "See Epic-XXX §1. Business Value for full context"
+
+        3. **Problem Being Solved (from Epic §2):**
+           - Extract 1-2 sentence summary from Epic §2. Problem Being Solved
+           - Do NOT duplicate full Epic content
+           - Add reference: "See Epic-XXX §2. Problem Being Solved for full context"
+
+        4. **Success Metrics Alignment (from Epic §3):**
+           - List 2-3 metrics from Epic §3. Success Metrics
+           - Show how THIS PRD contributes to each metric
+           - Format: "- [Metric from Epic §3]: [How this PRD contributes]"
+
+        5. **Closing Note:**
+           - Add: "For comprehensive business context (market analysis, competitive landscape, user research), see parent Epic-XXX sections §1-§4 and Business Research document."
+
+        **DO NOT generate separate sections for:**
+        - Background & Context (covered in Epic Context)
+        - Problem Statement (covered in Epic Context → Epic §2)
+        - User Personas & Use Cases (deferred to Business Research Appendix A, referenced only)
+      </guidance>
+      <anti_hallucination>Apply cross_referencing guideline: Extract from Epic §1, §2, §3 sections. Summarize in 1-2 sentences, reference full context in Epic.</anti_hallucination>
+    </step>
+
+    <step priority="6">
       <action>Define Objective and Vision</action>
       <guidance>
         - Expand Epic statement into clear objective
@@ -243,7 +281,7 @@
       </guidance>
     </step>
 
-    <step priority="6">
+    <step priority="7">
       <action>Document Scope and Features</action>
       <guidance>
         - List 5-10 major features from Epic + Business Research
@@ -320,11 +358,12 @@
     </step>
 
     <step priority="12">
-      <action>Develop User Personas and Target Audience</action>
+      <action>REMOVED - User Personas now referenced in Epic Context (see Epic §1 and Business Research)</action>
       <guidance>
-        - Extract detailed personas from Business Research §7
-        - Include demographics, goals, pain points, technical proficiency
-        - 2-3 primary personas
+        - User Personas are NOT duplicated in PRD
+        - Reference Epic §1 for user impact
+        - Reference Business Research Appendix A for detailed personas
+        - This step removed per Lean Analysis Recommendation 3 (Business Context Bloat Reduction)
       </guidance>
     </step>
 
@@ -339,13 +378,24 @@
     </step>
 
     <step priority="14">
-      <action>Identify Risks and Mitigations</action>
+      <action>Identify PRD-Specific Risks and Mitigations (Technical/Delivery only)</action>
       <guidance>
-        - Business risks from Business Research §6
-        - Technical risks from Implementation Research §6 (pitfalls/anti-patterns)
+        **IMPORTANT:** Business and market risks are documented in Epic-XXX §4. Business Risks & Mitigations. This section focuses on PRD-specific technical and delivery risks only.
+
+        - **Technical risks** from Implementation Research §6 (pitfalls/anti-patterns)
+        - **Delivery risks:** Timeline, resource constraints, integration challenges
+        - **Implementation risks:** Technology adoption, performance, scalability
         - Assign likelihood and impact
         - Propose mitigation strategies
+
+        **DO NOT duplicate business/market risks from Epic §4**
+        - Market adoption risks → Epic §4
+        - Competitive risks → Epic §4
+        - User acceptance risks → Epic §4
+
+        **Add note:** "Business and market risks are documented in Epic-XXX §4. Business Risks & Mitigations. This section focuses on PRD-specific technical and delivery risks."
       </guidance>
+      <anti_hallucination>Apply cross_referencing guideline: Reference Epic §4 for business/market risks. PRD focuses on technical/delivery risks only.</anti_hallucination>
     </step>
 
     <step priority="15">

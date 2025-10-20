@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Epic_Generator</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <sdlc_phase>Epic</sdlc_phase>
     <depends_on>Product Vision (mandatory, mutually exclusive with Initiative) OR Initiative (mandatory, mutually exclusive with Product Vision), Business Research (recommended)</depends_on>
-    <generated_by>Context Engineering Framework v1.5</generated_by>
-    <date>2025-10-13</date>
-    <changes>v1.4: Replaced required attribute with classification system - Product Vision OR Initiative mandatory (mutually exclusive), Business Research recommended (Issue #3)</changes>
+    <generated_by>Context Engineering Framework v1.6</generated_by>
+    <date>2025-10-20</date>
+    <changes>v1.5: Added section ID generation (§1-§4) for Business Value, Problem Being Solved, Success Metrics, Business Risks sections to enable cross-referencing from PRD and HLS artifacts (Lean Analysis Report v1.4 Recommendation 3 - Business Context Bloat Reduction)</changes>
   </metadata>
 
   <system_role>
@@ -93,6 +93,7 @@
     <guideline category="scope">Stay at epic level. Do not define detailed user stories or technical implementation—those belong in PRD and Backlog Story phases.</guideline>
     <guideline category="strategic_focus">NEVER include specific technologies, technical architecture decisions, or implementation details. Epics are strategic documents focused on WHAT and WHY, not HOW. Technical details belong in PRD phase and beyond.</guideline>
     <guideline category="open_questions">Open Questions section must contain ONLY business-level questions (market, users, business model, priorities). NEVER include technical questions (architecture, implementation, technology choices) or product/technical trade-off questions (requiring PM + Tech Lead collaboration). If technical uncertainties or product/technical trade-offs exist, note that "technical decisions and product/technical trade-offs will be addressed in PRD phase" without listing specific questions.</guideline>
+    <guideline category="section_ids">Generate section IDs consistently: §1 (Business Value), §2 (Problem Being Solved), §3 (Success Metrics), §4 (Business Risks). These enable downstream artifacts (PRD, HLS) to cross-reference Epic content instead of duplicating. Use exact format "## §1. Business Value" with section number and period.</guideline>
   </anti_hallucination_guidelines>
 
   <instructions>
@@ -125,23 +126,27 @@
     </step>
 
     <step priority="5">
-      <action>Define Business Value</action>
+      <action>Define Business Value (with section ID §1)</action>
       <guidance>
+        - **IMPORTANT:** Use section heading "## §1. Business Value" (include §1 prefix for cross-referencing)
         - User Impact: How users benefit (qualitative + quantitative)
         - Business Impact: Measurable business outcomes
         - Include 2-3 quantified metrics
         - Example: "Reduce app uninstalls due to notifications by 20%, increase notification open rate by 35%"
         - Trace metrics back to parent vision/initiative OKRs
+        - **Purpose of §1:** PRD and HLS artifacts will reference "Epic-XXX §1. Business Value" instead of duplicating content
       </guidance>
     </step>
 
     <step priority="6">
-      <action>Articulate Problem Being Solved</action>
+      <action>Articulate Problem Being Solved (with section ID §2)</action>
       <guidance>
+        - **IMPORTANT:** Use section heading "## §2. Problem Being Solved" (include §2 prefix for cross-referencing)
         - Extract from Product Vision problem statement
         - Add specificity from Business Research (if available)
         - Quantify user pain where possible
         - Connect to strategic opportunity
+        - **Purpose of §2:** PRD and HLS artifacts will reference "Epic-XXX §2. Problem Being Solved" instead of duplicating content
       </guidance>
     </step>
 
@@ -176,22 +181,26 @@
     </step>
 
     <step priority="10">
-      <action>Establish Success Metrics</action>
+      <action>Establish Success Metrics (with section ID §3)</action>
       <guidance>
+        - **IMPORTANT:** Use section heading "## §3. Success Metrics" (include §3 prefix for cross-referencing)
         - 3-4 metrics linked to business impact
         - Include target and measurement method
         - Tie to parent initiative OKRs if applicable
         - Make metrics specific and measurable
+        - **Purpose of §3:** PRD and HLS artifacts will reference "Epic-XXX §3. Success Metrics" for alignment
       </guidance>
     </step>
 
     <step priority="11">
-      <action>Identify Business-Level Dependencies and Risks</action>
+      <action>Identify Business-Level Dependencies and Risks (with section ID §4 for risks)</action>
       <guidance>
         - Epic dependencies (what must complete first at business level)
+        - **IMPORTANT:** Use section heading "### §4. Business Risks & Mitigations" (include §4 prefix for cross-referencing)
         - Business risks with mitigation strategies (market, adoption, user acceptance)
         - Keep at strategic level - NO technical dependencies or technical risks
         - Example dependency: "Depends on User Authentication Epic completion"
+        - **Purpose of §4:** PRD artifacts will reference "Epic-XXX §4. Business Risks & Mitigations" for business risks, focusing PRD risks on technical/delivery only
         - Example risk: "Risk: Market adoption may be slow if pricing not competitive"
         - DO NOT include: Technical architecture, specific technologies, API dependencies
       </guidance>

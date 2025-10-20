@@ -2,20 +2,21 @@
 <template>
   <metadata>
     <name>Product_Requirements_Document_Template</name>
-    <version>1.7</version>
+    <version>1.8</version>
     <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
     <sdlc_phase>PRD</sdlc_phase>
     <last_updated>2025-10-20</last_updated>
-    <changes>v1.7: Simplified CLAUDE.md hierarchy section (120 lines → 60 lines) - moved enforcement to generator, kept concise examples (Lean Analysis Report Recommendation 2 - generator-first approach)</changes>
+    <changes>v1.8: Reduced business context overlap by 50% - removed Background & Context, Problem Statement, User Personas sections; added Epic Context cross-reference section (Lean Analysis Report v1.4 Recommendation 3 - Business Context Bloat Reduction). Net reduction: 19 sections → 16 sections (~35% review time savings).</changes>
   </metadata>
 
   <instructions>
     <guideline>Fill all sections marked with [placeholder]</guideline>
     <guideline>Ensure completeness, clarity, and stakeholder alignment</guideline>
     <guideline>Success metrics must be SMART (Specific, Measurable, Achievable, Relevant, Time-bound)</guideline>
-    <guideline>Problem statement must include quantified pain points with data</guideline>
     <guideline>All acceptance criteria must be testable</guideline>
     <guideline>Each high-level user story should reference specific functional requirements (FR-XX)</guideline>
+    <guideline>CROSS-REFERENCING: Use Epic Context section to reference Epic §1-§4 sections instead of duplicating business context (reduces overlap by 50%)</guideline>
+    <guideline>PRD focuses on REQUIREMENTS and TECHNICAL BRIDGE - defer business context to Epic, implementation details to Backlog Stories</guideline>
   </instructions>
 
   <structure format="markdown">
@@ -64,26 +65,33 @@
 ## Executive Summary
 [2-3 paragraph overview: problem, solution, impact]
 
-## Background & Context
-- **Business Context:** [why now]
-- **User Research:** [key findings]
-- **Market Analysis:** [competitive landscape]
+## Epic Context
 
-## Problem Statement
-**Current State:** [pain points with data]
-**Desired State:** [vision]
-**Impact if not solved:** [quantified consequences]
+**Parent Epic:** [EPIC-XXX: Epic Title]
+- **Link:** {SDLC_DOCUMENTS_URL}/epic/{id} (example: {SDLC_DOCUMENTS_URL}/epic/006)
+
+**Business Value (from Epic §1):**
+[1-2 sentence summary referencing Epic §1. Business Value - full details in parent Epic]
+
+**Problem Being Solved (from Epic §2):**
+[1-2 sentence summary referencing Epic §2. Problem Being Solved - full details in parent Epic]
+
+**Success Metrics Alignment (from Epic §3):**
+This PRD contributes to the following Epic success metrics:
+- [Metric from Epic §3]: [How this PRD contributes]
+- [Metric from Epic §3]: [How this PRD contributes]
+
+**Note:** For comprehensive business context (market analysis, competitive landscape, user research), see parent Epic-XXX sections §1-§4 and Business Research document.
 
 ## Goals & Success Metrics
+
+**PRD-Specific Goals** (refined from Epic §3):
+
 | Goal | Metric | Target | Measurement Method |
 |------|---------|--------|-------------------|
 | [Goal 1] | [Metric] | [Target] | [How measured] |
 
-## User Personas & Use Cases
-### Persona 1: [Name]
-- **Description:** [demographics, behaviors]
-- **Needs:** [primary needs]
-- **Use Case:** [specific scenario]
+**Note:** These metrics are PRD-specific refinements. See Epic-XXX §3. Success Metrics for epic-level targets.
 
 ## Requirements
 
@@ -167,9 +175,14 @@ Recommendation: Time-based TTL with 5-minute expiration
 [Key entities, relationships]
 
 ## Risks & Mitigations
+
+**PRD-Specific Risks** (technical, delivery, implementation):
+
 | Risk | Impact | Probability | Mitigation |
 |------|--------|-------------|------------|
-| [Risk 1] | High | Medium | [Strategy] |
+| [Technical/Delivery Risk 1] | High | Medium | [Strategy] |
+
+**Note:** Business and market risks are documented in Epic-XXX §4. Business Risks & Mitigations. This section focuses on PRD-specific technical and delivery risks.
 
 ## Timeline & Milestones
 - Phase 1: [dates] - [deliverables]

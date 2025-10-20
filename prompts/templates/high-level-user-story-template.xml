@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>High_Level_User_Story_Template</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>High-Level User Story</sdlc_phase>
     <alias>Capability Story, Parent Story, Feature (in Strategy 1)</alias>
-    <last_updated>2025-10-13</last_updated>
-    <changes>v1.3: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.4: Reduced business context overlap - removed User Context and Business Value sections; added Value Contribution cross-reference section (Lean Analysis Report v1.4 Recommendation 3 - Business Context Bloat Reduction). Net reduction: 16 sections → 14 sections (~35% review time savings).</changes>
   </metadata>
 
   <instructions>
@@ -19,6 +19,8 @@
     <guideline>Uses standard user story format: As a [user], I want [goal], so that [benefit]</guideline>
     <guideline>Will decompose into multiple backlog stories (sprint-sized)</guideline>
     <guideline>Can represent cross-feature user experiences</guideline>
+    <guideline>CROSS-REFERENCING: Use Value Contribution section to reference Epic §1/§3 and PRD FR-XX instead of duplicating business context (reduces overlap by 50%)</guideline>
+    <guideline>HLS focuses on USER WORKFLOWS and FUNCTIONAL REQUIREMENTS - defer business value to Epic, implementation to Backlog Stories</guideline>
   </instructions>
 
   <structure format="markdown">
@@ -58,33 +60,22 @@
 **I want** [goal or capability],
 **So that** [business value or user benefit].
 
-## User Context
+## Value Contribution
 
-### Target Persona
-[Primary user persona this story serves - link to detailed persona doc]
+**Parent Epic Alignment (from Epic §1, §3):**
+This story contributes to Epic-[XXX] success metrics:
+- **Success Metric from Epic §3:** [How this HLS contributes]
+- **Business Value from Epic §1:** [1-sentence alignment statement]
 
-**User Characteristics:**
-- [Key characteristic 1]
-- [Key characteristic 2]
-- [Pain point this addresses]
+**PRD Requirements Coverage (from PRD FR-XX):**
+This story implements the following PRD functional requirements:
+- **FR-01:** [Requirement name from PRD]
+- **FR-02:** [Requirement name from PRD]
 
-### User Journey Context
-[Where in the user journey does this story fit? What comes before/after?]
+**User Impact:**
+[1-2 sentences on user benefit - avoid duplicating Epic §1. User Impact]
 
-## Business Value
-
-### User Value
-[What benefit does the user get from this capability?]
-
-### Business Value
-[What business outcome does this enable?]
-- [Quantifiable impact if known, e.g., "Reduces onboarding time by 30%"]
-- [Qualitative benefit, e.g., "Improves user satisfaction"]
-
-### Success Criteria
-[How will we know this story was successful?]
-- [Measurable criterion 1]
-- [Measurable criterion 2]
+**Note:** For detailed business value, user personas, and market context, see Epic-XXX §1 (Business Value) and Business Research document. For comprehensive requirements, see PRD-XXX.
 
 ## Functional Requirements (High-Level)
 
@@ -268,27 +259,22 @@
       **I want** to configure which types of push notifications I receive,
       **So that** I only get notifications relevant to my interests and avoid notification fatigue.
 
-      ## User Context
+      ## Value Contribution
 
-      ### Target Persona
-      Active mobile app user who receives multiple notifications daily
+      **Parent Epic Alignment (from Epic-006 §1, §3):**
+      This story contributes to Epic-006 "User Engagement Optimization" success metrics:
+      - **Success Metric from Epic §3:** Reduce app uninstalls by 20% (notification preferences contribute to retention)
+      - **Business Value from Epic §1:** Improves user satisfaction and engagement
 
-      **User Characteristics:**
-      - Uses app 3-5 times per week
-      - Frustrated by irrelevant notifications
-      - Values control over their notification experience
+      **PRD Requirements Coverage (from PRD-012 FR-XX):**
+      This story implements the following PRD functional requirements:
+      - **FR-05:** User notification preference management
+      - **FR-06:** Persistent preference storage
 
-      ## Business Value
+      **User Impact:**
+      Reduces notification fatigue by giving users granular control over which notification types they receive, improving app experience and reducing uninstalls.
 
-      ### User Value
-      - Reduces notification fatigue
-      - Improves app experience by showing only relevant content
-      - Gives users control over their interaction with the app
-
-      ### Business Value
-      - Reduces app uninstalls due to notification annoyance (target: -20%)
-      - Increases engagement with notifications (target: +35% open rate)
-      - Improves user satisfaction scores
+      **Note:** For detailed business value and user personas, see Epic-006 §1 (Business Value). For comprehensive requirements, see PRD-012.
 
       ## Functional Requirements (High-Level)
 

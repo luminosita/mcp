@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Epic_Template</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <source>Generated based on industry best practices and Context Engineering framework</source>
     <sdlc_phase>Epic</sdlc_phase>
-    <last_updated>2025-10-13</last_updated>
-    <changes>v1.4: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.5: Added section IDs (§) for cross-referencing from PRD and HLS artifacts (Lean Analysis Report v1.4 Recommendation 3 - Reduce Business Context Overlap)</changes>
   </metadata>
 
   <instructions>
@@ -17,6 +17,7 @@
     <guideline>Define dependencies between epics at business level only</guideline>
     <guideline>Link to parent product vision</guideline>
     <guideline>STRATEGIC FOCUS: Epics describe WHAT and WHY, not HOW. No technical implementation details.</guideline>
+    <guideline>CROSS-REFERENCING: Key sections include § IDs (§1, §2, §3, §4) for cross-referencing from PRD and HLS artifacts, reducing business context duplication</guideline>
   </instructions>
 
   <structure format="markdown">
@@ -46,7 +47,7 @@ As [user persona], I need [capability] so that [business value].
 - **Link:** {SDLC_DOCUMENTS_URL}/initiative/{id} (example: {SDLC_DOCUMENTS_URL}/initiative/042)
 - **Initiative Contribution:** [How this epic contributes to initiative OKRs]
 
-## Business Value
+## §1. Business Value
 [Clear articulation of why this epic matters]
 
 ### User Impact
@@ -57,7 +58,7 @@ As [user persona], I need [capability] so that [business value].
 - [Metric 1]: [Expected improvement]
 - [Metric 2]: [Expected improvement]
 
-## Problem Being Solved
+## §2. Problem Being Solved
 [Specific problem this epic addresses from product vision]
 
 ## Business Research References
@@ -102,7 +103,7 @@ As [user persona], I need [capability] so that [business value].
 **When** [user action]
 **Then** [system response]
 
-## Success Metrics
+## §3. Success Metrics
 
 | Metric | Target | Measurement Method |
 |--------|--------|-------------------|
@@ -115,7 +116,7 @@ As [user persona], I need [capability] so that [business value].
 - **Depends On:** [EPIC-XXX: Must complete first]
 - **Blocks:** [EPIC-YYY: This epic must complete first]
 
-### Business Risks & Mitigations
+### §4. Business Risks & Mitigations
 
 | Risk | Likelihood | Impact | Mitigation Strategy |
 |------|------------|--------|-------------------|
