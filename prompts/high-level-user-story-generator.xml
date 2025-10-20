@@ -2,12 +2,13 @@
 <generator_prompt>
   <metadata>
     <name>High_Level_User_Story_Generator</name>
-    <version>1.4</version>
+    <version>1.6</version>
     <sdlc_phase>High_Level_Story</sdlc_phase>
     <depends_on>Epic (mandatory, mutually exclusive with PRD) OR PRD (mandatory, mutually exclusive with Epic), Business Research (recommended)</depends_on>
-    <generated_by>Context Engineering Framework v1.6</generated_by>
+    <generated_by>Context Engineering Framework v2.0</generated_by>
     <date>2025-10-20</date>
-    <changes>v1.4: Reduced business context overlap (Lean Analysis Recommendation 3) - Removed User Context and Business Value generation steps; added Value Contribution cross-reference step (references Epic §1/§3 and PRD FR-XX). Net reduction: 16 sections → 14 sections (~35% review time savings).</changes>
+    <changes>v1.6: Implemented Open Questions marker validation for v2+ artifacts (Generator Validation Spec v1.0) - enforces standardized marker system with required sub-fields for [REQUIRES UX RESEARCH], [REQUIRES UX DESIGN], [REQUIRES PRODUCT OWNER]. Phase 2 of SDLC marker enforcement rollout.
+v1.5: Added standardized Happy Path Flow format generation (Lean Analysis Recommendation 4) - Step 7 now generates Actor Legend, numbered steps with Actor → Actor transitions, and optional I/O descriptions</changes>
   </metadata>
 
   <system_role>
@@ -154,14 +155,58 @@
     </step>
 
     <step priority="7">
-      <action>Define Functional Requirements (High-Level)</action>
+      <action>Define Primary User Flow with Standardized Happy Path Format</action>
       <guidance>
-        - Primary User Flow: Step-by-step happy path from user perspective
-        - Alternative Flows: What happens in alternate scenarios?
-        - User Interactions: What does user do? (not how system implements)
-        - System Behaviors: What does system do from user's point of view? (not technical details)
-        - Keep purely functional—NO technology, architecture, or implementation
+        **IMPORTANT:** Use standardized Happy Path Flow format (Lean Analysis Recommendation 4) to prevent sequence ambiguity errors.
+
+        **Generate "Primary User Flow" section with:**
+
+        1. **Actor Legend:**
+           - Identify primary actors (User, System)
+           - Format: "- **User:** [Primary user role, e.g., 'Mobile app user']"
+           - Format: "- **System:** [System component, e.g., 'Application backend']"
+
+        2. **Happy Path Flow Sequence:**
+           - Use numbered steps with explicit actor identification
+           - Format: "**Step 1:** User → System: [Action description]"
+           - Format: "**Step 2:** System → User: [Response description]"
+           - Each step shows who initiates and who receives
+           - Optional: Brief input/output description if helpful for clarity
+           - Keep user-centric (not technical implementation)
+
+        3. **Alternative Flows:**
+           - List alternative scenarios with conditions
+           - Format: "- **Alt Flow 1:** If [condition], then [alternative path description]"
+
+        4. **Note:**
+           - Add: "Detailed I/O schemas (request/response formats, JSON examples, state changes) belong in Functional Specification (FuncSpec). HLS focuses on user-visible sequence."
+
+        **DO NOT include:**
+        - Technical implementation details (APIs, database queries, code)
+        - Specific technologies or frameworks
+        - Data structures or schemas (those go in FuncSpec)
+
+        **Example Happy Path Format:**
+        ```
+        **Step 1:** User → System: Navigate to notification settings
+        - User accesses settings menu and selects notifications
+
+        **Step 2:** System → User: Display notification categories
+        - System shows available categories (marketing, transactional, alerts)
+
+        **Step 3:** User → System: Toggle categories on/off
+        - User selects which categories to enable/disable
+
+        **Step 4:** System → User: Confirm changes applied
+        - System saves preferences and shows confirmation message
+        ```
       </guidance>
+      <anti_hallucination>
+        - Use Actor → Actor format for all steps
+        - Keep user-facing language (no APIs, databases, code)
+        - Number all steps explicitly
+        - If detailed I/O needed, note "See FuncSpec for detailed schemas"
+      </anti_hallucination>
     </step>
 
     <step priority="8">
@@ -264,11 +309,14 @@
       <guidance>
         IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
 
+        Reference: Generator Validation Specification v1.0 (docs/generator_validation_spec.md)
+
         If any criterion fails validation:
         1. Present a validation report showing:
            - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
            - Passed criteria can be summarized (e.g., "18 criteria passed")
-        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+        2. For Open Questions marker validation failures (OQ-XX criteria), use error message formats from validation spec
+        3. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
 
         If all criteria pass, proceed to finalize the artifact.
       </guidance>
@@ -300,6 +348,17 @@
 
         <!-- Consistency Checks -->
         <criterion id="CC-01" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
+
+        <!-- Open Questions Marker Validation (v2+ only) - Ref: Generator Validation Spec v1.0 -->
+        <criterion id="OQ-01" category="open_questions_markers" applies_to="v2+">Version detected correctly (v1 skips marker validation, v2+ enforces)</criterion>
+        <criterion id="OQ-02" category="open_questions_markers" applies_to="v2+">Section Structure: "Decisions Made" section exists</criterion>
+        <criterion id="OQ-03" category="open_questions_markers" applies_to="v2+">Section Structure: "Open Questions" section exists</criterion>
+        <criterion id="OQ-04" category="open_questions_markers" applies_to="v2+">Decisions Made entries follow format: **Q[N]: [Question]** with Decision/Rationale/Decided By sub-fields</criterion>
+        <criterion id="OQ-05" category="open_questions_markers" applies_to="v2+">Each Open Question uses allowed marker: [REQUIRES UX RESEARCH], [REQUIRES UX DESIGN], or [REQUIRES PRODUCT OWNER]</criterion>
+        <criterion id="OQ-06" category="open_questions_markers" applies_to="v2+">No free-form text patterns (e.g., "Decision: X needed", "Action Required: Do Y" without ⚠️ prefix)</criterion>
+        <criterion id="OQ-07" category="open_questions_markers" applies_to="v2+">All [REQUIRES UX RESEARCH] markers include: Research Question, Research Method, Timeline, Blocking</criterion>
+        <criterion id="OQ-08" category="open_questions_markers" applies_to="v2+">All [REQUIRES UX DESIGN] markers include: Design Scope, Design Deliverables, Timeline, Blocking</criterion>
+        <criterion id="OQ-09" category="open_questions_markers" applies_to="v2+">All [REQUIRES PRODUCT OWNER] markers include: Decision Needed, Context, Impact</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -330,7 +389,7 @@
     </guideline>
 
     <guideline category="open_questions">
-      High-Level Story Open Questions focus on user/UX/functional uncertainties requiring validation before backlog refinement. These are non-technical questions about user behavior, UX design, and functional clarity. Mark questions requiring user research [REQUIRES USER RESEARCH] and questions requiring design input [REQUIRES UX DESIGN].
+      High-Level Story Open Questions focus on user/UX/functional uncertainties requiring validation before backlog refinement. These are non-technical questions about user behavior, UX design, and functional clarity. Mark questions requiring user research [REQUIRES UX RESEARCH] and questions requiring design input [REQUIRES UX DESIGN].
 
       **High-Level Story questions (user/UX focused):**
       - "Do users prefer toggles or dropdown for preferences?" [REQUIRES UX DESIGN]
@@ -341,6 +400,25 @@
       - "What API structure?" (Backlog Story question)
       - "Should we use Redis?" (ADR question)
       - "Should we build or buy notifications?" (PRD question)
+
+      **Marker Validation (v2+ artifacts only) - Reference: Generator Validation Spec v1.0:**
+
+      v1 artifacts: No marker validation (exploratory questions with recommendations allowed)
+      v2+ artifacts: Enforce standardized marker system with required sub-fields
+
+      Error message formats for OQ validation failures:
+
+      Missing Marker (OQ-05):
+      ❌ ERROR: Open Question missing standardized marker
+      Question text: "{question}"
+      Artifact: HLS-{XXX} v{N}
+      Required: [REQUIRES UX RESEARCH], [REQUIRES UX DESIGN], or [REQUIRES PRODUCT OWNER]
+
+      Missing Sub-fields (OQ-07/08/09):
+      ❌ ERROR: Marker missing required sub-fields
+      Marker: [REQUIRES UX RESEARCH]
+      Question: "{question}"
+      Missing sub-fields: Research Question, Research Method
     </guideline>
   </quality_guidance>
 

@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Epic_Template</name>
-    <version>1.5</version>
+    <version>1.6</version>
     <source>Generated based on industry best practices and Context Engineering framework</source>
     <sdlc_phase>Epic</sdlc_phase>
     <last_updated>2025-10-20</last_updated>
-    <changes>v1.5: Added section IDs (§) for cross-referencing from PRD and HLS artifacts (Lean Analysis Report v1.4 Recommendation 3 - Reduce Business Context Overlap)</changes>
+    <changes>v1.6: Added Standardized Marker System for Open Questions with v1/v2+ workflow, required sub-fields, Decisions Made section, and validation checklist (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)</changes>
   </metadata>
 
   <instructions>
@@ -147,6 +147,15 @@ As [user persona], I need [capability] so that [business value].
 - [ ] Deployed to production
 - [ ] Success metrics baseline captured
 
+## Decisions Made
+
+**Note:** This section added in v2+ after feedback provided. Answered questions from Open Questions move here.
+
+**Q1: [Question]**
+- **Decision:** [Answer]
+- **Rationale:** [Why this decision was made]
+- **Decided By:** [Person/Role] ([Date])
+
 ## Open Questions
 
 **IMPORTANT: Include ONLY business-level questions. Technical questions and product/technical trade-offs belong in PRD phase.**
@@ -182,12 +191,67 @@ As [user persona], I need [capability] so that [business value].
 
 ---
 
+**MANDATORY MARKER USAGE (Hard Enforcement):**
+
+**Version 1 Artifacts:**
+- Open Questions should include **Recommendations** for each question (exploratory, not yet decided)
+- Include alternatives, context, decision criteria
+- No markers required in v1 (questions are exploratory)
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved questions MUST use standardized markers:
+  - [REQUIRES EXECUTIVE DECISION] (C-level or VP approval)
+  - [REQUIRES PORTFOLIO PLANNING] (affects multiple initiatives or roadmap)
+  - [REQUIRES RESOURCE PLANNING] (FTE, budget, or team allocation)
+  - [REQUIRES ORGANIZATIONAL ALIGNMENT] (stakeholder consensus)
+
+**Required Sub-fields for Each Marker:**
+
+[REQUIRES EXECUTIVE DECISION]
+- **Decision Needed:** {What needs executive approval}
+- **Options Considered:** {List alternatives}
+- **Business Impact:** {Revenue, risk, resource implications}
+- **Decision Deadline:** {Date by which decision needed}
+
+[REQUIRES PORTFOLIO PLANNING]
+- **Impact:** {Affects which initiatives or roadmap items}
+- **Timeline Dependencies:** {When this needs to be decided}
+- **Resource Impact:** {Teams or budgets affected}
+
+[REQUIRES RESOURCE PLANNING]
+- **Resource Type:** {FTE, budget, infrastructure}
+- **Quantity Needed:** {Number of people, dollar amount, capacity}
+- **Duration:** {Timeline for resource need}
+- **Blocking:** {What's blocked without resources}
+
+[REQUIRES ORGANIZATIONAL ALIGNMENT]
+- **Stakeholders:** {List departments/teams requiring alignment}
+- **Alignment Topic:** {What needs consensus}
+- **Impact Without Alignment:** {Risk of proceeding without consensus}
+- **Decision Deadline:** {Date}
+
+**PROHIBITED:**
+- ❌ Free-form text: "Decision: Executive approval needed"
+- ❌ Generic actions: "Action Required: Get executive sign-off..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```
+⚠️ **ACTION REQUIRED:** This artifact has 2 open questions without markers.
+Add [REQUIRES EXECUTIVE DECISION] or [REQUIRES ORGANIZATIONAL ALIGNMENT] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
 **If no business questions exist, state:** "No open business questions at this time. Technical decisions and product/technical trade-offs will be addressed in PRD phase."
 
 ---
 
-- [Business Question 1]
-- [Business Question 2]
+- [Business Question 1 with marker if v2+]
+- [Business Question 2 with marker if v2+]
 
 ## Related Documents
 - **Parent Product Vision:** {SDLC_DOCUMENTS_URL}/product-vision/{id}

@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Technical_Specification_Template</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <source>Section 6.3 of advanced_prompt_engineering_software_docs_code_final.md (lines 905-1016)</source>
     <sdlc_phase>Technical_Design</sdlc_phase>
-    <last_updated>2025-10-13</last_updated>
-    <changes>v1.2: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.3: Added Standardized Marker System for Open Questions with v1/v2+ workflow, required sub-fields for Tech Spec-level markers ([REQUIRES TECH LEAD], [CLARIFY BEFORE START], [BLOCKED BY], [NEEDS PAIR PROGRAMMING]), Decisions Made section, and validation checklist (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)</changes>
   </metadata>
 
   <instructions>
@@ -177,6 +177,15 @@ interface User {
 - [Task 3]
 - [Task 4]
 
+## Decisions Made
+
+**Note:** This section added in v2+ after feedback provided. Answered questions from Open Questions move here.
+
+**Q1: [Question]**
+- **Decision:** [Answer]
+- **Rationale:** [Why this decision was made]
+- **Decided By:** [Person/Role] ([Date])
+
 ## Open Questions
 
 **Tech Spec Open Questions focus on IMPLEMENTATION-LEVEL details that require resolution during development.**
@@ -211,12 +220,64 @@ interface User {
 
 ---
 
+**MANDATORY MARKER USAGE (Hard Enforcement):**
+
+**Version 1 Artifacts:**
+- Open Questions should include **Recommendations** for each question (exploratory, not yet decided)
+- Include alternatives, context, decision criteria
+- No markers required in v1 (questions are exploratory)
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved questions MUST use standardized markers:
+  - [REQUIRES TECH LEAD] (senior technical input)
+  - [CLARIFY BEFORE START] (must resolve before beginning task)
+  - [BLOCKED BY] (external dependency)
+  - [NEEDS PAIR PROGRAMMING] (complex area requiring collaboration)
+
+**Required Sub-fields for Each Marker:**
+
+[REQUIRES TECH LEAD]
+- **Technical Question:** {Senior input needed on what}
+- **Context:** {Why this needs tech lead review}
+- **Blocking:** {What's blocked}
+
+[CLARIFY BEFORE START]
+- **Clarification Needed:** {Ambiguity to resolve}
+- **Stakeholder:** {Who can clarify}
+- **Blocking:** {Can't start task until clarified}
+
+[BLOCKED BY]
+- **Dependency:** {External system, team, decision}
+- **Expected Resolution:** {Date/milestone when unblocked}
+- **Workaround Available:** {Yes/No, if yes describe}
+
+[NEEDS PAIR PROGRAMMING]
+- **Complexity Area:** {What's complex requiring collaboration}
+- **Skills Needed:** {Expertise required}
+- **Duration:** {Estimated pairing time}
+
+**PROHIBITED:**
+- ❌ Free-form text: "Decision: Tech Lead needs to review"
+- ❌ Generic actions: "Action Required: Get tech lead approval..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```
+⚠️ **ACTION REQUIRED:** This artifact has 2 open questions without markers.
+Add [REQUIRES TECH LEAD] or [CLARIFY BEFORE START] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
 **If no open questions exist, state:** "No open implementation questions at this time. All technical decisions addressed in PRD and ADRs."
 
 ---
 
-- [Implementation Question 1]
-- [Implementation Question 2]
+- [Implementation Question 1 with marker if v2+]
+- [Implementation Question 2 with marker if v2+]
 
 ## References
 - [Documentation links]

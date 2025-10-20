@@ -35,7 +35,11 @@ Validation checklists are currently embedded in generator XML prompts as markdow
 
 This story migrates validation checklists to JSON resources served via MCP protocol:
 - Extract existing checklists from all generator prompts (12 total: Product Vision, Initiative, Epic, PRD, HLS, Backlog Story, Tech Spec, ADR, Spike, Implementation Task, Business Research, Implementation Research)
-- Convert to structured JSON format with fields: id, category, description, validation_type (automated/agent/manual), check_type (template_sections/id_format/etc.)
+- **Dual-Source Extraction:** Extract from TWO sources per generator:
+  1. `<validation_checklist>` section: General validation criteria (CQ-XX, UT-XX, CC-XX, OQ-XX criterion IDs)
+  2. `<guideline category="open_questions">` section: Open Questions marker validation rules (allowed markers, sub-field requirements, special validations, error message templates) - applies to 6 generators with OQ criteria
+- Convert to structured JSON format with fields: id, category, description, validation_type (automated/agent/manual), check_type (template_sections/id_format/marker_validation/etc.)
+- **Extended Schema for Open Questions Markers:** Add fields for marker validation: applies_to, allowed_markers, marker_sub_fields, prohibited_patterns, special_validations, error_message_templates
 - Store as versioned resources at configured validation directory: `{VALIDATION_RESOURCES_DIR}/{artifact_type}_validation_v1.json`
 - Expose via MCP resource URI: `mcp://resources/validation/{artifact_type}_validation_v1`
 - Update `validate_artifact` tool to load checklists dynamically from resources (not hardcoded)
@@ -58,7 +62,11 @@ After implementation, Framework Maintainers can update validation criteria by ed
 - **§2.4: Caching Layer:** Checklist JSON files cached in memory (TTL: 5 minutes, same as US-040 validation tool) to avoid repeated file I/O (ref: Implementation Research §2.4 - Caching Layer)
 
 ## Functional Requirements
-1. Extract validation criteria from all 12 generator prompts:
+1. Extract validation criteria from all 12 generator prompts (TWO SOURCES):
+   - **Source 1:** `<validation_checklist>` section (general validation criteria)
+   - **Source 2:** `<guideline category="open_questions">` section (Open Questions marker validation for v2+ artifacts)
+
+   Generators to process:
    - product-vision-generator.xml
    - initiative-generator.xml
    - epic-generator.xml
@@ -72,13 +80,20 @@ After implementation, Framework Maintainers can update validation criteria by ed
    - business-research-generator.xml
    - implementation-research-generator.xml
 2. Convert each checklist to JSON format with fields:
-   - `id`: Criterion identifier (e.g., "CQ-01", "UT-02", "CC-03")
-   - `category`: Criterion category (e.g., "content_quality", "traceability", "consistency")
+   - `id`: Criterion identifier (e.g., "CQ-01", "UT-02", "CC-03", "OQ-01")
+   - `category`: Criterion category (e.g., "content_quality", "traceability", "consistency", "open_questions_markers")
    - `description`: Human-readable description
    - `validation_type`: "automated", "agent", or "manual"
-   - `check_type`: For automated criteria, specifies check algorithm (e.g., "template_sections", "id_format", "no_placeholders", "references_valid")
+   - `check_type`: For automated criteria, specifies check algorithm (e.g., "template_sections", "id_format", "no_placeholders", "references_valid", "marker_validation")
    - `pattern`: For regex-based checks, the regex pattern
    - `required_sections`: For template section checks, list of required section headers
+   - **Open Questions Marker Validation fields (OQ-XX criteria only):**
+     - `applies_to`: Version lifecycle ("v1", "v2+", or "all")
+     - `allowed_markers`: List of allowed markers for this artifact type (e.g., ["[REQUIRES SPIKE]", "[REQUIRES ADR]"])
+     - `marker_sub_fields`: Map of marker names to required sub-fields (e.g., {"[REQUIRES SPIKE]": ["Investigation Needed", "Spike Scope", "Time Box", "Blocking"]})
+     - `prohibited_patterns`: List of free-form text patterns to reject (e.g., ["Decision:\\s*\\w+\\s*needed"])
+     - `special_validations`: List of special validation rules (e.g., [{"marker": "[REQUIRES SPIKE]", "field": "Time Box", "valid_values": ["1 day", "2 days", "3 days"]}])
+     - `error_message_templates`: Map of validation failure types to error message templates
 3. Store JSON files at configured validation directory: `{VALIDATION_RESOURCES_DIR}/{artifact_type}_validation_v1.json`
    - product_vision_validation_v1.json
    - initiative_validation_v1.json
@@ -94,14 +109,28 @@ After implementation, Framework Maintainers can update validation criteria by ed
    - implementation_research_validation_v1.json
 4. Implement Pydantic schema for checklist validation:
    ```python
+   class SpecialValidation(BaseModel):
+       """Special validation rule for marker sub-fields"""
+       marker: str  # e.g., "[REQUIRES SPIKE]"
+       field: str   # e.g., "Time Box"
+       valid_values: List[str]  # e.g., ["1 day", "2 days", "3 days"]
+
    class ValidationCriterion(BaseModel):
        id: str
        category: str
        description: str
        validation_type: Literal["automated", "agent", "manual"]
-       check_type: Optional[str] = None  # e.g., "template_sections"
+       check_type: Optional[str] = None  # e.g., "template_sections", "marker_validation"
        pattern: Optional[str] = None  # Regex pattern
        required_sections: Optional[List[str]] = None
+
+       # Open Questions Marker Validation fields (OQ-XX criteria only)
+       applies_to: Optional[Literal["v1", "v2+", "all"]] = None
+       allowed_markers: Optional[List[str]] = None  # e.g., ["[REQUIRES SPIKE]", "[REQUIRES ADR]"]
+       marker_sub_fields: Optional[Dict[str, List[str]]] = None  # {marker: [required_fields]}
+       prohibited_patterns: Optional[List[str]] = None  # Regex patterns
+       special_validations: Optional[List[SpecialValidation]] = None
+       error_message_templates: Optional[Dict[str, str]] = None  # {failure_type: template}
 
    class ValidationChecklist(BaseModel):
        artifact_type: str
@@ -132,67 +161,128 @@ After implementation, Framework Maintainers can update validation criteria by ed
 
 **Story-Specific Technical Approach:**
 
-1. **JSON Checklist Schema Example (PRD Validation):**
+1. **JSON Checklist Schema Example (Backlog Story Validation with Open Questions Markers):**
    ```json
    {
-     "artifact_type": "prd",
+     "artifact_type": "backlog_story",
      "version": 1,
      "criteria": [
        {
          "id": "CQ-01",
          "category": "content_quality",
-         "description": "All template sections present",
-         "validation_type": "automated",
-         "check_type": "template_sections",
-         "required_sections": [
-           "Metadata",
-           "Executive Summary",
-           "Background & Context",
-           "Problem Statement",
-           "Goals & Success Metrics",
-           "User Personas & Use Cases",
-           "Requirements",
-           "User Experience",
-           "Technical Considerations",
-           "Risks & Mitigations",
-           "Timeline & Milestones",
-           "Decisions Made",
-           "Related Documents",
-           "Version History",
-           "Appendix"
-         ]
+         "description": "Story title is action-oriented and specific",
+         "validation_type": "agent"
        },
        {
-         "id": "CQ-02",
-         "category": "content_quality",
-         "description": "PRD ID format valid",
+         "id": "CC-02",
+         "category": "consistency",
+         "description": "Story ID follows standard format: US-XXX",
          "validation_type": "automated",
          "check_type": "id_format",
-         "pattern": "^PRD-\\d{3,}$"
+         "pattern": "^US-\\d{3,}$"
        },
        {
          "id": "CC-03",
          "category": "consistency",
-         "description": "No placeholder fields remaining",
+         "description": "All placeholder fields [brackets] have been filled in",
          "validation_type": "automated",
          "check_type": "no_placeholders"
        },
        {
-         "id": "CQ-12",
-         "category": "content_quality",
-         "description": "Readability accessible to cross-functional team",
-         "validation_type": "agent"
+         "id": "OQ-01",
+         "category": "open_questions_markers",
+         "description": "Version detected correctly (v1 skips marker validation, v2+ enforces)",
+         "validation_type": "automated",
+         "check_type": "marker_validation",
+         "applies_to": "all"
+       },
+       {
+         "id": "OQ-02",
+         "category": "open_questions_markers",
+         "description": "Section Structure: Decisions Made section exists",
+         "validation_type": "automated",
+         "check_type": "marker_validation",
+         "applies_to": "v2+"
+       },
+       {
+         "id": "OQ-05",
+         "category": "open_questions_markers",
+         "description": "Each Open Question uses allowed marker",
+         "validation_type": "automated",
+         "check_type": "marker_validation",
+         "applies_to": "v2+",
+         "allowed_markers": [
+           "[REQUIRES SPIKE]",
+           "[REQUIRES ADR]",
+           "[REQUIRES TECH LEAD]",
+           "[BLOCKED BY]"
+         ],
+         "error_message_templates": {
+           "missing_marker": "❌ ERROR: Open Question missing standardized marker\n\nQuestion text: \"{question}\"\nArtifact: US-{XXX} v{N}\nRequired: [REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD], or [BLOCKED BY]"
+         }
+       },
+       {
+         "id": "OQ-06",
+         "category": "open_questions_markers",
+         "description": "No free-form text patterns",
+         "validation_type": "automated",
+         "check_type": "marker_validation",
+         "applies_to": "v2+",
+         "prohibited_patterns": [
+           "Decision:\\s*\\w+\\s*needed",
+           "Action Required:\\s*(?!.*ACTION REQUIRED)"
+         ]
+       },
+       {
+         "id": "OQ-07",
+         "category": "open_questions_markers",
+         "description": "All [REQUIRES SPIKE] markers include required sub-fields",
+         "validation_type": "automated",
+         "check_type": "marker_validation",
+         "applies_to": "v2+",
+         "marker_sub_fields": {
+           "[REQUIRES SPIKE]": [
+             "Investigation Needed",
+             "Spike Scope",
+             "Time Box",
+             "Blocking"
+           ]
+         },
+         "error_message_templates": {
+           "missing_subfields": "❌ ERROR: Marker missing required sub-fields\n\nMarker: [REQUIRES SPIKE]\nQuestion: \"{question}\"\nMissing sub-fields: {missing_fields}\n\nAll required sub-fields: Investigation Needed, Spike Scope, Time Box (1-3 days), Blocking"
+         }
+       },
+       {
+         "id": "OQ-11",
+         "category": "open_questions_markers",
+         "description": "SPIKE Time Box values are exactly 1 day, 2 days, or 3 days (hard limit)",
+         "validation_type": "automated",
+         "check_type": "marker_validation",
+         "applies_to": "v2+",
+         "special_validations": [
+           {
+             "marker": "[REQUIRES SPIKE]",
+             "field": "Time Box",
+             "valid_values": ["1 day", "2 days", "3 days"]
+           }
+         ],
+         "error_message_templates": {
+           "invalid_time_box": "❌ ERROR: Invalid Time Box value for SPIKE\n\nQuestion: \"{question}\"\nTime Box Value: \"{value}\"\nValid values: \"1 day\", \"2 days\", \"3 days\" (HARD LIMIT)"
+         }
        }
      ]
    }
    ```
 
 2. **Migration Process:**
+
+   **Phase 1: Extract from `<validation_checklist>` section**
    - Extract criteria from each generator's `<validation_checklist>` section
    - Map markdown criteria to JSON fields:
-     - Extract criterion ID (CQ-01, UT-02, etc.) from markdown header
+     - Extract criterion ID (CQ-01, UT-02, CC-XX, OQ-XX) from markdown header
      - Extract category from section grouping
      - Extract description from criterion text
+     - Extract `applies_to` attribute if present (v1, v2+, or all)
      - Classify as automated/agent/manual based on:
        - Automated: Objective, deterministic checks (sections present, ID format, placeholders)
        - Agent: Subjective content quality checks requiring AI review (readability, appropriateness, clarity)
@@ -202,18 +292,40 @@ After implementation, Framework Maintainers can update validation criteria by ed
        - "ID format valid" → check_type: "id_format", pattern: regex
        - "No placeholders remaining" → check_type: "no_placeholders"
        - "References valid" → check_type: "references_valid", pattern: regex
+       - OQ-XX criteria → check_type: "marker_validation"
+
+   **Phase 2: Extract from `<guideline category="open_questions">` section**
+   - Locate "Marker Validation (v2+ artifacts only)" subsection
+   - Extract allowed markers list from criterion OQ-05 or guideline text
+   - Extract marker sub-field requirements from criteria OQ-07, OQ-08, OQ-09, OQ-10, etc.
+   - Map to marker_sub_fields dict: `{marker_name: [required_fields]}`
+   - Extract prohibited patterns from criterion OQ-06 or guideline text
+   - Extract special validations (e.g., SPIKE Time Box constraint from criterion OQ-11)
+   - Extract error message templates from guideline text (Missing Marker, Missing Sub-fields, Invalid Time Box)
+   - Merge into OQ-XX criteria from Phase 1
+
+   **Phase 3: Write JSON files**
+   - Combine criteria from both phases
+   - Validate against Pydantic schema
    - Write JSON files to configured validation directory
 
 3. **Pydantic Schema Implementation:**
    ```python
    from pydantic import BaseModel, Field
-   from typing import List, Optional, Literal
+   from typing import List, Optional, Literal, Dict
    from config import settings
+   import json
+
+   class SpecialValidation(BaseModel):
+       """Special validation rule for marker sub-fields (e.g., SPIKE Time Box constraint)"""
+       marker: str = Field(..., description="Marker name, e.g., '[REQUIRES SPIKE]'")
+       field: str = Field(..., description="Sub-field name, e.g., 'Time Box'")
+       valid_values: List[str] = Field(..., description="Allowed values for this field")
 
    class ValidationCriterion(BaseModel):
        """Single validation criterion"""
-       id: str = Field(..., pattern=r'^[A-Z]{2}-\d{2}$')  # e.g., CQ-01
-       category: Literal["content_quality", "traceability", "consistency"]
+       id: str = Field(..., pattern=r'^[A-Z]{2}-\d{2}$')  # e.g., CQ-01, OQ-05
+       category: Literal["content_quality", "traceability", "consistency", "open_questions_markers"]
        description: str = Field(..., min_length=10)
        validation_type: Literal["automated", "agent", "manual"]
        check_type: Optional[Literal[
@@ -222,17 +334,27 @@ After implementation, Framework Maintainers can update validation criteria by ed
            "no_placeholders",
            "references_valid",
            "status_format",
-           "metadata_present"
+           "metadata_present",
+           "marker_validation"  # New: for Open Questions marker validation
        ]] = None
        pattern: Optional[str] = None  # Regex pattern for id_format, references_valid
        required_sections: Optional[List[str]] = None  # For template_sections check
 
+       # Open Questions Marker Validation fields (OQ-XX criteria only)
+       applies_to: Optional[Literal["v1", "v2+", "all"]] = None
+       allowed_markers: Optional[List[str]] = None
+       marker_sub_fields: Optional[Dict[str, List[str]]] = None  # {marker: [required_fields]}
+       prohibited_patterns: Optional[List[str]] = None  # Regex patterns
+       special_validations: Optional[List[SpecialValidation]] = None
+       error_message_templates: Optional[Dict[str, str]] = None  # {failure_type: template}
+
    class ValidationChecklist(BaseModel):
        """Validation checklist for artifact type"""
-       artifact_type: str = Field(..., pattern=r'^[a-z_]+$')  # e.g., "prd", "epic"
+       artifact_type: str = Field(..., pattern=r'^[a-z_]+$')  # e.g., "prd", "epic", "backlog_story"
        version: int = Field(..., ge=1)
        criteria: List[ValidationCriterion] = Field(..., min_items=1)
 
+       @classmethod
        def validate_json(cls, file_path: str) -> "ValidationChecklist":
            """Loads and validates checklist JSON from file"""
            with open(file_path, 'r') as f:
@@ -291,16 +413,21 @@ After implementation, Framework Maintainers can update validation criteria by ed
    - Validation tests: Ensure `validate_artifact` tool loads checklists correctly
 
 ### Technical Tasks
-- [ ] Extract validation criteria from 12 generator XML prompts
-- [ ] Convert criteria to JSON format (Pydantic schema)
+- [ ] Extract validation criteria from `<validation_checklist>` sections (12 generator XML prompts)
+- [ ] Extract Open Questions marker validation from `<guideline category="open_questions">` sections (6 generators with OQ criteria)
+- [ ] Convert criteria to JSON format (Pydantic schema with OQ marker validation fields)
+- [ ] Map marker sub-field requirements to marker_sub_fields dict
+- [ ] Extract special validations (e.g., SPIKE Time Box constraint)
+- [ ] Extract error message templates for marker validation failures
 - [ ] Write JSON files to configured validation directory
-- [ ] Implement Pydantic models (ValidationCriterion, ValidationChecklist)
+- [ ] Implement Pydantic models (SpecialValidation, ValidationCriterion, ValidationChecklist)
 - [ ] Implement MCP resource endpoint for checklists
-- [ ] Add JSON schema validation on load
+- [ ] Add JSON schema validation on load (including OQ fields)
 - [ ] Add structured logging for checklist loading
-- [ ] Write unit tests for Pydantic schema validation
+- [ ] Write unit tests for Pydantic schema validation (including OQ marker fields)
 - [ ] Write integration tests for MCP resource endpoint
-- [ ] Write migration tests (verify all criteria migrated)
+- [ ] Write migration tests (verify all criteria migrated from both sources)
+- [ ] Write marker validation tests (verify OQ criteria include marker rules)
 - [ ] Update `validate_artifact` tool to load checklists from resources
 - [ ] Add Taskfile commands for checklist validation
 
@@ -372,6 +499,26 @@ After implementation, Framework Maintainers can update validation criteria by ed
 **And** Agent criteria flagged for AI content review
 **And** Manual criteria flagged for human review
 
+### Scenario 9: Open Questions marker validation criteria migrated
+**Given** Generators have Open Questions marker validation in `<guideline category="open_questions">` sections
+**When** Validation checklists migrated to JSON
+**Then** Backlog Story checklist includes OQ-XX criteria with:
+  - `category: "open_questions_markers"`
+  - `check_type: "marker_validation"`
+  - `applies_to: "v2+"` for v2+ lifecycle enforcement
+  - `allowed_markers: ["[REQUIRES SPIKE]", "[REQUIRES ADR]", "[REQUIRES TECH LEAD]", "[BLOCKED BY]"]`
+  - `marker_sub_fields` dict with required fields per marker
+  - `special_validations` for SPIKE Time Box constraint
+  - `error_message_templates` for validation failures
+**And** Epic checklist includes OQ-XX criteria with:
+  - `allowed_markers: ["[REQUIRES EXECUTIVE DECISION]", "[REQUIRES PORTFOLIO PLANNING]", "[REQUIRES RESOURCE PLANNING]", "[REQUIRES ORGANIZATIONAL ALIGNMENT]"]`
+**And** PRD checklist includes OQ-XX criteria with:
+  - `allowed_markers: ["[REQUIRES PM + TECH LEAD]", "[REQUIRES EXECUTIVE DECISION]", "[REQUIRES ORGANIZATIONAL ALIGNMENT]"]`
+**And** HLS checklist includes OQ-XX criteria with:
+  - `allowed_markers: ["[REQUIRES UX RESEARCH]", "[REQUIRES UX DESIGN]", "[REQUIRES PRODUCT OWNER]"]`
+**And** All OQ criteria extracted from both `<validation_checklist>` AND `<guideline>` sections
+**And** No Open Questions marker validation logic lost during migration
+
 ## Implementation Tasks Evaluation
 
 **Purpose:** Determine if this backlog story should be decomposed into separate Implementation Tasks (TASK-XXX artifacts) per SDLC Guideline v1.3 Section 11.
@@ -379,39 +526,41 @@ After implementation, Framework Maintainers can update validation criteria by ed
 **Decision:** Tasks Not Needed (Single Sprint-Ready Task)
 
 **Rationale:**
-- **Story Points:** 3 SP (below 5 SP threshold - CONSIDER SKIPPING per decision matrix)
-- **Developer Count:** Single developer (straightforward data migration + schema implementation)
-- **Domain Span:** Single domain (data migration and JSON schema)
-- **Complexity:** Low - primarily data transformation and schema definition
-- **Uncertainty:** Low - clear migration path, well-defined JSON schema
-- **Override Factors:** None (no security-critical, no external dependencies)
+- **Story Points:** 5 SP (AT threshold - CONSIDER per decision matrix, but single developer and familiar domain favor SKIP)
+- **Developer Count:** Single developer (data migration + schema implementation + extraction from two sources)
+- **Domain Span:** Single domain (data migration and JSON schema with Open Questions marker validation extraction)
+- **Complexity:** Medium - data transformation, schema definition, dual-source extraction (validation checklist + guideline sections)
+- **Uncertainty:** Low - clear migration path, well-defined JSON schema, explicit extraction rules
+- **Override Factors:** None (no security-critical, no external dependencies, no unfamiliar technology)
 
-Per SDLC Section 11.6 Decision Matrix: "3 SP, single developer, low complexity → SKIP (Single sprint-ready task)".
+Per SDLC Section 11.6 Decision Matrix: "5 SP at threshold, single developer, familiar domain → CONSIDER but lean towards SKIP given straightforward implementation path".
 
-**No task decomposition needed.** Story can be completed as single unit of work in 1-2 days.
+**No task decomposition needed.** Story can be completed as single unit of work in 2-3 days. Dual-source extraction adds complexity but follows explicit documented patterns (Generator Validation Spec v1.0).
 
 ## Definition of Done
-- [ ] Validation criteria extracted from 12 generator XML prompts
-- [ ] JSON files created for all 12 artifact types
-- [ ] Pydantic models implemented (ValidationCriterion, ValidationChecklist)
+- [ ] Validation criteria extracted from 12 generator XML prompts (`<validation_checklist>` sections)
+- [ ] Open Questions marker validation extracted from 6 generators (`<guideline category="open_questions">` sections)
+- [ ] JSON files created for all 12 artifact types (with OQ marker validation for applicable generators)
+- [ ] Pydantic models implemented (SpecialValidation, ValidationCriterion, ValidationChecklist with OQ fields)
 - [ ] MCP resource endpoint implemented for checklists
-- [ ] JSON schema validation on load (reject invalid schemas)
+- [ ] JSON schema validation on load (reject invalid schemas, including OQ marker validation fields)
 - [ ] Structured logging for checklist loading events
-- [ ] Unit tests written and passing (Pydantic schema validation)
+- [ ] Unit tests written and passing (Pydantic schema validation with OQ fields)
 - [ ] Integration tests passing (MCP resource endpoint)
-- [ ] Migration tests passing (all criteria migrated, no data loss)
+- [ ] Migration tests passing (all criteria migrated from BOTH sources, no data loss)
+- [ ] Marker validation tests passing (OQ criteria include allowed_markers, marker_sub_fields, special_validations)
 - [ ] `validate_artifact` tool updated to load checklists from resources
 - [ ] Manual testing: Verify checklist update without code changes
 - [ ] Taskfile commands added for checklist validation
 - [ ] Product Owner approval obtained
 
 ## Additional Information
-**Suggested Labels:** mcp-resources, validation, data-migration
-**Estimated Story Points:** 3
+**Suggested Labels:** mcp-resources, validation, data-migration, open-questions-markers
+**Estimated Story Points:** 5 (increased from 3 SP due to Open Questions marker validation extraction complexity - Decision 4)
 **Dependencies:**
 - **Depends On:** None (can be implemented independently)
 - **Blocks:** US-040 (validate_artifact tool needs checklists to function)
-- **Related:** US-030, US-031 (similar MCP resource migration pattern)
+- **Related:** US-030, US-031 (similar MCP resource migration pattern), Generator Validation Spec v1.0
 
 **Related PRD Section:** PRD-006 §Functional Requirements - FR-16
 
@@ -432,9 +581,16 @@ Per SDLC Section 11.6 Decision Matrix: "3 SP, single developer, low complexity �
 - **Rationale:** Hardcoded paths prevent configuration flexibility and testing with different directory structures
 - **Impact:** Use `settings.VALIDATION_RESOURCES_DIR` from configuration instead of hardcoded `"resources/validation/"` path
 
+**Decision 4: Extract Open Questions marker validation from TWO sources**
+- **Made:** 2025-10-20 (during Generator Validation Spec v1.0 implementation)
+- **Rationale:** Open Questions marker validation logic exists in TWO places: (1) `<validation_checklist>` section contains OQ-XX criterion IDs, and (2) `<guideline category="open_questions">` section contains detailed marker validation rules (allowed markers, sub-field requirements, special validations, error message templates). Both sources must be extracted to preserve complete validation logic
+- **Impact:** Extended migration process to Phase 2 extraction from `<guideline category="open_questions">` sections. Added new JSON fields: `applies_to`, `allowed_markers`, `marker_sub_fields`, `prohibited_patterns`, `special_validations`, `error_message_templates`. Added Scenario 9 acceptance criterion. Estimated effort increased from 3 SP to 5 SP (additional extraction complexity)
+
 ## Related Documents
 - **Parent PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md`
 - **Parent HLS:** `/artifacts/hls/HLS-008_mcp_tools_validation_path_resolution_v2.md`
 - **Implementation Research:** `/artifacts/research/AI_Agent_MCP_Server_implementation_research.md` (§2.1 Python Type Safety, §5.3 Input Validation, §6.1 Structured Logging)
+- **Generator Validation Spec:** `/docs/generator_validation_spec.md` (v1.0 - defines Open Questions marker validation rules to be extracted)
+- **CLAUDE.md:** `/CLAUDE.md` (v2.0 - Framework Design Principles, Open Questions Marker System sections)
 - **Related Stories:** US-040 (validate_artifact tool), US-030 (MCP resource pattern), US-031 (template resources)
 - **Feedback:** `/feedback/US-040-047_v1_comments.md`

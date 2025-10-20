@@ -6,6 +6,52 @@
 **Documentation Product Name:** AI Agent MCP Server
 **Package Name:** mcp_server (alias: ai_agent_mcp_server)
 
+---
+
+## Framework Design Principles
+
+### Template vs Generator Responsibility
+
+**Single Responsibility Separation:**
+
+**Templates** (`prompts/templates/*.xml`):
+- **Purpose:** Define artifact structure and content requirements
+- **Responsibility:** Specify WHAT sections exist and WHAT format to use
+- **Example:** Define that Open Questions must use standardized markers `[REQUIRES SPIKE]`, `[REQUIRES ADR]`, etc.
+- **Does NOT:** Contain validation checklists or enforcement logic
+- **Audience:** Human reviewers and generators (as structural reference)
+
+**Generators** (`prompts/*-generator.xml`):
+- **Purpose:** Produce artifacts conforming to template structure
+- **Responsibility:** Implement validation logic to enforce template requirements
+- **Example:** Validate that Open Questions in v2+ artifacts use markers with required sub-fields
+- **Does:** Programmatically check compliance and reject non-conforming artifacts
+- **Audience:** Automated artifact generation system
+
+**Validation Specification** (`docs/generator_validation_spec.md`):
+- **Purpose:** Define HOW generators should validate artifacts
+- **Responsibility:** Provide comprehensive validation rules, error messages, test cases
+- **Example:** Specify that `[REQUIRES SPIKE]` must include "Investigation Needed", "Spike Scope", "Time Box", "Blocking" sub-fields
+- **Audience:** Generator developers implementing validation logic
+
+**Rationale:**
+- **Separation of concerns:** Templates define structure (declarative), generators enforce compliance (imperative)
+- **Maintainability:** Validation logic updates don't require template changes
+- **Testability:** Generators can be unit tested against validation spec
+- **Single source of truth:** Validation spec is authoritative for enforcement logic
+
+**When Updating Templates or Generators:**
+1. **Template changes** → Update structural requirements (sections, markers, format)
+2. **Validation changes** → Update `docs/generator_validation_spec.md` first, then implement in generators
+3. **Never add validation checklists to templates** → Document in generator validation spec instead
+
+**Example (Open Questions Marker System):**
+- **Template:** Specifies that v2+ artifacts must use `[REQUIRES SPIKE]` marker with sub-fields
+- **Generator:** Validates that marker exists and includes "Investigation Needed", "Spike Scope", "Time Box", "Blocking"
+- **Validation Spec:** Documents exact validation rules, error messages, and test cases
+
+---
+
 ## Folder Structure
 
 **Single source for directory hierarchy and file naming conventions.**
@@ -478,40 +524,210 @@ All generators updated to use `classification` attribute exclusively.
 
 ## Open Questions Marker System
 
-All SDLC artifacts use a consistent marker system to classify uncertainties and route them to appropriate resolution paths:
+All SDLC artifacts use a consistent marker system to classify uncertainties and route them to appropriate resolution paths.
+
+### Version Lifecycle (v1 → v2+)
+
+**Version 1 Artifacts (Initial Generation):**
+- Open Questions should include **Recommendations** for each question (exploratory, not yet decided)
+- Include alternatives, context, decision criteria
+- No markers required in v1 (questions are exploratory)
+- Example format:
+  ```markdown
+  ## Open Questions
+
+  - How should error responses be structured to match MCP SDK expectations?
+    - **Recommendation:** Review MCP SDK documentation for error response schema patterns
+    - **Alternatives:**
+      - Option A: Mirror HTTP status code structure (400/500 codes)
+      - Option B: Custom error object with code/message/details fields
+      - Option C: Follow MCP protocol error conventions
+    - **Decision Needed By:** Product Owner + Tech Lead
+  ```
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved questions MUST use standardized markers
+- Format for Decisions Made:
+  ```markdown
+  ## Decisions Made
+
+  **Q1: How should error responses be structured?**
+  - **Decision:** Follow MCP protocol error conventions (Option C)
+  - **Rationale:** Ensures compatibility with MCP clients, standard error handling
+  - **Decided By:** Tech Lead John (2025-10-20)
+  ```
+
+**PROHIBITED in v2+ artifacts:**
+- ❌ Free-form text: "Decision: Spike needed for this"
+- ❌ Generic actions: "Action Required: Create spike to investigate..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```markdown
+⚠️ **ACTION REQUIRED:** This artifact has 3 open questions without markers.
+Add [REQUIRES SPIKE] or [REQUIRES TECH LEAD] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
+### Standardized Marker Formats with Required Sub-fields
 
 **Strategic/Resource Level (Initiative):**
-- `[REQUIRES EXECUTIVE DECISION]` - C-level or VP approval needed
-- `[REQUIRES PORTFOLIO PLANNING]` - Affects multiple initiatives or roadmap
-- `[REQUIRES RESOURCE PLANNING]` - FTE, budget, or team allocation
-- `[REQUIRES ORGANIZATIONAL ALIGNMENT]` - Stakeholder consensus needed
+
+```markdown
+[REQUIRES EXECUTIVE DECISION]
+- **Decision Needed:** {What needs executive approval}
+- **Options Considered:** {List alternatives}
+- **Business Impact:** {Revenue, risk, resource implications}
+- **Decision Deadline:** {Date by which decision needed}
+```
+
+```markdown
+[REQUIRES PORTFOLIO PLANNING]
+- **Impact:** {Affects which initiatives or roadmap items}
+- **Timeline Dependencies:** {When this needs to be decided}
+- **Resource Impact:** {Teams or budgets affected}
+```
+
+```markdown
+[REQUIRES RESOURCE PLANNING]
+- **Resource Type:** {FTE, budget, infrastructure}
+- **Quantity Needed:** {Number of people, dollar amount, capacity}
+- **Duration:** {Timeline for resource need}
+- **Blocking:** {What's blocked without resources}
+```
+
+```markdown
+[REQUIRES ORGANIZATIONAL ALIGNMENT]
+- **Stakeholders:** {List departments/teams requiring alignment}
+- **Alignment Topic:** {What needs consensus}
+- **Impact Without Alignment:** {Risk of proceeding without consensus}
+- **Decision Deadline:** {Date}
+```
 
 **Business Level (Epic):**
-- Business questions only (market, business model, compliance)
-- No technical markers at Epic phase
+
+Business questions only (market, business model, compliance). No technical markers at Epic phase.
+
+```markdown
+[REQUIRES EXECUTIVE DECISION]
+- **Decision Needed:** {Business strategy or investment decision}
+- **Options Considered:** {Strategic alternatives}
+- **Business Impact:** {Revenue, market position, risk}
+- **Decision Deadline:** {Date}
+```
 
 **Bridge Level (PRD):**
-- `[REQUIRES PM + TECH LEAD]` - Product/technical trade-offs requiring collaboration
+
+```markdown
+[REQUIRES PM + TECH LEAD]
+- **Trade-off:** {Product vs. technical tension}
+- **PM Perspective:** {User experience, business value considerations}
+- **Tech Perspective:** {Implementation complexity, technical debt considerations}
+- **Decision Needed By:** {Date}
+```
 
 **User/UX Level (High-Level Story):**
-- `[REQUIRES UX RESEARCH]` - User behavior validation
-- `[REQUIRES UX DESIGN]` - Design input or usability testing
-- `[REQUIRES PRODUCT OWNER]` - Feature scope or priority decisions
+
+```markdown
+[REQUIRES UX RESEARCH]
+- **Research Question:** {User behavior to validate}
+- **Research Method:** {Survey, usability test, A/B test}
+- **Timeline:** {Duration}
+- **Blocking:** {What's blocked until research complete}
+```
+
+```markdown
+[REQUIRES UX DESIGN]
+- **Design Scope:** {What needs design input}
+- **Design Deliverables:** {Mockups, prototypes, design system components}
+- **Timeline:** {When design needed}
+- **Blocking:** {What's blocked without design}
+```
+
+```markdown
+[REQUIRES PRODUCT OWNER]
+- **Decision Needed:** {Scope, priority, feature clarification}
+- **Context:** {Why this decision matters}
+- **Impact:** {What's affected by decision}
+```
 
 **Implementation Level (Backlog Story):**
-- `[REQUIRES SPIKE]` - Time-boxed investigation (1-3 days) → Creates spike artifact
-- `[REQUIRES ADR]` - Major architectural decision → Creates ADR artifact
-- `[REQUIRES TECH LEAD]` - Senior technical input (no artifact needed)
-- `[BLOCKED BY]` - External dependency
+
+```markdown
+[REQUIRES SPIKE]
+- **Investigation Needed:** {Technical uncertainty to resolve}
+- **Spike Scope:** {What to research/prototype}
+- **Time Box:** {1-3 days maximum}
+- **Blocking:** {What implementation steps blocked}
+```
+
+```markdown
+[REQUIRES ADR]
+- **Decision Topic:** {Architectural decision needed}
+- **Alternatives:** {Options to evaluate in ADR}
+- **Impact Scope:** {What components/systems affected}
+- **Decision Deadline:** {Date}
+```
+
+```markdown
+[REQUIRES TECH LEAD]
+- **Technical Question:** {Senior input needed on what}
+- **Context:** {Why this needs tech lead review}
+- **Blocking:** {What's blocked}
+```
+
+```markdown
+[BLOCKED BY]
+- **Dependency:** {External system, team, decision}
+- **Expected Resolution:** {Date/milestone when unblocked}
+- **Workaround Available:** {Yes/No, if yes describe}
+```
 
 **Technical Detail Level (Tech Spec, Implementation Task):**
-- `[REQUIRES TECH LEAD]` - Senior technical input
-- `[CLARIFY BEFORE START]` - Must resolve before beginning task
-- `[BLOCKED BY]` - External dependency
-- `[NEEDS PAIR PROGRAMMING]` - Complex area requiring collaboration
-- `[TECH DEBT]` - Workaround needed due to existing code constraints
 
-**Workflow:**
+```markdown
+[REQUIRES TECH LEAD]
+- **Technical Question:** {Senior input needed on what}
+- **Context:** {Why this needs tech lead review}
+- **Blocking:** {What's blocked}
+```
+
+```markdown
+[CLARIFY BEFORE START]
+- **Clarification Needed:** {Ambiguity to resolve}
+- **Stakeholder:** {Who can clarify}
+- **Blocking:** {Can't start task until clarified}
+```
+
+```markdown
+[BLOCKED BY]
+- **Dependency:** {External system, team, decision}
+- **Expected Resolution:** {Date/milestone when unblocked}
+- **Workaround Available:** {Yes/No, if yes describe}
+```
+
+```markdown
+[NEEDS PAIR PROGRAMMING]
+- **Complexity Area:** {What's complex requiring collaboration}
+- **Skills Needed:** {Expertise required}
+- **Duration:** {Estimated pairing time}
+```
+
+```markdown
+[TECH DEBT]
+- **Tech Debt Description:** {Existing constraint}
+- **Workaround:** {How to work around constraint}
+- **Future Resolution:** {When/how to address properly}
+```
+
+---
+
+### Spike Workflow Example
+
 ```
 Question marked [REQUIRES SPIKE] in Backlog Story
     ↓
@@ -750,12 +966,13 @@ PRD-000 (Project Foundation)
 
 ---
 
-**Document Version**: 1.9
-**Last Updated**: 2025-10-18
+**Document Version**: 2.0
+**Last Updated**: 2025-10-20
 **Maintained By**: Context Engineering PoC Team
 **Next Review**: End of Phase 1
 
 **Version History:**
+- v2.0 (2025-10-20): **MAJOR UPDATE** - Added Framework Design Principles section documenting Template vs Generator responsibility separation. Expanded Open Questions Marker System with v1/v2+ workflow, standardized markers with required sub-fields for all artifact types. Removed validation checklists from templates (moved to generator validation spec). Created comprehensive generator validation specification document. (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)
 - v1.9 (2025-10-18): Added comprehensive tracking tables for SPEC, ADR, SPIKE, and TASK artifacts with purpose, usage patterns, triggers, and current allocations (Issue #6 - Artifact Tracking)
 - v1.8 (2025-10-18): Allocated US-028 through US-067 for EPIC-006 (MCP Server Integration) - 40 backlog stories across 6 HLS stories (HLS-006 through HLS-011) with detailed scope breakdown
 - v1.7 (2025-10-15): Added Artifact Path Resolution Algorithm section - explicit rules for resolving path patterns with variable substitution, glob strategies, error message formats, and implementation checklist (Issue #5 - Path Resolution Failures)
@@ -769,6 +986,8 @@ PRD-000 (Project Foundation)
 **Related Documents:**
 - `/docs/framework_validation_gaps.md` - Known validation gaps and production requirements
 - `/docs/sdlc_artifacts_comprehensive_guideline.md` - Section 1.10 covers Metadata Standards and Traceability
+- `/docs/generator_validation_spec.md` - Generator validation specification for enforcing standardized marker system (implementation guide for generators)
+- `/docs/lean/report.md` - SDLC Documentation Optimization Report (Lean Analysis v1.4 with 5 tactical recommendations)
 
 ---
 

@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Product_Requirements_Document_Template</name>
-    <version>1.8</version>
+    <version>1.9</version>
     <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
     <sdlc_phase>PRD</sdlc_phase>
     <last_updated>2025-10-20</last_updated>
-    <changes>v1.8: Reduced business context overlap by 50% - removed Background & Context, Problem Statement, User Personas sections; added Epic Context cross-reference section (Lean Analysis Report v1.4 Recommendation 3 - Business Context Bloat Reduction). Net reduction: 19 sections → 16 sections (~35% review time savings).</changes>
+    <changes>v1.9: Added Standardized Marker System for Open Questions with v1/v2+ workflow, required sub-fields for PRD-level markers ([REQUIRES PM + TECH LEAD], [REQUIRES EXECUTIVE DECISION], [REQUIRES ORGANIZATIONAL ALIGNMENT]), Decisions Made section, and validation checklist (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)</changes>
   </metadata>
 
   <instructions>
@@ -188,6 +188,15 @@ Recommendation: Time-based TTL with 5-minute expiration
 - Phase 1: [dates] - [deliverables]
 - Phase 2: [dates] - [deliverables]
 
+## Decisions Made
+
+**Note:** This section added in v2+ after feedback provided. Answered questions from Open Questions move here.
+
+**Q1: [Question]**
+- **Decision:** [Answer]
+- **Rationale:** [Why this decision was made]
+- **Decided By:** [Person/Role] ([Date])
+
 ## Open Questions
 
 **PRD is a BRIDGE ARTIFACT: Include both business and strategic technical questions, but defer implementation details to later phases.**
@@ -234,12 +243,61 @@ Recommendation: Time-based TTL with 5-minute expiration
 
 ---
 
+**MANDATORY MARKER USAGE (Hard Enforcement):**
+
+**Version 1 Artifacts:**
+- Open Questions should include **Recommendations** for each question (exploratory, not yet decided)
+- Include alternatives, context, decision criteria
+- No markers required in v1 (questions are exploratory)
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved questions MUST use standardized markers:
+  - [REQUIRES PM + TECH LEAD] (product/technical trade-offs)
+  - [REQUIRES EXECUTIVE DECISION] (business-level decisions from Epic)
+  - [REQUIRES ORGANIZATIONAL ALIGNMENT] (if cross-functional alignment needed)
+
+**Required Sub-fields for Each Marker:**
+
+[REQUIRES PM + TECH LEAD]
+- **Trade-off:** {Product vs. technical tension}
+- **PM Perspective:** {User experience, business value considerations}
+- **Tech Perspective:** {Implementation complexity, technical debt considerations}
+- **Decision Needed By:** {Date}
+
+[REQUIRES EXECUTIVE DECISION]
+- **Decision Needed:** {What needs executive approval}
+- **Options Considered:** {List alternatives}
+- **Business Impact:** {Revenue, risk, resource implications}
+- **Decision Deadline:** {Date by which decision needed}
+
+[REQUIRES ORGANIZATIONAL ALIGNMENT]
+- **Stakeholders:** {List departments/teams requiring alignment}
+- **Alignment Topic:** {What needs consensus}
+- **Impact Without Alignment:** {Risk of proceeding without consensus}
+- **Decision Deadline:** {Date}
+
+**PROHIBITED:**
+- ❌ Free-form text: "Decision: PM and Tech Lead need to discuss"
+- ❌ Generic actions: "Action Required: Schedule PM/Tech Lead meeting..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```
+⚠️ **ACTION REQUIRED:** This artifact has 3 open questions without markers.
+Add [REQUIRES PM + TECH LEAD] or [REQUIRES EXECUTIVE DECISION] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
 **If no open questions exist, state:** "No open questions at this time. Technical implementation details will be addressed in ADR and Technical Specification phases."
 
 ---
 
-- [Question 1 - mark as [BUSINESS] or [TECHNICAL]]
-- [Question 2 - mark as [BUSINESS] or [TECHNICAL]]
+- [Question 1 with marker if v2+]
+- [Question 2 with marker if v2+]
 
 ## Related Documents
 - **Parent Epic:** {SDLC_DOCUMENTS_URL}/epic/{id}

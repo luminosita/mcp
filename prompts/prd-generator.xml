@@ -2,12 +2,13 @@
 <generator_prompt>
   <metadata>
     <name>PRD_Generator</name>
-    <version>1.6</version>
+    <version>1.7</version>
     <sdlc_phase>PRD</sdlc_phase>
     <depends_on>Epic (mandatory), Business Research (recommended), Implementation Research (recommended), Specialized CLAUDE.md files (mandatory for Technical Considerations)</depends_on>
-    <generated_by>Context Engineering Framework v1.6</generated_by>
+    <generated_by>Context Engineering Framework v2.0</generated_by>
     <date>2025-10-20</date>
-    <changes>v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3) - Removed Background & Context, Problem Statement, User Personas generation steps; added Epic Context cross-reference step (references Epic §1-§4); updated Risks step to reference Epic §4 for business risks. Net reduction: 19 sections → 16 sections (~35% review time savings).</changes>
+    <changes>v1.7: Implemented Open Questions marker validation for v2+ artifacts (Generator Validation Spec v1.0) - enforces standardized marker system with required sub-fields for [REQUIRES PM + TECH LEAD], [REQUIRES EXECUTIVE DECISION], [REQUIRES ORGANIZATIONAL ALIGNMENT]. Phase 2 of SDLC marker enforcement rollout.
+v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3) - Removed Background & Context, Problem Statement, User Personas generation steps; added Epic Context cross-reference step (references Epic §1-§4); updated Risks step to reference Epic §4 for business risks</changes>
   </metadata>
 
   <system_role>
@@ -453,11 +454,14 @@
       <guidance>
         IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
 
+        Reference: Generator Validation Specification v1.0 (docs/generator_validation_spec.md)
+
         If any criterion fails validation:
         1. Present a validation report showing:
            - Failed criteria with IDs (e.g., "CQ-03: FAILED - Only 8 user stories documented, need 10-20")
            - Passed criteria can be summarized (e.g., "15 criteria passed")
-        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+        2. For Open Questions marker validation failures (OQ-XX criteria), use error message formats from validation spec
+        3. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
 
         If all criteria pass, proceed to finalize the artifact.
       </guidance>
@@ -501,6 +505,17 @@
         <criterion id="CC-04" category="consistency">All functional requirements have unique FR-XX identifiers</criterion>
         <criterion id="CC-05" category="consistency">Success metrics are measurable and time-bound</criterion>
         <criterion id="CC-06" category="consistency">Acceptance criteria are testable</criterion>
+
+        <!-- Open Questions Marker Validation (v2+ only) - Ref: Generator Validation Spec v1.0 -->
+        <criterion id="OQ-01" category="open_questions_markers" applies_to="v2+">Version detected correctly (v1 skips marker validation, v2+ enforces)</criterion>
+        <criterion id="OQ-02" category="open_questions_markers" applies_to="v2+">Section Structure: "Decisions Made" section exists</criterion>
+        <criterion id="OQ-03" category="open_questions_markers" applies_to="v2+">Section Structure: "Open Questions" section exists</criterion>
+        <criterion id="OQ-04" category="open_questions_markers" applies_to="v2+">Decisions Made entries follow format: **Q[N]: [Question]** with Decision/Rationale/Decided By sub-fields</criterion>
+        <criterion id="OQ-05" category="open_questions_markers" applies_to="v2+">Each Open Question uses allowed marker: [REQUIRES PM + TECH LEAD], [REQUIRES EXECUTIVE DECISION], or [REQUIRES ORGANIZATIONAL ALIGNMENT]</criterion>
+        <criterion id="OQ-06" category="open_questions_markers" applies_to="v2+">No free-form text patterns (e.g., "Decision: X needed", "Action Required: Do Y" without ⚠️ prefix)</criterion>
+        <criterion id="OQ-07" category="open_questions_markers" applies_to="v2+">All [REQUIRES PM + TECH LEAD] markers include: Trade-off, PM Perspective, Tech Perspective, Decision Needed By</criterion>
+        <criterion id="OQ-08" category="open_questions_markers" applies_to="v2+">All [REQUIRES EXECUTIVE DECISION] markers include: Decision Needed, Options Considered, Business Impact, Decision Deadline</criterion>
+        <criterion id="OQ-09" category="open_questions_markers" applies_to="v2+">All [REQUIRES ORGANIZATIONAL ALIGNMENT] markers include: Stakeholders, Alignment Topic, Impact Without Alignment, Decision Deadline</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -550,6 +565,25 @@
       - "Should we use repository or active record pattern?" (low-level design - Tech Spec)
 
       If no questions exist, state: "No open questions at this time. Technical implementation details will be addressed in ADR and Technical Specification phases."
+
+      **Marker Validation (v2+ artifacts only) - Reference: Generator Validation Spec v1.0:**
+
+      v1 artifacts: No marker validation (exploratory questions with recommendations allowed)
+      v2+ artifacts: Enforce standardized marker system with required sub-fields
+
+      Error message formats for OQ validation failures:
+
+      Missing Marker (OQ-05):
+      ❌ ERROR: Open Question missing standardized marker
+      Question text: "{question}"
+      Artifact: PRD-{XXX} v{N}
+      Required: [REQUIRES PM + TECH LEAD], [REQUIRES EXECUTIVE DECISION], or [REQUIRES ORGANIZATIONAL ALIGNMENT]
+
+      Missing Sub-fields (OQ-07/08/09):
+      ❌ ERROR: Marker missing required sub-fields
+      Marker: [REQUIRES PM + TECH LEAD]
+      Question: "{question}"
+      Missing sub-fields: Trade-off, PM Perspective
     </guideline>
   </quality_guidance>
 

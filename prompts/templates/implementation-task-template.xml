@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>Implementation_Task_Template</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>Implementation Task</sdlc_phase>
     <alias>Technical Task, Sub-task</alias>
-    <last_updated>2025-10-13</last_updated>
-    <changes>v1.2: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.3: Added Standardized Marker System for Task-Level Uncertainties with v1/v2+ workflow, required sub-fields for task-level markers ([CLARIFY BEFORE START], [BLOCKED BY], [NEEDS PAIR PROGRAMMING], [TECH DEBT]), Decisions Made section, and validation checklist (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)</changes>
   </metadata>
 
   <instructions>
@@ -223,7 +223,16 @@
 - [Strategy for risk 1]
 - [Strategy for risk 2]
 
-**Task-Level Uncertainties & Blockers:**
+## Decisions Made
+
+**Note:** This section added in v2+ after feedback provided. Answered questions from Task-Level Uncertainties move here.
+
+**Q1: [Question]**
+- **Decision:** [Answer]
+- **Rationale:** [Why this decision was made]
+- **Decided By:** [Person/Role] ([Date])
+
+## Task-Level Uncertainties & Blockers
 
 **Implementation Task uncertainties are GRANULAR IMPLEMENTATION BLOCKERS or clarifications needed before starting or during task execution.**
 
@@ -245,14 +254,6 @@
 
 ---
 
-**Uncertainty Markers:**
-- [CLARIFY BEFORE START] - must resolve before beginning task
-- [BLOCKED BY] - external dependency blocking task
-- [NEEDS PAIR PROGRAMMING] - complex area requiring collaboration
-- [TECH DEBT] - workaround needed due to existing code constraints
-
----
-
 **Examples of Task-APPROPRIATE uncertainties:**
 - "Do we handle null userId in validateUser(), or assume caller validates?" [CLARIFY BEFORE START]
 - "Should error logging be synchronous (console.error) or async (Winston)?" [CLARIFY BEFORE START]
@@ -266,12 +267,64 @@
 
 ---
 
+**MANDATORY MARKER USAGE (Hard Enforcement):**
+
+**Version 1 Artifacts:**
+- Uncertainties should include **Recommendations** or context (exploratory, not yet decided)
+- Include alternatives where applicable
+- No markers required in v1 (questions are exploratory)
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved uncertainties MUST use standardized markers:
+  - [CLARIFY BEFORE START] (must resolve before beginning task)
+  - [BLOCKED BY] (external dependency blocking task)
+  - [NEEDS PAIR PROGRAMMING] (complex area requiring collaboration)
+  - [TECH DEBT] (workaround needed due to existing code constraints)
+
+**Required Sub-fields for Each Marker:**
+
+[CLARIFY BEFORE START]
+- **Clarification Needed:** {Ambiguity to resolve}
+- **Stakeholder:** {Who can clarify}
+- **Blocking:** {Can't start task until clarified}
+
+[BLOCKED BY]
+- **Dependency:** {External system, team, decision}
+- **Expected Resolution:** {Date/milestone when unblocked}
+- **Workaround Available:** {Yes/No, if yes describe}
+
+[NEEDS PAIR PROGRAMMING]
+- **Complexity Area:** {What's complex requiring collaboration}
+- **Skills Needed:** {Expertise required}
+- **Duration:** {Estimated pairing time}
+
+[TECH DEBT]
+- **Tech Debt Description:** {Existing constraint}
+- **Workaround:** {How to work around constraint}
+- **Future Resolution:** {When/how to address properly}
+
+**PROHIBITED:**
+- ❌ Free-form text: "Decision: Need clarification on this"
+- ❌ Generic actions: "Action Required: Ask team about..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```
+⚠️ **ACTION REQUIRED:** This artifact has 2 uncertainties without markers.
+Add [CLARIFY BEFORE START] or [BLOCKED BY] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
 **If no uncertainties exist, state:** "No task-level uncertainties. Implementation approach clear from Tech Spec and Backlog Story."
 
 ---
 
-- [Task-level uncertainty 1 with marker]
-- [Task-level uncertainty 2 with marker]
+- [Task-level uncertainty 1 with marker if v2+]
+- [Task-level uncertainty 2 with marker if v2+]
 
 ## Definition of Done (Task Level)
 

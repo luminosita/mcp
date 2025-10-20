@@ -2,12 +2,13 @@
 <generator_prompt>
   <metadata>
     <name>Epic_Generator</name>
-    <version>1.5</version>
+    <version>1.6</version>
     <sdlc_phase>Epic</sdlc_phase>
     <depends_on>Product Vision (mandatory, mutually exclusive with Initiative) OR Initiative (mandatory, mutually exclusive with Product Vision), Business Research (recommended)</depends_on>
-    <generated_by>Context Engineering Framework v1.6</generated_by>
+    <generated_by>Context Engineering Framework v2.0</generated_by>
     <date>2025-10-20</date>
-    <changes>v1.5: Added section ID generation (§1-§4) for Business Value, Problem Being Solved, Success Metrics, Business Risks sections to enable cross-referencing from PRD and HLS artifacts (Lean Analysis Report v1.4 Recommendation 3 - Business Context Bloat Reduction)</changes>
+    <changes>v1.6: Implemented Open Questions marker validation for v2+ artifacts (Generator Validation Spec v1.0) - enforces standardized marker system with required sub-fields for [REQUIRES EXECUTIVE DECISION], [REQUIRES PORTFOLIO PLANNING], [REQUIRES RESOURCE PLANNING], [REQUIRES ORGANIZATIONAL ALIGNMENT]. Phase 2 of SDLC marker enforcement rollout.
+v1.5: Added section ID generation (§1-§4) for Business Value, Problem Being Solved, Success Metrics, Business Risks sections to enable cross-referencing from PRD and HLS artifacts</changes>
   </metadata>
 
   <system_role>
@@ -274,11 +275,14 @@
       <guidance>
         IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
 
+        Reference: Generator Validation Specification v1.0 (docs/generator_validation_spec.md)
+
         If any criterion fails validation:
         1. Present a validation report showing:
            - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
            - Passed criteria can be summarized (e.g., "18 criteria passed")
-        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+        2. For Open Questions marker validation failures (OQ-XX criteria), use error message formats from validation spec
+        3. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
 
         If all criteria pass, proceed to finalize the artifact.
       </guidance>
@@ -319,6 +323,18 @@
         <criterion id="CC-03" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
         <criterion id="CC-04" category="consistency">Epic statement follows "As [user], I need [capability], so that [business value]" format</criterion>
         <criterion id="CC-05" category="consistency">Acceptance criteria are business-focused (not technical implementation details)</criterion>
+
+        <!-- Open Questions Marker Validation (v2+ only) - Ref: Generator Validation Spec v1.0 -->
+        <criterion id="OQ-01" category="open_questions_markers" applies_to="v2+">Version detected correctly (v1 skips marker validation, v2+ enforces)</criterion>
+        <criterion id="OQ-02" category="open_questions_markers" applies_to="v2+">Section Structure: "Decisions Made" section exists</criterion>
+        <criterion id="OQ-03" category="open_questions_markers" applies_to="v2+">Section Structure: "Open Questions" section exists</criterion>
+        <criterion id="OQ-04" category="open_questions_markers" applies_to="v2+">Decisions Made entries follow format: **Q[N]: [Question]** with Decision/Rationale/Decided By sub-fields</criterion>
+        <criterion id="OQ-05" category="open_questions_markers" applies_to="v2+">Each Open Question uses allowed marker: [REQUIRES EXECUTIVE DECISION], [REQUIRES PORTFOLIO PLANNING], [REQUIRES RESOURCE PLANNING], or [REQUIRES ORGANIZATIONAL ALIGNMENT]</criterion>
+        <criterion id="OQ-06" category="open_questions_markers" applies_to="v2+">No free-form text patterns (e.g., "Decision: X needed", "Action Required: Do Y" without ⚠️ prefix)</criterion>
+        <criterion id="OQ-07" category="open_questions_markers" applies_to="v2+">All [REQUIRES EXECUTIVE DECISION] markers include: Decision Needed, Options Considered, Business Impact, Decision Deadline</criterion>
+        <criterion id="OQ-08" category="open_questions_markers" applies_to="v2+">All [REQUIRES PORTFOLIO PLANNING] markers include: Impact, Timeline Dependencies, Resource Impact</criterion>
+        <criterion id="OQ-09" category="open_questions_markers" applies_to="v2+">All [REQUIRES RESOURCE PLANNING] markers include: Resource Type, Quantity Needed, Duration, Blocking</criterion>
+        <criterion id="OQ-10" category="open_questions_markers" applies_to="v2+">All [REQUIRES ORGANIZATIONAL ALIGNMENT] markers include: Stakeholders, Alignment Topic, Impact Without Alignment, Decision Deadline</criterion>
       </validation_checklist>
     </terminal_artifact>
   </output_format>
@@ -369,6 +385,25 @@
       - "Should we prioritize offline-first capability or real-time sync in V1?" (belongs in PRD)
       - "What authentication approach balances user experience with security?" (belongs in PRD)
       - "Should we build or integrate with third-party service for notifications?" (belongs in PRD)
+
+      **Marker Validation (v2+ artifacts only) - Reference: Generator Validation Spec v1.0:**
+
+      v1 artifacts: No marker validation (exploratory questions with recommendations allowed)
+      v2+ artifacts: Enforce standardized marker system with required sub-fields
+
+      Error message formats for OQ validation failures:
+
+      Missing Marker (OQ-05):
+      ❌ ERROR: Open Question missing standardized marker
+      Question text: "{question}"
+      Artifact: EPIC-{XXX} v{N}
+      Required: [REQUIRES EXECUTIVE DECISION], [REQUIRES PORTFOLIO PLANNING], [REQUIRES RESOURCE PLANNING], or [REQUIRES ORGANIZATIONAL ALIGNMENT]
+
+      Missing Sub-fields (OQ-07/08/09/10):
+      ❌ ERROR: Marker missing required sub-fields
+      Marker: [REQUIRES EXECUTIVE DECISION]
+      Question: "{question}"
+      Missing sub-fields: Decision Needed, Options Considered
     </guideline>
   </quality_guidance>
 

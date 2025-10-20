@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>High_Level_User_Story_Template</name>
-    <version>1.4</version>
+    <version>1.6</version>
     <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
     <sdlc_phase>High-Level User Story</sdlc_phase>
     <alias>Capability Story, Parent Story, Feature (in Strategy 1)</alias>
     <last_updated>2025-10-20</last_updated>
-    <changes>v1.4: Reduced business context overlap - removed User Context and Business Value sections; added Value Contribution cross-reference section (Lean Analysis Report v1.4 Recommendation 3 - Business Context Bloat Reduction). Net reduction: 16 sections → 14 sections (~35% review time savings).</changes>
+    <changes>v1.6: Added Standardized Marker System for Open Questions with v1/v2+ workflow, required sub-fields for HLS-level markers ([REQUIRES UX RESEARCH], [REQUIRES UX DESIGN], [REQUIRES PRODUCT OWNER]), Decisions Made section, and validation checklist (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)</changes>
   </metadata>
 
   <instructions>
@@ -81,28 +81,35 @@ This story implements the following PRD functional requirements:
 
 ### Primary User Flow
 
-**Happy Path:**
-1. User [action 1]
-2. System [response 1]
-3. User [action 2]
-4. System [response 2]
-5. User achieves [goal]
+**IMPORTANT:** Use numbered steps with explicit actor identification to prevent sequence ambiguity (Lean Analysis Recommendation 4 - Happy Path Format). I/O details optional at HLS level (will be detailed in FuncSpec).
+
+**Actor Legend:**
+- **User:** [Primary user role, e.g., "Mobile app user"]
+- **System:** [System component, e.g., "Application backend"]
+
+**Happy Path Flow Sequence:**
+
+**Step 1:** User → System: [Action description]
+- [Optional: Brief input/output description if helpful for clarity]
+- [What user provides or initiates]
+
+**Step 2:** System → User: [Response description]
+- [What system does from user perspective]
+- [What user sees or receives]
+
+**Step 3:** User → System: [Action description]
+- [Next user action]
+
+**Step 4:** System → User: [Response description]
+- [System response]
+
+**Step 5:** User achieves [goal]
+
+**Note:** Detailed I/O schemas (request/response formats, JSON examples, state changes) belong in Functional Specification (FuncSpec). HLS focuses on user-visible sequence.
 
 **Alternative Flows:**
-- **Alt Flow 1:** If [condition], then [alternative path]
-- **Alt Flow 2:** If [condition], then [alternative path]
-
-### User Interactions
-[Describe what the user does - NOT how it's implemented]
-- [Interaction 1: e.g., "User enters notification preferences"]
-- [Interaction 2: e.g., "User saves preferences"]
-- [Interaction 3: e.g., "User receives confirmation"]
-
-### System Behaviors (User Perspective)
-[What the system does from user's point of view - NO technical details]
-- [Behavior 1: e.g., "System validates inputs"]
-- [Behavior 2: e.g., "System persists changes"]
-- [Behavior 3: e.g., "System provides feedback"]
+- **Alt Flow 1:** If [condition], then [alternative path description]
+- **Alt Flow 2:** If [condition], then [alternative path description]
 
 ## Acceptance Criteria (High-Level)
 
@@ -183,6 +190,15 @@ This story implements the following PRD functional requirements:
 | [User adoption risk] | High/Med/Low | [Strategy] |
 | [Usability risk] | High/Med/Low | [Strategy] |
 
+### Decisions Made
+
+**Note:** This section added in v2+ after feedback provided. Answered questions from Open Questions move here.
+
+**Q1: [Question]**
+- **Decision:** [Answer]
+- **Rationale:** [Why this decision was made]
+- **Decided By:** [Person/Role] ([Date])
+
 ### Open Questions
 
 **High-Level Story Open Questions focus on USER/UX/FUNCTIONAL uncertainties needing validation before backlog refinement.**
@@ -215,12 +231,60 @@ This story implements the following PRD functional requirements:
 
 ---
 
+**MANDATORY MARKER USAGE (Hard Enforcement):**
+
+**Version 1 Artifacts:**
+- Open Questions should include **Recommendations** for each question (exploratory, not yet decided)
+- Include alternatives, context, decision criteria
+- No markers required in v1 (questions are exploratory)
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved questions MUST use standardized markers:
+  - [REQUIRES UX RESEARCH] (user behavior validation)
+  - [REQUIRES UX DESIGN] (design input or usability testing)
+  - [REQUIRES PRODUCT OWNER] (scope, priority, feature clarification)
+
+**Required Sub-fields for Each Marker:**
+
+[REQUIRES UX RESEARCH]
+- **Research Question:** {User behavior to validate}
+- **Research Method:** {Survey, usability test, A/B test}
+- **Timeline:** {Duration}
+- **Blocking:** {What's blocked until research complete}
+
+[REQUIRES UX DESIGN]
+- **Design Scope:** {What needs design input}
+- **Design Deliverables:** {Mockups, prototypes, design system components}
+- **Timeline:** {When design needed}
+- **Blocking:** {What's blocked without design}
+
+[REQUIRES PRODUCT OWNER]
+- **Decision Needed:** {Scope, priority, feature clarification}
+- **Context:** {Why this decision matters}
+- **Impact:** {What's affected by decision}
+
+**PROHIBITED:**
+- ❌ Free-form text: "Decision: Need UX research for this"
+- ❌ Generic actions: "Action Required: Schedule user testing..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```
+⚠️ **ACTION REQUIRED:** This artifact has 2 open questions without markers.
+Add [REQUIRES UX RESEARCH], [REQUIRES UX DESIGN], or [REQUIRES PRODUCT OWNER] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
 **If no open questions exist, state:** "No open UX or functional questions at this time. Implementation uncertainties will be captured during backlog refinement."
 
 ---
 
-- [User/UX Question 1 - mark as [REQUIRES UX RESEARCH/DESIGN] or [REQUIRES PRODUCT OWNER]]
-- [Functional Question 2]
+- [User/UX Question 1 with marker if v2+]
+- [Functional Question 2 with marker if v2+]
 
 ## Definition of Ready (Before Backlog Refinement)
 
