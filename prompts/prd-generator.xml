@@ -2,13 +2,14 @@
 <generator_prompt>
   <metadata>
     <name>PRD_Generator</name>
-    <version>1.7</version>
+    <version>2.0</version>
     <sdlc_phase>PRD</sdlc_phase>
     <depends_on>Epic (mandatory), Business Research (recommended), Implementation Research (recommended), Specialized CLAUDE.md files (mandatory for Technical Considerations)</depends_on>
     <generated_by>Context Engineering Framework v2.0</generated_by>
     <date>2025-10-20</date>
-    <changes>v1.7: Implemented Open Questions marker validation for v2+ artifacts (Generator Validation Spec v1.0) - enforces standardized marker system with required sub-fields for [REQUIRES PM + TECH LEAD], [REQUIRES EXECUTIVE DECISION], [REQUIRES ORGANIZATIONAL ALIGNMENT]. Phase 2 of SDLC marker enforcement rollout.
-v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3) - Removed Background & Context, Problem Statement, User Personas generation steps; added Epic Context cross-reference step (references Epic §1-§4); updated Risks step to reference Epic §4 for business risks</changes>
+    <changes>v2.0: **MAJOR UPDATE** - Implemented HLS Consolidation (Lean Analysis v1.4 Strategic Recommendation - Option 2). PRD now generates High-Level User Stories as subsections within PRD (HLS-XXX format). Replaced "Define User Stories" step with "Generate High-Level User Stories Subsections" step. PRD combines Requirements (FR-XX, NFR-XX) AND High-Level User Stories (HLS-XXX subsections). Eliminates separate HLS artifacts. Artifact count: 6 types (Epic, PRD+HLS, FuncSpec, US, Tech Spec, Task).
+v1.7: Implemented Open Questions marker validation for v2+ artifacts (Generator Validation Spec v1.0).
+v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).</changes>
   </metadata>
 
   <system_role>
@@ -293,23 +294,74 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3) -
     </step>
 
     <step priority="7">
-      <action>Define User Stories and Use Cases</action>
+      <action>Generate High-Level User Stories Subsections (HLS Consolidation)</action>
       <guidance>
-        - Expand Epic high-level stories into detailed user stories
-        - Add use cases from Business Research
-        - Use standard format: "As [user], I want [goal], so that [benefit]"
-        - 10-20 user stories typical for feature PRD
-      </guidance>
-    </step>
+        **IMPORTANT:** PRD now includes High-Level User Stories as subsections within "High-Level User Stories" section (Lean Analysis v1.4 Strategic Recommendation - Option 2: HLS Consolidation).
 
-    <step priority="8">
-      <action>Specify Acceptance Criteria</action>
-      <guidance>
-        - Per user story or feature
-        - Use Given/When/Then format
-        - Focus on functional outcomes (not technical implementation)
-        - Derived from Business Research + Epic acceptance criteria
+        **Generate one HLS-XXX subsection for each major user goal:**
+
+        1. **HLS Subsection Header:**
+           - Format: `### HLS-[XXX]: [Story Title]`
+           - Example: `### HLS-001: User Authentication Flow`
+           - HLS IDs assigned sequentially based on PRD scope (check TODO.md for next available HLS ID)
+
+        2. **User Story Statement:**
+           - Use standard format: "As a [user persona], I want [goal], so that [business value/benefit]"
+           - Example: "As a mobile app user, I want to log in using my email and password, so that I can access my personalized dashboard"
+
+        3. **Value Contribution:**
+           - **Parent PRD Requirements:** List FR-XX requirements this HLS implements (e.g., "FR-01, FR-03")
+           - **Epic Success Metrics Alignment:** Explain how this HLS contributes to Epic §3 metrics
+           - **User Impact:** 1-2 sentences on user benefit (avoid duplicating Epic §1)
+
+        4. **Primary User Flow:**
+           - **Actor Legend:** Define actors (User, System, Database, External Service)
+           - **Happy Path Flow Sequence:** Numbered steps with explicit actor identification
+             - Format: `Step 1: User → System: [Action description]`
+             - Include brief input/output descriptions if helpful for clarity
+             - NO detailed JSON examples (deferred to FuncSpec)
+             - Focus on user-visible sequence
+           - **Note:** Add reminder that detailed I/O schemas belong in FuncSpec
+           - **Alternative Flows:** List 2-3 alternative paths (e.g., "Alt Flow 1: If invalid credentials, then show error")
+
+        5. **Acceptance Criteria (High-Level):**
+           - 2-4 criteria per HLS using Given/When/Then format
+           - Focus on functional outcomes from user perspective
+           - NOT technical implementation details
+
+        6. **Edge Cases & Error Conditions:**
+           - List 2-3 edge cases (Invalid Input, System Unavailable, Partial Success)
+           - Describe system response from user perspective
+
+        7. **Decomposition into Backlog Stories:**
+           - **Estimated Backlog Stories:** List 3-8 backlog stories (not yet detailed, titles only)
+           - Format: `1. **US-[XXX]:** [Story title] - [Est. SP]`
+           - Total Estimated Effort in story points
+           - **NOTE:** US IDs are placeholders (assigned during backlog story generation from TODO.md)
+
+        8. **Dependencies:**
+           - **Upstream:** What must complete before this HLS
+           - **Downstream:** What depends on this HLS
+
+        9. **Open Questions (if any):**
+           - Use standardized markers if v2+ artifact ([REQUIRES UX RESEARCH], [REQUIRES PRODUCT OWNER], etc.)
+
+        **Number of HLS Subsections:**
+        - Typical PRD includes 3-8 HLS subsections (one per major user goal)
+        - Each HLS should be independently valuable to users
+        - HLS should align with Epic high-level stories
+
+        **Expand Epic high-level stories into HLS subsections:**
+        - Use Epic high-level stories as starting point
+        - Enrich with Business Research user workflows
+        - Add acceptance criteria from Epic + Business Research
       </guidance>
+      <anti_hallucination>
+        - Do NOT generate US-XXX IDs (placeholders only, actual IDs assigned during backlog story generation)
+        - Do NOT include detailed JSON I/O examples (deferred to FuncSpec)
+        - Focus HLS on user-visible flows, not implementation
+        - Preserve HLS-XXX ID format for traceability (even though consolidated into PRD)
+      </anti_hallucination>
     </step>
 
     <step priority="9">
@@ -456,12 +508,20 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3) -
 
         Reference: Generator Validation Specification v1.0 (docs/generator_validation_spec.md)
 
+        **Validation Categories:**
+        - **Content Quality (CQ-XX):** 14 criteria covering objective, scope, NFRs, metrics, risks, etc.
+        - **Upstream Traceability (UT-XX):** 8 criteria covering Epic linkage, research references, section validity
+        - **Consistency (CC-XX):** 6 criteria covering status values, ID formats, placeholders, testability
+        - **High-Level User Stories (HLS-XX):** 16 criteria covering HLS subsections structure, format, completeness (HLS Consolidation v2.0)
+        - **Open Questions Markers (OQ-XX):** 9 criteria covering v2+ marker enforcement (applies_to="v2+" only)
+
         If any criterion fails validation:
         1. Present a validation report showing:
-           - Failed criteria with IDs (e.g., "CQ-03: FAILED - Only 8 user stories documented, need 10-20")
-           - Passed criteria can be summarized (e.g., "15 criteria passed")
+           - Failed criteria with IDs (e.g., "HLS-07: FAILED - HLS-002 Primary User Flow missing numbered step format")
+           - Passed criteria can be summarized (e.g., "51 of 53 criteria passed")
         2. For Open Questions marker validation failures (OQ-XX criteria), use error message formats from validation spec
-        3. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+        3. For HLS validation failures (HLS-XX criteria), specify which HLS subsection failed and what's missing
+        4. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
 
         If all criteria pass, proceed to finalize the artifact.
       </guidance>
@@ -475,7 +535,7 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3) -
         <!-- Content Quality Criteria -->
         <criterion id="CQ-01" category="content">Objective and vision clearly articulated</criterion>
         <criterion id="CQ-02" category="content">Scope defined with In/Out boundaries and feature list</criterion>
-        <criterion id="CQ-03" category="content">10-20 user stories documented with acceptance criteria</criterion>
+        <criterion id="CQ-03" category="content">High-Level User Stories section populated with 3-8 HLS subsections (consolidated structure - detailed validation in HLS-XX criteria)</criterion>
         <criterion id="CQ-04" category="content">NFRs separated: Business-level (compliance, accessibility) vs. Technical (performance, security)</criterion>
         <criterion id="CQ-05" category="content">Technical NFRs include specific targets (e.g., p99 &lt; 200ms) from Implementation Research</criterion>
         <criterion id="CQ-06" category="content">Dependencies and constraints documented (system, external, technical, business)</criterion>
@@ -505,6 +565,24 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3) -
         <criterion id="CC-04" category="consistency">All functional requirements have unique FR-XX identifiers</criterion>
         <criterion id="CC-05" category="consistency">Success metrics are measurable and time-bound</criterion>
         <criterion id="CC-06" category="consistency">Acceptance criteria are testable</criterion>
+
+        <!-- High-Level User Stories (HLS) Validation - HLS Consolidation (Lean Analysis v1.4 Strategic Recommendation) -->
+        <criterion id="HLS-01" category="hls_subsections">"High-Level User Stories" section exists in PRD</criterion>
+        <criterion id="HLS-02" category="hls_subsections">3-8 HLS subsections documented (one per major user goal)</criterion>
+        <criterion id="HLS-03" category="hls_subsections">Each HLS subsection has header format: "### HLS-[XXX]: [Story Title]"</criterion>
+        <criterion id="HLS-04" category="hls_subsections">Each HLS has User Story Statement with "As a/I want/So that" format</criterion>
+        <criterion id="HLS-05" category="hls_subsections">Each HLS has Value Contribution section referencing parent PRD requirements (FR-XX)</criterion>
+        <criterion id="HLS-06" category="hls_subsections">Each HLS has Primary User Flow with Actor Legend</criterion>
+        <criterion id="HLS-07" category="hls_subsections">Each HLS Primary User Flow uses numbered step format (Step 1, Step 2, etc.) with actor identification</criterion>
+        <criterion id="HLS-08" category="hls_subsections">Each HLS has Acceptance Criteria with Given/When/Then format (2-4 criteria)</criterion>
+        <criterion id="HLS-09" category="hls_subsections">Each HLS has Edge Cases & Error Conditions section (2-3 cases documented)</criterion>
+        <criterion id="HLS-10" category="hls_subsections">Each HLS has Decomposition into Backlog Stories section listing 3-8 estimated US-XXX stories</criterion>
+        <criterion id="HLS-11" category="hls_subsections">Each HLS decomposition includes story point estimates per US-XXX</criterion>
+        <criterion id="HLS-12" category="hls_subsections">Each HLS has Dependencies section (Upstream/Downstream)</criterion>
+        <criterion id="HLS-13" category="hls_subsections">HLS IDs are sequential and follow HLS-XXX format (e.g., HLS-001, HLS-002)</criterion>
+        <criterion id="HLS-14" category="hls_subsections">Note present in each HLS: "Detailed I/O schemas belong in FuncSpec" (defers JSON examples to FuncSpec)</criterion>
+        <criterion id="HLS-15" category="hls_subsections">Alternative Flows documented (2-3 per HLS)</criterion>
+        <criterion id="HLS-16" category="hls_subsections">HLS aligns with Epic high-level stories (traceability to Epic §X)</criterion>
 
         <!-- Open Questions Marker Validation (v2+ only) - Ref: Generator Validation Spec v1.0 -->
         <criterion id="OQ-01" category="open_questions_markers" applies_to="v2+">Version detected correctly (v1 skips marker validation, v2+ enforces)</criterion>

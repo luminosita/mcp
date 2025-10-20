@@ -52,6 +52,117 @@
 
 ---
 
+## Decision Hierarchy for Technical Guidance
+
+**Purpose:** Establish authoritative precedence when multiple sources provide technical guidance. Prevents architectural decision conflicts and generator hallucination for already-decided patterns.
+
+**Problem Addressed:** CLAUDE.md architectural decisions ignored or contradicted by Implementation Research recommendations, causing duplicate decision-making and documentation inconsistency (Lean Analysis Report v1.4 Recommendation 2).
+
+### Three-Tier Precedence System
+
+**Tier 1: CLAUDE.md Files (Authoritative - Decisions Made)**
+- **Location:** `prompts/CLAUDE/{language}/CLAUDE-*.md` files
+- **Content:** Finalized architectural decisions, technology choices, patterns, standards
+- **Status:** **Default authoritative** - use unless explicit override justified
+- **Override Allowed:** YES - with documented justification and approval (see override process below)
+- **Examples:**
+  - HTTP framework choice (e.g., Gin for Go REST APIs - `CLAUDE-http-frameworks.md`)
+  - Database ORM (e.g., SQLAlchemy async for Python - `CLAUDE-database.md`)
+  - Logging library (e.g., structlog for Python - `CLAUDE-logging.md`)
+  - Testing framework (e.g., pytest for Python, testify for Go - `CLAUDE-testing.md`)
+
+**Tier 2: Implementation Research (Exploratory - Recommendations)**
+- **Location:** `artifacts/research/{product_name}_implementation_research.md`
+- **Content:** Exploration of patterns, alternatives analysis, recommendations when CLAUDE.md doesn't cover topic
+- **Status:** **Advisory** - used only when CLAUDE.md has no decision on topic
+- **Usage Rule:** `IF CLAUDE.md covers topic THEN ignore Implementation Research ELSE use Implementation Research`
+- **Examples:**
+  - Cache invalidation strategies (when `CLAUDE-caching.md` doesn't exist)
+  - Error handling patterns for specific domain (when not standardized in CLAUDE.md)
+  - Third-party library selection (when no standard exists)
+
+**Tier 3: Artifact-Specific Decisions (Supplements)**
+- **Location:** PRD, US, Tech Spec Open Questions → triggers ADR creation
+- **Content:** Product-specific decisions not covered by CLAUDE.md or Implementation Research
+- **Status:** **New decisions** - may trigger CLAUDE.md updates if pattern generalizes across project
+- **Examples:**
+  - Product-specific data model constraints
+  - Integration-specific error handling
+  - Feature-specific algorithm selection
+
+### CLAUDE.md Override Process
+
+**When Override Justified:**
+Artifact-specific context requires deviating from CLAUDE.md decision (rare - requires strong technical justification).
+
+**Required Documentation:**
+```markdown
+[CLAUDE.md OVERRIDE] {Alternative approach}
+- **Original Decision:** CLAUDE-{file}.md:{line} "{decision}"
+- **Override Rationale:** {Technical justification specific to this artifact}
+- **Approval Status:** [APPROVED BY: {Tech Lead Name} - {Date}] or [REQUIRES TECH LEAD APPROVAL]
+
+Example:
+[CLAUDE.md OVERRIDE] Use Chi instead of Gin for this microservice
+- **Original Decision:** CLAUDE-http-frameworks.md:238 "Default: Use Gin"
+- **Override Rationale:** Client mandate requires stdlib-only dependencies for security audit compliance
+- **Approval Status:** [APPROVED BY: Tech Lead John - 2025-10-20]
+```
+
+### CLAUDE.md Gap Flagging
+
+**When Implementation Research suggests pattern worth standardizing:**
+```markdown
+[EXTEND CLAUDE.md]
+- **Pattern from Research:** §X.Y {Pattern name from Implementation Research}
+- **Generalization Opportunity:** {Why this should become project standard}
+- **Proposed File:** CLAUDE-{domain}.md
+- **Action:** Tech Lead review for standardization
+
+Example:
+[EXTEND CLAUDE.md]
+- **Pattern from Research:** §5.3 Cache invalidation with TTL expiration
+- **Generalization Opportunity:** Used across 3 services, should standardize TTL values and invalidation strategy
+- **Proposed File:** CLAUDE-caching.md
+- **Action:** Tech Lead review for standardization (create new CLAUDE file)
+```
+
+### Conflict Resolution Examples
+
+**Scenario 1: CLAUDE.md has decision, Implementation Research contradicts**
+- **Resolution:** Use CLAUDE.md decision (Tier 1 precedence)
+- **Generator Behavior:** Reference CLAUDE.md, ignore Implementation Research recommendation
+- **Example:** CLAUDE-http-frameworks.md says "Gin", Implementation Research suggests "chi or gin" → Use Gin
+
+**Scenario 2: CLAUDE.md silent, Implementation Research has recommendation**
+- **Resolution:** Use Implementation Research (Tier 2 applies when Tier 1 absent)
+- **Generator Behavior:** Reference Implementation Research with `[CLAUDE.md GAP]` marker
+- **Example:** No CLAUDE-caching.md, Implementation Research §5.3 recommends TTL strategy → Use §5.3
+
+**Scenario 3: Neither CLAUDE.md nor Implementation Research covers topic**
+- **Resolution:** Create artifact-specific decision (Tier 3), document in Open Questions
+- **Generator Behavior:** Mark with `[NEW DECISION REQUIRED]` or appropriate marker (`[REQUIRES TECH LEAD]`, `[REQUIRES ADR]`)
+- **Example:** Product-specific algorithm choice → Document decision rationale, consider ADR
+
+### Template and Generator Enforcement
+
+**Templates include Decision Hierarchy guidance:**
+- PRD Template (lines 118-163): Explicit hierarchy with examples
+- Backlog Story Template: References to CLAUDE.md standards
+- Tech Spec Template: CLAUDE.md precedence for implementation patterns
+
+**Generators enforce precedence:**
+- Check CLAUDE.md files before referencing Implementation Research
+- Validate that CLAUDE.md decisions are not contradicted
+- Flag conflicts during generation (validation criteria)
+
+**Related Documents:**
+- PRD Template: Lines 118-163 (Technical Considerations section)
+- Lean Analysis Report v1.4: Recommendation 2 (lines 726-875)
+- Generator Validation Spec: Precedence validation rules (if applicable)
+
+---
+
 ## Folder Structure
 
 **Single source for directory hierarchy and file naming conventions.**
@@ -97,10 +208,12 @@
          INIT-{XXX}_{descriptive-slug}_v{N}.md   # Format: INIT-001_ai_agent_mcp_infrastructure_v1.md
       epics/                                     # Epics
          EPIC-{XXX}_{descriptive-slug}_v{N}.md   # Format: EPIC-000_project_foundation_bootstrap_v2.md
-      prds/                                      # PRDs
+      prds/                                      # PRDs (CONSOLIDATED - includes HLS-XXX subsections within PRD)
          PRD-{XXX}_{descriptive-slug}_v{N}.md    # Format: PRD-000_project_foundation_bootstrap_v3.md
-      hls/                                       # High-level user stories
+                                                 # Note: HLS-XXX are subsections within PRD (Lean Analysis v1.4 Strategic Rec - Option 2)
+      hls/                                       # High-level user stories (LEGACY - being migrated to PRD subsections)
          HLS-{XXX}_{descriptive-slug}_v{N}.md    # Format: HLS-078_user_authentication_flow_v1.md
+                                                 # Note: Existing HLS artifacts pending migration to PRD §HLS-XXX subsections
       funcspecs/                                 # Functional Specifications (detailed behavior specs)
          FS-{XXX}_{descriptive-slug}_v{N}.md     # Format: FS-001_user_login_flow_v1.md
       backlog_stories/                           # Backlog user stories
@@ -128,6 +241,7 @@
 - Consistent ID prefixes enable artifact type identification (VIS, EPIC, PRD, US, SPIKE, etc.)
 - File naming conventions inline with structure (single reference point)
 - Language-specific implementation guides organized by subdirectory (Python, Go, etc.) enable multi-language project support
+- **HLS Consolidation (v2.2):** High-Level Stories consolidated as subsections within PRD (reduces artifact count from 7 to 6, eliminates navigation overhead) - Lean Analysis v1.4 Strategic Recommendation - Option 2
 
 **Descriptive Slug Derivation Rules:**
 
@@ -369,26 +483,28 @@ Strategic Phase
 ↓
 
 Requirements Phase (Transition - bridges business and technical)
-├── PRD
-│   ├── Requires: Epic (mandatory)
-│   ├── + Business Research (recommended - market validation)
-│   └── + Implementation Research (recommended - technical feasibility)
-│
-└── High-Level Story
-    ├── Requires: PRD (mandatory)
-    └── + Business Research (recommended)
+└── PRD (CONSOLIDATED - includes HLS subsections)
+    ├── Requires: Epic (mandatory)
+    ├── + Business Research (recommended - market validation)
+    ├── + Implementation Research (recommended - technical feasibility)
+    ├── Contains: Requirements (FR-XX, NFR-XX) + High-Level User Stories (HLS-XXX subsections)
+    └── **HLS Consolidation:** High-Level Stories now subsections within PRD (Lean Analysis v1.4 Strategic Recommendation - Option 2)
 
 ↓
 
 Story Phase
 ├── Functional Specification (FuncSpec) - NEW (Lean Analysis Recommendation 1)
-│   ├── Requires: High-Level Story (mandatory)
-│   ├── + PRD (recommended - for FR-XX traceability)
+│   ├── Requires: PRD (mandatory - single document with multiple sections)
+│   │   ├── §HLS-XXX subsection (parent high-level story)
+│   │   └── Referenced FR-XX requirements (traceability)
 │   ├── + Implementation Research (recommended - for I/O schema examples)
 │   └── Purpose: Detailed functional behavior (WHAT system does) with explicit I/O contracts, Happy Paths, Alternative Flows, Error Handling
 │
 └── Backlog Story
-    ├── Requires: FuncSpec (recommended - eliminates 60-80% of I/O schema errors) OR PRD (mandatory if no FuncSpec)
+    ├── Requires: PRD (mandatory - single document with multiple sections)
+    │   ├── §HLS-XXX subsection (parent high-level story)
+    │   └── Referenced FR-XX requirements (for context, if needed)
+    ├── + FuncSpec (recommended - eliminates 60-80% of I/O schema errors)
     └── + Implementation Research (recommended)
 
 ↓
@@ -415,9 +531,10 @@ Technical Phase
 - **INIT-000 (Foundation Initiative)**: For greenfield/new projects only. Contains EPIC-000 (Project Foundation & Bootstrap). Establishes infrastructure before feature development. No dependencies.
 - **INIT-001+ (Feature Initiatives)**: For feature delivery. Depends on INIT-000 (if greenfield). Contains EPIC-001, EPIC-002, etc.
 - **Epic Generation**: Can be generated from Product Vision (direct) OR Initiative (decomposition). Use mutually exclusive input selection.
-- **Business Research** flows into all business-phase artifacts (Vision, Initiative, Epic, PRD, HLS)
-- **Implementation Research** flows into technical-phase artifacts (PRD, Backlog Story, Spike, ADR, Tech Spec)
-- **PRD is unique**: Transition phase artifact that may use BOTH research documents
+- **Business Research** flows into all business-phase artifacts (Vision, Initiative, Epic, PRD with HLS subsections)
+- **Implementation Research** flows into technical-phase artifacts (PRD, FuncSpec, Backlog Story, Spike, ADR, Tech Spec)
+- **PRD is unique**: Transition phase artifact that may use BOTH research documents AND contains consolidated HLS-XXX subsections (Lean Analysis v1.4 Strategic Recommendation - Option 2)
+- **HLS Consolidation**: High-Level Stories are subsections within PRD (not separate artifacts). Artifact count: 6 types (Epic, PRD+HLS, FuncSpec, US, Tech Spec, Task)
 - **Spike is optional**: Only created when Backlog Story or Tech Spec has [REQUIRES SPIKE] marker
 - **Classification system**: mandatory (must load), recommended (should load), conditional (load if condition met)
 - Each generator produces v1, v2, v3 iterations through feedback cycles
@@ -966,12 +1083,14 @@ PRD-000 (Project Foundation)
 
 ---
 
-**Document Version**: 2.0
+**Document Version**: 2.2
 **Last Updated**: 2025-10-20
 **Maintained By**: Context Engineering PoC Team
 **Next Review**: End of Phase 1
 
 **Version History:**
+- v2.2 (2025-10-20): **HLS Consolidation IMPLEMENTED (Core Generators)** - Completed tasks 1-4 of HLS Consolidation (Lean Analysis v1.4 Strategic Recommendation - Option 2). Updated PRD template v2.0 to include "High-Level User Stories" section with HLS-XXX subsections. Updated PRD generator v2.0 to generate 3-8 HLS subsections within PRD (added 16 HLS-XX validation criteria). Updated FuncSpec generator v2.0 and Backlog Story generator v2.0 to reference PRD §HLS-XXX subsections instead of separate HLS artifacts. Artifact flow now: Epic → PRD (contains HLS-XXX subsections + FR-XX) → FuncSpec → US. New PRDs will include consolidated HLS structure. Pending: migration of existing HLS artifacts (tasks 5-6).
+- v2.1 (2025-10-20): Added Decision Hierarchy for Technical Guidance section - establishes Three-Tier Precedence System (CLAUDE.md > Implementation Research > Artifact-specific), CLAUDE.md override process, gap flagging mechanism, and conflict resolution examples (Lean Analysis Report v1.4 Recommendation 2 - Enforce CLAUDE.md Precedence Hierarchy)
 - v2.0 (2025-10-20): **MAJOR UPDATE** - Added Framework Design Principles section documenting Template vs Generator responsibility separation. Expanded Open Questions Marker System with v1/v2+ workflow, standardized markers with required sub-fields for all artifact types. Removed validation checklists from templates (moved to generator validation spec). Created comprehensive generator validation specification document. (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)
 - v1.9 (2025-10-18): Added comprehensive tracking tables for SPEC, ADR, SPIKE, and TASK artifacts with purpose, usage patterns, triggers, and current allocations (Issue #6 - Artifact Tracking)
 - v1.8 (2025-10-18): Allocated US-028 through US-067 for EPIC-006 (MCP Server Integration) - 40 backlog stories across 6 HLS stories (HLS-006 through HLS-011) with detailed scope breakdown
@@ -988,6 +1107,113 @@ PRD-000 (Project Foundation)
 - `/docs/sdlc_artifacts_comprehensive_guideline.md` - Section 1.10 covers Metadata Standards and Traceability
 - `/docs/generator_validation_spec.md` - Generator validation specification for enforcing standardized marker system (implementation guide for generators)
 - `/docs/lean/report.md` - SDLC Documentation Optimization Report (Lean Analysis v1.4 with 5 tactical recommendations)
+
+---
+
+## Strategic SDLC Decisions
+
+### HLS Consolidation Decision (Lean Analysis Strategic Recommendation)
+
+**Decision Date:** 2025-10-20
+
+**Question:** Should we consolidate High-Level Story (HLS) into PRD or keep HLS as separate artifact?
+
+**Options Evaluated:**
+- **Option 1:** Keep all artifacts + Add FuncSpec (7 artifact types total)
+  - Flow: Epic → PRD → HLS → FuncSpec → US → Tech Spec → Task
+  - Strategy: Make existing artifacts LEANER (reduce business overlap 50%), ADD FuncSpec to fill functional gap
+  - Trade-off: More artifacts to manage, but clear separation of concerns
+
+- **Option 2:** Merge HLS into PRD + Add FuncSpec (6 artifact types total)
+  - Flow: Epic → PRD (includes HLS subsections) → FuncSpec → US → Tech Spec → Task
+  - Strategy: Consolidate HLS as subsection within PRD, eliminate artifact navigation overhead
+  - Trade-off: Single artifact contains both requirements and user stories, reduces navigation
+
+**Decision:** **Option 2 - Merge HLS into PRD (Consolidation)**
+
+**Rationale:**
+1. **Eliminates artifact navigation overhead:** Single PRD contains requirements (FR-XX) AND high-level user stories
+2. **Reduces artifact count:** 6 artifact types instead of 7 (Epic, PRD+HLS, FuncSpec, US, Tech Spec, Task)
+3. **Aligns with "consolidation" terminology:** Merging artifacts, not expanding them
+4. **Maintains user story structure:** HLS becomes dedicated section within PRD ("High-Level User Stories")
+5. **Preserves FuncSpec value:** Detailed functional specs still bridge gap between HLS (in PRD) and US
+
+**Trade-offs Accepted:**
+- ✅ **Pro:** Reduced artifact count (6 vs 7 types)
+- ✅ **Pro:** Single source for requirements AND user stories (eliminates PRD ↔ HLS navigation)
+- ✅ **Pro:** Clear precedence: Epic business context → PRD requirements + user stories → FuncSpec detailed behavior → US implementation
+- ❌ **Con:** Larger PRD documents (includes HLS content as subsections)
+- ❌ **Con:** PRD serves dual purpose (requirements definition + user story organization)
+
+**Mitigation:**
+- PRD structured with clear sections: Executive Summary, Requirements (FR-XX, NFR-XX), High-Level User Stories (HLS-XXX subsections), Technical Considerations
+- Each HLS subsection within PRD follows standard user story format: "As a [user], I want...", Acceptance Criteria, Decomposition into Backlog Stories
+- FuncSpec references PRD §High-Level User Stories for detailed functional specification
+- Business overlap still reduced 50% via Epic Context cross-referencing
+
+**Artifact Count:** 6 types (Epic, PRD+HLS, FuncSpec, US, Tech Spec, Task)
+
+**Artifact Flow:**
+```
+Epic (Business goals, success metrics)
+  └─ PRD (Requirements: FR-XX, NFR-XX + High-Level User Stories: HLS-XXX)
+      └─ FuncSpec (Detailed functional behavior with I/O schemas)
+          └─ US (Implementation-ready backlog stories)
+              ├─ Tech Spec (Technical design)
+              └─ Task (4-16 hour work items)
+```
+
+**Implementation Status:** **Decision made, PARTIALLY IMPLEMENTED (Core generators complete, migration pending)**
+
+**Completed Implementation Tasks (2025-10-20):**
+1. ✅ **PRD Template Updated (v1.9 → v2.0):** Added "High-Level User Stories" section with complete HLS subsection structure
+   - Location: `prompts/templates/prd-template.xml`
+   - Structure: HLS-XXX subsections with User Story Statement, Value Contribution, Primary User Flow, Acceptance Criteria, Decomposition, Dependencies
+   - Preserves HLS-XXX ID format for traceability
+
+2. ✅ **PRD Generator Updated (v1.7 → v2.0):** Generates 3-8 HLS subsections within PRD
+   - Location: `prompts/prd-generator.xml`
+   - Step 7 replaced: "Define User Stories" → "Generate High-Level User Stories Subsections"
+   - Validation: Added 16 HLS-XX validation criteria (HLS-01 to HLS-16) covering structure, format, completeness
+   - Total validation criteria: 53 (CQ: 14, UT: 8, CC: 6, HLS: 16, OQ: 9)
+
+3. ✅ **FuncSpec Generator Updated (v1.1 → v2.0):** References PRD §HLS-XXX subsections instead of separate HLS artifacts
+   - Location: `prompts/funcspec-generator.xml`
+   - Input: Loads PRD, navigates to §High-Level User Stories, extracts specific HLS-XXX subsection
+   - Traceability: References both PRD FR-XX requirements AND PRD §HLS-XXX subsections
+
+4. ✅ **Backlog Story Generator Updated (v1.7 → v2.0):** References parent PRD §HLS-XXX subsections for decomposition
+   - Location: `prompts/backlog-story-generator.xml`
+   - Input: Loads PRD, navigates to §HLS-XXX subsection, extracts decomposition plan
+   - Traceability: US-XXX metadata includes both "Parent HLS: PRD §HLS-YYY" and "Parent PRD: PRD-XXX"
+
+**Pending Implementation Tasks:**
+5. ⏳ **Migrate existing HLS artifacts to PRD subsections** (one-time data migration)
+   - Action: Move content from `artifacts/hls/HLS-XXX_v*.md` files into corresponding PRD §High-Level User Stories subsections
+   - Scope: HLS-001 through HLS-011 (11 artifacts)
+   - Timing: Before generating new PRDs with consolidated structure
+
+6. ⏳ **Archive HLS template and generator** (no longer needed as separate artifacts)
+   - Action: Move to archive folder or mark as deprecated
+   - Files: `prompts/templates/high-level-user-story-template.xml`, `prompts/high-level-user-story-generator.xml`
+   - Timing: After migration complete and tested
+
+**Current State (as of 2025-10-20):**
+- ✅ PRD template v2.0 includes HLS subsection structure (consolidated)
+- ✅ PRD generator v2.0 generates HLS subsections within PRD (ready for use)
+- ✅ FuncSpec generator v2.0 references PRD §HLS-XXX (ready for use)
+- ✅ Backlog Story generator v2.0 references PRD §HLS-XXX (ready for use)
+- ⏳ Separate HLS template still exists (pending archive)
+- ⏳ Separate HLS generator still exists (pending archive)
+- ⏳ Existing HLS artifacts in `artifacts/hls/` (pending migration to PRD subsections)
+- **New PRDs generated with v2.0 will include HLS subsections** (consolidated structure operational)
+
+**Related Recommendations:**
+- **Recommendation 1 (Implemented):** FuncSpec artifact added to fill Happy Path/I/O gap
+- **Recommendation 3 (Implemented):** Business overlap reduced 50% through cross-referencing
+- **Recommendation 4 (Implemented):** Happy Path format standardized in FuncSpec template
+
+**Reference:** Lean Analysis Report v1.4 lines 1746-1845 (Strategic Recommendation: Artifact Consolidation - Option 2)
 
 ---
 

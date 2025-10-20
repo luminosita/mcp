@@ -2,12 +2,13 @@
 <generator_prompt>
   <metadata>
     <name>Functional_Specification_Generator</name>
-    <version>1.1</version>
+    <version>2.0</version>
     <sdlc_phase>Functional_Specification</sdlc_phase>
-    <depends_on>High-Level Story (mandatory), PRD (recommended), Implementation Research (recommended)</depends_on>
+    <depends_on>PRD §High-Level User Stories (mandatory - HLS-XXX subsections within PRD), PRD Requirements (mandatory - FR-XX), Implementation Research (recommended)</depends_on>
     <generated_by>Context Engineering Framework - Lean Analysis Report Recommendation 1</generated_by>
     <date>2025-10-20</date>
-    <changes>v1.1: Aligned with PRD generator standards - Added validation step (priority 18), validation_checklist (24 criteria), traceability section, quality_guidance section (6 categories). Full alignment with generator schema patterns.</changes>
+    <changes>v2.0: **MAJOR UPDATE** - Implemented HLS Consolidation (Lean Analysis v1.4 Strategic Recommendation - Option 2). FuncSpec now references PRD §High-Level User Stories (HLS-XXX subsections within PRD) instead of separate HLS artifacts. Updated all references from standalone "High-Level Story" to "PRD §HLS-XXX". Artifact flow: Epic → PRD (contains HLS-XXX subsections) → FuncSpec → US. Eliminates separate HLS artifact navigation.
+v1.1: Aligned with PRD generator standards - Added validation step (priority 18), validation_checklist (24 criteria), traceability section, quality_guidance section (6 categories).</changes>
   </metadata>
 
   <system_role>
@@ -18,10 +19,12 @@
 
   <task_context>
     <background>
-      You are creating a Functional Specification from a High-Level Story. This specification will:
+      You are creating a Functional Specification from a PRD §High-Level User Story subsection (HLS-XXX). This specification will:
       - Define detailed functional behavior (WHAT system does, not HOW)
       - Document Happy Path flows with numbered steps, actor identification, and explicit I/O at each step
       - Specify Alternative Flows and Error Handling with concrete examples
+
+      **IMPORTANT:** High-Level Stories are now consolidated as subsections within PRD (Lean Analysis v1.4 Strategic Recommendation - Option 2: HLS Consolidation). FuncSpec references PRD §HLS-XXX subsections, not separate HLS artifacts.
       - Provide Input/Output schemas with data types, validation rules, and JSON/YAML examples
       - Document State Transitions showing how system state changes through interactions
       - Enumerate Edge Cases with boundary conditions and expected behaviors
@@ -36,36 +39,37 @@
       - Implementation-agnostic: Doesn't prescribe technology, patterns, or code structure
 
       **Distinction from other artifacts:**
-      - High-Level Story: User-centric capability (WHAT user needs, WHY)
+      - PRD §HLS-XXX (High-Level Story subsection): User-centric capability (WHAT user needs, WHY)
       - Functional Spec: Detailed system behavior (WHAT system does, with I/O contracts)
       - Backlog Story: Implementation specification (HOW to code it, with patterns and tech)
+
+      **Artifact Flow:** Epic → PRD (contains HLS-XXX subsections + FR-XX requirements) → FuncSpec → US → Tech Spec → Task
 
       Reference: SDLC Lean Analysis Report v1.4, Recommendation 1 (Introduce FuncSpec Artifact)
     </background>
 
     <input_artifacts>
-      <artifact classification="mandatory" type="high_level_story">
-        High-Level Story contains:
-        - User Story Statement (As/Want/So That)
-        - Primary User Flow (high-level steps)
-        - Acceptance Criteria (Given/When/Then)
-        - Decomposition plan into backlog stories
-
-        You will expand the Primary User Flow into detailed functional flows with explicit I/O schemas.
-
-        **Classification**: MANDATORY - FuncSpec cannot be generated without parent HLS. Generator fails if not provided.
-      </artifact>
-
-      <artifact classification="recommended" type="prd">
-        PRD contains:
-        - Functional Requirements (FR-XX with detailed descriptions)
-        - Non-Functional Requirements
-        - User Personas and Use Cases
+      <artifact classification="mandatory" type="prd">
+        PRD contains (consolidated structure):
+        - **Requirements Section:** Functional Requirements (FR-XX), Non-Functional Requirements
+        - **High-Level User Stories Section:** HLS-XXX subsections (consolidated - no separate HLS artifacts)
+          - Each HLS-XXX subsection includes: User Story Statement, Primary User Flow, Acceptance Criteria, Decomposition plan
+        - User Personas (Epic Context reference or Business Research reference)
         - Technical Considerations
 
-        Use to enrich functional requirements, reference FR-XX IDs, and understand product context.
+        **IMPORTANT:** High-Level Stories are now subsections within PRD. Reference format: `PRD-XXX §High-Level User Stories §HLS-YYY`
 
-        **Classification**: RECOMMENDED - Provides FR-XX traceability and additional functional context. Without it, FuncSpec quality reduced by ~15-20%. Generator warns if not found but continues.
+        **Example Path:** `artifacts/prds/PRD-006_mcp_server_integration_v1.md` → Navigate to section "High-Level User Stories" → Find subsection "### HLS-001: User Authentication Flow"
+
+        You will:
+        1. Load PRD document (mandatory)
+        2. Navigate to §High-Level User Stories section
+        3. Find the specific HLS-XXX subsection specified in task
+        4. Expand that HLS subsection's Primary User Flow into detailed functional flows with explicit I/O schemas
+
+        **Classification**: MANDATORY - FuncSpec cannot be generated without parent PRD §HLS-XXX. Generator fails if PRD not found or HLS-XXX subsection not found within PRD.
+
+        **Traceability:** FuncSpec references both PRD FR-XX requirements AND PRD §HLS-XXX subsection.
       </artifact>
 
       <artifact classification="recommended" type="implementation_research">
@@ -101,15 +105,31 @@
 
   <instructions>
     <step priority="1">
-      <action>Load and analyze parent High-Level Story</action>
-      <purpose>Extract user flows, acceptance criteria, and functional requirements</purpose>
-      <anti_hallucination>Identify specific Primary User Flow steps from HLS. Note exact source for traceability. Verify HLS Status = "Approved" before proceeding.</anti_hallucination>
+      <action>Load parent PRD document</action>
+      <purpose>Access PRD §High-Level User Stories (HLS-XXX subsections) and FR-XX requirements</purpose>
+      <guidance>
+        1. **Load PRD:** Artifact path from CLAUDE.md Folder Structure or TODO.md task specification
+        2. **Verify PRD Status:** Must be "Approved" before proceeding
+        3. **Navigate to §High-Level User Stories section:** Locate section containing HLS-XXX subsections
+        4. **Extract target HLS-XXX subsection:** Find specific HLS-XXX specified in task (e.g., HLS-001, HLS-003)
+        5. **Extract FR-XX requirements:** From PRD Requirements section for traceability
+      </guidance>
+      <anti_hallucination>Verify PRD document exists. Verify §High-Level User Stories section exists. Verify specific HLS-XXX subsection exists within PRD. If any missing, FAIL with error: "PRD §HLS-XXX not found - cannot generate FuncSpec". Note exact PRD section references for traceability.</anti_hallucination>
     </step>
 
     <step priority="2">
-      <action>Load PRD (if available)</action>
-      <purpose>Reference Functional Requirements (FR-XX) for traceability and additional context</purpose>
-      <anti_hallucination>Extract FR-XX requirements that map to this HLS. Reference specific PRD sections. If PRD unavailable, note "[PRD not available - functional requirements inferred from HLS only]".</anti_hallucination>
+      <action>Extract HLS-XXX subsection details</action>
+      <purpose>Parse user flows, acceptance criteria, and functional context from PRD §HLS-XXX</purpose>
+      <guidance>
+        From PRD §High-Level User Stories §HLS-XXX, extract:
+        1. **User Story Statement:** "As a [user], I want [goal], so that [benefit]"
+        2. **Primary User Flow:** Numbered steps with actor identification
+        3. **Acceptance Criteria:** Given/When/Then scenarios
+        4. **Edge Cases & Error Conditions:** System response to edge cases
+        5. **Value Contribution:** Parent PRD Requirements (FR-XX list)
+        6. **Decomposition plan:** Estimated backlog stories (for scope understanding)
+      </guidance>
+      <anti_hallucination>Quote specific text from PRD §HLS-XXX. Identify which Primary User Flow steps from HLS will be expanded. Map to PRD FR-XX requirements for traceability. If HLS content incomplete, document as Open Question with [REQUIRES PRODUCT OWNER] marker.</anti_hallucination>
     </step>
 
     <step priority="3">

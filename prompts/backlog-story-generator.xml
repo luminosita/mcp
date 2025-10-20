@@ -2,13 +2,14 @@
 <generator_prompt>
   <metadata>
     <name>Backlog_Story_Generator</name>
-    <version>1.7</version>
+    <version>2.0</version>
     <sdlc_phase>Backlog_Story</sdlc_phase>
-    <depends_on>High-Level Story (mandatory), PRD (conditional), Implementation Research (recommended), Specialized CLAUDE.md files (conditional)</depends_on>
+    <depends_on>PRD §High-Level User Stories (mandatory - HLS-XXX subsections within PRD), PRD Requirements (conditional - FR-XX), Implementation Research (recommended), Specialized CLAUDE.md files (conditional)</depends_on>
     <generated_by>Context Engineering Framework v2.0</generated_by>
     <date>2025-10-20</date>
-    <changes>v1.7: Implemented Open Questions marker validation for v2+ artifacts (Generator Validation Spec v1.0) - enforces standardized marker system with required sub-fields, validates [REQUIRES SPIKE] Time Box (1-3 days), prohibits free-form text patterns. Phase 1 (Critical) of SDLC marker enforcement rollout.
-v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Report v1.4 Recommendation 2) - prevents suggesting alternatives when decisions already made in CLAUDE.md files</changes>
+    <changes>v2.0: **MAJOR UPDATE** - Implemented HLS Consolidation (Lean Analysis v1.4 Strategic Recommendation - Option 2). Backlog Story now references PRD §High-Level User Stories (HLS-XXX subsections within PRD) instead of separate HLS artifacts. Updated input_artifacts to load PRD, navigate to §HLS-XXX subsection, extract decomposition plan. Updated all references from standalone "High-Level Story" to "PRD §HLS-XXX". Artifact flow: Epic → PRD (contains HLS-XXX subsections) → FuncSpec → US. Eliminates separate HLS artifact navigation.
+v1.7: Implemented Open Questions marker validation for v2+ artifacts (Generator Validation Spec v1.0).
+v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Report v1.4 Recommendation 2).</changes>
   </metadata>
 
   <system_role>
@@ -19,7 +20,11 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
 
   <task_context>
     <background>
-      You are creating a Backlog Story from a High-Level User Story. This story will:
+      You are creating a Backlog Story from a PRD §High-Level User Story subsection (HLS-XXX). This story will:
+
+      **IMPORTANT:** High-Level Stories are now consolidated as subsections within PRD (Lean Analysis v1.4 Strategic Recommendation - Option 2: HLS Consolidation). Backlog Story generator references PRD §HLS-XXX subsections, not separate HLS artifacts.
+
+      This story will:
       - Be sprint-ready (completable in 1 sprint, typically 2-5 story points)
       - Provide clear acceptance criteria for development and testing
       - Include technical context from Implementation Research
@@ -41,27 +46,29 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
     </background>
 
     <input_artifacts>
-      <artifact classification="mandatory" type="high_level_story">
-        High-Level Story contains:
-        - User story statement and user context
-        - Primary user flow and acceptance criteria
-        - Decomposition plan (3-5 backlog stories estimated)
-        - Scope and dependencies
+      <artifact classification="mandatory" type="prd">
+        PRD contains (consolidated structure):
+        - **Requirements Section:** Functional Requirements (FR-XX), Non-Functional Requirements (NFR-XX), Technical Considerations
+        - **High-Level User Stories Section:** HLS-XXX subsections (consolidated - no separate HLS artifacts)
+          - Each HLS-XXX subsection includes: User Story Statement, Primary User Flow, Acceptance Criteria, Decomposition into Backlog Stories (3-8 stories estimated)
 
-        Select one backlog story from decomposition plan to develop in detail.
+        **IMPORTANT:** High-Level Stories are now subsections within PRD. Reference format: `PRD-XXX §High-Level User Stories §HLS-YYY`
 
-        **Classification**: MANDATORY - Generator cannot proceed without High-Level Story as primary input for decomposition.
-      </artifact>
+        **Example Path:** `artifacts/prds/PRD-006_mcp_server_integration_v1.md` → Navigate to section "High-Level User Stories" → Find subsection "### HLS-001: User Authentication Flow" → Extract "Decomposition into Backlog Stories"
 
-      <artifact classification="conditional" type="prd">
-        PRD provides:
-        - Detailed functional requirements
-        - Technical NFRs
-        - Dependencies and constraints
+        You will:
+        1. Load PRD document (mandatory)
+        2. Navigate to §High-Level User Stories section
+        3. Find the specific HLS-XXX subsection specified in task
+        4. Extract decomposition plan listing backlog stories (e.g., "1. **US-001:** Login form UI - 3 SP")
+        5. Select the specific US-XXX from decomposition plan specified in task to develop in detail
 
-        Use for additional context on requirements and technical constraints.
+        **Classification**: MANDATORY - Generator cannot proceed without parent PRD §HLS-XXX for decomposition context and user story scope. Generator fails if PRD not found or HLS-XXX subsection not found within PRD.
 
-        **Classification**: CONDITIONAL - Load if additional context needed beyond High-Level Story. PRD provides richer functional requirements and technical NFRs when High-Level Story lacks detail.
+        **Traceability:**
+        - **Parent HLS:** PRD §HLS-XXX subsection (direct parent for decomposition context)
+        - **Parent PRD:** PRD-XXX (for FR-XX requirements and technical NFRs)
+        - **Story references both:** US-XXX metadata includes both "Parent HLS: PRD §HLS-YYY" and "Parent PRD: PRD-XXX"
       </artifact>
 
       <artifact classification="recommended" type="implementation_research">

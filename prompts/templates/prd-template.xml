@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Product_Requirements_Document_Template</name>
-    <version>1.9</version>
+    <version>2.0</version>
     <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
     <sdlc_phase>PRD</sdlc_phase>
     <last_updated>2025-10-20</last_updated>
-    <changes>v1.9: Added Standardized Marker System for Open Questions with v1/v2+ workflow, required sub-fields for PRD-level markers ([REQUIRES PM + TECH LEAD], [REQUIRES EXECUTIVE DECISION], [REQUIRES ORGANIZATIONAL ALIGNMENT]), Decisions Made section, and validation checklist (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)</changes>
+    <changes>v2.0: **MAJOR UPDATE** - Added "High-Level User Stories" section consolidating HLS artifacts into PRD subsections (Lean Analysis Report v1.4 Strategic Recommendation - Option 2: Artifact Consolidation). PRD now contains Requirements (FR-XX, NFR-XX) AND High-Level User Stories (HLS-XXX subsections). Eliminates separate HLS artifacts, reduces navigation overhead. Artifact count: 6 types (Epic, PRD+HLS, FuncSpec, US, Tech Spec, Task)</changes>
   </metadata>
 
   <instructions>
@@ -14,9 +14,10 @@
     <guideline>Ensure completeness, clarity, and stakeholder alignment</guideline>
     <guideline>Success metrics must be SMART (Specific, Measurable, Achievable, Relevant, Time-bound)</guideline>
     <guideline>All acceptance criteria must be testable</guideline>
-    <guideline>Each high-level user story should reference specific functional requirements (FR-XX)</guideline>
+    <guideline>HIGH-LEVEL USER STORIES: PRD includes HLS-XXX subsections in "High-Level User Stories" section. Each HLS follows user story format and references parent PRD requirements (FR-XX). HLS artifacts no longer separate.</guideline>
+    <guideline>Each high-level user story should reference specific functional requirements (FR-XX) to maintain traceability</guideline>
     <guideline>CROSS-REFERENCING: Use Epic Context section to reference Epic §1-§4 sections instead of duplicating business context (reduces overlap by 50%)</guideline>
-    <guideline>PRD focuses on REQUIREMENTS and TECHNICAL BRIDGE - defer business context to Epic, implementation details to Backlog Stories</guideline>
+    <guideline>PRD focuses on REQUIREMENTS and HIGH-LEVEL USER STORIES (consolidated) - defer business context to Epic, detailed functional specs to FuncSpec, implementation details to Backlog Stories</guideline>
   </instructions>
 
   <structure format="markdown">
@@ -112,6 +113,90 @@ This PRD contributes to the following Epic success metrics:
 
 ### Wireframes/Mockups
 [Link to designs]
+
+## High-Level User Stories
+
+**Purpose:** User-centric expression of functionality bridging PRD requirements (FR-XX) and detailed backlog stories (US-XXX). Each HLS represents a major user goal decomposing into multiple sprint-sized backlog stories.
+
+**Note:** High-Level Stories consolidated into PRD per Lean Analysis v1.4 Strategic Recommendation (Option 2 - Artifact Consolidation). Eliminates navigation overhead while maintaining clear user story structure.
+
+---
+
+### HLS-[XXX]: [Story Title]
+
+**User Story Statement:**
+**As a** [user persona],
+**I want** [goal or capability],
+**So that** [business value or user benefit].
+
+**Value Contribution:**
+- **Parent PRD Requirements:** FR-[XX], FR-[YY] (requirements this story implements)
+- **Epic Success Metrics Alignment:** [How this story contributes to Epic §3 metrics]
+- **User Impact:** [1-2 sentences on user benefit]
+
+**Primary User Flow:**
+
+**Actor Legend:**
+- **User:** [Primary user role]
+- **System:** [System component]
+
+**Happy Path Flow Sequence:**
+
+**Step 1:** User → System: [Action description]
+- [Brief input/output description if helpful for clarity]
+
+**Step 2:** System → User: [Response description]
+- [What system does from user perspective]
+
+**Step 3:** User → System: [Next action]
+
+**Step 4:** System → User: [Final response]
+
+**Step 5:** User achieves [goal]
+
+**Note:** Detailed I/O schemas (JSON examples, state changes) belong in Functional Specification (FuncSpec). HLS focuses on user-visible sequence.
+
+**Alternative Flows:**
+- **Alt Flow 1:** If [condition], then [alternative path]
+- **Alt Flow 2:** If [condition], then [alternative path]
+
+**Acceptance Criteria (High-Level):**
+
+**Criterion 1:** [Description]
+- **Given** [precondition]
+- **When** [user action]
+- **Then** [expected outcome]
+
+**Criterion 2:** [Description]
+- **Given** [precondition]
+- **When** [user action]
+- **Then** [expected outcome]
+
+**Edge Cases & Error Conditions:**
+- **Invalid Input:** [How system responds]
+- **System Unavailable:** [What user experiences]
+
+**Decomposition into Backlog Stories:**
+
+**Estimated Backlog Stories (Not Yet Detailed):**
+1. **US-[XXX]:** [Story title] - [Est. SP]
+2. **US-[YYY]:** [Story title] - [Est. SP]
+3. **US-[ZZZ]:** [Story title] - [Est. SP]
+
+**Total Estimated Effort:** [Sum of story points] SP
+
+**Dependencies:**
+- **Upstream:** [What must complete before this HLS]
+- **Downstream:** [What depends on this HLS]
+
+**Open Questions (if any):**
+- [Question with marker if v2+]
+
+---
+
+**[Repeat HLS-[XXX] structure for each High-Level Story in this PRD]**
+
+---
 
 ## Technical Considerations
 
