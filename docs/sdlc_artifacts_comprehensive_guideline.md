@@ -1,10 +1,11 @@
 # Comprehensive SDLC Artifacts Guideline
 
-**Version:** 1.3
-**Date:** 2025-10-14
+**Version:** 1.4
+**Date:** 2025-10-20
 **Purpose:** Strategic guideline for SDLC artifact creation, hierarchy, and relationships across different Agile scaling approaches
 
 **Recent Updates:**
+- v1.4 (2025-10-20): **MAJOR UPDATE** - Added Section 1.6 Functional Specification (FuncSpec) artifact definition. Documented Lean Analysis Report v1.4 recommendations implementation: FuncSpec introduction (Recommendation 1), Decision Hierarchy (Recommendation 2), Business Context Overlap reduction (Recommendation 3), Happy Path format standardization (Recommendation 4), Standardized Marker System (Recommendation 5), and HLS Consolidation decision (Strategic - Option 2: Merge HLS into PRD, implementation PENDING). Section renumbering: Spike 1.6→1.7, Implementation Task 1.7→1.8, PRD 1.8→1.9. **NOTE:** High-Level Story (HLS) will be consolidated as subsection within PRD (6 artifact types total: Epic, PRD+HLS, FuncSpec, US, Tech Spec, Task).
 - v1.3 (2025-10-14): Added Section 12 - When to Skip Tech Specs and Implementation Tasks
 - v1.2 (2025-10-12): Added Section 1.10 - Metadata Standards and Traceability
 - v1.1 (2025-10-10): Initial comprehensive version
@@ -121,6 +122,13 @@ This guideline synthesizes SDLC artifact definitions, creation timelines, hierar
 - Sometimes synonymous with features (especially in smaller teams)
 - Can be a user-centric expression of a feature
 - May describe cross-feature user experiences
+
+**Note on HLS Consolidation (Effective 2025-10-20):**
+- High-Level Stories are now consolidated as **subsections within PRD** (§HLS-XXX format)
+- HLS no longer exists as a separate artifact type
+- Artifact count reduced from 7 to 6 types: Epic, PRD (includes §HLS-XXX subsections), FuncSpec, US, Tech Spec, Task
+- Generators (FuncSpec, Backlog Story) now reference **PRD §HLS-XXX subsections** instead of separate HLS artifacts
+- See: Lean Analysis Report v1.4 Strategic Recommendation - Option 2
 
 ---
 
@@ -376,7 +384,54 @@ This ensures:
 
 ---
 
-### 1.6 Spike
+### 1.6 Functional Specification (FuncSpec)
+
+**Also known as:** Detailed Functional Behavior Specification, Functional Spec
+
+**Definition:** Detailed functional specification that bridges the gap between High-Level Story (user-centric) and Backlog Story (implementation-centric) by documenting WHAT the system does from an external observer perspective.
+
+**Characteristics:**
+- **Time Horizon:** Detailed specification for 1 HLS (typically 1-2 weeks to document all flows)
+- **Scope:** Complete functional behavior for one High-Level Story
+- **Purpose:** Eliminate Happy Path sequence ambiguity and I/O schema hallucination
+- **Ownership:** Product Owner + Tech Lead collaboration ("Three Amigos": PO + TL + QA)
+- **Format:** "Specification by Example" with concrete I/O examples
+
+**Example:**
+> FuncSpec for HLS-003: "User Authentication Flow" - documents every step (user enters email → system validates → creates session → redirects) with explicit JSON request/response examples at each step
+
+**Strategic Value:**
+- **Eliminates 60-80% of US quality errors:** Explicit I/O contracts prevent generator hallucination
+- **Reduces US review time 30-40%:** Clear specifications reduce misunderstandings and refinement cycles
+- **Bridges functional gap:** HLS describes WHAT user needs, FuncSpec describes WHAT system does, US describes HOW to implement
+- **Implementation-agnostic:** No technology choices, patterns, or code structure (purely functional behavior)
+
+**Content Structure:**
+1. **Happy Path Flow:** Numbered steps with actor identification, explicit I/O at each step, state changes
+2. **Alternative Flows:** Non-happy-path scenarios with I/O (e.g., invalid input, resource not found)
+3. **Error Handling:** All error conditions with expected system behaviors
+4. **Input/Output Schemas:** Explicit request/response formats with data types, validation rules, JSON examples
+5. **State Transitions:** What changes in system state after each step
+6. **Edge Cases:** Boundary conditions, race conditions, concurrent access scenarios
+
+**When to Create FuncSpec:**
+- **MANDATORY:** HLS with 5+ backlog stories (complex decomposition requiring detailed functional specification)
+- **MANDATORY:** Stories with complex I/O contracts (multiple endpoints, intricate data flows)
+- **MANDATORY:** Stories marked [REQUIRES SPIKE] or [REQUIRES ADR] (high uncertainty requiring detailed functional spec first)
+- **OPTIONAL:** Simple CRUD operations (1-3 backlog stories with straightforward I/O)
+
+**Relationship to Other Artifacts:**
+- **Input:** PRD (single document with multiple sections)
+  - §HLS-XXX subsection (high-level user flow, acceptance criteria)
+  - Referenced FR-XX requirements (traceability)
+- **Output:** Detailed functional specification that Backlog Story generator references
+- **NOT Duplicated:** Business context (Epic/PRD), implementation patterns (US), technology choices (Tech Spec)
+
+**Added:** 2025-10-20 (Lean Analysis Report v1.4 Recommendation 1)
+
+---
+
+### 1.7 Spike
 
 **Also known as:** Technical Spike, Investigation Spike, Research Spike
 
@@ -454,7 +509,7 @@ Spike time box is HARD LIMIT. If investigation incomplete at time box expiration
 
 ---
 
-### 1.7 Implementation Task
+### 1.8 Implementation Task
 
 **Also known as:** Technical Task, Sub-task
 
@@ -480,7 +535,7 @@ Spike time box is HARD LIMIT. If investigation incomplete at time box expiration
 
 ---
 
-### 1.8 Product Requirements Document (PRD)
+### 1.9 Product Requirements Document (PRD)
 
 **Definition:** A strategic document capturing the "what" and "why" of a product or feature, not the "how."
 
@@ -510,7 +565,7 @@ Spike time box is HARD LIMIT. If investigation incomplete at time box expiration
 
 ---
 
-### 1.9 SDLC Phases: Business vs Implementation
+### 1.10 SDLC Phases: Business vs Implementation
 
 **Definition:** SDLC artifacts separate into two distinct planning phases with different focus and information needs.
 
@@ -616,9 +671,9 @@ Backlog Story: "Implement push notification preferences API"
 
 ---
 
-### 1.10 Metadata Standards and Traceability
+### 1.11 Metadata Standards and Traceability
 
-#### 1.10.1 Core Metadata Fields
+#### 1.11.1 Core Metadata Fields
 
 All SDLC artifacts include standardized metadata fields to enable traceability and impact analysis.
 
@@ -742,18 +797,17 @@ Implementation Research informs **technical artifacts** (implementation planning
 
 | Artifact | Parent | Informed By | Informs |
 |----------|--------|-------------|---------|
-| Business Research | None | None | Vision, Initiative, Epic, PRD, HLS |
-| Implementation Research | None | None | PRD, US, Spike, ADR, Spec, Task |
-| Product Vision | None | Business Research | Initiative, Epic | Initiative, Epic |
-| Product Vision | Business Research | Epic | Epic |
-| Epic | Product Vision, Initiative | Business Research | PRD, HLS |
-| PRD | Epic | Business Research, Impl Research | HLS, US |
-| High-Level Story | Epic, PRD | Business Research | US |
-| Backlog Story | PRD, HLS | Implementation Research | Technical artifacts |
+| Business Research | None | None | Vision, Initiative, Epic, PRD |
+| Implementation Research | None | None | PRD, FuncSpec, US, Spike, ADR, Spec, Task |
+| Product Vision | None | Business Research | Initiative, Epic |
+| Epic | Product Vision, Initiative | Business Research | PRD |
+| PRD (includes §HLS-XXX subsections) | Epic | Business Research, Impl Research | FuncSpec, US |
+| FuncSpec | PRD §HLS-XXX | Implementation Research | US |
+| Backlog Story | PRD §HLS-XXX | FuncSpec, Impl Research | Technical artifacts |
 | Spike | US, Spec | Implementation Research | ADR, Spec |
 | ADR | US | Spike, Impl Research | Spec, Task |
 | Tech Spec | US, ADR | Spike, Impl Research | Task |
-| Task | US, Spec, ADR | Implementation Research | None | None |
+| Task | US, Spec, ADR | Implementation Research | None |
 
 #### 1.10.6 Validation Best Practices
 
