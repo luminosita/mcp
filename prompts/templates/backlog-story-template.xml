@@ -2,12 +2,12 @@
 <template>
   <metadata>
     <name>Backlog_Story_Template</name>
-    <version>1.6</version>
+    <version>1.8</version>
     <source>Section 6.4 of advanced_prompt_engineering_software_docs_code_final.md (lines 1063-1112), enhanced for Context Engineering Framework</source>
     <sdlc_phase>Backlog_Story</sdlc_phase>
     <note>This template is for DETAILED backlog user stories, not high-level stories in PRDs</note>
-    <last_updated>2025-10-15</last_updated>
-    <changes>v1.6: Added Implementation Tasks Evaluation section (before Definition of Done) per SDLC Guideline v1.3 Section 11 - evaluates if story needs decomposition into TASK-XXX artifacts based on decision matrix (story points, developer count, domain span, complexity, override factors)</changes>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.8: Simplified CLAUDE.md hierarchy section (70 lines → 35 lines) - moved enforcement to generator, kept concise examples (Lean Analysis Report Recommendation 2 - generator-first approach)</changes>
   </metadata>
 
   <instructions>
@@ -86,26 +86,53 @@ As [role], I want [feature], so that [benefit].
 
 ## Technical Requirements
 
-**HYBRID CLAUDE.md APPROACH:** When specialized CLAUDE-*.md files exist, reference (not duplicate) established implementation standards. Supplement with story-specific technical guidance.
+**DECISION HIERARCHY:** CLAUDE.md (Authoritative) > Implementation Research (Advisory) > Story-specific (Supplementary)
 
-### Implementation Guidance
-[Story-specific technical approach, patterns, considerations]
+**Note:** US generator enforces this hierarchy. CLAUDE.md decisions referenced by file+line, alternatives NOT suggested for decided topics.
 
-**References to Implementation Standards (when applicable):**
-- CLAUDE-tooling.md: Use Taskfile commands (`task test`, `task lint`, `task type-check`, `task format`)
-- CLAUDE-testing.md: Follow testing patterns (80% coverage minimum, fixtures for database, async test support)
-- CLAUDE-typing.md: Apply type hints (strict mode, Pydantic models for validation per CLAUDE-validation.md)
-- CLAUDE-architecture.md: Follow project structure, modularity patterns
-- CLAUDE-validation.md: Input validation with Pydantic, security patterns
-- *Reference additional domain-specific files as needed (e.g., CLAUDE-security.md, CLAUDE-auth.md)*
+### CLAUDE.md Decisions Applied
 
-**Note:** Treat CLAUDE.md content as authoritative - supplement with story-specific context, don't duplicate.
+**Established Standards:**
+- **CLAUDE-http-frameworks.md (Go):** [e.g., "Gin per line 238"]
+- **CLAUDE-tooling.md:** [e.g., "UV + Ruff per lines 20-45"]
+- **CLAUDE-testing.md:** [e.g., "pytest with fixtures, 80% coverage"]
+- **CLAUDE-typing.md:** [e.g., "MyPy strict mode"]
+- **CLAUDE-architecture.md:** [e.g., "Project structure per lines 15-30"]
+- [Additional CLAUDE-*.md files]
+
+**Example (Compliant):**
+```
+Use Gin HTTP framework per CLAUDE-http-frameworks.md:238
+```
+
+**Example (Non-Compliant - DON'T DO THIS):**
+```
+❌ "Use chi, gin, or gorilla/mux" (suggests alternatives when Gin decided)
+```
+
+### Implementation Research (Gaps Only)
+
+**Applied Patterns (ONLY for CLAUDE.md gaps):**
+- **§[X.Y]: [Pattern]:** [Guidance] - `[CLAUDE.md GAP]`
+
+### Story-Specific Implementation Guidance
+
+[Technical approach specific to this story - supplements CLAUDE.md standards]
+
+### CLAUDE.md Override (If Needed)
+
+```
+[CLAUDE.md OVERRIDE] {Alternative}
+- Original: CLAUDE-{file}.md:{line}
+- Rationale: {Justification}
+- Approval: [APPROVED BY: {name}]
+```
 
 ### Technical Tasks
-- [Frontend task 1]
-- [Backend task 1]
-- [Database change 1]
-- [Additional technical considerations]
+- [Frontend task - per CLAUDE-architecture.md structure]
+- [Backend task - using CLAUDE.md patterns]
+- [Database change - per CLAUDE-database.md]
+- [Testing task - per CLAUDE-testing.md strategy]
 
 ## Acceptance Criteria
 

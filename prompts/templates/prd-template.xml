@@ -2,11 +2,11 @@
 <template>
   <metadata>
     <name>Product_Requirements_Document_Template</name>
-    <version>1.5</version>
+    <version>1.7</version>
     <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
     <sdlc_phase>PRD</sdlc_phase>
-    <last_updated>2025-10-14</last_updated>
-    <changes>v1.5: Added Hybrid CLAUDE.md approach to Technical Considerations section - references specialized CLAUDE-*.md standards (TASK-030)</changes>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.7: Simplified CLAUDE.md hierarchy section (120 lines → 60 lines) - moved enforcement to generator, kept concise examples (Lean Analysis Report Recommendation 2 - generator-first approach)</changes>
   </metadata>
 
   <instructions>
@@ -107,35 +107,61 @@
 
 ## Technical Considerations
 
-**HYBRID CLAUDE.md APPROACH:** When specialized CLAUDE-*.md files exist, align this section with established implementation standards. Reference (not duplicate) CLAUDE.md content. PRD supplements CLAUDE.md with product-specific context.
+**DECISION HIERARCHY:** CLAUDE.md (Authoritative) > Implementation Research (Advisory) > PRD-specific (Supplementary)
+
+**Note:** PRD generator enforces this hierarchy. CLAUDE.md decisions referenced by file+line, alternatives NOT suggested for decided topics.
+
+### Alignment with CLAUDE.md Standards
+
+**Established Decisions Applied:**
+- **CLAUDE-core.md:** [Core development philosophy]
+- **CLAUDE-architecture.md:** [Project structure, modularity patterns]
+- **CLAUDE-tooling.md:** [Build tools, linters, formatters - e.g., "UV for Python, Ruff for linting"]
+- **CLAUDE-testing.md:** [Testing framework - e.g., "pytest with fixtures, 80% coverage"]
+- **CLAUDE-http-frameworks.md (Go):** [HTTP framework - e.g., "Gin per line 238"]
+- [Additional CLAUDE-*.md files as applicable]
+
+**Example (Compliant):**
+```
+Use Gin HTTP framework per CLAUDE-http-frameworks.md:238 (Gin = default for Go REST APIs)
+```
+
+**Example (Non-Compliant - DON'T DO THIS):**
+```
+❌ "Use chi, gin, or gorilla/mux" (suggests alternatives when Gin already decided)
+```
+
+### Implementation Research (Gaps Only)
+
+**Applied Insights (ONLY for topics not in CLAUDE.md):**
+- **§[X.Y]: [Pattern Name]:** [Technical guidance]
+  - **CLAUDE.md Status:** `[CLAUDE.md GAP]` or `[ALIGNS WITH CLAUDE-{file}.md]`
+
+**Example:**
+```
+§5.3 Cache invalidation strategy - [CLAUDE-caching.md GAP]
+Recommendation: Time-based TTL with 5-minute expiration
+```
+
+### CLAUDE.md Override (When Justified)
+
+**If override needed, document:**
+```
+[CLAUDE.md OVERRIDE] {Alternative approach}
+- Original: CLAUDE-{file}.md:{line} "{decision}"
+- Rationale: {Technical justification}
+- Approval: [APPROVED BY: {name} - {date}]
+```
 
 ### Architecture
-[High-level architecture approach]
-
-**Alignment with CLAUDE.md Standards:**
-- Reference CLAUDE-architecture.md for project structure, modularity, design patterns
-- Reference CLAUDE-core.md for core development philosophy
-- Supplement with product-specific architecture decisions
+[High-level architecture approach - product-specific only, supplement CLAUDE.md]
 
 ### Dependencies
-**System Dependencies:**
-[Systems, services, databases]
-
-**External Dependencies:**
-[Third-party integrations]
-
-**Implementation Standards (when applicable):**
-- CLAUDE-tooling.md: Language-specific tooling configuration (build tools, linters, formatters, test runners)
-- CLAUDE-testing.md: Testing strategy, coverage requirements, fixture patterns
-- CLAUDE-typing.md: Type system patterns and type safety enforcement
-- CLAUDE-validation.md: Input validation, data models, security patterns
-- CLAUDE-architecture.md: Project structure, modularity patterns
-- *Additional domain-specific files may be added during development (e.g., CLAUDE-security.md, CLAUDE-auth.md, CLAUDE-messaging.md)*
-
-**Note:** Language-specific CLAUDE.md files are located in prompts/CLAUDE/{language}/ subdirectories (e.g., prompts/CLAUDE/python/, prompts/CLAUDE/go/). Treat CLAUDE.md content as "Decisions Made" - authoritative for implementation. PRD supplements (not duplicates) these standards.
+**System:** [Systems, services, databases]
+**External:** [Third-party integrations]
 
 ### Technical Constraints
-[Limitations, platform requirements, technology constraints]
+[Limitations, platform requirements]
 
 ### Data Model
 [Key entities, relationships]

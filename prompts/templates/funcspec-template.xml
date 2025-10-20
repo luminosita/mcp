@@ -1,0 +1,700 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Functional_Specification_Template</name>
+    <version>1.0</version>
+    <source>Generated based on SDLC Lean Analysis Report - Recommendation 1</source>
+    <sdlc_phase>Functional Specification</sdlc_phase>
+    <alias>FuncSpec, Detailed Functional Behavior Specification</alias>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.0: Initial creation - Bridges gap between HLS (user-centric) and US (implementation-centric) with detailed functional flows, I/O contracts, and state transitions</changes>
+  </metadata>
+
+  <instructions>
+    <guideline>Bridges gap between High-Level Story (WHAT user needs) and Backlog Story (HOW to implement)</guideline>
+    <guideline>Documents WHAT system does from external observer perspective (not HOW it's implemented)</guideline>
+    <guideline>Implementation-agnostic: No technology choices, patterns, or code structure</guideline>
+    <guideline>Uses "Specification by Example" approach with concrete I/O examples</guideline>
+    <guideline>Eliminates Happy Path sequence ambiguity with numbered steps and explicit ordering</guideline>
+    <guideline>Eliminates I/O schema hallucination with explicit request/response formats</guideline>
+    <guideline>Provides detailed functional specification that Backlog Story generator references (prevents assumptions)</guideline>
+    <guideline>Time horizon: Detailed specification for 1 HLS (typically 1-2 weeks to document all flows)</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# Functional Specification: [Feature Title]
+
+## Metadata
+- **FuncSpec ID:** FS-[XXX]
+- **Status:** [Draft/In Review/Approved/Ready]
+- **Priority:** [Critical/High/Medium/Low]
+- **Parent HLS:** [HLS-XXX]
+- **Parent PRD:** [PRD-XXX]
+- **Owner:** [Product Owner + Tech Lead]
+- **Version:** [v1]
+- **Last Updated:** [YYYY-MM-DD]
+
+## Parent Artifact Context
+
+**Parent High-Level Story:** [HLS-XXX: Story Title]
+- **Link:** artifacts/hls/HLS-XXX_[slug]_v[N].md
+- **HLS Acceptance Criteria Addressed:** [List high-level criteria this spec implements]
+
+**Parent PRD:** [PRD-XXX: PRD Title]
+- **Link:** artifacts/prds/PRD-XXX_[slug]_v[N].md
+- **Functional Requirements Coverage:**
+  - **FR-01:** [Requirement description]
+  - **FR-02:** [Requirement description]
+
+## Overview
+
+### Purpose
+[What functional capability does this specification define? One paragraph summary.]
+
+### Scope
+**In Scope (Detailed in this FuncSpec):**
+- [Capability 1]
+- [Capability 2]
+- [Capability 3]
+
+**Out of Scope (Covered in other FuncSpecs or deferred):**
+- [Capability not included]
+- [Enhancement for later iteration]
+
+### Actors
+**Actor Legend:**
+- **User:** [Description of user role, e.g., "End user interacting with web application"]
+- **System:** [Description of system, e.g., "Application backend API"]
+- **Database:** [Description of persistence layer, e.g., "PostgreSQL database"]
+- **External Service:** [Description of third-party integration, e.g., "OAuth provider API"]
+
+## Happy Path Flow
+
+**Preconditions:**
+- [System state before flow begins]
+- [User authentication status]
+- [Data that must exist]
+
+### Flow Sequence
+
+**Step 1:** [Actor] → [Actor]: [Action Description]
+- **Input:** [Data format with example]
+  ```json
+  {
+    "field1": "value1",
+    "field2": "value2"
+  }
+  ```
+- **Processing:** [What happens - no implementation details, just functional behavior]
+- **Output:** [Data format with example]
+  ```json
+  {
+    "result": "success",
+    "data": {...}
+  }
+  ```
+- **State Change:** [What changes in system state after this step]
+
+**Step 2:** [Actor] → [Actor]: [Action Description]
+- **Input:** [Data format with example]
+- **Processing:** [What happens]
+- **Output:** [Data format with example]
+- **State Change:** [What changes]
+
+**Step 3:** [Actor] → [Actor]: [Action Description]
+- **Input:** [Data format with example]
+- **Processing:** [What happens]
+- **Output:** [Data format with example]
+- **State Change:** [What changes]
+
+[Continue for all steps in Happy Path...]
+
+**Postconditions:**
+- [Final system state after successful completion]
+- [User outcome achieved]
+- [Data persisted]
+
+## Alternative Flows
+
+### Alt Flow 1: [Scenario Name]
+**Trigger:** [Condition that causes this alternative flow, e.g., "User provides invalid input"]
+
+**Diverges From:** Step [N] of Happy Path
+
+**Flow Sequence:**
+
+**Step 1:** [Actor] → [Actor]: [Action Description]
+- **Input:** [Data format with example showing invalid/alternative case]
+- **Processing:** [What happens in this alternative scenario]
+- **Output:** [Data format with example]
+- **State Change:** [What changes]
+
+**Step 2:** [Actor] → [Actor]: [Action Description]
+- **Input:** [Data format]
+- **Processing:** [What happens]
+- **Output:** [Data format]
+- **State Change:** [What changes]
+
+**Outcome:** [How this alternative flow concludes - rejoin Happy Path, terminate, or other outcome]
+
+### Alt Flow 2: [Scenario Name]
+[Same structure as Alt Flow 1]
+
+## Error Handling
+
+### Error Condition 1: [Error Name]
+**Trigger:** [What causes this error, e.g., "Database connection unavailable"]
+
+**Detection Point:** Step [N] of [Happy Path/Alt Flow X]
+
+**System Behavior:**
+- **Error Response Format:**
+  ```json
+  {
+    "error": "error_code",
+    "message": "User-facing error message",
+    "details": {...}
+  }
+  ```
+- **User Experience:** [What user sees/experiences]
+- **Logging:** [What gets logged for debugging]
+- **Recovery:** [How system recovers or what user can do]
+
+### Error Condition 2: [Error Name]
+[Same structure as Error Condition 1]
+
+### Error Condition 3: [Error Name]
+[Same structure as Error Condition 1]
+
+## Input/Output Schemas
+
+### Schema 1: [API Endpoint or Data Contract Name]
+**Direction:** [Request/Response/Both]
+
+**Request Schema:**
+```json
+{
+  "field1": {
+    "type": "string",
+    "required": true,
+    "validation": "regex: ^[A-Za-z0-9]+$",
+    "description": "Field purpose"
+  },
+  "field2": {
+    "type": "integer",
+    "required": false,
+    "validation": "min: 1, max: 100",
+    "description": "Field purpose"
+  },
+  "field3": {
+    "type": "object",
+    "required": true,
+    "properties": {
+      "nested_field": {
+        "type": "string",
+        "required": true
+      }
+    }
+  }
+}
+```
+
+**Request Example (Happy Path):**
+```json
+{
+  "field1": "example_value",
+  "field2": 42,
+  "field3": {
+    "nested_field": "nested_value"
+  }
+}
+```
+
+**Response Schema (Success - 200 OK):**
+```json
+{
+  "status": {
+    "type": "string",
+    "values": ["success", "partial", "failed"]
+  },
+  "data": {
+    "type": "object",
+    "description": "Result data"
+  }
+}
+```
+
+**Response Example (Success):**
+```json
+{
+  "status": "success",
+  "data": {
+    "result_id": "abc123",
+    "timestamp": "2025-10-20T14:30:00Z"
+  }
+}
+```
+
+**Response Schema (Error - 4xx/5xx):**
+```json
+{
+  "error": {
+    "type": "string",
+    "description": "Error code"
+  },
+  "message": {
+    "type": "string",
+    "description": "User-facing error message"
+  },
+  "details": {
+    "type": "object",
+    "description": "Additional error context"
+  }
+}
+```
+
+**Response Example (Error - 400 Bad Request):**
+```json
+{
+  "error": "invalid_input",
+  "message": "Field 'field1' contains invalid characters",
+  "details": {
+    "field": "field1",
+    "received": "invalid@value",
+    "expected": "alphanumeric characters only"
+  }
+}
+```
+
+### Schema 2: [Another API Endpoint or Data Contract]
+[Same structure as Schema 1]
+
+## State Transitions
+
+### State Machine: [Entity or System State Name]
+
+**States:**
+- **State 1:** [State name] - [Description]
+- **State 2:** [State name] - [Description]
+- **State 3:** [State name] - [Description]
+
+**Transitions:**
+| From State | Trigger | To State | Conditions |
+|------------|---------|----------|------------|
+| State 1 | [Event/Action] | State 2 | [Conditions that must be true] |
+| State 2 | [Event/Action] | State 3 | [Conditions] |
+| State 2 | [Event/Action] | State 1 | [Conditions - rollback case] |
+
+**State Diagram (Textual):**
+```
+[State 1] --[Event]--> [State 2] --[Event]--> [State 3]
+    ^                                  |
+    |                                  |
+    +----------[Rollback Event]--------+
+```
+
+**Example State Transition (Happy Path):**
+1. Initial State: [State 1] (e.g., "Unvalidated")
+2. User submits data → Transition to [State 2] (e.g., "Validating")
+3. Validation passes → Transition to [State 3] (e.g., "Validated")
+
+## Edge Cases
+
+### Edge Case 1: [Scenario Name]
+**Condition:** [Boundary condition, race condition, or unusual scenario]
+
+**Example:**
+[Concrete example with data, e.g., "User submits request at exactly midnight during timezone change"]
+
+**Expected System Behavior:**
+[What system should do in this edge case]
+
+**Input/Output Example:**
+```json
+// Input
+{...}
+
+// Output
+{...}
+```
+
+### Edge Case 2: [Scenario Name]
+[Same structure as Edge Case 1]
+
+### Edge Case 3: [Scenario Name]
+[Same structure as Edge Case 1]
+
+## Data Validation Rules
+
+### Validation Rule 1: [Field or Input Name]
+- **Field:** [field_name]
+- **Type:** [string/integer/object/array]
+- **Required:** [Yes/No]
+- **Constraints:**
+  - [Constraint 1, e.g., "Length: 3-50 characters"]
+  - [Constraint 2, e.g., "Pattern: alphanumeric only"]
+  - [Constraint 3, e.g., "Must not contain: special characters"]
+- **Validation Error Response:**
+  ```json
+  {
+    "error": "validation_failed",
+    "field": "field_name",
+    "message": "Field must be 3-50 alphanumeric characters"
+  }
+  ```
+
+### Validation Rule 2: [Field or Input Name]
+[Same structure as Validation Rule 1]
+
+## Business Rules
+
+### Business Rule 1: [Rule Name]
+**Description:** [What business rule must be enforced]
+
+**Conditions:**
+- [Condition 1 that triggers this rule]
+- [Condition 2]
+
+**System Behavior When Rule Applies:**
+[What system does when this business rule is enforced]
+
+**Example Scenario:**
+```
+Given: [Context]
+When: [Action]
+Then: [System enforces rule by...]
+```
+
+### Business Rule 2: [Rule Name]
+[Same structure as Business Rule 1]
+
+## Non-Functional Behaviors (Observable)
+
+**Note:** These are user-observable behaviors, not technical implementation details.
+
+- **Response Time:** [User-facing expectation, e.g., "Page loads within 2 seconds"]
+- **Availability:** [User-facing expectation, e.g., "Service available 99.9% of time"]
+- **Data Freshness:** [User-facing expectation, e.g., "Data updates visible within 30 seconds"]
+- **Concurrency:** [User-facing behavior, e.g., "Multiple users can edit simultaneously without conflicts"]
+- **Data Integrity:** [User-facing guarantee, e.g., "No data loss during network interruption"]
+
+## Acceptance Criteria (Functional Validation)
+
+### AC-1: [Criterion Name]
+**Given** [functional precondition]
+**When** [user or system action]
+**Then** [observable functional outcome with specific I/O]
+
+**Validation Example:**
+```json
+// Input
+{...}
+
+// Expected Output
+{...}
+```
+
+### AC-2: [Criterion Name]
+[Same structure as AC-1]
+
+### AC-3: [Criterion Name]
+[Same structure as AC-1]
+
+## Assumptions & Constraints
+
+### Assumptions
+- [Assumption 1 about external systems or user behavior]
+- [Assumption 2]
+
+### Constraints
+- [Constraint 1 imposed by external factors]
+- [Constraint 2]
+
+## Open Questions
+
+**FuncSpec Open Questions focus on FUNCTIONAL behavior uncertainties that must be resolved before Backlog Story generation.**
+
+**Version 1 Artifacts:**
+- Open Questions should include **Recommendations** for each question (exploratory, not yet decided)
+- Include alternatives, context, decision criteria
+- No markers required in v1 (questions are exploratory)
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved questions MUST use standardized markers:
+  - [REQUIRES SPIKE] (1-3 day investigation, see sub-fields below)
+  - [REQUIRES ADR] (architectural decision)
+  - [REQUIRES TECH LEAD] (senior technical input)
+  - [REQUIRES PRODUCT OWNER] (functional scope or priority)
+
+**Required Sub-fields for Markers:**
+
+```markdown
+[REQUIRES SPIKE]
+- **Investigation Needed:** {Technical uncertainty to resolve}
+- **Spike Scope:** {What to research/prototype}
+- **Time Box:** {1-3 days maximum}
+- **Blocking:** {What implementation steps blocked}
+
+[REQUIRES ADR]
+- **Decision Topic:** {Architectural decision needed}
+- **Alternatives:** {Options to evaluate in ADR}
+- **Impact Scope:** {What components/systems affected}
+- **Decision Deadline:** {Date}
+
+[REQUIRES TECH LEAD]
+- **Technical Question:** {Senior input needed on what}
+- **Context:** {Why this needs tech lead review}
+- **Blocking:** {What's blocked}
+
+[REQUIRES PRODUCT OWNER]
+- **Decision Needed:** {Scope, priority, feature clarification}
+- **Context:** {Why this decision matters}
+- **Impact:** {What's affected by decision}
+```
+
+**If no open questions exist, state:** "No functional behavior questions at this time. Implementation decisions will be captured during Backlog Story refinement."
+
+## Related Documents
+- **Parent HLS:** artifacts/hls/HLS-XXX_[slug]_v[N].md
+- **Parent PRD:** artifacts/prds/PRD-XXX_[slug]_v[N].md
+- **Parent Epic:** artifacts/epics/EPIC-XXX_[slug]_v[N].md
+- **Business Research:** artifacts/research/[product_name]_business_research.md
+- **User Personas:** [Link to persona documents]
+- **Wireframes/Mockups:** [Link if available]
+    ]]>
+  </structure>
+
+  <examples>
+    <example>
+      # Functional Specification: User Login Flow
+
+      ## Metadata
+      - **FuncSpec ID:** FS-001
+      - **Status:** Draft
+      - **Parent HLS:** HLS-001
+      - **Owner:** Product Owner + Tech Lead
+
+      ## Overview
+
+      ### Purpose
+      Define the detailed functional behavior of user authentication flow, including login request handling, credential validation, session creation, and error responses.
+
+      ### Actors
+      **Actor Legend:**
+      - **User:** Web application user attempting to access their account
+      - **System:** Authentication API backend
+      - **Database:** User credentials and session storage
+      - **External Service:** OAuth2 provider (Google)
+
+      ## Happy Path Flow
+
+      **Preconditions:**
+      - User has registered account with valid email and password
+      - System is operational
+      - Database is accessible
+
+      ### Flow Sequence
+
+      **Step 1:** User → System: Submit login credentials
+      - **Input:** POST /api/login
+        ```json
+        {
+          "email": "user@example.com",
+          "password": "SecurePass123!"
+        }
+        ```
+      - **Processing:** Extract email and password from request body, validate format
+      - **Output:** Validated credentials object
+      - **State Change:** None (credentials received, not yet validated)
+
+      **Step 2:** System → Database: Query user by email
+      - **Input:** SELECT query with email parameter
+        ```sql
+        SELECT user_id, email, password_hash, status FROM users WHERE email = 'user@example.com'
+        ```
+      - **Processing:** Database lookup by email
+      - **Output:** User record
+        ```json
+        {
+          "user_id": "12345",
+          "email": "user@example.com",
+          "password_hash": "$2b$12$...",
+          "status": "active"
+        }
+        ```
+      - **State Change:** User record loaded into memory
+
+      **Step 3:** System: Validate password hash
+      - **Input:** User-provided password + stored password_hash
+      - **Processing:** Compare password against stored hash using bcrypt
+      - **Output:** Boolean (true = valid, false = invalid)
+      - **State Change:** Validation result determined
+
+      **Step 4:** System: Create session
+      - **Input:** User ID from validated user
+      - **Processing:** Generate session token (JWT), set expiration (24 hours)
+      - **Output:** Session token
+        ```json
+        {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "expires_at": "2025-10-21T14:30:00Z"
+        }
+        ```
+      - **State Change:** Session created in database
+
+      **Step 5:** System → User: Return success response
+      - **Input:** Session token + user data
+      - **Processing:** Format response JSON
+      - **Output:** Response 200 OK
+        ```json
+        {
+          "status": "success",
+          "user": {
+            "user_id": "12345",
+            "email": "user@example.com",
+            "name": "John Doe"
+          },
+          "session": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "expires_at": "2025-10-21T14:30:00Z"
+          }
+        }
+        ```
+      - **State Change:** User session active, user authenticated
+
+      **Postconditions:**
+      - User has active session token
+      - Session stored in database with expiration
+      - User can access protected resources
+
+      ## Alternative Flows
+
+      ### Alt Flow 1: Invalid Credentials
+      **Trigger:** User provides incorrect email or password
+
+      **Diverges From:** Step 3 of Happy Path (password validation fails)
+
+      **Flow Sequence:**
+
+      **Step 1:** System: Detect invalid credentials
+      - **Input:** Password validation result = false
+      - **Processing:** Reject authentication attempt, increment failed login counter
+      - **Output:** Authentication failure
+      - **State Change:** Failed login count incremented for user
+
+      **Step 2:** System → User: Return error response
+      - **Input:** Authentication failure
+      - **Processing:** Format error response
+      - **Output:** Response 401 Unauthorized
+        ```json
+        {
+          "error": "invalid_credentials",
+          "message": "Invalid email or password"
+        }
+        ```
+      - **State Change:** No session created, user remains unauthenticated
+
+      **Outcome:** Flow terminates, user must retry with correct credentials
+
+      ## Error Handling
+
+      ### Error Condition 1: Account Locked
+      **Trigger:** User exceeded maximum failed login attempts (5 attempts)
+
+      **Detection Point:** Step 2 of Happy Path (user lookup shows status = "locked")
+
+      **System Behavior:**
+      - **Error Response Format:**
+        ```json
+        {
+          "error": "account_locked",
+          "message": "Account temporarily locked due to multiple failed login attempts. Try again in 30 minutes.",
+          "locked_until": "2025-10-20T15:00:00Z"
+        }
+        ```
+      - **User Experience:** User sees error message, cannot log in until lock expires
+      - **Logging:** Log account lock event with timestamp and user_id
+      - **Recovery:** Account automatically unlocks after 30 minutes, or admin can manually unlock
+
+      ## Input/Output Schemas
+
+      ### Schema 1: POST /api/login
+      **Direction:** Request/Response
+
+      **Request Schema:**
+      ```json
+      {
+        "email": {
+          "type": "string",
+          "required": true,
+          "validation": "format: email, max_length: 255",
+          "description": "User's email address"
+        },
+        "password": {
+          "type": "string",
+          "required": true,
+          "validation": "min_length: 8, max_length: 128",
+          "description": "User's password (plain text, will be hashed)"
+        }
+      }
+      ```
+
+      **Response Schema (Success - 200 OK):**
+      ```json
+      {
+        "status": {
+          "type": "string",
+          "values": ["success"]
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "user_id": {"type": "string"},
+            "email": {"type": "string"},
+            "name": {"type": "string"}
+          }
+        },
+        "session": {
+          "type": "object",
+          "properties": {
+            "token": {"type": "string", "description": "JWT token"},
+            "expires_at": {"type": "string", "format": "ISO 8601"}
+          }
+        }
+      }
+      ```
+
+      ## Acceptance Criteria
+
+      ### AC-1: Valid Login Success
+      **Given** user has registered account with email "user@example.com" and password "SecurePass123!"
+      **When** user submits POST /api/login with correct credentials
+      **Then** system returns 200 OK with session token and user data
+
+      **Validation Example:**
+      ```json
+      // Input
+      {"email": "user@example.com", "password": "SecurePass123!"}
+
+      // Expected Output (200 OK)
+      {"status": "success", "user": {...}, "session": {"token": "...", "expires_at": "..."}}
+      ```
+
+      ### AC-2: Invalid Credentials Error
+      **Given** user provides incorrect password
+      **When** user submits POST /api/login
+      **Then** system returns 401 Unauthorized with error message
+
+      **Validation Example:**
+      ```json
+      // Input
+      {"email": "user@example.com", "password": "WrongPassword"}
+
+      // Expected Output (401 Unauthorized)
+      {"error": "invalid_credentials", "message": "Invalid email or password"}
+      ```
+    </example>
+  </examples>
+</template>

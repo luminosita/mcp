@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>PRD_Generator</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <sdlc_phase>PRD</sdlc_phase>
-    <depends_on>Epic (CLAUDE.md: Epic path), Business Research (recommended), Implementation Research (recommended), Specialized CLAUDE.md files (conditional)</depends_on>
+    <depends_on>Epic (mandatory), Business Research (recommended), Implementation Research (recommended), Specialized CLAUDE.md files (mandatory for Technical Considerations)</depends_on>
     <generated_by>Context Engineering Framework v1.5</generated_by>
-    <date>2025-10-14</date>
-    <changes>v1.4: Added Hybrid CLAUDE.md approach - Technical Considerations align with specialized CLAUDE-*.md standards (TASK-030)</changes>
+    <date>2025-10-20</date>
+    <changes>v1.5: ENFORCED CLAUDE.md Precedence Hierarchy (Lean Analysis Recommendation 2) - Added Step 3.5 with 6-step enforcement process: Load CLAUDE.md files, extract decisions, create decisions register, cross-check Implementation Research, generate Technical Considerations with strict hierarchy (CLAUDE.md > Implementation Research > PRD-specific). Prevents US-050 problem (suggesting alternatives for decided topics).</changes>
   </metadata>
 
   <system_role>
@@ -142,28 +142,89 @@
     </step>
 
     <step priority="3.5">
-      <action>Review Specialized CLAUDE.md files (CONDITIONAL)</action>
-      <purpose>Align Technical Considerations with established implementation standards</purpose>
+      <action>Enforce CLAUDE.md Precedence Hierarchy (MANDATORY - Lean Analysis Recommendation 2)</action>
+      <purpose>Prevent decision conflicts by enforcing CLAUDE.md > Implementation Research > PRD-specific hierarchy</purpose>
       <guidance>
-        **When to Load:** PRD includes technical requirements, dependencies, or implementation guidance.
+        **CRITICAL: This step prevents US-050 problem (suggesting "chi or gin" when Gin already decided).**
 
-        **Files to Review (paths per CLAUDE.md Folder Structure):**
-        - CLAUDE-core.md (Core development philosophy)
-        - CLAUDE-tooling.md (Taskfile, UV, Ruff, MyPy, pytest)
-        - CLAUDE-testing.md (Testing strategy, coverage)
-        - CLAUDE-typing.md (Type hints, type safety)
-        - CLAUDE-validation.md (Pydantic models, input validation)
-        - CLAUDE-architecture.md (Project structure, patterns)
-        - Additional domain-specific files as needed per CLAUDE.md
+        **STEP 1: Load all prompts/CLAUDE/{language}/*.md files**
+        - Determine project language from context (Python, Go, etc.)
+        - Load all CLAUDE-*.md files from prompts/CLAUDE/{language}/ directory
+        - Example: prompts/CLAUDE/python/CLAUDE-tooling.md, prompts/CLAUDE/go/CLAUDE-http-frameworks.md
 
-        **Hybrid CLAUDE.md Approach:**
-        - Treat CLAUDE.md content as "Decisions Made" - authoritative for implementation
-        - Technical Considerations section should REFERENCE (not duplicate) CLAUDE.md standards
-        - PRD supplements CLAUDE.md with product-specific context
-        - Functional requirements (FR-XX) reference CLAUDE.md standards where applicable
-        - Dependencies section lists relevant CLAUDE.md files
+        **STEP 2: Extract decisions from CLAUDE.md files**
+        - Look for decision indicators: "Recommended", "Default", "Use", "Standard", "Decision:"
+        - Extract decision text and line number
+        - Example: Line 238 of CLAUDE-http-frameworks.md: "Default: Use Gin"
+        - Example: Line 45 of CLAUDE-tooling.md: "Use UV for Python dependency management"
+
+        **STEP 3: Create "CLAUDE.md Decisions Register"**
+        - Build list of all covered topics from all CLAUDE-*.md files
+        - Format: {domain}: {decision} (file:line)
+        - Example register:
+          ```
+          HTTP_Framework: Gin (CLAUDE-http-frameworks.md:238)
+          Package_Manager: UV (CLAUDE-tooling.md:45)
+          Linter: Ruff (CLAUDE-tooling.md:67)
+          Testing_Framework: pytest (CLAUDE-testing.md:20)
+          Type_Checker: MyPy strict mode (CLAUDE-typing.md:15)
+          ```
+
+        **STEP 4: Load Implementation Research (already loaded in step 3)**
+
+        **STEP 5: Cross-check Implementation Research against CLAUDE.md Decisions Register**
+        - For each technical recommendation in Implementation Research:
+          - Check if topic exists in CLAUDE.md Decisions Register
+          - IF topic found in register:
+            - Mark as "[OVERRIDDEN BY CLAUDE.md]"
+            - Do NOT include in PRD Technical Considerations
+          - ELSE (topic NOT in register):
+            - Mark as "[USE - No CLAUDE.md coverage]"
+            - Include in PRD with `[CLAUDE.md GAP]` marker
+
+        **STEP 6: Generate Technical Considerations section with enforced hierarchy**
+
+        **Section 1: Alignment with CLAUDE.md Standards (Tier 1 - Authoritative)**
+        - List all CLAUDE.md decisions applied to this PRD
+        - Include file name and line number for each decision
+        - Format: "CLAUDE-{file}.md:{line}: {decision}"
+        - Example:
+          ```
+          - CLAUDE-http-frameworks.md:238: Use Gin for Go REST APIs
+          - CLAUDE-tooling.md:45: Use UV for Python dependency management
+          - CLAUDE-testing.md:20: Use pytest with fixtures, 80% coverage minimum
+          ```
+
+        **Section 2: Implementation Research Guidance (Tier 2 - Advisory - ONLY gaps)**
+        - Include ONLY Implementation Research topics NOT covered by CLAUDE.md
+        - Mark each with `[CLAUDE.md GAP]`
+        - Example:
+          ```
+          §5.3 Cache invalidation strategy - [CLAUDE.md GAP]
+          Recommendation: Time-based TTL with 5-minute expiration
+          ```
+
+        **Section 3: Product-Specific Architecture (Tier 3 - Supplementary)**
+        - Include ONLY product-specific decisions not covered by CLAUDE.md or Implementation Research
+        - Example: Microservice decomposition strategy, service boundaries
+
+        **VALIDATION:** Before finalizing Technical Considerations section:
+        - [ ] No alternatives suggested for CLAUDE.md-decided topics
+        - [ ] All CLAUDE.md decisions include file:line references
+        - [ ] Implementation Research marked with `[CLAUDE.md GAP]` for non-covered topics
+        - [ ] No duplication between CLAUDE.md and Implementation Research sections
       </guidance>
-      <anti_hallucination>Only reference CLAUDE.md files that exist and are relevant. Do not fabricate CLAUDE.md content. If CLAUDE.md files don't exist yet, note in PRD: "Technical standards will be defined in specialized CLAUDE.md files during implementation."</anti_hallucination>
+      <anti_hallucination>
+        **CRITICAL - DO NOT:**
+        - Suggest alternatives for CLAUDE.md-decided topics (e.g., if Gin decided, DO NOT write "chi, gin, or gorilla/mux")
+        - Duplicate CLAUDE.md decisions in Implementation Research section
+        - Fabricate CLAUDE.md content if files don't exist (note: "CLAUDE.md standards will be defined during implementation")
+
+        **MUST DO:**
+        - Reference every CLAUDE.md decision with file:line format
+        - Mark Implementation Research with `[CLAUDE.md GAP]` when not covered
+        - Maintain strict hierarchy: CLAUDE.md > Implementation Research > PRD-specific
+      </anti_hallucination>
     </step>
 
     <step priority="4">
@@ -371,7 +432,7 @@
         <criterion id="CQ-11" category="content">Open Questions appropriate for PRD phase (business + strategic technical), with implementation details deferred to ADR/Tech Spec</criterion>
         <criterion id="CQ-12" category="content">Readability: Accessible to cross-functional team (product, design, engineering)</criterion>
         <criterion id="CQ-13" category="content">Bridge artifact: Clear separation between business requirements and technical NFRs</criterion>
-        <criterion id="CQ-14" category="content">CLAUDE.md Alignment: When PRD includes technical requirements, Technical Considerations section references (not duplicates) specialized CLAUDE-*.md standards; treats CLAUDE.md content as authoritative</criterion>
+        <criterion id="CQ-14" category="content">CLAUDE.md Precedence ENFORCED: Technical Considerations section follows strict hierarchy (CLAUDE.md > Implementation Research > PRD-specific); NO alternatives suggested for CLAUDE.md-decided topics; all CLAUDE.md decisions include file:line references; Implementation Research marked with [CLAUDE.md GAP] for non-covered topics</criterion>
 
         <!-- Upstream Traceability Criteria -->
         <criterion id="UT-01" category="traceability">"Parent Epic" field populated with valid Epic ID (EPIC-XXX)</criterion>

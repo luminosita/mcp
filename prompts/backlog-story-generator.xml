@@ -2,12 +2,12 @@
 <generator_prompt>
   <metadata>
     <name>Backlog_Story_Generator</name>
-    <version>1.5</version>
+    <version>1.6</version>
     <sdlc_phase>Backlog_Story</sdlc_phase>
     <depends_on>High-Level Story (mandatory), PRD (conditional), Implementation Research (recommended), Specialized CLAUDE.md files (conditional)</depends_on>
-    <generated_by>Context Engineering Framework v1.5</generated_by>
-    <date>2025-10-15</date>
-    <changes>v1.5: Added Implementation Tasks Evaluation step (step 14) per SDLC Guideline v1.3 Section 11 - evaluates if story needs decomposition into TASK-XXX artifacts based on story points, developer count, domain span, and complexity</changes>
+    <generated_by>Context Engineering Framework v1.6</generated_by>
+    <date>2025-10-20</date>
+    <changes>v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Report v1.4 Recommendation 2) - prevents suggesting alternatives when decisions already made in CLAUDE.md files (e.g., US-050 problem: suggesting "chi, gin, or gorilla/mux" when Gin decided in CLAUDE-http-frameworks.md:238)</changes>
   </metadata>
 
   <system_role>
@@ -131,6 +131,114 @@
       <action>Load PRD (if available for additional context)</action>
       <purpose>Extract detailed requirements and technical NFRs relevant to this story</purpose>
       <anti_hallucination>Use PRD for functional requirements and technical NFRs. Do not re-invent requirements—extract from PRD.</anti_hallucination>
+    </step>
+
+    <step priority="3.5">
+      <action>Enforce CLAUDE.md Precedence Hierarchy (MANDATORY - Lean Analysis Recommendation 2)</action>
+      <purpose>Prevent suggesting alternatives when decisions already made in CLAUDE.md files (US-050 problem)</purpose>
+      <guidance>
+        **CRITICAL: This step prevents quality errors like US-050 (suggesting "chi or gin" when Gin already decided in CLAUDE-http-frameworks.md:238).**
+
+        **3-TIER HIERARCHY:**
+        - **Tier 1 (Authoritative):** CLAUDE.md files = "Decisions Made" (use file:line references, NO alternatives)
+        - **Tier 2 (Advisory):** Implementation Research = "Fill Gaps" (use ONLY for topics not in CLAUDE.md)
+        - **Tier 3 (Supplementary):** Story-specific decisions = "Product Context" (story-specific only)
+
+        **STEP 1: Load all prompts/CLAUDE/{language}/*.md files**
+        - Determine project language from context (Python, Go, etc.)
+        - Load all CLAUDE-*.md files from prompts/CLAUDE/{language}/ directory
+        - Example files: CLAUDE-core.md, CLAUDE-tooling.md, CLAUDE-testing.md, CLAUDE-http-frameworks.md, etc.
+
+        **STEP 2: Extract decisions from CLAUDE.md files**
+        - Look for decision indicators: "Recommended", "Default", "Use", "Standard", "Decision:"
+        - Extract decision text and line number for each
+        - Example: Line 238 of CLAUDE-http-frameworks.md: "Default: Use Gin for Go REST APIs"
+        - Example: Line 45 of CLAUDE-tooling.md: "Use UV for Python package management"
+        - Example: Line 67 of CLAUDE-testing.md: "pytest with fixtures, 80% coverage minimum"
+
+        **STEP 3: Create "CLAUDE.md Decisions Register"**
+        - Build comprehensive list of all covered topics with file:line references
+        - Format: {domain}: {decision} (file:line)
+        - Example register:
+          ```
+          HTTP_Framework: Gin (CLAUDE-http-frameworks.md:238)
+          Package_Manager: UV (CLAUDE-tooling.md:45)
+          Testing_Framework: pytest with fixtures, 80% coverage (CLAUDE-testing.md:67)
+          Linter: Ruff (CLAUDE-tooling.md:52)
+          Type_Checker: MyPy strict mode (CLAUDE-typing.md:15)
+          Database_ORM: SQLAlchemy (CLAUDE-database.md:30)
+          ```
+
+        **STEP 4: Cross-check Implementation Research against CLAUDE.md Decisions Register**
+        - For each Implementation Research pattern/recommendation:
+          - IF topic found in CLAUDE.md Decisions Register:
+            → Mark as "[OVERRIDDEN BY CLAUDE.md]"
+            → Do NOT include in Technical Requirements section
+            → Use CLAUDE.md decision instead with file:line reference
+          - ELSE (topic NOT in register):
+            → Mark as "[USE - No CLAUDE.md coverage]"
+            → Include in Technical Requirements with [CLAUDE.md GAP] label
+        - This prevents conflicts and duplication
+
+        **STEP 5: Generate Technical Requirements Section with Strict Hierarchy**
+
+        Structure output as follows:
+
+        ```markdown
+        ## Technical Requirements
+
+        **DECISION HIERARCHY:** CLAUDE.md (Authoritative) > Implementation Research (Advisory) > Story-specific (Supplementary)
+
+        ### CLAUDE.md Decisions Applied
+
+        **Established Standards:**
+        - **CLAUDE-http-frameworks.md (Go):** Gin per line 238
+        - **CLAUDE-tooling.md:** UV + Ruff per lines 20-45
+        - **CLAUDE-testing.md:** pytest with fixtures, 80% coverage per line 67
+        - **CLAUDE-typing.md:** MyPy strict mode per line 15
+        - [Additional CLAUDE-*.md files as applicable]
+
+        **Example (Compliant):**
+        Use Gin HTTP framework per CLAUDE-http-frameworks.md:238
+
+        **Example (Non-Compliant - DON'T DO THIS):**
+        ❌ "Use chi, gin, or gorilla/mux" (suggests alternatives when Gin decided)
+
+        ### Implementation Research (Gaps Only)
+
+        **Applied Patterns (ONLY for CLAUDE.md gaps):**
+        - **§X.Y: Pattern Name:** [Guidance] - `[CLAUDE.md GAP]`
+
+        ### Story-Specific Implementation Guidance
+        [Technical approach specific to this story - supplements CLAUDE.md standards]
+        ```
+
+        **VALIDATION CHECKPOINT (before proceeding):**
+        - [ ] All CLAUDE.md files for project language loaded
+        - [ ] Decisions Register created with file:line references
+        - [ ] Implementation Research cross-checked against register
+        - [ ] No alternatives suggested for CLAUDE.md-decided topics
+        - [ ] All CLAUDE.md references include file:line citations
+        - [ ] [CLAUDE.md GAP] label used for Implementation Research patterns not covered by CLAUDE.md
+
+        **FAILURE MODE (What NOT to do):**
+        ❌ "Use Gin, chi, or gorilla/mux for HTTP framework" (suggests alternatives when Gin already decided)
+        ❌ "Consider UV or pip for package management" (suggests alternatives when UV already decided)
+        ❌ "Testing framework: pytest or unittest" (suggests alternatives when pytest already decided)
+
+        **SUCCESS MODE (Correct approach):**
+        ✅ "Use Gin HTTP framework per CLAUDE-http-frameworks.md:238"
+        ✅ "Use UV package manager per CLAUDE-tooling.md:45"
+        ✅ "Follow pytest testing patterns per CLAUDE-testing.md:67 (80% coverage minimum)"
+        ✅ "Cache invalidation strategy: Time-based TTL with 5-minute expiration - [CLAUDE.md GAP]" (for topics not in CLAUDE.md)
+      </guidance>
+      <anti_hallucination>
+        - Load ALL CLAUDE-*.md files before generating Technical Requirements
+        - Create Decisions Register with file:line references for ALL decisions found
+        - NEVER suggest alternatives when decision exists in CLAUDE.md
+        - Use [CLAUDE.md GAP] label for Implementation Research patterns not covered by CLAUDE.md
+        - If CLAUDE.md file missing or unreadable, WARN user and continue with degraded quality
+      </anti_hallucination>
     </step>
 
     <step priority="4">
@@ -356,16 +464,17 @@
         <criterion id="CQ-02" category="content_quality">Detailed requirements clearly stated</criterion>
         <criterion id="CQ-03" category="content_quality">Acceptance criteria highly specific and testable (5-10 criteria)</criterion>
         <criterion id="CQ-04" category="content_quality">Technical notes reference Implementation Research sections</criterion>
-        <criterion id="CQ-05" category="content_quality">Technical specifications include API/database/dependencies (if applicable)</criterion>
-        <criterion id="CQ-06" category="content_quality">Story points estimated (1-5 SP typical)</criterion>
-        <criterion id="CQ-07" category="content_quality">Testing strategy defined (unit, integration, manual)</criterion>
-        <criterion id="CQ-08" category="content_quality">Dependencies identified (story, technical, team)</criterion>
-        <criterion id="CQ-09" category="content_quality">Open Questions capture implementation uncertainties with clear markers ([REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD])</criterion>
-        <criterion id="CQ-10" category="content_quality">Implementation-adjacent: Hints at approach without prescribing exact code</criterion>
-        <criterion id="CQ-11" category="content_quality">Sprint-ready: Can be completed in 1 sprint by team</criterion>
-        <criterion id="CQ-12" category="content_quality">For non-PRD-derived stories: Justification and Implementation Research reference per Section 1.5.7</criterion>
-        <criterion id="CQ-13" category="content_quality">CLAUDE.md Alignment: When story includes technical guidance, Technical Notes section references (not duplicates) specialized CLAUDE-*.md standards; treats CLAUDE.md content as authoritative</criterion>
-        <criterion id="CQ-14" category="content_quality">Implementation Tasks Evaluation: Section present before Definition of Done with clear decision (Tasks Needed/No Tasks Needed/Consider Tasks), rationale based on SDLC Section 11 criteria (story points, developer count, domain span, complexity), and proposed tasks with TASK-XXX IDs if applicable</criterion>
+        <criterion id="CQ-05" category="content_quality">CLAUDE.md precedence hierarchy enforced: No alternatives suggested for decided topics, all CLAUDE.md references include file:line citations, [CLAUDE.md GAP] label used for Implementation Research patterns not covered by CLAUDE.md</criterion>
+        <criterion id="CQ-06" category="content_quality">Technical specifications include API/database/dependencies (if applicable)</criterion>
+        <criterion id="CQ-07" category="content_quality">Story points estimated (1-5 SP typical)</criterion>
+        <criterion id="CQ-08" category="content_quality">Testing strategy defined (unit, integration, manual)</criterion>
+        <criterion id="CQ-09" category="content_quality">Dependencies identified (story, technical, team)</criterion>
+        <criterion id="CQ-10" category="content_quality">Open Questions capture implementation uncertainties with clear markers ([REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD])</criterion>
+        <criterion id="CQ-11" category="content_quality">Implementation-adjacent: Hints at approach without prescribing exact code</criterion>
+        <criterion id="CQ-12" category="content_quality">Sprint-ready: Can be completed in 1 sprint by team</criterion>
+        <criterion id="CQ-13" category="content_quality">For non-PRD-derived stories: Justification and Implementation Research reference per Section 1.5.7</criterion>
+        <criterion id="CQ-14" category="content_quality">CLAUDE.md Alignment: When story includes technical guidance, Technical Notes section references (not duplicates) specialized CLAUDE-*.md standards; treats CLAUDE.md content as authoritative</criterion>
+        <criterion id="CQ-15" category="content_quality">Implementation Tasks Evaluation: Section present before Definition of Done with clear decision (Tasks Needed/No Tasks Needed/Consider Tasks), rationale based on SDLC Section 11 criteria (story points, developer count, domain span, complexity), and proposed tasks with TASK-XXX IDs if applicable</criterion>
 
         <!-- Upstream Traceability -->
         <criterion id="UT-01" category="upstream_traceability">"Parent PRD" field populated with valid PRD ID (PRD-XXX)</criterion>

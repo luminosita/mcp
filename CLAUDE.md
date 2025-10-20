@@ -55,6 +55,8 @@
          PRD-{XXX}_{descriptive-slug}_v{N}.md    # Format: PRD-000_project_foundation_bootstrap_v3.md
       hls/                                       # High-level user stories
          HLS-{XXX}_{descriptive-slug}_v{N}.md    # Format: HLS-078_user_authentication_flow_v1.md
+      funcspecs/                                 # Functional Specifications (detailed behavior specs)
+         FS-{XXX}_{descriptive-slug}_v{N}.md     # Format: FS-001_user_login_flow_v1.md
       backlog_stories/                           # Backlog user stories
          US-{XXX}_{descriptive-slug}_v{N}.md     # Format: US-234_implement_user_authentication_v1.md
       spikes/                                    # Time-boxed technical investigations (1-3 days)
@@ -157,6 +159,7 @@ Based on generator's `<input_artifacts>` section:
 | Epic | `artifacts/epics/EPIC-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/epics/EPIC-000_project_foundation_bootstrap_v2.md` |
 | PRD | `artifacts/prds/PRD-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/prds/PRD-000_project_foundation_bootstrap_v3.md` |
 | High-Level Story | `artifacts/hls/HLS-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/hls/HLS-003_application_skeleton_implementation_v1.md` |
+| Functional Spec | `artifacts/funcspecs/FS-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/funcspecs/FS-001_user_login_flow_v1.md` |
 | Backlog Story | `artifacts/backlog_stories/US-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/backlog_stories/US-001_automated_setup_script_v1.md` |
 | Spike | `artifacts/spikes/SPIKE-{XXX}_v{N}.md` | `artifacts/spikes/SPIKE-001_v1.md` |
 | ADR | `artifacts/adrs/ADR-{XXX}_v{N}.md` | `artifacts/adrs/ADR-001_v1.md` |
@@ -332,8 +335,14 @@ Requirements Phase (Transition - bridges business and technical)
 ↓
 
 Story Phase
+├── Functional Specification (FuncSpec) - NEW (Lean Analysis Recommendation 1)
+│   ├── Requires: High-Level Story (mandatory)
+│   ├── + PRD (recommended - for FR-XX traceability)
+│   ├── + Implementation Research (recommended - for I/O schema examples)
+│   └── Purpose: Detailed functional behavior (WHAT system does) with explicit I/O contracts, Happy Paths, Alternative Flows, Error Handling
+│
 └── Backlog Story
-    ├── Requires: PRD (mandatory)
+    ├── Requires: FuncSpec (recommended - eliminates 60-80% of I/O schema errors) OR PRD (mandatory if no FuncSpec)
     └── + Implementation Research (recommended)
 
 ↓
@@ -554,6 +563,7 @@ Upon completion, update relevant task status in `/TODO.md`:
 | Epic | EPIC-XXX | EPIC-123 |
 | PRD | PRD-XXX | PRD-005 |
 | High-Level Story | HLS-XXX | HLS-078 |
+| Functional Spec | FS-XXX | FS-001 |
 | Backlog Story | US-XXX | US-234 |
 | Spike | SPIKE-XXX | SPIKE-042 |
 | ADR | ADR-XXX | ADR-008 |
