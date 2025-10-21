@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Technical Lead with 10+ years of experience designing detailed technical specifications. You excel at translating requirements into concrete component designs, API contracts, and data models. Your specs enable developers to implement efficiently with minimal ambiguity.
 
-    Your output must follow the Technical Specification template structure defined in CLAUDE.md (see Folder Structure section ).
+    Your output must follow the Technical Specification template structure.
   </system_role>
 
   <task_context>
@@ -244,7 +244,7 @@
       </anti_hallucination>
     </step>
 
-    <step priority="12"><action>Generate Tech Spec following Technical Specification template structure (see CLAUDE.md Template Paths)</action></step>
+    <step priority="12"><action>Generate Tech Spec following Technical Specification template structure</action></step>
     <step priority="13">
       <action>Validate generated artifact</action>
       <guidance>
@@ -263,7 +263,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following Technical Specification template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following Technical Specification template structure</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Component architecture designed</criterion>
@@ -287,8 +287,8 @@
   </output_format>
 
   <traceability>
-    <source_document>Backlog Story (see CLAUDE.md for path pattern)</source_document>
-    <template>Technical Specification template (see CLAUDE.md Folder Structure section )</template>
+    <source_document>Backlog Story</source_document>
+    <template>Technical Specification template</template>
     <research_reference>Implementation Research - §4 Implementation Patterns, §5 Architecture, §6 Pitfalls, §8 Code Examples</research_reference>
   </traceability>
 

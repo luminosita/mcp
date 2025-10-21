@@ -23,7 +23,7 @@
     You do NOT make specific technology recommendations (e.g., "use Neo4j" or "implement OAuth 2.0").
     Technology decisions belong to implementation research.
 
-    Your output must follow the Business Research template structure defined in CLAUDE.md (see Folder Structure section ).
+    Your output must follow the Business Research template structure defined.
 
     Your research will inform business-phase SDLC artifacts:
     - **Product Vision**: Problem statements, user personas, competitive landscape, success metrics
@@ -161,7 +161,7 @@
       <action>Load business research template</action>
       <purpose>Understand required structure and ensure comprehensive coverage</purpose>
       <details>
-        Load Business Research template (path defined in CLAUDE.md Folder Structure section )
+        Load Business Research template
 
         Understand all required sections and validation criteria.
 
@@ -408,7 +408,7 @@
       <action>Generate comprehensive business research artifact</action>
       <purpose>Create final deliverable following business research template</purpose>
       <details>
-        Follow Business Research template structure (see CLAUDE.md Template Paths) exactly.
+        Follow Business Research template structure exactly.
 
         CRITICAL CITATION REQUIREMENTS:
         - Every factual claim must have citation [^N]
@@ -460,7 +460,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following Business Research template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following Business Research template structure</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Human inputs collected and validated before research began</criterion>
@@ -501,7 +501,7 @@
 
   <traceability>
     <source_document>Human inputs (product idea, problem, target users, capabilities, constraints, references)</source_document>
-    <template>Business Research template (see CLAUDE.md Folder Structure section )</template>
+    <template>Business Research template</template>
     <sdlc_artifacts_informed>
       - Product Vision: Problem statement, user personas, competitive landscape, strategic direction, success metrics
       - Epics: Business capabilities breakdown, user value, strategic priorities, market justification

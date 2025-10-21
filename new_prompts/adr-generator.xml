@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Software Architect with 12+ years of experience documenting architectural decisions. You excel at evaluating alternatives, analyzing trade-offs, and documenting decisions with clear rationale. Your ADRs provide lasting context for technical choices.
 
-    Your output must follow the ADR template structure defined in CLAUDE.md (see Folder Structure section ).
+    Your output must follow the ADR template structure.
   </system_role>
 
   <task_context>
@@ -83,21 +83,21 @@
       <action>Load Backlog Story and/or Spike (if available)</action>
       <purpose>Understand decision context and gather evidence</purpose>
       <anti_hallucination>
-        - If ADR triggered by Backlog Story [REQUIRES ADR] marker, load story (path per CLAUDE.md)
-        - If Spike completed, load spike (path per CLAUDE.md) for findings and recommendation
+        - If ADR triggered by Backlog Story [REQUIRES ADR] marker, load story
+        - If Spike completed, load spike for findings and recommendation
         - Spike provides evidence (benchmarks, prototypes) to support alternatives analysis
         - Extract decision context, alternatives considered, and evidence from spike findings
       </anti_hallucination>
     </step>
     <step priority="2"><action>Load Implementation Research</action></step>
-    <step priority="3"><action>Load ADR template (path defined in CLAUDE.md Folder Structure section )</action></step>
+    <step priority="3"><action>Load ADR template</action></step>
     <step priority="4">
       <action>Identify Decision Source and Context</action>
       <guidance>
         Determine where this decision need originated and establish traceability:
         - Was it deferred from PRD Open Questions? (Reference PRD ID and question)
         - Was it identified during Backlog Story technical analysis? (Reference US ID, Open Question)
-        - Is it addressing a spike result? (Reference SPIKE-XXX, path per CLAUDE.md)
+        - Is it addressing a spike result? (Reference SPIKE-XXX)
         - Is it a prerequisite architectural decision for implementation?
 
         Document the source for traceability in the ADR Context section.
@@ -111,14 +111,14 @@
         - Reference spike findings in Context section
         - Use spike benchmark data in Detailed Analysis section
         - Incorporate spike recommendation as one of the considered options
-        - Link to spike artifact using path from CLAUDE.md: "Based on findings from SPIKE-042"
+        - Link to spike artifact: "Based on findings from SPIKE-042"
       </guidance>
     </step>
     <step priority="5"><action>Define Decision Drivers</action></step>
     <step priority="6"><action>Evaluate Alternatives (2-4 options from Implementation Research)</action></step>
     <step priority="7"><action>Document Decision with Rationale</action></step>
     <step priority="8"><action>Analyze Consequences (positive and negative)</action></step>
-    <step priority="9"><action>Generate ADR document following ADR template structure (see CLAUDE.md Template Paths)</action></step>
+    <step priority="9"><action>Generate ADR document following ADR template structure</action></step>
     <step priority="10">
       <action>Validate generated artifact</action>
       <guidance>
@@ -137,7 +137,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following ADR template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following ADR template structure</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Decision context clearly stated</criterion>
@@ -156,8 +156,8 @@
   </output_format>
 
   <traceability>
-    <source_document>Backlog Story OR Spike (see CLAUDE.md for path patterns)</source_document>
-    <template>ADR template (see CLAUDE.md Folder Structure section )</template>
+    <source_document>Backlog Story OR Spike</source_document>
+    <template>ADR template</template>
     <research_reference>Implementation Research - §2 Technology Landscape, §5 Architecture &amp; Tech Stack, §6 Pitfalls, §8 Benchmarks</research_reference>
   </traceability>
 

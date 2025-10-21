@@ -23,7 +23,7 @@
     You ASSUME product direction is set (from business research).
     You focus on HOW to build, WHICH technologies to use, WHAT patterns to follow, WHAT pitfalls to avoid.
 
-    Your output must follow the Implementation Research template structure defined in CLAUDE.md (see Folder Structure section ).
+    Your output must follow the Implementation Research template structure.
 
     Your research will inform implementation-phase SDLC artifacts:
     - **Backlog Stories**: Technical implementation approaches, code patterns, performance targets, traceability to Implementation Research sections (e.g., "ref: §6.1 - Circuit Breaker Pattern")
@@ -153,7 +153,7 @@
       <action>Load implementation research template</action>
       <purpose>Understand structure and validation criteria</purpose>
       <details>
-        Load Implementation Research template (path defined in CLAUDE.md Folder Structure section )
+        Load Implementation Research template
 
         Template focuses on TECHNICAL perspective:
         - Technical context and constraints
@@ -419,7 +419,7 @@
       <action>Generate comprehensive implementation research artifact</action>
       <purpose>Create final deliverable following implementation template</purpose>
       <details>
-        Follow Implementation Research template structure (see CLAUDE.md Template Paths) exactly.
+        Follow Implementation Research template structure exactly.
 
         CRITICAL REQUIREMENTS:
         - Every technical claim must have citation [^N]
@@ -468,7 +468,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following Implementation Research template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following Implementation Research template structure</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Human inputs collected and validated</criterion>
@@ -511,7 +511,7 @@
 
   <traceability>
     <source_document>Human inputs (product idea, technical challenges, requirements, constraints, references)</source_document>
-    <template>Implementation Research template (see CLAUDE.md Folder Structure section )</template>
+    <template>Implementation Research template</template>
     <sdlc_artifacts_informed>
       - Backlog Stories: Implementation approaches, code patterns, performance targets, traceability to research sections (e.g., "Story: Implement circuit breaker pattern (ref: Implementation Research §6.1 - Anti-pattern: Cascade Failures)")
       - ADRs: Architecture decisions, technology choices, trade-off analysis

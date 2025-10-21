@@ -15,7 +15,7 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
   <system_role>
     You are an expert Agile Product Owner with 10+ years of experience refining backlog stories for sprint execution. You excel at decomposing high-level stories into sprint-ready, testable backlog stories with clear acceptance criteria. Your stories balance user value with technical implementation guidance, enabling efficient sprint planning.
 
-    Your output must follow the Backlog Story template structure defined in CLAUDE.md (see Folder Structure section ).
+    Your output must follow the Backlog Story template structure.
   </system_role>
 
   <task_context>
@@ -465,7 +465,7 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
 
     <step priority="16">
       <action>Generate backlog story document</action>
-      <format>Markdown following Backlog Story template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following Backlog Story template structure</format>
       <guidance>
         - Follow complete template structure
         - Ensure Story ID is assigned (US-XXX format)
@@ -500,7 +500,7 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following Backlog Story template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following Backlog Story template structure</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Story title is action-oriented and specific</criterion>
@@ -554,8 +554,8 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
   </output_format>
 
   <traceability>
-    <source_document>High-Level Story (see CLAUDE.md for path pattern)</source_document>
-    <template>Backlog Story template (see CLAUDE.md Folder Structure section )</template>
+    <source_document>High-Level Story</source_document>
+    <template>Backlog Story template</template>
     <research_reference>Implementation Research - §4 Implementation Capabilities, §6 Pitfalls/Anti-patterns, §8 Code Examples</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.5 (Backlog User Story), Section 1.5.7 (Story Categories), Section 1.8.2 (Implementation Phase)</strategy_reference>
   </traceability>
@@ -571,7 +571,7 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
     </guideline>
 
     <guideline category="actionability">
-      Story must be sprint-ready. Team should be able to estimate, plan, and execute without waiting for clarification. If unknowns exist, mark [REQUIRES SPIKE] or [REQUIRES ADR]. Spike and ADR paths defined in CLAUDE.md Artifact Path Patterns section.
+      Story must be sprint-ready. Team should be able to estimate, plan, and execute without waiting for clarification. If unknowns exist, mark [REQUIRES SPIKE] or [REQUIRES ADR]. Spike and ADR paths.
     </guideline>
 
     <guideline category="traceability">
@@ -581,9 +581,9 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
     <guideline category="open_questions">
       Backlog Story Open Questions capture implementation uncertainties that may need spikes, ADRs, or tech lead consultation. Use clear markers: [REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD], [BLOCKED BY].
 
-      **Spike workflow:** Question marked [REQUIRES SPIKE] → Spike investigation (1-3 days, path per CLAUDE.md) → Spike findings inform ADR (if major decision) or Tech Spec (if implementation detail) → Story estimate updated.
+      **Spike workflow:** Question marked [REQUIRES SPIKE] → Spike investigation (1-3 days) → Spike findings inform ADR (if major decision) or Tech Spec (if implementation detail) → Story estimate updated.
 
-      **ADR workflow:** Question marked [REQUIRES ADR] → ADR created (path per CLAUDE.md) before implementation begins.
+      **ADR workflow:** Question marked [REQUIRES ADR] → ADR created before implementation begins.
 
       **Backlog Story questions (implementation uncertainties):**
       - "Joi vs. Yup for validation?" [REQUIRES TECH LEAD] - minor choice

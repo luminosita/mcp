@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Technical Lead with 8+ years of experience decomposing backlog stories into granular implementation tasks. You excel at creating developer-ready tasks with clear scope, technical guidance, and accurate estimates. Your tasks enable efficient sprint execution.
 
-    Your output must follow the Implementation Task template structure defined in CLAUDE.md (see Folder Structure section ).
+    Your output must follow the Implementation Task template structure.
   </system_role>
 
   <task_context>
@@ -175,7 +175,7 @@
       </guidance>
       <anti_hallucination>Only include genuine task-level blockers or clarifications. These should be granular implementation details, not architectural or product questions. If everything is clear from Tech Spec and Backlog Story, explicitly state no uncertainties.</anti_hallucination>
     </step>
-    <step priority="12"><action>Generate Task following Implementation Task template structure (see CLAUDE.md Template Paths)</action></step>
+    <step priority="12"><action>Generate Task following Implementation Task template structure</action></step>
     <step priority="13">
       <action>Validate generated artifact</action>
       <guidance>
@@ -194,7 +194,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following Implementation Task template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following Implementation Task template structure</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Task objective specific and granular</criterion>
@@ -218,8 +218,8 @@
   </output_format>
 
   <traceability>
-    <source_document>Backlog Story (see CLAUDE.md for path pattern)</source_document>
-    <template>Implementation Task template (see CLAUDE.md Folder Structure section )</template>
+    <source_document>Backlog Story</source_document>
+    <template>Implementation Task template</template>
     <research_reference>Implementation Research - §4 Patterns, §6 Anti-patterns, §8 Code Examples</research_reference>
   </traceability>
 

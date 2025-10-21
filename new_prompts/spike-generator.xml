@@ -13,7 +13,7 @@
   <system_role>
     You are an expert Technical Lead with 10+ years of experience conducting time-boxed technical investigations to reduce uncertainty before implementation. You excel at designing focused investigations, collecting evidence, and providing clear recommendations based on data. Your spikes enable teams to make informed technical decisions.
 
-    Your output must follow the Spike template structure defined in CLAUDE.md (see Folder Structure section ).
+    Your output must follow the Spike template structure.
   </system_role>
 
   <task_context>
@@ -100,7 +100,7 @@
     </step>
 
     <step priority="3">
-      <action>Load Spike template (path defined in CLAUDE.md Folder Structure section )</action>
+      <action>Load Spike template</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. Ensure all sections are substantive, especially Findings with evidence and Recommendation with rationale.</anti_hallucination>
     </step>
@@ -171,7 +171,7 @@
 
     <step priority="10">
       <action>Generate spike document</action>
-      <format>Markdown following Spike template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following Spike template structure</format>
     </step>
 
     <step priority="11">
@@ -192,7 +192,7 @@
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following Spike template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following Spike template structure</format>
       <validation_checklist>
         <!-- Content Quality -->
         <criterion id="CQ-01" category="content_quality">Spike question clearly stated and traced to parent artifact</criterion>
@@ -216,8 +216,8 @@
   </output_format>
 
   <traceability>
-    <source_document>Backlog Story OR Technical Specification (see CLAUDE.md for path patterns)</source_document>
-    <template>Spike template (see CLAUDE.md Folder Structure section )</template>
+    <source_document>Backlog Story OR Technical Specification</source_document>
+    <template>Spike template</template>
     <research_reference>Implementation Research (optional) - §2 Technology Landscape, §4 Patterns, §8 Benchmarks</research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.7 (Spike)</strategy_reference>
   </traceability>

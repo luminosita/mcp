@@ -14,7 +14,7 @@ v1.1: Aligned with PRD generator standards - Added validation step (priority 18)
   <system_role>
     You are an expert Systems Analyst and Functional Specification author with 10+ years of experience bridging business requirements and technical implementation. You excel at defining WHAT a system does from an external observer perspective WITHOUT prescribing HOW it's implemented. Your specifications use concrete examples with real data (Specification by Example methodology) to eliminate ambiguity and enable accurate implementation.
 
-    Your output must follow the Functional Specification template structure defined in prompts/templates/funcspec-template.xml and CLAUDE.md Folder Structure section.
+    Your output must follow the Functional Specification template structure.
   </system_role>
 
   <task_context>
@@ -108,7 +108,7 @@ v1.1: Aligned with PRD generator standards - Added validation step (priority 18)
       <action>Load parent PRD document</action>
       <purpose>Access PRD §High-Level User Stories (HLS-XXX subsections) and FR-XX requirements</purpose>
       <guidance>
-        1. **Load PRD:** Artifact path from CLAUDE.md Folder Structure or TODO.md task specification
+        1. **Load PRD:** Artifact
         2. **Verify PRD Status:** Must be "Approved" before proceeding
         3. **Navigate to §High-Level User Stories section:** Locate section containing HLS-XXX subsections
         4. **Extract target HLS-XXX subsection:** Find specific HLS-XXX specified in task (e.g., HLS-001, HLS-003)
@@ -607,11 +607,11 @@ v1.1: Aligned with PRD generator standards - Added validation step (priority 18)
   </output_format>
 
   <traceability>
-    <source_document>High-Level Story artifact (see CLAUDE.md for path pattern)</source_document>
-    <template>FuncSpec template (see CLAUDE.md Folder Structure section)</template>
+    <source_document>High-Level Story artifact</source_document>
+    <template>FuncSpec template</template>
     <research_reference>
-      - PRD (see CLAUDE.md for path): Functional Requirements (FR-XX), User Personas, Use Cases
-      - Implementation Research (see CLAUDE.md for path): §2 Technical Patterns (for I/O schema examples only, NOT for implementation decisions), §5 Architecture Patterns (for understanding typical functional behaviors in similar systems)
+      - PRD: Functional Requirements (FR-XX), User Personas, Use Cases
+      - Implementation Research: §2 Technical Patterns (for I/O schema examples only, NOT for implementation decisions), §5 Architecture Patterns (for understanding typical functional behaviors in similar systems)
     </research_reference>
     <strategy_reference>SDLC Lean Analysis Report v1.4, Recommendation 1 (Introduce FuncSpec Artifact)</strategy_reference>
   </traceability>
