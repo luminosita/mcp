@@ -59,8 +59,6 @@ v1.1: Aligned with PRD generator standards - Added validation step (priority 18)
 
         **IMPORTANT:** High-Level Stories are now subsections within PRD. Reference format: `PRD-XXX §High-Level User Stories §HLS-YYY`
 
-        **Example Path:** `artifacts/prds/PRD-006_mcp_server_integration_v1.md` → Navigate to section "High-Level User Stories" → Find subsection "### HLS-001: User Authentication Flow"
-
         You will:
         1. Load PRD document (mandatory)
         2. Navigate to §High-Level User Stories section
@@ -554,7 +552,7 @@ v1.1: Aligned with PRD generator standards - Added validation step (priority 18)
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following Functional Specification template structure (see prompts/templates/funcspec-template.xml)</format>
+      <format>Markdown following Functional Specification template structure</format>
       <validation_checklist>
         <!-- Content Quality Criteria -->
         <criterion id="CQ-01" category="content">Happy Path flow with numbered steps (Step 1, Step 2, etc.)</criterion>
@@ -593,10 +591,6 @@ v1.1: Aligned with PRD generator standards - Added validation step (priority 18)
         <criterion id="CC-06" category="consistency">Error response format standardized across all error conditions</criterion>
       </validation_checklist>
     </terminal_artifact>
-
-    **Output Path:** artifacts/funcspecs/FS-{XXX}_{descriptive-slug}_v1.md
-
-    Example: artifacts/funcspecs/FS-001_user_login_flow_v1.md
 
     **Versioning:** Start with v1. Subsequent iterations (after feedback) increment to v2, v3.
 

@@ -98,7 +98,6 @@
 
     <step priority="[N-2]">
       <action>[Generate terminal artifact]</action>
-      <output_path>[/artifacts/path/artifact_v1.md]</output_path>
     </step>
 
     <step priority="[N]">
@@ -116,7 +115,6 @@
 
   <output_format>
     <terminal_artifact>
-      <path>[/artifacts/path/artifact_v1.md]</path>
       <format>[Markdown following template structure]</format>
       <validation_checklist>
         <!-- Content Quality Criteria -->

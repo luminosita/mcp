@@ -38,11 +38,11 @@
 ## Parent Artifact Context
 
 **Parent High-Level Story:** [HLS-XXX: Story Title]
-- **Link:** artifacts/hls/HLS-XXX_[slug]_v[N].md
+- **HLS ID:** [HLS-XXX]
 - **HLS Acceptance Criteria Addressed:** [List high-level criteria this spec implements]
 
 **Parent PRD:** [PRD-XXX: PRD Title]
-- **Link:** artifacts/prds/PRD-XXX_[slug]_v[N].md
+- **Link:** [PARENT PRD LINK]
 - **Functional Requirements Coverage:**
   - **FR-01:** [Requirement description]
   - **FR-02:** [Requirement description]
@@ -473,10 +473,9 @@ This Functional Specification covers the following backlog stories (from PRD §H
 **If no open questions exist, state:** "No functional behavior questions at this time. Implementation decisions will be captured during Backlog Story refinement."
 
 ## Related Documents
-- **Parent HLS:** artifacts/hls/HLS-XXX_[slug]_v[N].md
-- **Parent PRD:** artifacts/prds/PRD-XXX_[slug]_v[N].md
-- **Parent Epic:** artifacts/epics/EPIC-XXX_[slug]_v[N].md
-- **Business Research:** artifacts/research/[product_name]_business_research.md
+- **Parent HLS:** HLS-XXX
+- **Parent PRD:** PRD-XXX
+- **Parent Epic:** EPIC-XXX
 - **User Personas:** [Link to persona documents]
 - **Wireframes/Mockups:** [Link if available]
     ]]>

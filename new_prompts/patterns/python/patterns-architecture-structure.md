@@ -31,9 +31,6 @@ project-root/
 ├── .gitignore                  # Git ignore rules
 ├── .env.example                # Example environment variables
 │
-├── .claude/                    # Claude Code configuration
-│   └── commands/               # Custom commands
-│
 ├── src/                        # Source code
 │   └── mcp_server/
 │       ├── __init__.py

@@ -631,12 +631,6 @@ Before deploying MCP tools/resources:
 - [ ] **Error messages include context** - MCP resource URI, parameter values
 - [ ] **All exceptions caught and logged** - No silent failures
 
-### Reference
-
-- **SPIKE-001**: MCP Error Response Format Investigation (artifacts/spikes/SPIKE-001_mcp_error_response_format_v1.md)
-- **MCP Specification**: JSON-RPC 2.0 error format (modelcontextprotocol.io)
-- **FastMCP Error Handling**: gofastmcp.com/python-sdk/fastmcp-server-middleware-error_handling
-
 ---
 
 ## 🧪 Testing MCP Tools

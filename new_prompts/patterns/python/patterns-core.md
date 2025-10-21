@@ -67,8 +67,6 @@ project-root/
 ├── pyproject.toml          # Configuration and dependencies
 ├── uv.lock                 # Locked dependencies
 ├── CLAUDE.md               # This file
-├── .claude/
-│   └── commands/
 ├── src/
 │   └── mcp_server/       # Source code
 │       ├── __init__.py

@@ -85,7 +85,7 @@
       <action>Check for INIT-000 existence (Foundation Initiative)</action>
       <purpose>Determine if foundation initiative exists before generating feature initiatives</purpose>
       <guidance>
-        **CRITICAL CHECK:** Before proceeding with initiative generation, check if INIT-000 (Foundation Initiative) exists in `/artifacts/initiatives/` directory.
+        **CRITICAL CHECK:** Before proceeding with initiative generation, check if INIT-000 (Foundation Initiative) exists.
 
         **If INIT-000 does NOT exist AND this is a greenfield/new project:**
         - STOP and recommend creating INIT-000 first

@@ -1635,7 +1635,7 @@ The Go pre-commit configuration includes:
 - `trailing-whitespace` - Remove trailing whitespace
 
 **Documentation:**
-- `markdownlint` - Markdown linting (excludes artifacts/)
+- `markdownlint` - Markdown linting
 - `hadolint-docker` - Containerfile.go linting
 
 ### Usage
@@ -1678,8 +1678,6 @@ Pre-commit hooks skip:
 - `.git/` and `.github/` directories
 - `vendor/` directory
 - `node_modules/` directory
-- `artifacts/` directory (generated SDLC artifacts)
-- `docs/refinements/` directory
 - Test files (`*_test.go`)
 - Mock files (`mock_*.go`)
 - Wire-generated files (`wire_gen.go`)
