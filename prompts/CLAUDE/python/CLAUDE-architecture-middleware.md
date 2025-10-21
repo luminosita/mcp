@@ -1,11 +1,13 @@
 # CLAUDE-architecture-middleware.md - Exception Handling & CORS
 
 
-> **Specialized Guide**: Exception handling patterns and CORS configuration for FastAPI applications.
+> **Specialized Guide**: Exception handling patterns and CORS configuration for FastAPI REST API applications.
 
-> **Specialized Guide**: Comprehensive project architecture, modularity patterns, and design principles for Python projects.
+> **Scope**: This guide covers FastAPI REST endpoint exception handling. For MCP tools/resources, see **[CLAUDE-mcp.md](./CLAUDE-mcp.md)** which uses FastMCP ErrorHandlingMiddleware with JSON-RPC error format instead.
 
-## 🔒 Exception Handling
+## 🔒 Exception Handling (FastAPI REST Endpoints)
+
+**Note**: This section applies to **FastAPI REST API endpoints only**. For MCP tools and resources, use standard Python exceptions (FileNotFoundError, ValueError, etc.) and let FastMCP ErrorHandlingMiddleware convert to JSON-RPC format. See **[CLAUDE-mcp.md § Exception Handling for MCP Tools](./CLAUDE-mcp.md#🛡️-exception-handling-for-mcp-tools)** for MCP-specific patterns.
 
 ### Custom Exceptions
 

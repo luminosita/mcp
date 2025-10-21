@@ -108,14 +108,18 @@ After implementation, Claude Code can request `mcp://resources/patterns/core` an
    settings = Settings()
    ```
 
-2. **Resource Handler Implementation (FastAPI):**
+2. **Resource Handler Implementation (FastAPI with FastMCP error handling):**
    ```python
-   from fastapi import FastAPI, HTTPException
+   from fastapi import FastAPI
+   # NOTE: Do NOT import HTTPException - use standard Python exceptions instead
+   # FastMCP ErrorHandlingMiddleware converts to JSON-RPC format automatically
    from pydantic import BaseModel, Field, constr
    import aiofiles
    from pathlib import Path
+   import structlog
 
    app = FastAPI()
+   logger = structlog.get_logger()
 
    class ResourceRequest(BaseModel):
        """MCP resource request model with path traversal protection"""
@@ -126,21 +130,24 @@ After implementation, Claude Code can request `mcp://resources/patterns/core` an
    async def get_pattern_resource(name: str, language: str = "python"):
        """Returns implementation pattern file content as MCP resource"""
        # Validate input to prevent path traversal
+       # ValueError → JSON-RPC -32602 (Invalid params)
        if ".." in name or name.startswith("/"):
-           raise HTTPException(status_code=400, detail="Invalid resource name")
+           logger.warning("Path traversal attempt detected", resource_name=name)
+           raise ValueError("Invalid resource name")
 
        # Construct file path using configuration
        patterns_dir = Path(settings.PATTERNS_BASE_DIR) / language
        file_path = patterns_dir / f"patterns-{name}.md"
 
        # Check file exists
+       # FileNotFoundError → JSON-RPC -32001 (Resource not found)
        if not file_path.exists():
-           raise HTTPException(
-               status_code=404,
-               detail=f"Resource not found: mcp://resources/patterns/{name}"
+           raise FileNotFoundError(
+               f"Resource not found: mcp://resources/patterns/{name}"
            )
 
        # Read file asynchronously
+       # PermissionError/IOError → JSON-RPC -32000/-32603 (auto-handled)
        async with aiofiles.open(file_path, mode='r') as f:
            content = await f.read()
 
@@ -152,12 +159,11 @@ After implementation, Claude Code can request `mcp://resources/patterns/core` an
        # Use configuration for SDLC core file path
        file_path = Path(settings.SDLC_CORE_FILE_PATH)
 
+       # FileNotFoundError → JSON-RPC -32001
        if not file_path.exists():
-           raise HTTPException(
-               status_code=404,
-               detail="Resource not found: mcp://resources/sdlc/core"
-           )
+           raise FileNotFoundError("Resource not found: mcp://resources/sdlc/core")
 
+       # PermissionError/IOError → JSON-RPC -32000/-32603 (auto-handled)
        async with aiofiles.open(file_path, mode='r') as f:
            content = await f.read()
 
@@ -216,30 +222,33 @@ After implementation, Claude Code can request `mcp://resources/patterns/core` an
 ### Scenario 4: Missing resource handled gracefully
 **Given** MCP Server is running
 **When** Claude Code requests `mcp://resources/patterns/nonexistent`
-**Then** server returns 404 error
+**Then** server returns JSON-RPC error with code -32001 (Resource not found)
 **And** error message includes: "Resource not found: mcp://resources/patterns/nonexistent"
 **And** error is logged with structured logging
+**And** error response follows JSON-RPC 2.0 format: `{"jsonrpc": "2.0", "id": ..., "error": {"code": -32001, "message": "..."}}`
 
 ### Scenario 5: Path traversal attack prevented
 **Given** MCP Server is running
 **When** Claude Code requests `mcp://resources/patterns/../../../etc/passwd`
-**Then** server returns 400 error (Bad Request)
+**Then** server returns JSON-RPC error with code -32602 (Invalid params)
 **And** error message indicates invalid resource name
 **And** security event logged with resource name attempt
 **And** no file system access occurs outside prompts/CLAUDE/ directory
+**And** error response follows JSON-RPC 2.0 format
 
 ### Scenario 6: Resource access logged
 **Given** MCP Server is running and logging configured
 **When** Claude Code requests any resource
-**Then** server logs event with fields: resource_uri, latency_ms, status_code, file_size_bytes
+**Then** server logs event with fields: resource_uri, latency_ms, error_code (if error), file_size_bytes (if success)
 **And** log format is JSON (structured logging)
 
 ### Scenario 7: Disk I/O error handled
 **Given** resource file exists but disk I/O fails (e.g., permissions issue)
 **When** Claude Code requests resource
-**Then** server returns 500 error (Internal Server Error)
+**Then** server returns JSON-RPC error with code -32000 (Permission denied) or -32603 (Internal error)
 **And** error message indicates server-side issue (not missing file)
 **And** error logged with exception details
+**And** error response follows JSON-RPC 2.0 format
 
 ## Implementation Tasks Evaluation
 
@@ -317,13 +326,45 @@ Per SDLC Section 11.6 Decision Matrix: "5+ SP, any team size → DON'T SKIP (Com
 **Rationale:** Nested URIs provide better semantic clarity and align with RESTful API design principles.
 
 ### D2: Error Response Format
-**Decision:** Spike needed for this decision.
+**Decision:** Use standard Python exceptions and let FastMCP ErrorHandlingMiddleware handle conversion to MCP error responses. Do NOT use FastAPI HTTPException or custom exception handlers.
 
-**Context:** MCP protocol may have specific error format expectations. FastAPI returns standard HTTP error format. Investigation needed to determine if custom exception handlers required.
+**Context:** MCP protocol uses JSON-RPC 2.0 error format with specific error codes (-32001 for resource not found, -32602 for invalid params, -32603 for internal errors). FastAPI HTTPException produces HTTP-style errors that break MCP protocol compliance.
 
-**Action Required:** Create spike to investigate MCP SDK documentation for expected error response schema before implementing error handling.
+**Spike Findings:** SPIKE-001 investigation confirmed FastMCP provides automatic error conversion via ErrorHandlingMiddleware:
+- FileNotFoundError → JSON-RPC code -32001 ("Resource not found")
+- ValueError/TypeError → JSON-RPC code -32602 ("Invalid params")
+- PermissionError/TimeoutError → JSON-RPC code -32000 ("Permission denied" / "Request timeout")
+- Other exceptions → JSON-RPC code -32603 ("Internal error")
+
+**Implementation Pattern:**
+```python
+@app.get("/mcp/resources/patterns/{name}")
+async def get_pattern_resource(name: str):
+    # Validation errors → ValueError → -32602
+    if ".." in name or name.startswith("/"):
+        raise ValueError("Invalid resource name")
+
+    # Missing resources → FileNotFoundError → -32001
+    if not file_path.exists():
+        raise FileNotFoundError(f"Resource not found: mcp://resources/patterns/{name}")
+
+    # I/O errors → PermissionError/IOError → -32000/-32603 (auto-handled)
+    async with aiofiles.open(file_path, mode='r') as f:
+        content = await f.read()
+
+    return {"uri": f"mcp://resources/patterns/{name}", "content": content}
+```
+
+**Rationale:**
+- FastMCP middleware provides comprehensive error conversion without custom code
+- Maintains MCP protocol compliance (JSON-RPC 2.0 format)
+- Simpler implementation (no custom exception handlers)
+- Standard Python exceptions map predictably to JSON-RPC error codes
+
+**Reference:** `/artifacts/spikes/SPIKE-001_mcp_error_response_format_v1.md`
 
 ## Related Documents
 - **Parent PRD:** `/artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v3.md`
 - **Parent HLS:** `/artifacts/hls/HLS-006_mcp_resources_migration_v2.md`
 - **Implementation Research:** `/artifacts/research/AI_Agent_MCP_Server_implementation_research.md` (§2.2 FastAPI, §2.1 Python Async, §5.3 Input Validation, §6.1 Structured Logging)
+- **Spike:** `/artifacts/spikes/SPIKE-001_mcp_error_response_format_v1.md` (MCP Error Response Format Investigation)

@@ -433,6 +433,74 @@ v1.1: Aligned with PRD generator standards - Added validation step (priority 18)
       </guidance>
     </step>
 
+    <step priority="15.5">
+      <action>Document Implementation Scope (Reference Parent HLS Decomposition)</action>
+      <guidance>
+        **IMPORTANT: FuncSpec does NOT decompose HLS into Backlog Stories. The decomposition is defined in PRD §HLS-XXX §Decomposition section. FuncSpec REFERENCES this decomposition for traceability.**
+
+        Reference the parent HLS decomposition plan from PRD §HLS-XXX to document expected implementation scope.
+
+        **Purpose:**
+        - Provide clear traceability from FuncSpec to Backlog Stories (defined in parent HLS)
+        - Document scope expectations (number of stories, complexity)
+        - Use same placeholder IDs as parent HLS for consistency
+        - FuncSpec serves as detailed functional reference when generating those backlog stories
+
+        **Extract from PRD §HLS-XXX §Decomposition into Backlog Stories:**
+        - List of US-AAA, US-BBB, US-CCC placeholder IDs from parent HLS
+        - Story titles and estimated story points
+        - Total estimated effort
+
+        **Output Format:**
+        ```markdown
+        ## Implementation Scope
+
+        This Functional Specification covers the following backlog stories (from PRD §HLS-XXX decomposition):
+
+        **Total Stories:** [N] stories (estimated [X] story points)
+
+        1. **US-AAA:** [Story title from HLS decomposition] - [Est. SP]
+        2. **US-BBB:** [Story title from HLS decomposition] - [Est. SP]
+        3. **US-CCC:** [Story title from HLS decomposition] - [Est. SP]
+
+        **Note:** Placeholder IDs (US-AAA, US-BBB, US-CCC) will be resolved to final IDs during approval workflow (US-071 approve_artifact).
+
+        **Scope Boundaries:**
+        - **In Scope:** [What functional behavior is covered by these stories]
+        - **Out of Scope:** [What is deferred to future iterations or other HLS]
+        ```
+
+        **Example:**
+        ```markdown
+        ## Implementation Scope
+
+        This Functional Specification covers the following backlog stories (from PRD §HLS-AAA decomposition):
+
+        **Total Stories:** 4 stories (estimated 18 story points)
+
+        1. **US-AAA:** Implement user registration API endpoint - 5 SP
+        2. **US-BBB:** Add email verification flow - 3 SP
+        3. **US-CCC:** Create user profile setup UI - 5 SP
+        4. **US-DDD:** Implement password strength validation - 5 SP
+
+        **Note:** Placeholder IDs (US-AAA, US-BBB, US-CCC, US-DDD) will be resolved to final IDs during approval workflow.
+
+        **Scope Boundaries:**
+        - **In Scope:** User registration, email verification, initial profile setup, password validation
+        - **Out of Scope:** Social auth (HLS-BBB), password reset (HLS-CCC), profile editing (HLS-DDD)
+        ```
+
+        **STANDARDIZED SEQUENCE:** Use alphabetic sequence AAA, BBB, CCC, DDD, EEE, FFF... matching parent HLS decomposition.
+      </guidance>
+      <anti_hallucination>
+        - Copy placeholder IDs EXACTLY from parent PRD §HLS-XXX decomposition (US-AAA, US-BBB, US-CCC)
+        - Do NOT invent new US IDs or renumber them
+        - Do NOT use XXX/YYY/ZZZ pattern - use AAA/BBB/CCC alphabetic sequence
+        - Do NOT change story titles from parent HLS decomposition
+        - If parent HLS decomposition missing or incomplete, document as Open Question: [REQUIRES PRODUCT OWNER - HLS decomposition plan incomplete]
+      </anti_hallucination>
+    </step>
+
     <step priority="16">
       <action>Generate metadata and artifact linkage</action>
       <purpose>Ensure traceability to parent artifacts</purpose>

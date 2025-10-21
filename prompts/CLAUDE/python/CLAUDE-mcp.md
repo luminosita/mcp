@@ -431,6 +431,214 @@ async def good_fetch(url: str) -> dict:
 
 ---
 
+## 🛡️ Exception Handling for MCP Tools
+
+**Source**: SPIKE-001 - MCP Error Response Format Investigation
+
+### Core Principle: Use Standard Python Exceptions
+
+**CRITICAL**: MCP protocol uses JSON-RPC 2.0 error format. FastMCP's `ErrorHandlingMiddleware` **automatically** converts Python exceptions into MCP-compatible error responses. **Do NOT use FastAPI HTTPException**.
+
+### ✅ Recommended Pattern: Standard Python Exceptions
+
+FastMCP ErrorHandlingMiddleware maps Python exception types to JSON-RPC error codes:
+
+| Python Exception | JSON-RPC Code | Use Case |
+|------------------|---------------|----------|
+| `FileNotFoundError` | `-32001` | Resource not found |
+| `ValueError` | `-32602` | Invalid input parameters |
+| `TypeError` | `-32602` | Invalid input types |
+| `PermissionError` | `-32000` | Permission denied |
+| `TimeoutError` | `-32000` | Request timeout |
+| Other exceptions | `-32603` | Internal server error |
+
+### Error Handling Examples
+
+#### Example 1: MCP Resource Server (US-030 Pattern)
+
+```python
+from pathlib import Path
+import aiofiles
+
+@mcp.resource("mcp://resources/patterns/{name}")
+async def get_pattern_resource(name: str) -> str:
+    """
+    Serve implementation pattern file from patterns directory.
+
+    Raises:
+        ValueError: If resource name contains path traversal attempts → -32602
+        FileNotFoundError: If resource file does not exist → -32001
+        PermissionError: If resource file cannot be read → -32000
+    """
+    # Input validation → ValueError → JSON-RPC -32602
+    if ".." in name or name.startswith("/"):
+        raise ValueError("Invalid resource name: path traversal detected")
+
+    # Construct file path
+    file_path = Path(settings.PATTERNS_BASE_DIR) / f"patterns-{name}.md"
+
+    # Check existence → FileNotFoundError → JSON-RPC -32001
+    if not file_path.exists():
+        raise FileNotFoundError(
+            f"Resource not found: mcp://resources/patterns/{name}"
+        )
+
+    # Read file → PermissionError/IOError automatically handled
+    async with aiofiles.open(file_path, mode='r') as f:
+        content = await f.read()
+
+    return content
+```
+
+#### Example 2: MCP Tool with Business Logic
+
+```python
+from mcp_server.core.exceptions import BusinessLogicError
+
+class CreateTaskInput(BaseModel):
+    title: str
+    priority: int
+
+async def create_task_logic(
+    params: CreateTaskInput,
+    settings: Settings,
+    logger: logging.Logger,
+) -> TaskOutput:
+    """
+    Business logic with comprehensive error handling.
+
+    Raises:
+        ValueError: If input validation fails → -32602
+        BusinessLogicError: If business rule violated → -32603
+    """
+    logger.info(f"Creating task: title={params.title}")
+
+    # Input validation → ValueError → JSON-RPC -32602
+    if params.priority < 1 or params.priority > 5:
+        raise ValueError("Priority must be between 1 and 5")
+
+    try:
+        # Business logic
+        task = await create_task(params.title, params.priority)
+
+        # Business rule validation
+        if len(task.title) > 500:
+            raise BusinessLogicError(
+                "Task title exceeds maximum length",
+                details={"title_length": str(len(task.title)), "max_length": "500"},
+            )
+
+        logger.info(f"Task created: task_id={task.id}")
+        return TaskOutput(task_id=task.id, title=task.title)
+
+    except BusinessLogicError:
+        logger.error(f"Business logic error: title={params.title}")
+        raise  # Re-raise for FastMCP ErrorHandlingMiddleware → -32603
+
+    except Exception as e:
+        logger.exception(f"Unexpected error: title={params.title}, error={e!s}")
+        raise BusinessLogicError(
+            "Task creation failed due to unexpected error",
+            details={"error": str(e)},
+        ) from e
+```
+
+#### Example 3: Security Logging for Path Traversal
+
+```python
+import logging
+
+@mcp.resource("mcp://resources/validation/{checklist_id}")
+async def get_validation_checklist(checklist_id: str) -> dict:
+    """
+    Serve validation checklist JSON resource with security logging.
+
+    Raises:
+        ValueError: If checklist_id contains path traversal → -32602
+        FileNotFoundError: If checklist does not exist → -32001
+    """
+    logger = logging.getLogger("mcp_server.resources.validation")
+
+    # Security validation with logging
+    if ".." in checklist_id or checklist_id.startswith("/"):
+        logger.warning(
+            "Path traversal attempt detected",
+            extra={"checklist_id": checklist_id}
+        )
+        raise ValueError("Invalid checklist ID: path traversal detected")
+
+    file_path = Path(settings.CHECKLISTS_DIR) / f"{checklist_id}.json"
+
+    if not file_path.exists():
+        raise FileNotFoundError(
+            f"Resource not found: mcp://resources/validation/{checklist_id}"
+        )
+
+    async with aiofiles.open(file_path, mode='r') as f:
+        content = await f.read()
+
+    return json.loads(content)
+```
+
+### ❌ Anti-Pattern: FastAPI HTTPException
+
+```python
+from fastapi import HTTPException  # ❌ DO NOT IMPORT
+
+# ❌ WRONG - HTTPException bypasses FastMCP error conversion
+@mcp.resource("mcp://resources/patterns/{name}")
+async def bad_resource(name: str) -> str:
+    if not file_path.exists():
+        # This produces HTTP error format, NOT JSON-RPC format!
+        raise HTTPException(status_code=404, detail="Not found")
+    # ...
+
+# ✅ CORRECT - Use standard Python exceptions
+@mcp.resource("mcp://resources/patterns/{name}")
+async def good_resource(name: str) -> str:
+    if not file_path.exists():
+        # FastMCP converts to JSON-RPC -32001 automatically
+        raise FileNotFoundError(f"Resource not found: mcp://resources/patterns/{name}")
+    # ...
+```
+
+### Error Response Format (JSON-RPC 2.0)
+
+FastMCP ErrorHandlingMiddleware produces standard JSON-RPC 2.0 error responses:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32001,
+    "message": "Resource not found: mcp://resources/patterns/example",
+    "data": null
+  }
+}
+```
+
+### Exception Handling Checklist
+
+Before deploying MCP tools/resources:
+
+- [ ] **No FastAPI HTTPException imports** - Use standard Python exceptions only
+- [ ] **Validation errors** → `ValueError` (maps to -32602)
+- [ ] **Missing resources** → `FileNotFoundError` (maps to -32001)
+- [ ] **Permission errors** → `PermissionError` (maps to -32000)
+- [ ] **Business logic errors** → Custom `BusinessLogicError` or re-raise (maps to -32603)
+- [ ] **Security events logged** - Path traversal, permission denials, suspicious inputs
+- [ ] **Error messages include context** - MCP resource URI, parameter values
+- [ ] **All exceptions caught and logged** - No silent failures
+
+### Reference
+
+- **SPIKE-001**: MCP Error Response Format Investigation (artifacts/spikes/SPIKE-001_mcp_error_response_format_v1.md)
+- **MCP Specification**: JSON-RPC 2.0 error format (modelcontextprotocol.io)
+- **FastMCP Error Handling**: gofastmcp.com/python-sdk/fastmcp-server-middleware-error_handling
+
+---
+
 ## 🧪 Testing MCP Tools
 
 ### Testing Business Logic (Without MCP)
@@ -536,6 +744,12 @@ See `src/mcp_server/tools/example_tool.py` for complete working example demonstr
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2025-10-15
-**Related Story**: US-011 Example MCP Tool Implementation
+**Document Version**: 1.1
+**Last Updated**: 2025-10-21
+**Related Stories**:
+- US-011 Example MCP Tool Implementation
+- SPIKE-001 MCP Error Response Format Investigation
+
+**Version History:**
+- v1.1 (2025-10-21): Added comprehensive exception handling section from SPIKE-001 findings (JSON-RPC error format, FastMCP ErrorHandlingMiddleware, anti-pattern for HTTPException)
+- v1.0 (2025-10-15): Initial version with MCP tool implementation patterns

@@ -411,6 +411,22 @@ Then: [System enforces rule by...]
 - [Constraint 1 imposed by external factors]
 - [Constraint 2]
 
+## Implementation Scope
+
+This Functional Specification covers the following backlog stories (from PRD §HLS-XXX decomposition):
+
+**Total Stories:** [N] stories (estimated [X] story points)
+
+1. **US-AAA:** [Story title from parent HLS decomposition] - [Est. SP]
+2. **US-BBB:** [Story title from parent HLS decomposition] - [Est. SP]
+3. **US-CCC:** [Story title from parent HLS decomposition] - [Est. SP]
+
+**Note:** Placeholder IDs (US-AAA, US-BBB, US-CCC) will be resolved to final IDs during approval workflow (US-071 approve_artifact).
+
+**Scope Boundaries:**
+- **In Scope:** [What functional behavior is covered by these stories]
+- **Out of Scope:** [What is deferred to future iterations or other HLS]
+
 ## Open Questions
 
 **FuncSpec Open Questions focus on FUNCTIONAL behavior uncertainties that must be resolved before Backlog Story generation.**

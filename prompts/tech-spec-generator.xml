@@ -181,6 +181,69 @@
       </guidance>
       <anti_hallucination>Only include genuine implementation uncertainties requiring team discussion or spike resolution. Reference relevant ADRs that have already resolved major decisions. Do not re-open questions already decided in PRD or ADR phases. Distinguish between ADR-worthy questions (requiring alternatives analysis with pros/cons) and Tech Spec questions (implementation details).</anti_hallucination>
     </step>
+
+    <step priority="11.5">
+      <action>Decompose Tech Spec into Implementation Tasks</action>
+      <guidance>
+        **Tech Spec ALWAYS decomposes into Implementation Tasks.** Break down the technical design into concrete, sprint-ready work items (4-16 hours each).
+
+        **Task Decomposition Strategy:**
+        - Analyze technical design components (APIs, data models, services, tests)
+        - Each task should be independently testable and deliverable
+        - Tasks should follow logical dependency order
+        - Typical Tech Spec generates 3-8 implementation tasks
+
+        **Task Breakdown Patterns:**
+        1. **Data Layer Tasks:** Database schema, migrations, models
+        2. **API Layer Tasks:** Endpoint implementation, request/response handling
+        3. **Business Logic Tasks:** Core service logic, algorithms
+        4. **Integration Tasks:** External service integrations
+        5. **Testing Tasks:** Unit tests, integration tests, performance tests
+        6. **Documentation Tasks:** API docs, inline code comments
+
+        **Placeholder ID Usage:**
+        - Always use PLACEHOLDER IDs: TASK-AAA, TASK-BBB, TASK-CCC, TASK-DDD, etc.
+        - **STANDARDIZED SEQUENCE:** Always use alphabetic sequence AAA, BBB, CCC, DDD, EEE, FFF...
+        - Placeholder IDs resolved to final IDs during approval workflow (US-071 approve_artifact)
+
+        **Output Format:**
+        Add "Implementation Tasks" section with:
+        1. **Total Tasks:** [Count] tasks (estimated [X] total hours)
+        2. **Task List:**
+           - **TASK-AAA:** [Task title] - [Component] - [Est. hours]
+           - **TASK-BBB:** [Task title] - [Component] - [Est. hours]
+           - **TASK-CCC:** [Task title] - [Component] - [Est. hours]
+        3. **Task Dependencies:** Document if tasks must execute in specific order
+        4. **Testing Tasks:** Explicitly include test implementation tasks
+
+        **Example:**
+        ```markdown
+        ## Implementation Tasks
+        **Total Tasks:** 6 tasks (estimated 42 hours)
+
+        1. **TASK-AAA:** Implement database schema and migrations - Data Layer - 6 hours
+        2. **TASK-BBB:** Create user repository with CRUD operations - Data Layer - 8 hours
+        3. **TASK-CCC:** Implement authentication service - Business Logic - 10 hours
+        4. **TASK-DDD:** Build login/logout API endpoints - API Layer - 8 hours
+        5. **TASK-EEE:** Write unit tests for auth service - Testing - 6 hours
+        6. **TASK-FFF:** Add integration tests for auth flow - Testing - 4 hours
+
+        **Task Dependencies:**
+        - TASK-BBB depends on TASK-AAA (schema must exist)
+        - TASK-CCC depends on TASK-BBB (needs repository)
+        - TASK-DDD depends on TASK-CCC (needs service)
+        - TASK-EEE, TASK-FFF can run in parallel after TASK-DDD
+        ```
+      </guidance>
+      <anti_hallucination>
+        - Always decompose Tech Spec into tasks (not optional)
+        - Always use PLACEHOLDER format (TASK-AAA, TASK-BBB, TASK-CCC) with standardized alphabetic sequence
+        - Each task: 4-16 hours (not smaller, not larger)
+        - Include test implementation tasks explicitly
+        - Do NOT invent final TASK-XXX numeric IDs - use alphabetic placeholders only
+      </anti_hallucination>
+    </step>
+
     <step priority="12"><action>Generate Tech Spec following Technical Specification template structure (see CLAUDE.md Template Paths)</action></step>
     <step priority="13">
       <action>Validate generated artifact</action>

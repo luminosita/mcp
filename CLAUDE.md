@@ -498,13 +498,16 @@ Story Phase
 │   │   ├── §HLS-XXX subsection (parent high-level story)
 │   │   └── Referenced FR-XX requirements (traceability)
 │   ├── + Implementation Research (recommended - for I/O schema examples)
-│   └── Purpose: Detailed functional behavior (WHAT system does) with explicit I/O contracts, Happy Paths, Alternative Flows, Error Handling
+│   ├── Purpose: Detailed functional behavior (WHAT system does) with explicit I/O contracts, Happy Paths, Alternative Flows, Error Handling
+│   ├── **Role:** REFERENCE artifact (not decomposition artifact)
+│   └── **§Implementation Scope:** References parent HLS decomposition (US-AAA, US-BBB, US-CCC) for traceability
 │
 └── Backlog Story
+    ├── **Source:** Decomposed from PRD §HLS-XXX §Decomposition (US-AAA, US-BBB, US-CCC)
     ├── Requires: PRD (mandatory - single document with multiple sections)
-    │   ├── §HLS-XXX subsection (parent high-level story)
+    │   ├── §HLS-XXX subsection (parent high-level story with decomposition)
     │   └── Referenced FR-XX requirements (for context, if needed)
-    ├── + FuncSpec (recommended - eliminates 60-80% of I/O schema errors)
+    ├── + FuncSpec (recommended - eliminates 60-80% of I/O schema errors, used as reference)
     └── + Implementation Research (recommended)
 
 ↓
@@ -518,13 +521,25 @@ Technical Phase
 │
 ├── ADR
 │   ├── Requires: Backlog Story (mandatory)
-│   ├── + Spike findings (conditional - if spike completed)
-│   └── + Implementation Research (recommended)
+│   ├── + Implementation Research (recommended)
+│   ├── + CLAUDE-*.md files (conditional - check existing architectural decisions, Tier 1 precedence)
+│   └── + Spike findings (conditional - if spike completed)
 │
 └── Tech Spec
     ├── Requires: Backlog Story (mandatory)
+    ├── + Implementation Research (mandatory)
+    ├── + CLAUDE-*.md files (conditional - implementation standards, Tier 1 precedence per Decision Hierarchy)
     ├── + Spike findings (conditional - if spike completed)
-    └── + Implementation Research (recommended)
+    ├── + ADR (conditional - architectural decisions)
+    └── Decomposes into: Implementation Tasks (TASK-AAA, TASK-BBB, TASK-CCC placeholders, always)
+
+↓
+
+Implementation Phase
+└── Implementation Task
+    ├── Generated from: Backlog Story (optional) OR Tech Spec (always)
+    ├── Requires: Tech Spec (if complex story) OR Backlog Story (if simple story)
+    └── Unit of work: 4-16 hours (sprint-ready task)
 ```
 
 **Key Principles:**
@@ -533,9 +548,18 @@ Technical Phase
 - **Epic Generation**: Can be generated from Product Vision (direct) OR Initiative (decomposition). Use mutually exclusive input selection.
 - **Business Research** flows into all business-phase artifacts (Vision, Initiative, Epic, PRD with HLS subsections)
 - **Implementation Research** flows into technical-phase artifacts (PRD, FuncSpec, Backlog Story, Spike, ADR, Tech Spec)
+- **CLAUDE-*.md files** provide implementation standards for technical artifacts (ADR, Tech Spec). Per Decision Hierarchy: CLAUDE.md (Tier 1 - authoritative) takes precedence over Implementation Research (Tier 2 - exploratory)
 - **PRD is unique**: Transition phase artifact that may use BOTH research documents AND contains consolidated HLS-XXX subsections (Lean Analysis v1.4 Strategic Recommendation - Option 2)
 - **HLS Consolidation**: High-Level Stories are subsections within PRD (not separate artifacts). Artifact count: 6 types (Epic, PRD+HLS, FuncSpec, US, Tech Spec, Task)
 - **Spike is optional**: Only created when Backlog Story or Tech Spec has [REQUIRES SPIKE] marker
+- **Decomposition Chain**:
+  - Initiative → Epics (EPIC-AAA, EPIC-BBB, EPIC-CCC)
+  - PRD §HLS-XXX → Backlog Stories (US-AAA, US-BBB, US-CCC in §Decomposition)
+  - Backlog Story (simple) → Direct implementation (no tasks)
+  - Backlog Story (medium) → Tasks (optional: TASK-AAA, TASK-BBB, TASK-CCC)
+  - Backlog Story (complex) → Tech Spec → Tasks (ALWAYS: TASK-AAA, TASK-BBB, TASK-CCC)
+  - **FuncSpec does NOT decompose** - it's a REFERENCE artifact for I/O details
+- **Placeholder IDs**: All sub-artifacts use standardized AAA/BBB/CCC alphabetic sequence. Resolved to final IDs during approval workflow (US-071).
 - **Classification system**: mandatory (must load), recommended (should load), conditional (load if condition met)
 - Each generator produces v1, v2, v3 iterations through feedback cycles
 - Approved v3 artifacts become inputs to downstream generators
@@ -905,6 +929,105 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 ---
 
+## Placeholder ID Conventions
+
+**Purpose:** Generators use placeholder IDs for sub-artifacts to enable automated approval workflow and prevent ID collisions.
+
+**Workflow:**
+1. **Generation Phase:** Generators create artifacts with placeholder IDs (e.g., HLS-AAA, HLS-BBB, US-XXX)
+2. **Storage Phase:** Artifacts stored in Draft status with placeholders intact
+3. **Approval Phase:** `approve_artifact` tool (US-071) resolves placeholders to final IDs via `reserve_id_range` API
+4. **Task Creation Phase:** Sub-artifact tasks created with final IDs and resolved inputs
+
+**Placeholder Format:**
+
+**STANDARDIZED SEQUENCE:** All sub-artifacts use alphabetic sequence: AAA, BBB, CCC, DDD, EEE, FFF, GGG, HHH, III, JJJ, KKK, LLL, MMM, NNN, OOO, PPP, QQQ, RRR, SSS, TTT, UUU, VVV, WWW, XXX, YYY, ZZZ
+
+| Artifact Type | Placeholder Format | Example | Final ID Format |
+|---------------|-------------------|---------|-----------------|
+| Epic | EPIC-AAA, EPIC-BBB, EPIC-CCC | EPIC-AAA → EPIC-001 | EPIC-001, EPIC-002 |
+| HLS (PRD subsections) | HLS-AAA, HLS-BBB, HLS-CCC | HLS-AAA → HLS-012 | HLS-012, HLS-013 |
+| Backlog Story | US-AAA, US-BBB, US-CCC | US-AAA → US-073 | US-073, US-074 |
+| Task | TASK-AAA, TASK-BBB, TASK-CCC | TASK-AAA → TASK-012 | TASK-012, TASK-013 |
+
+**Generator Usage:**
+
+| Generator | Creates Sub-Artifacts | Placeholder IDs Used |
+|-----------|----------------------|---------------------|
+| `initiative-generator.xml` | Epics | EPIC-AAA, EPIC-BBB, EPIC-CCC (for INIT-001+) |
+| `epic-generator.xml` | 1 PRD | No placeholder (uses same numeric ID: EPIC-006 → PRD-006) |
+| `prd-generator.xml` | HLS subsections + US decomposition | HLS-AAA, HLS-BBB, HLS-CCC (within PRD §High-Level User Stories)<br>US-AAA, US-BBB, US-CCC (in §Decomposition) |
+| `funcspec-generator.xml` | *(none - reference artifact)* | US-AAA, US-BBB, US-CCC (REFERENCES parent PRD §HLS-XXX decomposition)<br>Documented in §Implementation Scope for traceability only |
+| `backlog-story-generator.xml` | Tasks (optional) | TASK-AAA, TASK-BBB, TASK-CCC (if not pre-allocated in TODO.md) |
+| `tech-spec-generator.xml` | Tasks (always) | TASK-AAA, TASK-BBB, TASK-CCC (if not pre-allocated in TODO.md) |
+
+**Alphabetic Sequence:**
+- Use 3-letter alphabetic suffixes: AAA, BBB, CCC, DDD, EEE, FFF, GGG, HHH, III, JJJ, KKK, LLL, MMM, NNN, OOO, PPP, QQQ, RRR, SSS, TTT, UUU, VVV, WWW, XXX, YYY, ZZZ
+- For >26 sub-artifacts (rare): Use AAAA, BBBB, CCCC, etc.
+
+**Examples:**
+
+**Initiative with 4 Epics:**
+```markdown
+## Supporting Epics
+1. **EPIC-AAA:** User Authentication & Authorization
+2. **EPIC-BBB:** Dashboard & Analytics
+3. **EPIC-CCC:** Data Management
+4. **EPIC-DDD:** Reporting System
+```
+
+**PRD with 6 HLS Subsections:**
+```markdown
+## High-Level User Stories
+
+### HLS-AAA: User Registration Flow
+...
+
+### HLS-BBB: Login & Session Management
+...
+
+### HLS-CCC: Profile Management
+...
+```
+
+**Backlog Story with 3 Tasks:**
+```markdown
+## Implementation Tasks Evaluation
+**Decision:** Tasks Needed
+**Rationale:** 8 SP story with 3 distinct integration points
+**Proposed Tasks:**
+1. **TASK-AAA:** Implement authentication API client (6 hours)
+2. **TASK-BBB:** Add session management middleware (4 hours)
+3. **TASK-CCC:** Update UI components for auth state (6 hours)
+```
+
+**Tech Spec with 6 Tasks:**
+```markdown
+## Implementation Tasks
+**Total Tasks:** 6 tasks (estimated 42 hours)
+
+1. **TASK-AAA:** Implement database schema and migrations - Data Layer - 6 hours
+2. **TASK-BBB:** Create user repository with CRUD operations - Data Layer - 8 hours
+3. **TASK-CCC:** Implement authentication service - Business Logic - 10 hours
+4. **TASK-DDD:** Build login/logout API endpoints - API Layer - 8 hours
+5. **TASK-EEE:** Write unit tests for auth service - Testing - 6 hours
+6. **TASK-FFF:** Add integration tests for auth flow - Testing - 4 hours
+
+**Task Dependencies:**
+- TASK-BBB depends on TASK-AAA (schema must exist)
+- TASK-CCC depends on TASK-BBB (needs repository)
+- TASK-DDD depends on TASK-CCC (needs service)
+- TASK-EEE, TASK-FFF can run in parallel after TASK-DDD
+```
+
+**Special Cases:**
+- **EPIC-000:** Reserved for Foundation Initiative (INIT-000). Uses final ID, not placeholder.
+- **Pre-allocated IDs:** If TODO.md pre-allocates IDs (e.g., TASK-012, TASK-013), use those instead of placeholders.
+
+**Reference:** See US-071 (approve_artifact tool) for placeholder resolution workflow.
+
+---
+
 ## ID Assignment Strategy
 
 **Global Sequential Numbering:** All artifact IDs within a type (US, SPEC, ADR, TASK, SPIKE) are globally unique and sequential across the entire project.
@@ -928,17 +1051,17 @@ Upon completion, update relevant task status in `/TODO.md`:
 | HLS-005 | 8 stories | US-020 → US-027 |
 | HLS-006 | 7 stories | US-028 → US-034 |
 | HLS-007 | 5 stories | US-035 → US-039 |
-| HLS-008 | 8 stories | US-040 → US-047 |
+| HLS-008 | 8 stories | US-040 → US-047, US-071, US-072 |
 | HLS-009 | 8 stories | US-048 → US-055 |
 | HLS-010 | 7 stories | US-056 → US-062 |
 | HLS-011 | 8 stories | US-063 → US-070 |
 
 **Next Available IDs (as of 2025-10-18):**
-- US: US-071 (US-001 through US-070 allocated; HLS-006 through HLS-011 allocated pending backlog decomposition)
+- US: US-073 (US-001 through US-072 allocated; HLS-006 through HLS-011 allocated pending backlog decomposition)
 - SPEC: SPEC-002 (SPEC-001 used by US-001)
 - TASK: TASK-004 (TASK-001/002/003 used by US-001)
 - ADR: ADR-001 (none assigned yet)
-- SPIKE: SPIKE-001 (none assigned yet)
+- SPIKE: SPIKE-002
 
 **Recent ID Assignments:**
 - US-028 through US-070: Allocated for HLS-006 through HLS-011 (MCP Server SDLC Framework Integration, 43 stories total, updated 2025-10-18 v2)
@@ -981,9 +1104,9 @@ Upon completion, update relevant task status in `/TODO.md`:
 
 | SPIKE ID | Title | Investigation Goal | Parent US/SPEC | Time Box | Created |
 |----------|-------|-------------------|----------------|--------|---------|
-| *(none assigned yet)* | | | | | |
+| 001 | MCP Error Response Format Investigation | Exceptions | US-030 | 4 hrs | 2025-10-20 |
 
-**Next Available:** SPIKE-001
+**Next Available:** SPIKE-002
 
 **Usage Pattern:** One SPIKE per technical investigation (marked [REQUIRES SPIKE] in backlog story or tech spec Open Questions).
 
@@ -1083,12 +1206,14 @@ PRD-000 (Project Foundation)
 
 ---
 
-**Document Version**: 2.2
-**Last Updated**: 2025-10-20
+**Document Version**: 2.4
+**Last Updated**: 2025-10-21
 **Maintained By**: Context Engineering PoC Team
 **Next Review**: End of Phase 1
 
 **Version History:**
+- v2.4 (2025-10-21): **SDLC Flow Alignment with Decision Hierarchy** - Fixed misalignment between CLAUDE.md SDLC flow and generator input definitions. Tech Spec now shows: Implementation Research (mandatory, not recommended), CLAUDE-*.md files (conditional, Tier 1 precedence), ADR (conditional). ADR now shows: CLAUDE-*.md files (conditional, Tier 1 precedence). Added Key Principle documenting that CLAUDE-*.md files take precedence over Implementation Research per Decision Hierarchy (Tier 1 > Tier 2). Ensures consistency between SDLC flow documentation and tech-spec-generator.xml/adr-generator.xml implementations.
+- v2.3 (2025-10-20): **Placeholder ID Conventions Standardized** - Added comprehensive "Placeholder ID Conventions" section with STANDARDIZED alphabetic sequence (AAA, BBB, CCC, DDD, EEE, FFF...) for ALL sub-artifacts. Updated 5 generators: initiative-generator.xml (EPIC-AAA/BBB/CCC for INIT-001+), prd-generator.xml (HLS-AAA/BBB/CCC for PRD subsections + US-AAA/BBB/CCC for decomposition), funcspec-generator.xml (NEW step 15.5: Document Implementation Scope section referencing parent HLS decomposition with US-AAA/BBB/CCC placeholders), backlog-story-generator.xml (TASK-AAA/BBB/CCC when not pre-allocated), tech-spec-generator.xml (NEW step 11.5: ALWAYS decompose into TASK-AAA/BBB/CCC implementation tasks). Eliminated inconsistent placeholder patterns (XXX/YYY/ZZZ). Updated funcspec-template.xml with Implementation Scope section. Aligns with US-071 approve_artifact workflow which resolves placeholders to final IDs via reserve_id_range API. Prevents ID collisions and enables automated task creation workflow. Includes generator usage table with FuncSpec Implementation Scope + Tech Spec → Tasks, practical examples for all generators.
 - v2.2 (2025-10-20): **HLS Consolidation IMPLEMENTED (Core Generators)** - Completed tasks 1-4 of HLS Consolidation (Lean Analysis v1.4 Strategic Recommendation - Option 2). Updated PRD template v2.0 to include "High-Level User Stories" section with HLS-XXX subsections. Updated PRD generator v2.0 to generate 3-8 HLS subsections within PRD (added 16 HLS-XX validation criteria). Updated FuncSpec generator v2.0 and Backlog Story generator v2.0 to reference PRD §HLS-XXX subsections instead of separate HLS artifacts. Artifact flow now: Epic → PRD (contains HLS-XXX subsections + FR-XX) → FuncSpec → US. New PRDs will include consolidated HLS structure. Pending: migration of existing HLS artifacts (tasks 5-6).
 - v2.1 (2025-10-20): Added Decision Hierarchy for Technical Guidance section - establishes Three-Tier Precedence System (CLAUDE.md > Implementation Research > Artifact-specific), CLAUDE.md override process, gap flagging mechanism, and conflict resolution examples (Lean Analysis Report v1.4 Recommendation 2 - Enforce CLAUDE.md Precedence Hierarchy)
 - v2.0 (2025-10-20): **MAJOR UPDATE** - Added Framework Design Principles section documenting Template vs Generator responsibility separation. Expanded Open Questions Marker System with v1/v2+ workflow, standardized markers with required sub-fields for all artifact types. Removed validation checklists from templates (moved to generator validation spec). Created comprehensive generator validation specification document. (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)

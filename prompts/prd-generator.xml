@@ -300,10 +300,16 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
 
         **Generate one HLS-XXX subsection for each major user goal:**
 
+        **PLACEHOLDER ID USAGE:**
+        - Use alphabetic placeholder suffixes (AAA, BBB, CCC, DDD, EEE, FFF, etc.) instead of final numeric IDs
+        - Placeholder IDs will be resolved to final IDs (HLS-012, HLS-013, etc.) during approval workflow (US-071 approve_artifact)
+        - This prevents ID collisions and enables automated task creation workflow
+        - Example: If PRD has 6 HLS subsections, use HLS-AAA through HLS-FFF
+
         1. **HLS Subsection Header:**
-           - Format: `### HLS-[XXX]: [Story Title]`
-           - Example: `### HLS-001: User Authentication Flow`
-           - HLS IDs assigned sequentially based on PRD scope (check TODO.md for next available HLS ID)
+           - Format: `### HLS-[AAA|BBB|CCC...]: [Story Title]`
+           - Example: `### HLS-AAA: User Authentication Flow`
+           - HLS IDs use PLACEHOLDER format (HLS-AAA, HLS-BBB, HLS-CCC, etc.)
 
         2. **User Story Statement:**
            - Use standard format: "As a [user persona], I want [goal], so that [business value/benefit]"
@@ -335,9 +341,9 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
 
         7. **Decomposition into Backlog Stories:**
            - **Estimated Backlog Stories:** List 3-8 backlog stories (not yet detailed, titles only)
-           - Format: `1. **US-[XXX]:** [Story title] - [Est. SP]`
+           - Format: `1. **US-AAA:** [Story title] - [Est. SP]` (use placeholder AAA, BBB, CCC, DDD, etc.)
            - Total Estimated Effort in story points
-           - **NOTE:** US IDs are placeholders (assigned during backlog story generation from TODO.md)
+           - **NOTE:** US IDs are PLACEHOLDERS (US-AAA, US-BBB, US-CCC). Final IDs assigned during approval workflow.
 
         8. **Dependencies:**
            - **Upstream:** What must complete before this HLS
@@ -357,10 +363,13 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
         - Add acceptance criteria from Epic + Business Research
       </guidance>
       <anti_hallucination>
-        - Do NOT generate US-XXX IDs (placeholders only, actual IDs assigned during backlog story generation)
+        - Use PLACEHOLDER IDs for HLS subsections: HLS-AAA, HLS-BBB, HLS-CCC (NOT HLS-001, HLS-002)
+        - Use PLACEHOLDER IDs for backlog stories: US-AAA, US-BBB, US-CCC (NOT US-040, US-041, and NOT XXX/YYY/ZZZ)
+        - STANDARDIZED SEQUENCE: Always use alphabetic sequence AAA, BBB, CCC, DDD, EEE, FFF... for all sub-artifacts
+        - Placeholder IDs resolved to final IDs during approval workflow (US-071 approve_artifact)
         - Do NOT include detailed JSON I/O examples (deferred to FuncSpec)
         - Focus HLS on user-visible flows, not implementation
-        - Preserve HLS-XXX ID format for traceability (even though consolidated into PRD)
+        - Preserve HLS-XXX placeholder ID format for traceability (even though consolidated into PRD)
       </anti_hallucination>
     </step>
 

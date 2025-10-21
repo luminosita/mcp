@@ -219,8 +219,15 @@
 
         **IMPORTANT:** If this is a greenfield/new project, INIT-000 (Foundation Initiative) MUST exist before creating INIT-001+. If INIT-000 does not exist, return to step 1.
 
-        - Each key capability from Product Vision becomes an Epic (EPIC-001, EPIC-002, EPIC-003, etc.)
-        - Start numbering at EPIC-001 (EPIC-000 reserved for foundation initiative INIT-000)
+        **PLACEHOLDER ID USAGE:**
+        - Each key capability from Product Vision becomes an Epic with PLACEHOLDER ID (EPIC-AAA, EPIC-BBB, EPIC-CCC, etc.)
+        - Use alphabetic placeholder suffixes (AAA, BBB, CCC, DDD, EEE, FFF, etc.) instead of final numeric IDs
+        - Placeholder IDs will be resolved to final IDs (EPIC-001, EPIC-002, etc.) during approval workflow (US-071 approve_artifact)
+        - This prevents ID collisions and enables automated task creation workflow
+        - Start with EPIC-AAA (EPIC-000 reserved for foundation initiative INIT-000, already has final ID)
+        - Example: If initiative has 4 epics, use EPIC-AAA, EPIC-BBB, EPIC-CCC, EPIC-DDD
+
+        **Epic Content:**
         - Provide brief epic descriptions (1-2 sentences per epic)
         - Assign rough timeline per epic (quarters)
         - Note epic owners if known, otherwise mark [TBD]

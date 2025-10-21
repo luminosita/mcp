@@ -71,6 +71,34 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
         - **Story references both:** US-XXX metadata includes both "Parent HLS: PRD §HLS-YYY" and "Parent PRD: PRD-XXX"
       </artifact>
 
+      <artifact classification="recommended" type="funcspec">
+        Functional Specification (FuncSpec) provides (DETAILED FUNCTIONAL BEHAVIOR):
+        - Detailed Happy Path Flow with explicit I/O schemas (JSON examples)
+        - Alternative Flows with branching logic
+        - Error Handling with specific error codes and messages
+        - Input/Output Schemas (request/response structures)
+        - State Transitions (system state changes)
+        - Data Validation Rules (constraints, formats, ranges)
+        - Business Rules (functional logic enforcement)
+
+        **Purpose:** Eliminates 60-80% of I/O schema hallucination errors in Backlog Story generation by providing explicit functional specifications.
+
+        **When Available:** FuncSpec exists for complex HLS that require detailed functional specification before implementation. Simple HLS may not have FuncSpec.
+
+        **Usage:**
+        - Use FuncSpec I/O schemas for Acceptance Criteria validation examples
+        - Reference FuncSpec Happy Path for implementation guidance
+        - Copy FuncSpec error handling patterns
+        - Use FuncSpec data validation rules for input validation requirements
+
+        **Classification**: RECOMMENDED - Significantly improves Backlog Story quality by providing concrete functional specifications. Without it, story may hallucinate I/O schemas (quality reduced by 60-80% for complex features). Generator warns if expected but not found, continues with PRD only.
+
+        **FuncSpec Existence Check:**
+        - If parent HLS is complex (API endpoints, data transformations, multiple flows): FuncSpec likely exists
+        - If parent HLS is simple (basic CRUD, UI-only): FuncSpec may not exist
+        - Generator should attempt to load FuncSpec, warn if not found, continue without error
+      </artifact>
+
       <artifact classification="recommended" type="implementation_research">
         Implementation Research provides (TECHNICAL PERSPECTIVE):
         - Architecture patterns and technology stack
@@ -412,13 +440,17 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
         **Output Requirements:**
         1. **Decision:** [Tasks Needed / No Tasks Needed / Consider Tasks]
         2. **Rationale:** Explain decision based on story points, developer count, domain span, complexity
-        3. **If Tasks Needed:** List proposed tasks with pre-allocated TASK-XXX IDs from TODO.md (4-16 hours each)
+        3. **If Tasks Needed:** List proposed tasks with TASK placeholder IDs:
+           - Use PLACEHOLDER IDs: TASK-AAA, TASK-BBB, TASK-CCC, TASK-DDD, etc.
+           - **STANDARDIZED SEQUENCE:** Always use alphabetic sequence AAA, BBB, CCC, DDD, EEE, FFF...
+           - Placeholder IDs will be resolved to final IDs during approval workflow (US-071 approve_artifact)
+           - Each task: 4-16 hours estimated effort
         4. **If Tasks Not Needed:** Document why (e.g., "2 SP story with single developer, straightforward implementation")
 
         **Format in Artifact:**
         Add "Implementation Tasks Evaluation" section before "Definition of Done" with decision, rationale, and proposed tasks (if applicable).
       </guidance>
-      <anti_hallucination>Base decision on objective criteria from SDLC Section 11. Do not invent TASK-XXX IDs - use pre-allocated IDs specified in TODO.md task description. If no TASK IDs provided in TODO.md, note "TASK IDs to be allocated" and list task descriptions only.</anti_hallucination>
+      <anti_hallucination>Base decision on objective criteria from SDLC Section 11. Always use PLACEHOLDER format (TASK-AAA, TASK-BBB, TASK-CCC) with standardized alphabetic sequence AAA, BBB, CCC, DDD, EEE, FFF... - placeholder IDs will be resolved to final IDs during approval workflow (US-071 approve_artifact). Do NOT invent final numeric IDs (TASK-012, TASK-013) - use alphabetic placeholders only.</anti_hallucination>
     </step>
 
     <step priority="15">
