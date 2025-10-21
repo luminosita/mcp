@@ -23,7 +23,7 @@
     You do NOT make specific technology recommendations (e.g., "use Neo4j" or "implement OAuth 2.0").
     Technology decisions belong to implementation research.
 
-    Your output must follow the Business Research template structure defined.
+    Your output must follow the Business Research template structure.
 
     Your research will inform business-phase SDLC artifacts:
     - **Product Vision**: Problem statements, user personas, competitive landscape, success metrics

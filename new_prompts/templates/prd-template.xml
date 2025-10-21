@@ -200,23 +200,23 @@ This PRD contributes to the following Epic success metrics:
 
 ## Technical Considerations
 
-**DECISION HIERARCHY:** CLAUDE.md (Authoritative) > Implementation Research (Advisory) > PRD-specific (Supplementary)
+**DECISION HIERARCHY:** Patterns (Authoritative) > Implementation Research (Advisory) > PRD-specific (Supplementary)
 
-**Note:** PRD generator enforces this hierarchy. CLAUDE.md decisions referenced by file+line, alternatives NOT suggested for decided topics.
+**Note:** PRD generator enforces this hierarchy. Pattern decisions referenced by file+line, alternatives NOT suggested for decided topics.
 
-### Alignment with CLAUDE.md Standards
+### Alignment with Pattern Standards
 
 **Established Decisions Applied:**
-- **patterns-core.md:** [Core development philosophy]
-- **patterns-architecture.md:** [Project structure, modularity patterns]
-- **patterns-tooling.md:** [Build tools, linters, formatters - e.g., "UV for Python, Ruff for linting"]
-- **patterns-testing.md:** [Testing framework - e.g., "pytest with fixtures, 80% coverage"]
-- **patterns-http-frameworks.md (Go):** [HTTP framework - e.g., "Gin per line 238"]
-- [Additional patterns-*.md files as applicable]
+- **[Core patterns]:** [Core development philosophy]
+- **[Architecture patterns]:** [Project structure, modularity patterns]
+- **[Tooling patterns]:** [Build tools, linters, formatters - e.g., "UV for Python, Ruff for linting"]
+- **[Testing patterns]:** [Testing framework - e.g., "pytest with fixtures, 80% coverage"]
+- **[HTTP framework patterns]:** [HTTP framework - e.g., "Gin per line 238"]
+- [Additional pattern files as applicable]
 
 **Example (Compliant):**
 ```
-Use Gin HTTP framework per patterns-http-frameworks.md:238 (Gin = default for Go REST APIs)
+Use Gin HTTP framework per http-frameworks.md:238 (Gin = default for Go REST APIs)
 ```
 
 **Example (Non-Compliant - DON'T DO THIS):**
@@ -226,28 +226,28 @@ Use Gin HTTP framework per patterns-http-frameworks.md:238 (Gin = default for Go
 
 ### Implementation Research (Gaps Only)
 
-**Applied Insights (ONLY for topics not in CLAUDE.md):**
+**Applied Insights (ONLY for topics not in patterns):**
 - **§[X.Y]: [Pattern Name]:** [Technical guidance]
-  - **CLAUDE.md Status:** `[CLAUDE.md GAP]` or `[ALIGNS WITH patterns-{file}.md]`
+  - **Pattern Status:** `[PATTERN GAP]` or `[ALIGNS WITH pattern]`
 
 **Example:**
 ```
-§5.3 Cache invalidation strategy - [patterns-caching.md GAP]
+§5.3 Cache invalidation strategy - [PATTERN GAP]
 Recommendation: Time-based TTL with 5-minute expiration
 ```
 
-### CLAUDE.md Override (When Justified)
+### Pattern Override (When Justified)
 
 **If override needed, document:**
 ```
-[CLAUDE.md OVERRIDE] {Alternative approach}
-- Original: patterns-{file}.md:{line} "{decision}"
+[PATTERN OVERRIDE] {Alternative approach}
+- Original: [Pattern file]:[line] "{decision}"
 - Rationale: {Technical justification}
 - Approval: [APPROVED BY: {name} - {date}]
 ```
 
 ### Architecture
-[High-level architecture approach - product-specific only, supplement CLAUDE.md]
+[High-level architecture approach - product-specific only, supplement patterns]
 
 ### Dependencies
 **System:** [Systems, services, databases]

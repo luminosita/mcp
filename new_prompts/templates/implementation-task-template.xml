@@ -102,7 +102,7 @@
 
 ## Implementation Guidance
 
-**HYBRID CLAUDE.md APPROACH:** When specialized patterns-*.md files exist, reference (not duplicate) established implementation standards. Supplement with task-specific execution steps.
+**PATTERN REFERENCE:** When pattern files exist, reference (not duplicate) established implementation standards. Supplement with task-specific execution steps.
 
 ### Development Workflow (when applicable)
 - **patterns-tooling.md:** Use Taskfile commands for development workflow
@@ -118,9 +118,9 @@
 - **patterns-typing.md:** Apply type hints (strict mode), use Pydantic for data validation
 - **patterns-validation.md:** Input validation with Pydantic models, security patterns
 - **patterns-testing.md:** Testing requirements (80% coverage minimum, fixture patterns, async test support)
-- **Additional domain-specific files:** Reference as needed per CLAUDE.md
+- **Additional domain-specific files:** Reference as needed
 
-**Note:** Treat CLAUDE.md content as authoritative - supplement with task-specific implementation steps.
+**Note:** Treat pattern content as authoritative - supplement with task-specific implementation steps.
 
 ### Code Example / Pseudo-code
 ```[language]
@@ -178,7 +178,7 @@
 
 ## Testing Requirements
 
-**HYBRID CLAUDE.md APPROACH:** When patterns-testing.md exists, follow established testing standards. Supplement with task-specific test scenarios.
+**PATTERN REFERENCE:** When testing patterns exist, follow established testing standards. Supplement with task-specific test scenarios.
 
 ### Testing Standards (when applicable)
 - **patterns-testing.md:** Follow testing requirements (80% coverage minimum, fixture patterns, async test support)

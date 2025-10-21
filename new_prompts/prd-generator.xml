@@ -4,7 +4,7 @@
     <name>PRD_Generator</name>
     <version>2.0</version>
     <sdlc_phase>PRD</sdlc_phase>
-    <depends_on>Epic (mandatory), Business Research (recommended), Implementation Research (recommended), Specialized CLAUDE.md files (mandatory for Technical Considerations)</depends_on>
+    <depends_on>Epic (mandatory), Business Research (recommended), Implementation Research (recommended), patterns (mandatory for Technical Considerations)</depends_on>
     <generated_by>Context Engineering Framework v2.0</generated_by>
     <date>2025-10-20</date>
     <changes>v2.0: **MAJOR UPDATE** - Implemented HLS Consolidation (Lean Analysis v1.4 Strategic Recommendation - Option 2). PRD now generates High-Level User Stories as subsections within PRD (HLS-XXX format). Replaced "Define User Stories" step with "Generate High-Level User Stories Subsections" step. PRD combines Requirements (FR-XX, NFR-XX) AND High-Level User Stories (HLS-XXX subsections). Eliminates separate HLS artifacts. Artifact count: 6 types (Epic, PRD+HLS, FuncSpec, US, Tech Spec, Task).
@@ -15,7 +15,7 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
   <system_role>
     You are an expert Product Manager with 12+ years of experience writing comprehensive Product Requirements Documents (PRDs) that bridge business strategy and technical implementation. You excel at synthesizing market research, user needs, and technical constraints into clear, actionable requirements. Your PRDs serve as single source of truth for cross-functional teams.
 
-    Your output must follow the PRD template structure defined in CLAUDE.md (see Folder Structure section ).
+    Your output must follow the PRD template structure.
   </system_role>
 
   <task_context>
@@ -82,28 +82,26 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
         **Classification**: RECOMMENDED - Enriches PRD with technical NFRs and performance targets. Without it, technical requirements based on Epic's high-level considerations only. Generator warns if not found but continues.
       </artifact>
 
-      <artifact classification="conditional" type="specialized_claude_standards">
-        Specialized CLAUDE.md files provide (IMPLEMENTATION STANDARDS):
-        - patterns-core.md: Core development philosophy and orchestration
-        - patterns-tooling.md: Language-specific tooling configuration (build tools, linters, formatters, test runners)
-        - patterns-testing.md: Testing strategy, fixtures, coverage requirements
-        - patterns-typing.md: Type system patterns and type safety
-        - patterns-validation.md: Input validation, data models, security patterns
-        - patterns-architecture.md: Project structure, modularity, design patterns
-        - Additional domain-specific files: patterns-security.md, patterns-auth.md, patterns-messaging.md, etc.
-
-        **Location:** Language-specific CLAUDE.md files are located in prompts/CLAUDE/{language}/ subdirectories (e.g., prompts/CLAUDE/python/, prompts/CLAUDE/go/). Main CLAUDE.md directs to appropriate language subdirectory based on project technology stack.
+      <artifact classification="conditional" type="patterns">
+        Implementation patterns provide (IMPLEMENTATION STANDARDS):
+        - Core development philosophy and orchestration
+        - Language-specific tooling configuration (build tools, linters, formatters, test runners)
+        - Testing strategy, fixtures, coverage requirements
+        - Type system patterns and type safety
+        - Input validation, data models, security patterns
+        - Project structure, modularity, design patterns
+        - Additional domain-specific standards
 
         Use for Technical Considerations section alignment, ensuring PRD references established implementation standards.
 
-        **Classification**: CONDITIONAL - Load when PRD includes technical requirements that benefit from referencing established implementation standards. Treats CLAUDE.md content as "Decisions Made" - PRD supplements (not duplicates) these standards.
+        **Classification**: CONDITIONAL - Load when PRD includes technical requirements that benefit from referencing established implementation standards. Treats pattern content as "Decisions Made" - PRD supplements (not duplicates) these standards.
 
-        **Hybrid CLAUDE.md Approach:**
-        - Technical Considerations section aligns with specialized CLAUDE.md standards
-        - References specialized patterns-*.md files as authoritative for implementation guidance
-        - PRD supplements (not duplicates) CLAUDE.md standards
-        - Enables extensibility: Additional domain-specific patterns-*.md files may be added during development
-        - Language-agnostic: CLAUDE.md files adapt to project's chosen programming language via subdirectory structure
+        **Pattern Reference Approach:**
+        - Technical Considerations section aligns with implementation pattern standards
+        - References pattern files as authoritative for implementation guidance
+        - PRD supplements (not duplicates) pattern standards
+        - Enables extensibility: Additional domain-specific pattern files may be added during development
+        - Language-agnostic: Pattern files adapt to project's chosen programming language
       </artifact>
     </input_artifacts>
 
@@ -145,93 +143,61 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
     </step>
 
     <step priority="3.5">
-      <action>Enforce CLAUDE.md Precedence Hierarchy (MANDATORY - Lean Analysis Recommendation 2)</action>
-      <purpose>Prevent decision conflicts by enforcing CLAUDE.md > Implementation Research > PRD-specific hierarchy</purpose>
+      <action>Enforce Pattern Precedence Hierarchy (MANDATORY)</action>
+      <purpose>Prevent decision conflicts by enforcing patterns > Implementation Research > PRD-specific hierarchy</purpose>
       <guidance>
-        **CRITICAL: This step prevents US-050 problem (suggesting "chi or gin" when Gin already decided).**
+        **STEP 1: Load all implementation pattern files**
+        - Determine project language from context
+        - Load all pattern files for the project language
 
-        **STEP 1: Load all prompts/CLAUDE/{language}/*.md files**
-        - Determine project language from context (Python, Go, etc.)
-        - Load all patterns-*.md files from prompts/CLAUDE/{language}/ directory
-        - Example: prompts/CLAUDE/python/patterns-tooling.md, prompts/CLAUDE/go/patterns-http-frameworks.md
-
-        **STEP 2: Extract decisions from CLAUDE.md files**
+        **STEP 2: Extract decisions from pattern files**
         - Look for decision indicators: "Recommended", "Default", "Use", "Standard", "Decision:"
         - Extract decision text and line number
-        - Example: Line 238 of patterns-http-frameworks.md: "Default: Use Gin"
-        - Example: Line 45 of patterns-tooling.md: "Use UV for Python dependency management"
 
-        **STEP 3: Create "CLAUDE.md Decisions Register"**
-        - Build list of all covered topics from all patterns-*.md files
+        **STEP 3: Create "Pattern Decisions Register"**
+        - Build list of all covered topics from all pattern files
         - Format: {domain}: {decision} (file:line)
-        - Example register:
-          ```
-          HTTP_Framework: Gin (patterns-http-frameworks.md:238)
-          Package_Manager: UV (patterns-tooling.md:45)
-          Linter: Ruff (patterns-tooling.md:67)
-          Testing_Framework: pytest (patterns-testing.md:20)
-          Type_Checker: MyPy strict mode (patterns-typing.md:15)
-          ```
 
         **STEP 4: Load Implementation Research (already loaded in step 3)**
 
-        **STEP 5: Cross-check Implementation Research against CLAUDE.md Decisions Register**
+        **STEP 5: Cross-check Implementation Research against Pattern Decisions Register**
         - For each technical recommendation in Implementation Research:
-          - Check if topic exists in CLAUDE.md Decisions Register
+          - Check if topic exists in Pattern Decisions Register
           - IF topic found in register:
-            - Mark as "[OVERRIDDEN BY CLAUDE.md]"
             - Do NOT include in PRD Technical Considerations
           - ELSE (topic NOT in register):
-            - Mark as "[USE - No CLAUDE.md coverage]"
-            - Include in PRD with `[CLAUDE.md GAP]` marker
+            - Include in PRD with `[PATTERN GAP]` marker
 
         **STEP 6: Generate Technical Considerations section with enforced hierarchy**
 
-        **Section 1: Alignment with CLAUDE.md Standards (Tier 1 - Authoritative)**
-        - List all CLAUDE.md decisions applied to this PRD
+        **Section 1: Alignment with Pattern Standards (Tier 1 - Authoritative)**
+        - List all pattern decisions applied to this PRD
         - Include file name and line number for each decision
-        - Format: "patterns-{file}.md:{line}: {decision}"
-        - Example:
-          ```
-          - patterns-http-frameworks.md:238: Use Gin for Go REST APIs
-          - patterns-tooling.md:45: Use UV for Python dependency management
-          - patterns-testing.md:20: Use pytest with fixtures, 80% coverage minimum
-          ```
+        - Format: "[Pattern file]:[line]: {decision}"
 
         **Section 2: Implementation Research Guidance (Tier 2 - Advisory - ONLY gaps)**
-        - Include ONLY Implementation Research topics NOT covered by CLAUDE.md
-        - Mark each with `[CLAUDE.md GAP]`
-        - Example:
-          ```
-          §5.3 Cache invalidation strategy - [CLAUDE.md GAP]
-          Recommendation: Time-based TTL with 5-minute expiration
-          ```
+        - Include ONLY Implementation Research topics NOT covered by patterns
+        - Mark each with `[PATTERN GAP]`
 
         **Section 3: Product-Specific Architecture (Tier 3 - Supplementary)**
-        - Include ONLY product-specific decisions not covered by CLAUDE.md or Implementation Research
+        - Include ONLY product-specific decisions not covered by patterns or Implementation Research
         - Example: Microservice decomposition strategy, service boundaries
-
-        **VALIDATION:** Before finalizing Technical Considerations section:
-        - [ ] No alternatives suggested for CLAUDE.md-decided topics
-        - [ ] All CLAUDE.md decisions include file:line references
-        - [ ] Implementation Research marked with `[CLAUDE.md GAP]` for non-covered topics
-        - [ ] No duplication between CLAUDE.md and Implementation Research sections
       </guidance>
       <anti_hallucination>
         **CRITICAL - DO NOT:**
-        - Suggest alternatives for CLAUDE.md-decided topics (e.g., if Gin decided, DO NOT write "chi, gin, or gorilla/mux")
-        - Duplicate CLAUDE.md decisions in Implementation Research section
-        - Fabricate CLAUDE.md content if files don't exist (note: "CLAUDE.md standards will be defined during implementation")
+        - Suggest alternatives for pattern-decided topics
+        - Duplicate pattern decisions in Implementation Research section
+        - Fabricate pattern content if files don't exist (note: "Pattern standards will be defined during implementation")
 
         **MUST DO:**
-        - Reference every CLAUDE.md decision with file:line format
-        - Mark Implementation Research with `[CLAUDE.md GAP]` when not covered
-        - Maintain strict hierarchy: CLAUDE.md > Implementation Research > PRD-specific
+        - Reference every pattern decision with file:line format
+        - Mark Implementation Research with `[PATTERN GAP]` when not covered
+        - Maintain strict hierarchy: Patterns > Implementation Research > PRD-specific
       </anti_hallucination>
     </step>
 
     <step priority="4">
-      <action>Load PRD template (path defined in CLAUDE.md Folder Structure section )</action>
+      <action>Load PRD template</action>
       <purpose>Understand required structure and validation criteria</purpose>
       <anti_hallucination>Follow template structure exactly. Mark sections derived from Business Research vs. Implementation Research for transparency.</anti_hallucination>
     </step>
@@ -382,18 +348,18 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
         - Localization: Languages, regions
         - Enterprise requirements: SSO, SAML, audit logs
 
-        **TECHNICAL NFRs (from Implementation Research + CLAUDE.md standards):**
+        **TECHNICAL NFRs (from Implementation Research + implementation patterns):**
         - Performance: API response time (p99 &lt; 200ms), page load time
         - Scalability: Concurrent users, throughput
         - Availability: SLA (99.9% uptime)
         - Security: Encryption, authentication method, authorization
         - Observability: Logging, metrics, alerting requirements
-        - Type Safety: Type hint coverage, mypy strict mode (reference patterns-typing.md)
-        - Testing: Coverage thresholds, test strategy (reference patterns-testing.md)
-        - Code Quality: Linting, formatting standards (reference patterns-tooling.md)
+        - Type Safety: Type hint coverage, strict type checking
+        - Testing: Coverage thresholds, test strategy
+        - Code Quality: Linting, formatting standards
 
         Reference specific Implementation Research sections for technical NFRs.
-        **HYBRID APPROACH:** When specialized CLAUDE.md files exist, reference them for implementation standards. PRD supplements (not duplicates) CLAUDE.md standards.
+        **PATTERN REFERENCE APPROACH:** When implementation pattern files exist, reference them for implementation standards. PRD supplements (not duplicates) pattern standards.
       </guidance>
     </step>
 
@@ -405,7 +371,7 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
         - Technical constraints from Implementation Research
         - Business constraints from Business Research
         - Timeline and budget constraints
-        - **CLAUDE.md Standards (when applicable):** List relevant specialized patterns-*.md files that define implementation standards (e.g., patterns-tooling.md for unified CLI, patterns-typing.md for type safety, etc.)
+        - **Pattern Standards (when applicable):** List relevant implementation pattern files that define standards (e.g., tooling patterns for unified CLI, typing patterns for type safety, etc.)
       </guidance>
     </step>
 
@@ -497,7 +463,7 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
 
     <step priority="16">
       <action>Generate PRD document</action>
-      <format>Markdown following PRD template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following PRD template structure</format>
       <guidance>
         - Follow complete template structure
         - Ensure PRD ID is assigned (PRD-XXX format)
@@ -539,7 +505,7 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
 
   <output_format>
     <terminal_artifact>
-      <format>Markdown following PRD template structure (see CLAUDE.md Template Paths)</format>
+      <format>Markdown following PRD template structure</format>
       <validation_checklist>
         <!-- Content Quality Criteria -->
         <criterion id="CQ-01" category="content">Objective and vision clearly articulated</criterion>
@@ -555,7 +521,7 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
         <criterion id="CQ-11" category="content">Open Questions appropriate for PRD phase (business + strategic technical), with implementation details deferred to ADR/Tech Spec</criterion>
         <criterion id="CQ-12" category="content">Readability: Accessible to cross-functional team (product, design, engineering)</criterion>
         <criterion id="CQ-13" category="content">Bridge artifact: Clear separation between business requirements and technical NFRs</criterion>
-        <criterion id="CQ-14" category="content">CLAUDE.md Precedence ENFORCED: Technical Considerations section follows strict hierarchy (CLAUDE.md > Implementation Research > PRD-specific); NO alternatives suggested for CLAUDE.md-decided topics; all CLAUDE.md decisions include file:line references; Implementation Research marked with [CLAUDE.md GAP] for non-covered topics</criterion>
+        <criterion id="CQ-14" category="content">Pattern Precedence ENFORCED: Technical Considerations section follows strict hierarchy (Patterns > Implementation Research > PRD-specific); NO alternatives suggested for pattern-decided topics; all pattern decisions include file:line references; Implementation Research marked with [PATTERN GAP] for non-covered topics</criterion>
 
         <!-- Upstream Traceability Criteria -->
         <criterion id="UT-01" category="traceability">"Parent Epic" field populated with valid Epic ID (EPIC-XXX)</criterion>
@@ -608,11 +574,11 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
   </output_format>
 
   <traceability>
-    <source_document>Epic artifact (see CLAUDE.md for path pattern)</source_document>
-    <template>PRD template (see CLAUDE.md Folder Structure section )</template>
+    <source_document>Epic artifact</source_document>
+    <template>PRD template</template>
     <research_reference>
-      - Business Research (see CLAUDE.md for path): §1 Problem Space, §2 Market Landscape, §3 Gap Analysis (Business), §4 Product Capabilities (WHAT/WHY), §5 Strategic Recommendations, §6 Risk Analysis, §7 User Personas
-      - Implementation Research (see CLAUDE.md for path): §3 Gap Analysis (Technical), §5 Architecture &amp; Technology Stack (for constraints), Technical NFR sections (performance, security, observability)
+      - Business Research: §1 Problem Space, §2 Market Landscape, §3 Gap Analysis (Business), §4 Product Capabilities (WHAT/WHY), §5 Strategic Recommendations, §6 Risk Analysis, §7 User Personas
+      - Implementation Research: §3 Gap Analysis (Technical), §5 Architecture &amp; Technology Stack (for constraints), Technical NFR sections (performance, security, observability)
     </research_reference>
     <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.7 (PRD Definition), Section 1.8.3 (PRD as Bridge Artifact)</strategy_reference>
   </traceability>

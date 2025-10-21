@@ -4,10 +4,10 @@
     <name>Implementation_Task_Generator</name>
     <version>1.4</version>
     <sdlc_phase>Implementation_Task</sdlc_phase>
-    <depends_on>Backlog Story (mandatory), Tech Spec (mandatory), Implementation Research (recommended), Specialized CLAUDE.md files (conditional)</depends_on>
+    <depends_on>Backlog Story (mandatory), Tech Spec (mandatory), Implementation Research (recommended), patterns (conditional)</depends_on>
     <generated_by>Context Engineering Framework v1.5</generated_by>
     <date>2025-10-14</date>
-    <changes>v1.4: Added Hybrid CLAUDE.md approach - Implementation tasks reference specialized patterns-*.md standards for execution (TASK-030)</changes>
+    <changes>v1.4: Added pattern reference approach - Implementation tasks reference implementation pattern standards for execution</changes>
   </metadata>
 
   <system_role>
@@ -51,25 +51,25 @@
         **Classification**: RECOMMENDED - Enriches Implementation Tasks with code examples and implementation patterns. Without it, task guidance reduced by ~20-30% (lacks code references). Generator warns if not found but continues.
       </artifact>
 
-      <artifact classification="conditional" type="specialized_claude_standards">
-        Specialized CLAUDE.md files provide (IMPLEMENTATION STANDARDS):
-        - patterns-core.md: Core development philosophy and orchestration
-        - patterns-tooling.md: Unified CLI (Taskfile), UV, Ruff, MyPy, pytest configuration
-        - patterns-testing.md: Testing strategy, fixtures, coverage requirements
-        - patterns-typing.md: Type hints, annotations, type safety patterns
-        - patterns-validation.md: Pydantic models, input validation, security
-        - patterns-architecture.md: Project structure, modularity, design patterns
-        - Additional domain-specific files per CLAUDE.md
+      <artifact classification="conditional" type="patterns">
+        Implementation patterns provide (IMPLEMENTATION STANDARDS):
+        - Core development philosophy and orchestration
+        - Unified CLI, linters, formatters, test runners
+        - Testing strategy, fixtures, coverage requirements
+        - Type hints, annotations, type safety patterns
+        - Input validation models and security patterns
+        - Project structure, modularity, design patterns
+        - Additional domain-specific standards
 
         Use for Implementation Guidance, ensuring tasks reference established implementation standards for execution.
 
-        **Classification**: CONDITIONAL - Load for all implementation tasks. Treats CLAUDE.md content as authoritative - tasks provide file-specific execution guidance referencing these standards.
+        **Classification**: CONDITIONAL - Load for all implementation tasks. Treats pattern content as authoritative - tasks provide file-specific execution guidance referencing these standards.
 
-        **Hybrid CLAUDE.md Approach:**
-        - Implementation guidance references patterns-tooling.md commands (`task test`, `task lint`)
-        - Code examples follow patterns-typing.md and patterns-validation.md patterns
-        - Testing requirements reference patterns-testing.md standards
-        - Task supplements CLAUDE.md with file-specific implementation steps
+        **Pattern Reference Approach:**
+        - Implementation guidance references tooling pattern commands (`task test`, `task lint`)
+        - Code examples follow typing and validation patterns
+        - Testing requirements reference testing pattern standards
+        - Task supplements patterns with file-specific implementation steps
       </artifact>
     </input_artifacts>
   </task_context>
@@ -78,36 +78,28 @@
     <guideline category="grounding">Base task scope on Backlog Story acceptance criteria or Tech Spec components.</guideline>
     <guideline category="verification">For code examples, reference Implementation Research §8.</guideline>
     <guideline category="scope">Task defines specific file changes and implementation steps. Keep scope small (1-2 days max).</guideline>
-    <guideline category="claude_standards">When CLAUDE.md files exist, reference implementation standards for code patterns, testing, and tooling. Do not duplicate CLAUDE.md content.</guideline>
+    <guideline category="pattern_standards">When pattern files exist, reference implementation standards for code patterns, testing, and tooling. Do not duplicate pattern content.</guideline>
   </anti_hallucination_guidelines>
 
   <instructions>
     <step priority="1"><action>Load Backlog Story</action></step>
     <step priority="2"><action>Load Tech Spec</action></step>
     <step priority="3"><action>Load Implementation Research</action></step>
-    <step priority="4"><action>Load Implementation Task template (path defined in CLAUDE.md Folder Structure section )</action></step>
+    <step priority="4"><action>Load Implementation Task template</action></step>
     <step priority="4.5">
-      <action>Review Specialized CLAUDE.md files (CONDITIONAL)</action>
+      <action>Review implementation pattern files (CONDITIONAL)</action>
       <purpose>Align implementation guidance with established standards</purpose>
       <guidance>
-        **When to Load:** All implementation tasks should reference CLAUDE.md standards.
+        **When to Load:** All implementation tasks should reference pattern standards.
 
-        **Files to Review (paths per CLAUDE.md):**
-        - patterns-tooling.md (Taskfile commands - critical for execution)
-        - patterns-testing.md (Test requirements, coverage, fixtures)
-        - patterns-typing.md (Type hints, type safety patterns)
-        - patterns-validation.md (Pydantic models, input validation)
-        - patterns-architecture.md (File structure, module organization)
-        - Additional domain-specific files as needed per CLAUDE.md
-
-        **Hybrid CLAUDE.md Approach:**
-        - Treat CLAUDE.md content as authoritative for implementation patterns
-        - Implementation guidance references patterns-tooling.md commands
-        - Code examples follow patterns-typing.md and patterns-validation.md patterns
-        - Testing steps reference patterns-testing.md requirements
-        - Task provides file-specific steps supplementing CLAUDE.md standards
+        **Pattern Reference Approach:**
+        - Treat pattern content as authoritative for implementation patterns
+        - Implementation guidance references tooling pattern commands
+        - Code examples follow typing and validation patterns
+        - Testing steps reference testing pattern requirements
+        - Task provides file-specific steps supplementing pattern standards
       </guidance>
-      <anti_hallucination>Only reference CLAUDE.md files that exist. If files don't exist, omit references.</anti_hallucination>
+      <anti_hallucination>Only reference pattern files that exist. If files don't exist, omit references.</anti_hallucination>
     </step>
     <step priority="5"><action>Define Task Objective (specific, granular)</action></step>
     <step priority="6"><action>Specify Code Changes (files to modify/create)</action></step>
@@ -115,8 +107,8 @@
       <action>Add Implementation Guidance (pseudo-code or code examples from Research §8)</action>
       <guidance>
         - Provide specific implementation steps for file changes
-        - **HYBRID APPROACH:** Reference patterns-typing.md for type annotations, patterns-validation.md for Pydantic models
-        - Reference patterns-tooling.md commands for development workflow (`task test`, `task lint`, `task type-check`)
+        - **PATTERN REFERENCE:** Follow typing patterns for type annotations, validation patterns for data models
+        - Reference tooling pattern commands for development workflow (`task test`, `task lint`, `task type-check`)
         - Supplement with file-specific code examples
       </guidance>
     </step>
@@ -126,8 +118,8 @@
       <action>Define Testing Requirements</action>
       <guidance>
         - Define specific tests to write for this task
-        - **HYBRID APPROACH:** Reference patterns-testing.md requirements (coverage minimums, fixture patterns)
-        - Reference patterns-tooling.md commands for test execution (`task test`, `task test:coverage`)
+        - **PATTERN REFERENCE:** Follow testing pattern requirements (coverage minimums, fixture patterns)
+        - Reference tooling pattern commands for test execution (`task test`, `task test:coverage`)
         - Supplement with task-specific test scenarios
       </guidance>
     </step>
@@ -204,7 +196,7 @@
         <criterion id="CQ-05" category="content_quality">Estimated hours (1-16 hours, typically 4-8)</criterion>
         <criterion id="CQ-06" category="content_quality">Testing requirements specified</criterion>
         <criterion id="CQ-07" category="content_quality">Task-level uncertainties appropriate (granular implementation blockers, not architecture/product questions)</criterion>
-        <criterion id="CQ-08" category="content_quality">CLAUDE.md Alignment: Implementation guidance references specialized patterns-*.md standards (tooling commands, testing requirements, type patterns); treats CLAUDE.md content as authoritative</criterion>
+        <criterion id="CQ-08" category="content_quality">Pattern Alignment: Implementation guidance references implementation pattern standards (tooling commands, testing requirements, type patterns); treats pattern content as authoritative</criterion>
 
         <!-- Upstream Traceability -->
         <criterion id="UT-01" category="upstream_traceability">References to Implementation Research §X present (if applicable)</criterion>

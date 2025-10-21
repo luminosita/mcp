@@ -86,11 +86,11 @@ As [role], I want [feature], so that [benefit].
 
 ## Technical Requirements
 
-**DECISION HIERARCHY:** CLAUDE.md (Authoritative) > Implementation Research (Advisory) > Story-specific (Supplementary)
+**DECISION HIERARCHY:** Patterns (Authoritative) > Implementation Research (Advisory) > Story-specific (Supplementary)
 
-**Note:** US generator enforces this hierarchy. CLAUDE.md decisions referenced by file+line, alternatives NOT suggested for decided topics.
+**Note:** US generator enforces this hierarchy. Pattern decisions referenced by file+line, alternatives NOT suggested for decided topics.
 
-### CLAUDE.md Decisions Applied
+### Pattern Decisions Applied
 
 **Established Standards:**
 - **patterns-http-frameworks.md (Go):** [e.g., "Gin per line 238"]
@@ -112,17 +112,17 @@ Use Gin HTTP framework per patterns-http-frameworks.md:238
 
 ### Implementation Research (Gaps Only)
 
-**Applied Patterns (ONLY for CLAUDE.md gaps):**
-- **§[X.Y]: [Pattern]:** [Guidance] - `[CLAUDE.md GAP]`
+**Applied Patterns (ONLY for pattern gaps):**
+- **§[X.Y]: [Pattern]:** [Guidance] - `[PATTERN GAP]`
 
 ### Story-Specific Implementation Guidance
 
-[Technical approach specific to this story - supplements CLAUDE.md standards]
+[Technical approach specific to this story - supplements pattern standards]
 
-### CLAUDE.md Override (If Needed)
+### Pattern Override (If Needed)
 
 ```
-[CLAUDE.md OVERRIDE] {Alternative}
+[PATTERN OVERRIDE] {Alternative}
 - Original: patterns-{file}.md:{line}
 - Rationale: {Justification}
 - Approval: [APPROVED BY: {name}]
@@ -130,7 +130,7 @@ Use Gin HTTP framework per patterns-http-frameworks.md:238
 
 ### Technical Tasks
 - [Frontend task - per patterns-architecture.md structure]
-- [Backend task - using CLAUDE.md patterns]
+- [Backend task - using implementation patterns]
 - [Database change - per patterns-database.md]
 - [Testing task - per patterns-testing.md strategy]
 

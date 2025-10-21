@@ -71,7 +71,7 @@
 
 ## System Architecture
 
-**HYBRID CLAUDE.md APPROACH:** When specialized patterns-*.md files exist, align component architecture with established implementation standards. Reference (not duplicate) CLAUDE.md content. Supplement with component-specific design details.
+**PATTERN REFERENCE:** When pattern files exist, align component architecture with established implementation standards. Reference (not duplicate) pattern content. Supplement with component-specific design details.
 
 ### High-Level Architecture
 ```mermaid
@@ -88,9 +88,9 @@ graph TD
 - **patterns-architecture.md:** Follow project structure patterns, modularity principles
 - **patterns-typing.md:** Apply type hints and type safety patterns
 - **patterns-validation.md:** Use Pydantic models for data validation
-- **Additional domain-specific files:** Reference as needed per CLAUDE.md
+- **Additional domain-specific files:** Reference as needed
 
-**Note:** Treat CLAUDE.md content as authoritative - supplement with component-specific architecture, don't duplicate.
+**Note:** Treat pattern content as authoritative - supplement with component-specific architecture, don't duplicate.
 
 ## API Specifications
 
@@ -144,7 +144,7 @@ interface User {
 
 ## Testing Strategy
 
-**HYBRID CLAUDE.md APPROACH:** When patterns-testing.md exists, reference established testing requirements. Supplement with component-specific test scenarios.
+**PATTERN REFERENCE:** When testing patterns exist, reference established testing requirements. Supplement with component-specific test scenarios.
 
 ### Testing Requirements
 - **Unit Tests:** [Coverage target - reference patterns-testing.md minimum (e.g., 80%)]

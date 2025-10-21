@@ -24,7 +24,7 @@
     <name>[Generator_Name]</name>
     <version>[version]</version>
     <sdlc_phase>[Product_Research|Vision|Initiative|Epic|PRD|Feature|High_Level_Story|Backlog_Story|Architecture|Technical_Design|Code|Test]</sdlc_phase>
-    <depends_on>[Artifact type(s) - paths defined in CLAUDE.md]</depends_on>
+    <depends_on>[Artifact type(s) - ]</depends_on>
     <generated_by>[Source that created this generator]</generated_by>
     <date>[YYYY-MM-DD]</date>
   </metadata>
@@ -32,7 +32,7 @@
   <system_role>
     You are an expert [role] with [X]+ years of experience in [domain]. You excel at [key expertise].
 
-    Your output must follow the [Artifact Type] template structure defined in CLAUDE.md (see Folder Structure section ).
+    Your output must follow the [Artifact Type] template structure .
   </system_role>
 
   <task_context>
@@ -48,13 +48,11 @@
         [Description of what this input contains and how to use it]
 
         **Classification**: [MANDATORY|RECOMMENDED|CONDITIONAL] - [Brief explanation of classification and impact]
-
-        Note: Artifact paths defined in CLAUDE.md Artifact Path Patterns section.
       </artifact>
     </input_artifacts>
 
     <input_classification_reference>
-      See CLAUDE.md Input Classification System section for complete definitions:
+      See Input Classification System for complete definitions:
       - MANDATORY: Must be loaded, generator fails without it
       - RECOMMENDED: Should be loaded for quality (~20-30% quality reduction without)
       - CONDITIONAL: Loaded only under specific conditions
@@ -140,8 +138,8 @@
   </output_format>
 
   <traceability>
-    <source_document>[Artifact type] artifact (see CLAUDE.md for path pattern)</source_document>
-    <template>[Artifact Type] template (see CLAUDE.md Folder Structure section )</template>
+    <source_document>[Artifact type] artifact</source_document>
+    <template>[Artifact Type] template</template>
     <research_reference>[Optional: Section references for documentation only]</research_reference>
     <strategy_reference>[Optional: Section references for documentation only]</strategy_reference>
   </traceability>
@@ -179,12 +177,11 @@
     <element name="metadata">
       <description>Tracks generator identity, version, dependencies, and provenance</description>
       <required_fields>name, version, sdlc_phase, depends_on, generated_by, date</required_fields>
-      <note>depends_on references artifact types, paths defined in CLAUDE.md</note>
+      <note>depends_on references artifact types</note>
     </element>
 
     <element name="system_role">
       <description>Defines expert persona and primary responsibility</description>
-      <must_reference>Template structure from CLAUDE.md Folder Structure section </must_reference>
     </element>
 
     <element name="task_context">
@@ -197,7 +194,7 @@
       <description>Defines input artifacts with classification system</description>
       <attributes>classification (mandatory/recommended/conditional), type, mutually_exclusive_group (optional)</attributes>
       <must_document>Classification rationale and quality impact for each input</must_document>
-      <reference>See CLAUDE.md Input Classification System for definitions</reference>
+      <reference>See Input Classification System for definitions</reference>
     </element>
 
     <element name="instructions">
@@ -218,7 +215,7 @@
 
     <element name="traceability">
       <description>Links to source documents and references (documentation only)</description>
-      <note>References CLAUDE.md for path patterns. Not required context loading.</note>
+      <note>Path patterns defined in framework. Not required context loading.</note>
     </element>
 
     <element name="quality_guidance">
@@ -234,10 +231,10 @@
 
   <usage_notes>
     <note>When creating a new generator, copy this structure and fill in phase-specific details</note>
-    <note>Use classification system for input artifacts: mandatory/recommended/conditional (see CLAUDE.md)</note>
+    <note>Use classification system for input artifacts: mandatory/recommended/conditional</note>
     <note>Document quality impact for recommended inputs (e.g., "~20% quality reduction without")</note>
     <note>Validation checklist must use IDs (CQ-##, TR-##, CC-##) and categories for failure reporting</note>
-    <note>Reference CLAUDE.md for all paths - use natural language references, not hardcoded paths</note>
+    <note>Use natural language references for artifact paths</note>
     <note>Remove duplicate validation sections - single validation_checklist only</note>
     <note>Research steps should be included for Vision, Epic, and PRD phases</note>
     <note>Constraints should be marked [CUSTOMIZE PER PRODUCT] for reusable generators</note>
@@ -256,11 +253,10 @@
     </change>
 
     <change issue="2" name="Path Consolidation">
-      <summary>Centralized paths in CLAUDE.md</summary>
+      <summary>Centralized paths</summary>
       <changes>
         - Removed hardcoded paths from metadata and traceability
-        - Added references to CLAUDE.md Folder Structure section
-        - Use natural language: "see CLAUDE.md for path pattern"
+        - Added references to Folder Structure
       </changes>
     </change>
 
@@ -271,7 +267,7 @@
         - Added mutually_exclusive_group attribute for OR relationships
         - Added input_classification_reference section
         - Document quality impact for each input classification
-        - Reference CLAUDE.md Input Classification System section
+        - Reference Input Classification System
       </changes>
     </change>
   </consolidation_changes>
