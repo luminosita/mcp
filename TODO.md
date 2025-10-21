@@ -61,7 +61,7 @@
 
 **Generation Tasks**:
 
-- [X] **TASK-050**: Generate EPIC-006
+- [X] **TODO-050**: Generate EPIC-006
   - Command: `/generate epic-generator`
   - Input: docs/additions/HLS-resources.md (resource document)
   - Parent: INIT-001 v4
@@ -70,7 +70,7 @@
   - Validation: 25/25 criteria passed
   - Context: Completed in current session
 
-- [X] **TASK-051**: Generate PRD-006 v1
+- [X] **TODO-051**: Generate PRD-006 v1
   - Command: `/generate prd-generator`
   - Input: artifacts/epics/EPIC-006_mcp_server_sdlc_framework_integration_v1.md (parent epic)
   - Parent: EPIC-006 v1
@@ -80,7 +80,7 @@
   - Context: Completed in current session
   - Note: Comprehensive PRD with 24 functional requirements, 8 NFR categories, 5 open questions (3 business, 2 technical trade-offs)
 
-- [X] **TASK-052**: Refine PRD-006 v1 → v2
+- [X] **TODO-052**: Refine PRD-006 v1 → v2
   - Command: Manual refinement based on feedback
   - Input: feedback/PRD-006_v1_comments.md
   - Parent: PRD-006 v1
@@ -91,7 +91,7 @@
 
 **HLS Decomposition Tasks** (Next Available IDs: HLS-006 through HLS-011):
 
-- [X] **TASK-053**: Generate HLS-006 (MCP Resources Migration)
+- [X] **TODO-053**: Generate HLS-006 (MCP Resources Migration)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -101,7 +101,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [X] **TASK-054**: Generate HLS-007 (MCP Prompts - Generators Migration)
+- [X] **TODO-054**: Generate HLS-007 (MCP Prompts - Generators Migration)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -111,7 +111,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [X] **TASK-055**: Generate HLS-008 (MCP Tools - Validation and Path Resolution)
+- [X] **TODO-055**: Generate HLS-008 (MCP Tools - Validation and Path Resolution)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -121,7 +121,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [X] **TASK-056**: Generate HLS-009 (Task Tracking Microservice)
+- [X] **TODO-056**: Generate HLS-009 (Task Tracking Microservice)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -132,7 +132,7 @@
   - Context: Completed in current session
   - Note: Single microservice handling both task tracking and ID management
 
-- [X] **TASK-057**: Generate HLS-010 (CLAUDE.md Orchestration Update & Integration Testing)
+- [X] **TODO-057**: Generate HLS-010 (CLAUDE.md Orchestration Update & Integration Testing)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -142,7 +142,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [X] **TASK-058**: Generate HLS-011 (Production Readiness and Pilot)
+- [X] **TODO-058**: Generate HLS-011 (Production Readiness and Pilot)
   - Command: `/generate hls-generator`
   - Input: artifacts/prds/PRD-006_mcp_server_sdlc_framework_integration_v2.md
   - Parent: PRD-006 v2
@@ -155,7 +155,7 @@
 
 **Backlog Story Decomposition Tasks** (Next Available IDs: US-028 through US-070):
 
-- [X] **TASK-059**: Generate US-028 through US-034 (HLS-006: MCP Resources Migration)
+- [X] **TODO-059**: Generate US-028 through US-034 (HLS-006: MCP Resources Migration)
   - Command: `/generate backlog-story-generator` (7 iterations)
   - Input: artifacts/hls/HLS-006_mcp_resources_migration_v2.md
   - Parent: HLS-006 v2
@@ -172,7 +172,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [X] **TASK-060**: Generate US-035 through US-039 (HLS-007: MCP Prompts - Generators Migration)
+- [X] **TODO-060**: Generate US-035 through US-039 (HLS-007: MCP Prompts - Generators Migration)
     - Command: `/generate backlog-story-generator` (5 iterations)
   - Input: artifacts/hls/HLS-007_mcp_prompts_generators_migration_v2.md
   - Parent: HLS-007 v2
@@ -187,7 +187,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session. Also applied feedback to US-034 (converted Open Questions to Decisions Made).
 
-- [X] **TASK-061**: Generate US-040 through US-047 (HLS-008: MCP Tools - Validation and Path Resolution)
+- [X] **TODO-061**: Generate US-040 through US-047 (HLS-008: MCP Tools - Validation and Path Resolution)
   - Command: `/generate backlog-story-generator` (8 iterations)
   - Input: artifacts/hls/HLS-008_mcp_tools_validation_path_resolution_v2.md
   - Parent: HLS-008 v2
@@ -205,7 +205,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [X] **TASK-062**: Generate US-048 through US-055 (HLS-009: Task Tracking Microservice)
+- [X] **TODO-062**: Generate US-048 through US-055 (HLS-009: Task Tracking Microservice)
   - Command: `/generate backlog-story-generator` (8 iterations)
   - Input: artifacts/hls/HLS-009_task_tracking_microservice_v2.md
   - Parent: HLS-009 v2
@@ -225,7 +225,7 @@
   - Context: Completed in current session
   - Note: Single microservice handling both task tracking and ID management
 
-- [X] **TASK-063**: Generate US-056 through US-062 (HLS-010: CLAUDE.md Orchestration Update & Integration Testing)
+- [X] **TODO-063**: Generate US-056 through US-062 (HLS-010: CLAUDE.md Orchestration Update & Integration Testing)
   - Command: `/generate backlog-story-generator` (7 iterations)
   - Input: artifacts/hls/HLS-010_claude_orchestration_integration_testing_v2.md
   - Parent: HLS-010 v2
@@ -243,7 +243,7 @@
   - Status: ✅ Completed (2025-10-18)
   - Context: Completed in current session
 
-- [X] **TASK-064**: Generate US-063 through US-070 (HLS-011: Production Readiness and Pilot)
+- [X] **TODO-064**: Generate US-063 through US-070 (HLS-011: Production Readiness and Pilot)
   - Command: `/generate backlog-story-generator` (8 iterations)
   - Input: artifacts/hls/HLS-011_production_readiness_pilot_v2.md
   - Parent: HLS-011 v2
