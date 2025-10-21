@@ -552,27 +552,27 @@ The tool reduces validation errors from 20-30% to <5%, execution time from ~2s t
 Per SDLC Section 11.6 Decision Matrix: "5+ SP, any team size → DON'T SKIP (Complexity requires decomposition)".
 
 **Proposed Implementation Tasks** (TASK IDs to be allocated):
-- **TASK-XXX:** Implement Pydantic models and artifact type inference (4-6 hours)
+- **TASK-AAA:** Implement Pydantic models and artifact type inference (4-6 hours)
   - Input/output Pydantic models
   - ArtifactTypeInference class with TYPE_PREFIX_MAP
   - Validation of artifact ID format
 
-- **TASK-YYY:** Implement checklist loading with caching (4-6 hours)
+- **TASK-BBB:** Implement checklist loading with caching (4-6 hours)
   - ChecklistCache class with TTL
   - Async JSON file loading
   - Cache hit/miss logic
 
-- **TASK-ZZZ:** Implement ArtifactValidator with criterion evaluation logic (6-8 hours)
+- **TASK-CCC:** Implement ArtifactValidator with criterion evaluation logic (6-8 hours)
   - ArtifactValidator class
   - Criterion evaluation methods (template sections, ID format, placeholders, references)
   - Mapping logic from criterion to validation method
 
-- **TASK-AAA:** Implement MCP tool endpoint with observability (3-4 hours)
+- **TASK-DDD:** Implement MCP tool endpoint with observability (3-4 hours)
   - FastMCP tool decorator
   - Structured logging integration with task_id
   - Prometheus metrics instrumentation
 
-- **TASK-BBB:** Comprehensive testing (unit, integration, performance) (6-8 hours)
+- **TASK-EEE:** Comprehensive testing (unit, integration, performance) (6-8 hours)
   - Unit tests for ArtifactTypeInference (prefix inference)
   - Unit tests for ArtifactValidator methods
   - Integration tests with full PRD validation

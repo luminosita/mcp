@@ -1125,9 +1125,16 @@ Upon completion, update relevant task status in `/TODO.md`:
 | **SPEC-001** | 3 tasks | TASK-001 → TASK-003 | 2025-10-14 |
 | **US-030** | 4 tasks | TASK-004 → TASK-007 | 2025-10-18 |
 | **US-035** | 4 tasks | TASK-008 → TASK-011 | 2025-10-18 |
+| **US-040** | 5 tasks | TASK-049 → TASK-053 | 2025-10-21 |
+| **US-050** | 6 tasks | TASK-054 → TASK-059 | 2025-10-21 |
+| **US-051** | 6 tasks | TASK-060 → TASK-065 | 2025-10-21 |
+| **US-060** | 7 tasks | TASK-066 → TASK-072 | 2025-10-21 |
+| **US-063** | 6 tasks | TASK-073 → TASK-078 | 2025-10-21 |
+| **US-065** | 6 tasks | TASK-079 → TASK-084 | 2025-10-21 |
+| **US-068** | 6 tasks | TASK-085 → TASK-090 | 2025-10-21 |
 
 
-**Next Available:** TASK-012
+**Next Available:** TASK-091
 
 **Usage Pattern:** Multiple TASKs per SPEC (typically 3-8 tasks depending on SPEC complexity, each 4-16 hours).
 
