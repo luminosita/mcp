@@ -93,16 +93,16 @@ As [role], I want [feature], so that [benefit].
 ### CLAUDE.md Decisions Applied
 
 **Established Standards:**
-- **CLAUDE-http-frameworks.md (Go):** [e.g., "Gin per line 238"]
-- **CLAUDE-tooling.md:** [e.g., "UV + Ruff per lines 20-45"]
-- **CLAUDE-testing.md:** [e.g., "pytest with fixtures, 80% coverage"]
-- **CLAUDE-typing.md:** [e.g., "MyPy strict mode"]
-- **CLAUDE-architecture.md:** [e.g., "Project structure per lines 15-30"]
-- [Additional CLAUDE-*.md files]
+- **patterns-http-frameworks.md (Go):** [e.g., "Gin per line 238"]
+- **patterns-tooling.md:** [e.g., "UV + Ruff per lines 20-45"]
+- **patterns-testing.md:** [e.g., "pytest with fixtures, 80% coverage"]
+- **patterns-typing.md:** [e.g., "MyPy strict mode"]
+- **patterns-architecture.md:** [e.g., "Project structure per lines 15-30"]
+- [Additional patterns-*.md files]
 
 **Example (Compliant):**
 ```
-Use Gin HTTP framework per CLAUDE-http-frameworks.md:238
+Use Gin HTTP framework per patterns-http-frameworks.md:238
 ```
 
 **Example (Non-Compliant - DON'T DO THIS):**
@@ -123,16 +123,16 @@ Use Gin HTTP framework per CLAUDE-http-frameworks.md:238
 
 ```
 [CLAUDE.md OVERRIDE] {Alternative}
-- Original: CLAUDE-{file}.md:{line}
+- Original: patterns-{file}.md:{line}
 - Rationale: {Justification}
 - Approval: [APPROVED BY: {name}]
 ```
 
 ### Technical Tasks
-- [Frontend task - per CLAUDE-architecture.md structure]
+- [Frontend task - per patterns-architecture.md structure]
 - [Backend task - using CLAUDE.md patterns]
-- [Database change - per CLAUDE-database.md]
-- [Testing task - per CLAUDE-testing.md strategy]
+- [Database change - per patterns-database.md]
+- [Testing task - per patterns-testing.md strategy]
 
 ## Acceptance Criteria
 

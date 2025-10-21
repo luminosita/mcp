@@ -70,14 +70,14 @@ Language-specific CLAUDE.md files are organized by programming language in subdi
 - Additional languages added as needed (e.g., `new_prompts/CLAUDE/rust/`, `new_prompts/CLAUDE/java/`)
 
 **Implementation Configuration Files (Language-Specific):**
-- **CLAUDE-core.md** - Main implementation guide and orchestration
-- **CLAUDE-tooling.md** - Language-specific tooling (build tools, linters, formatters, test runners)
-- **CLAUDE-testing.md** - Testing strategy, fixtures, coverage
-- **CLAUDE-typing.md** - Type system patterns and type safety
-- **CLAUDE-validation.md** - Input validation, data models, security patterns
-- **CLAUDE-architecture.md** - Project structure, modularity, design patterns
+- **patterns-core.md** - Main implementation guide and orchestration
+- **patterns-tooling.md** - Language-specific tooling (build tools, linters, formatters, test runners)
+- **patterns-testing.md** - Testing strategy, fixtures, coverage
+- **patterns-typing.md** - Type system patterns and type safety
+- **patterns-validation.md** - Input validation, data models, security patterns
+- **patterns-architecture.md** - Project structure, modularity, design patterns
 
-**→ For implementation work, navigate to the appropriate language subdirectory and see CLAUDE-core.md which orchestrates all specialized configs.**
+**→ For implementation work, navigate to the appropriate language subdirectory and see patterns-core.md which orchestrates all specialized configs.**
 
 **Current Project Language:** Python (see `new_prompts/CLAUDE/python/` for implementation guides)
 

@@ -84,13 +84,13 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
 
       <artifact classification="conditional" type="specialized_claude_standards">
         Specialized CLAUDE.md files provide (IMPLEMENTATION STANDARDS):
-        - CLAUDE-core.md: Core development philosophy and orchestration
-        - CLAUDE-tooling.md: Language-specific tooling configuration (build tools, linters, formatters, test runners)
-        - CLAUDE-testing.md: Testing strategy, fixtures, coverage requirements
-        - CLAUDE-typing.md: Type system patterns and type safety
-        - CLAUDE-validation.md: Input validation, data models, security patterns
-        - CLAUDE-architecture.md: Project structure, modularity, design patterns
-        - Additional domain-specific files: CLAUDE-security.md, CLAUDE-auth.md, CLAUDE-messaging.md, etc.
+        - patterns-core.md: Core development philosophy and orchestration
+        - patterns-tooling.md: Language-specific tooling configuration (build tools, linters, formatters, test runners)
+        - patterns-testing.md: Testing strategy, fixtures, coverage requirements
+        - patterns-typing.md: Type system patterns and type safety
+        - patterns-validation.md: Input validation, data models, security patterns
+        - patterns-architecture.md: Project structure, modularity, design patterns
+        - Additional domain-specific files: patterns-security.md, patterns-auth.md, patterns-messaging.md, etc.
 
         **Location:** Language-specific CLAUDE.md files are located in prompts/CLAUDE/{language}/ subdirectories (e.g., prompts/CLAUDE/python/, prompts/CLAUDE/go/). Main CLAUDE.md directs to appropriate language subdirectory based on project technology stack.
 
@@ -100,9 +100,9 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
 
         **Hybrid CLAUDE.md Approach:**
         - Technical Considerations section aligns with specialized CLAUDE.md standards
-        - References specialized CLAUDE-*.md files as authoritative for implementation guidance
+        - References specialized patterns-*.md files as authoritative for implementation guidance
         - PRD supplements (not duplicates) CLAUDE.md standards
-        - Enables extensibility: Additional domain-specific CLAUDE-*.md files may be added during development
+        - Enables extensibility: Additional domain-specific patterns-*.md files may be added during development
         - Language-agnostic: CLAUDE.md files adapt to project's chosen programming language via subdirectory structure
       </artifact>
     </input_artifacts>
@@ -152,25 +152,25 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
 
         **STEP 1: Load all prompts/CLAUDE/{language}/*.md files**
         - Determine project language from context (Python, Go, etc.)
-        - Load all CLAUDE-*.md files from prompts/CLAUDE/{language}/ directory
-        - Example: prompts/CLAUDE/python/CLAUDE-tooling.md, prompts/CLAUDE/go/CLAUDE-http-frameworks.md
+        - Load all patterns-*.md files from prompts/CLAUDE/{language}/ directory
+        - Example: prompts/CLAUDE/python/patterns-tooling.md, prompts/CLAUDE/go/patterns-http-frameworks.md
 
         **STEP 2: Extract decisions from CLAUDE.md files**
         - Look for decision indicators: "Recommended", "Default", "Use", "Standard", "Decision:"
         - Extract decision text and line number
-        - Example: Line 238 of CLAUDE-http-frameworks.md: "Default: Use Gin"
-        - Example: Line 45 of CLAUDE-tooling.md: "Use UV for Python dependency management"
+        - Example: Line 238 of patterns-http-frameworks.md: "Default: Use Gin"
+        - Example: Line 45 of patterns-tooling.md: "Use UV for Python dependency management"
 
         **STEP 3: Create "CLAUDE.md Decisions Register"**
-        - Build list of all covered topics from all CLAUDE-*.md files
+        - Build list of all covered topics from all patterns-*.md files
         - Format: {domain}: {decision} (file:line)
         - Example register:
           ```
-          HTTP_Framework: Gin (CLAUDE-http-frameworks.md:238)
-          Package_Manager: UV (CLAUDE-tooling.md:45)
-          Linter: Ruff (CLAUDE-tooling.md:67)
-          Testing_Framework: pytest (CLAUDE-testing.md:20)
-          Type_Checker: MyPy strict mode (CLAUDE-typing.md:15)
+          HTTP_Framework: Gin (patterns-http-frameworks.md:238)
+          Package_Manager: UV (patterns-tooling.md:45)
+          Linter: Ruff (patterns-tooling.md:67)
+          Testing_Framework: pytest (patterns-testing.md:20)
+          Type_Checker: MyPy strict mode (patterns-typing.md:15)
           ```
 
         **STEP 4: Load Implementation Research (already loaded in step 3)**
@@ -190,12 +190,12 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
         **Section 1: Alignment with CLAUDE.md Standards (Tier 1 - Authoritative)**
         - List all CLAUDE.md decisions applied to this PRD
         - Include file name and line number for each decision
-        - Format: "CLAUDE-{file}.md:{line}: {decision}"
+        - Format: "patterns-{file}.md:{line}: {decision}"
         - Example:
           ```
-          - CLAUDE-http-frameworks.md:238: Use Gin for Go REST APIs
-          - CLAUDE-tooling.md:45: Use UV for Python dependency management
-          - CLAUDE-testing.md:20: Use pytest with fixtures, 80% coverage minimum
+          - patterns-http-frameworks.md:238: Use Gin for Go REST APIs
+          - patterns-tooling.md:45: Use UV for Python dependency management
+          - patterns-testing.md:20: Use pytest with fixtures, 80% coverage minimum
           ```
 
         **Section 2: Implementation Research Guidance (Tier 2 - Advisory - ONLY gaps)**
@@ -388,9 +388,9 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
         - Availability: SLA (99.9% uptime)
         - Security: Encryption, authentication method, authorization
         - Observability: Logging, metrics, alerting requirements
-        - Type Safety: Type hint coverage, mypy strict mode (reference CLAUDE-typing.md)
-        - Testing: Coverage thresholds, test strategy (reference CLAUDE-testing.md)
-        - Code Quality: Linting, formatting standards (reference CLAUDE-tooling.md)
+        - Type Safety: Type hint coverage, mypy strict mode (reference patterns-typing.md)
+        - Testing: Coverage thresholds, test strategy (reference patterns-testing.md)
+        - Code Quality: Linting, formatting standards (reference patterns-tooling.md)
 
         Reference specific Implementation Research sections for technical NFRs.
         **HYBRID APPROACH:** When specialized CLAUDE.md files exist, reference them for implementation standards. PRD supplements (not duplicates) CLAUDE.md standards.
@@ -405,7 +405,7 @@ v1.6: Reduced business context overlap by 50% (Lean Analysis Recommendation 3).<
         - Technical constraints from Implementation Research
         - Business constraints from Business Research
         - Timeline and budget constraints
-        - **CLAUDE.md Standards (when applicable):** List relevant specialized CLAUDE-*.md files that define implementation standards (e.g., CLAUDE-tooling.md for unified CLI, CLAUDE-typing.md for type safety, etc.)
+        - **CLAUDE.md Standards (when applicable):** List relevant specialized patterns-*.md files that define implementation standards (e.g., patterns-tooling.md for unified CLI, patterns-typing.md for type safety, etc.)
       </guidance>
     </step>
 

@@ -114,13 +114,13 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
 
       <artifact classification="conditional" type="specialized_claude_standards">
         Specialized CLAUDE.md files provide (IMPLEMENTATION STANDARDS):
-        - CLAUDE-core.md: Core development philosophy and orchestration
-        - CLAUDE-tooling.md: Unified CLI (Taskfile), UV, Ruff, MyPy, pytest configuration
-        - CLAUDE-testing.md: Testing strategy, fixtures, coverage requirements
-        - CLAUDE-typing.md: Type hints, annotations, type safety patterns
-        - CLAUDE-validation.md: Pydantic models, input validation, security
-        - CLAUDE-architecture.md: Project structure, modularity, design patterns
-        - Additional domain-specific files: CLAUDE-security.md, CLAUDE-auth.md, etc.
+        - patterns-core.md: Core development philosophy and orchestration
+        - patterns-tooling.md: Unified CLI (Taskfile), UV, Ruff, MyPy, pytest configuration
+        - patterns-testing.md: Testing strategy, fixtures, coverage requirements
+        - patterns-typing.md: Type hints, annotations, type safety patterns
+        - patterns-validation.md: Pydantic models, input validation, security
+        - patterns-architecture.md: Project structure, modularity, design patterns
+        - Additional domain-specific files: patterns-security.md, patterns-auth.md, etc.
 
         Use for Technical Notes section alignment, ensuring story references established implementation standards.
 
@@ -173,7 +173,7 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
       <action>Enforce CLAUDE.md Precedence Hierarchy (MANDATORY - Lean Analysis Recommendation 2)</action>
       <purpose>Prevent suggesting alternatives when decisions already made in CLAUDE.md files (US-050 problem)</purpose>
       <guidance>
-        **CRITICAL: This step prevents quality errors like US-050 (suggesting "chi or gin" when Gin already decided in CLAUDE-http-frameworks.md:238).**
+        **CRITICAL: This step prevents quality errors like US-050 (suggesting "chi or gin" when Gin already decided in patterns-http-frameworks.md:238).**
 
         **3-TIER HIERARCHY:**
         - **Tier 1 (Authoritative):** CLAUDE.md files = "Decisions Made" (use file:line references, NO alternatives)
@@ -182,27 +182,27 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
 
         **STEP 1: Load all prompts/CLAUDE/{language}/*.md files**
         - Determine project language from context (Python, Go, etc.)
-        - Load all CLAUDE-*.md files from prompts/CLAUDE/{language}/ directory
-        - Example files: CLAUDE-core.md, CLAUDE-tooling.md, CLAUDE-testing.md, CLAUDE-http-frameworks.md, etc.
+        - Load all patterns-*.md files from prompts/CLAUDE/{language}/ directory
+        - Example files: patterns-core.md, patterns-tooling.md, patterns-testing.md, patterns-http-frameworks.md, etc.
 
         **STEP 2: Extract decisions from CLAUDE.md files**
         - Look for decision indicators: "Recommended", "Default", "Use", "Standard", "Decision:"
         - Extract decision text and line number for each
-        - Example: Line 238 of CLAUDE-http-frameworks.md: "Default: Use Gin for Go REST APIs"
-        - Example: Line 45 of CLAUDE-tooling.md: "Use UV for Python package management"
-        - Example: Line 67 of CLAUDE-testing.md: "pytest with fixtures, 80% coverage minimum"
+        - Example: Line 238 of patterns-http-frameworks.md: "Default: Use Gin for Go REST APIs"
+        - Example: Line 45 of patterns-tooling.md: "Use UV for Python package management"
+        - Example: Line 67 of patterns-testing.md: "pytest with fixtures, 80% coverage minimum"
 
         **STEP 3: Create "CLAUDE.md Decisions Register"**
         - Build comprehensive list of all covered topics with file:line references
         - Format: {domain}: {decision} (file:line)
         - Example register:
           ```
-          HTTP_Framework: Gin (CLAUDE-http-frameworks.md:238)
-          Package_Manager: UV (CLAUDE-tooling.md:45)
-          Testing_Framework: pytest with fixtures, 80% coverage (CLAUDE-testing.md:67)
-          Linter: Ruff (CLAUDE-tooling.md:52)
-          Type_Checker: MyPy strict mode (CLAUDE-typing.md:15)
-          Database_ORM: SQLAlchemy (CLAUDE-database.md:30)
+          HTTP_Framework: Gin (patterns-http-frameworks.md:238)
+          Package_Manager: UV (patterns-tooling.md:45)
+          Testing_Framework: pytest with fixtures, 80% coverage (patterns-testing.md:67)
+          Linter: Ruff (patterns-tooling.md:52)
+          Type_Checker: MyPy strict mode (patterns-typing.md:15)
+          Database_ORM: SQLAlchemy (patterns-database.md:30)
           ```
 
         **STEP 4: Cross-check Implementation Research against CLAUDE.md Decisions Register**
@@ -228,14 +228,14 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
         ### CLAUDE.md Decisions Applied
 
         **Established Standards:**
-        - **CLAUDE-http-frameworks.md (Go):** Gin per line 238
-        - **CLAUDE-tooling.md:** UV + Ruff per lines 20-45
-        - **CLAUDE-testing.md:** pytest with fixtures, 80% coverage per line 67
-        - **CLAUDE-typing.md:** MyPy strict mode per line 15
-        - [Additional CLAUDE-*.md files as applicable]
+        - **patterns-http-frameworks.md (Go):** Gin per line 238
+        - **patterns-tooling.md:** UV + Ruff per lines 20-45
+        - **patterns-testing.md:** pytest with fixtures, 80% coverage per line 67
+        - **patterns-typing.md:** MyPy strict mode per line 15
+        - [Additional patterns-*.md files as applicable]
 
         **Example (Compliant):**
-        Use Gin HTTP framework per CLAUDE-http-frameworks.md:238
+        Use Gin HTTP framework per patterns-http-frameworks.md:238
 
         **Example (Non-Compliant - DON'T DO THIS):**
         ❌ "Use chi, gin, or gorilla/mux" (suggests alternatives when Gin decided)
@@ -263,13 +263,13 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
         ❌ "Testing framework: pytest or unittest" (suggests alternatives when pytest already decided)
 
         **SUCCESS MODE (Correct approach):**
-        ✅ "Use Gin HTTP framework per CLAUDE-http-frameworks.md:238"
-        ✅ "Use UV package manager per CLAUDE-tooling.md:45"
-        ✅ "Follow pytest testing patterns per CLAUDE-testing.md:67 (80% coverage minimum)"
+        ✅ "Use Gin HTTP framework per patterns-http-frameworks.md:238"
+        ✅ "Use UV package manager per patterns-tooling.md:45"
+        ✅ "Follow pytest testing patterns per patterns-testing.md:67 (80% coverage minimum)"
         ✅ "Cache invalidation strategy: Time-based TTL with 5-minute expiration - [CLAUDE.md GAP]" (for topics not in CLAUDE.md)
       </guidance>
       <anti_hallucination>
-        - Load ALL CLAUDE-*.md files before generating Technical Requirements
+        - Load ALL patterns-*.md files before generating Technical Requirements
         - Create Decisions Register with file:line references for ALL decisions found
         - NEVER suggest alternatives when decision exists in CLAUDE.md
         - Use [CLAUDE.md GAP] label for Implementation Research patterns not covered by CLAUDE.md
@@ -329,10 +329,10 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
         - Example: "Consider circuit breaker pattern for external API calls (ref: Implementation Research §6.1 - Anti-pattern: Cascade Failures)"
 
         **HYBRID CLAUDE.md APPROACH (when specialized files exist):**
-        - Reference specialized CLAUDE-*.md files for implementation standards
-        - Example: "Follow testing patterns from CLAUDE-testing.md (80% coverage minimum, fixtures for database access)"
-        - Example: "Use Taskfile commands from CLAUDE-tooling.md (`task test`, `task lint`, `task type-check`)"
-        - Example: "Apply type hints per CLAUDE-typing.md (strict mode, Pydantic models for validation)"
+        - Reference specialized patterns-*.md files for implementation standards
+        - Example: "Follow testing patterns from patterns-testing.md (80% coverage minimum, fixtures for database access)"
+        - Example: "Use Taskfile commands from patterns-tooling.md (`task test`, `task lint`, `task type-check`)"
+        - Example: "Apply type hints per patterns-typing.md (strict mode, Pydantic models for validation)"
         - Treat CLAUDE.md content as authoritative - supplement with story-specific context
         - Do NOT duplicate CLAUDE.md content - reference and supplement only
       </guidance>
@@ -516,7 +516,7 @@ v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Rep
         <criterion id="CQ-11" category="content_quality">Implementation-adjacent: Hints at approach without prescribing exact code</criterion>
         <criterion id="CQ-12" category="content_quality">Sprint-ready: Can be completed in 1 sprint by team</criterion>
         <criterion id="CQ-13" category="content_quality">For non-PRD-derived stories: Justification and Implementation Research reference per Section 1.5.7</criterion>
-        <criterion id="CQ-14" category="content_quality">CLAUDE.md Alignment: When story includes technical guidance, Technical Notes section references (not duplicates) specialized CLAUDE-*.md standards; treats CLAUDE.md content as authoritative</criterion>
+        <criterion id="CQ-14" category="content_quality">CLAUDE.md Alignment: When story includes technical guidance, Technical Notes section references (not duplicates) specialized patterns-*.md standards; treats CLAUDE.md content as authoritative</criterion>
         <criterion id="CQ-15" category="content_quality">Implementation Tasks Evaluation: Section present before Definition of Done with clear decision (Tasks Needed/No Tasks Needed/Consider Tasks), rationale based on SDLC Section 11 criteria (story points, developer count, domain span, complexity), and proposed tasks with TASK-XXX IDs if applicable</criterion>
 
         <!-- Upstream Traceability -->

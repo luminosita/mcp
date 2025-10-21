@@ -102,10 +102,10 @@
 
 ## Implementation Guidance
 
-**HYBRID CLAUDE.md APPROACH:** When specialized CLAUDE-*.md files exist, reference (not duplicate) established implementation standards. Supplement with task-specific execution steps.
+**HYBRID CLAUDE.md APPROACH:** When specialized patterns-*.md files exist, reference (not duplicate) established implementation standards. Supplement with task-specific execution steps.
 
 ### Development Workflow (when applicable)
-- **CLAUDE-tooling.md:** Use Taskfile commands for development workflow
+- **patterns-tooling.md:** Use Taskfile commands for development workflow
   - `task test` - Run test suite
   - `task lint` - Run linting
   - `task lint:fix` - Auto-fix linting issues
@@ -114,10 +114,10 @@
   - `task test:coverage` - Run tests with coverage report
 
 ### Implementation Standards (when applicable)
-- **CLAUDE-architecture.md:** Follow project structure, modularity patterns
-- **CLAUDE-typing.md:** Apply type hints (strict mode), use Pydantic for data validation
-- **CLAUDE-validation.md:** Input validation with Pydantic models, security patterns
-- **CLAUDE-testing.md:** Testing requirements (80% coverage minimum, fixture patterns, async test support)
+- **patterns-architecture.md:** Follow project structure, modularity patterns
+- **patterns-typing.md:** Apply type hints (strict mode), use Pydantic for data validation
+- **patterns-validation.md:** Input validation with Pydantic models, security patterns
+- **patterns-testing.md:** Testing requirements (80% coverage minimum, fixture patterns, async test support)
 - **Additional domain-specific files:** Reference as needed per CLAUDE.md
 
 **Note:** Treat CLAUDE.md content as authoritative - supplement with task-specific implementation steps.
@@ -125,15 +125,15 @@
 ### Code Example / Pseudo-code
 ```[language]
 // Example implementation approach
-[Show key code structure or algorithm following CLAUDE-*.md patterns]
+[Show key code structure or algorithm following patterns-*.md patterns]
 ```
 
 ### Reference Implementation
 [Link to similar existing code or pattern in codebase]
 
 ### Design Patterns to Use
-- [Pattern 1: e.g., "Use Repository pattern per CLAUDE-architecture.md"]
-- [Pattern 2: e.g., "Follow error handling pattern from CLAUDE-core.md"]
+- [Pattern 1: e.g., "Use Repository pattern per patterns-architecture.md"]
+- [Pattern 2: e.g., "Follow error handling pattern from patterns-core.md"]
 
 ### Implementation Research Reference
 [If applicable, reference Implementation Research sections]
@@ -178,18 +178,18 @@
 
 ## Testing Requirements
 
-**HYBRID CLAUDE.md APPROACH:** When CLAUDE-testing.md exists, follow established testing standards. Supplement with task-specific test scenarios.
+**HYBRID CLAUDE.md APPROACH:** When patterns-testing.md exists, follow established testing standards. Supplement with task-specific test scenarios.
 
 ### Testing Standards (when applicable)
-- **CLAUDE-testing.md:** Follow testing requirements (80% coverage minimum, fixture patterns, async test support)
-- **CLAUDE-tooling.md:** Use Taskfile commands for test execution (`task test`, `task test:coverage`, `task test:unit`, `task test:integration`)
+- **patterns-testing.md:** Follow testing requirements (80% coverage minimum, fixture patterns, async test support)
+- **patterns-tooling.md:** Use Taskfile commands for test execution (`task test`, `task test:coverage`, `task test:unit`, `task test:integration`)
 - Task-specific test scenarios supplement standard requirements
 
 ### Unit Tests
 - [ ] Test [scenario 1]
 - [ ] Test [scenario 2]
 - [ ] Test [error handling]
-- [ ] Achieve minimum coverage target per CLAUDE-testing.md (if exists)
+- [ ] Achieve minimum coverage target per patterns-testing.md (if exists)
 
 ### Integration Tests (if applicable)
 - [ ] Test [integration scenario 1]

@@ -207,16 +207,16 @@ This PRD contributes to the following Epic success metrics:
 ### Alignment with CLAUDE.md Standards
 
 **Established Decisions Applied:**
-- **CLAUDE-core.md:** [Core development philosophy]
-- **CLAUDE-architecture.md:** [Project structure, modularity patterns]
-- **CLAUDE-tooling.md:** [Build tools, linters, formatters - e.g., "UV for Python, Ruff for linting"]
-- **CLAUDE-testing.md:** [Testing framework - e.g., "pytest with fixtures, 80% coverage"]
-- **CLAUDE-http-frameworks.md (Go):** [HTTP framework - e.g., "Gin per line 238"]
-- [Additional CLAUDE-*.md files as applicable]
+- **patterns-core.md:** [Core development philosophy]
+- **patterns-architecture.md:** [Project structure, modularity patterns]
+- **patterns-tooling.md:** [Build tools, linters, formatters - e.g., "UV for Python, Ruff for linting"]
+- **patterns-testing.md:** [Testing framework - e.g., "pytest with fixtures, 80% coverage"]
+- **patterns-http-frameworks.md (Go):** [HTTP framework - e.g., "Gin per line 238"]
+- [Additional patterns-*.md files as applicable]
 
 **Example (Compliant):**
 ```
-Use Gin HTTP framework per CLAUDE-http-frameworks.md:238 (Gin = default for Go REST APIs)
+Use Gin HTTP framework per patterns-http-frameworks.md:238 (Gin = default for Go REST APIs)
 ```
 
 **Example (Non-Compliant - DON'T DO THIS):**
@@ -228,11 +228,11 @@ Use Gin HTTP framework per CLAUDE-http-frameworks.md:238 (Gin = default for Go R
 
 **Applied Insights (ONLY for topics not in CLAUDE.md):**
 - **§[X.Y]: [Pattern Name]:** [Technical guidance]
-  - **CLAUDE.md Status:** `[CLAUDE.md GAP]` or `[ALIGNS WITH CLAUDE-{file}.md]`
+  - **CLAUDE.md Status:** `[CLAUDE.md GAP]` or `[ALIGNS WITH patterns-{file}.md]`
 
 **Example:**
 ```
-§5.3 Cache invalidation strategy - [CLAUDE-caching.md GAP]
+§5.3 Cache invalidation strategy - [patterns-caching.md GAP]
 Recommendation: Time-based TTL with 5-minute expiration
 ```
 
@@ -241,7 +241,7 @@ Recommendation: Time-based TTL with 5-minute expiration
 **If override needed, document:**
 ```
 [CLAUDE.md OVERRIDE] {Alternative approach}
-- Original: CLAUDE-{file}.md:{line} "{decision}"
+- Original: patterns-{file}.md:{line} "{decision}"
 - Rationale: {Technical justification}
 - Approval: [APPROVED BY: {name} - {date}]
 ```
