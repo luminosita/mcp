@@ -53,90 +53,87 @@
 
 **Purpose:** Establish authoritative precedence when multiple sources provide technical guidance. Prevents architectural decision conflicts and generator hallucination for already-decided patterns.
 
-**Problem Addressed:** CLAUDE.md architectural decisions ignored or contradicted by Implementation Research recommendations, causing duplicate decision-making and documentation inconsistency (Lean Analysis Report v1.4 Recommendation 2).
+**Problem Addressed:** Pattern file architectural decisions ignored or contradicted by Implementation Research recommendations, causing duplicate decision-making and documentation inconsistency (Lean Analysis Report v1.4 Recommendation 2).
 
 ### Three-Tier Precedence System
 
-**Tier 1: CLAUDE.md Files (Authoritative - Decisions Made)**
-- **Location:** `new_prompts/CLAUDE/{language}/patterns-*.md` files
+**Tier 1: Pattern Files (Authoritative - Decisions Made)**
+- **Location:** See root CLAUDE.md for path resolution and file structure
 - **Content:** Finalized architectural decisions, technology choices, patterns, standards
 - **Status:** **Default authoritative** - use unless explicit override justified
 - **Override Allowed:** YES - with documented justification and approval (see override process below)
-- **Examples:**
-  - HTTP framework choice (e.g., Gin for Go REST APIs - `patterns-http-frameworks.md`)
-  - Database ORM (e.g., SQLAlchemy async for Python - `patterns-database.md`)
-  - Logging library (e.g., structlog for Python - `patterns-logging.md`)
-  - Testing framework (e.g., pytest for Python, testify for Go - `patterns-testing.md`)
+- **Pattern Coverage:** HTTP frameworks, database ORMs, logging libraries, testing frameworks, tooling configurations, type systems, validation approaches, architecture patterns
+- **Note:** See root CLAUDE.md for complete list of pattern files and their purposes
 
 **Tier 2: Implementation Research (Exploratory - Recommendations)**
-- **Location:** `artifacts/research/{product_name}_implementation_research.md`
-- **Content:** Exploration of patterns, alternatives analysis, recommendations when CLAUDE.md doesn't cover topic
-- **Status:** **Advisory** - used only when CLAUDE.md has no decision on topic
-- **Usage Rule:** `IF CLAUDE.md covers topic THEN ignore Implementation Research ELSE use Implementation Research`
+- **Location:** See root CLAUDE.md for path resolution
+- **Content:** Exploration of patterns, alternatives analysis, recommendations when patterns don't cover topic
+- **Status:** **Advisory** - used only when patterns have no decision on topic
+- **Usage Rule:** `IF patterns cover topic THEN ignore Implementation Research ELSE use Implementation Research`
 - **Examples:**
-  - Cache invalidation strategies (when `patterns-caching.md` doesn't exist)
-  - Error handling patterns for specific domain (when not standardized in CLAUDE.md)
+  - Cache invalidation strategies (when pattern file doesn't exist)
+  - Error handling patterns for specific domain (when not standardized in patterns)
   - Third-party library selection (when no standard exists)
 
 **Tier 3: Artifact-Specific Decisions (Supplements)**
-- **Location:** PRD, US, Tech Spec Open Questions → triggers ADR creation
-- **Content:** Product-specific decisions not covered by CLAUDE.md or Implementation Research
-- **Status:** **New decisions** - may trigger CLAUDE.md updates if pattern generalizes across project
+- **Content:** Product-specific decisions not covered by patterns or Implementation Research
+- **Status:** **New decisions** - may trigger pattern file updates if pattern generalizes across project
+- **Triggers:** PRD, US, Tech Spec Open Questions → may create ADR
 - **Examples:**
   - Product-specific data model constraints
   - Integration-specific error handling
   - Feature-specific algorithm selection
 
-### CLAUDE.md Override Process
+### Pattern Override Process
 
 **When Override Justified:**
-Artifact-specific context requires deviating from CLAUDE.md decision (rare - requires strong technical justification).
+Artifact-specific context requires deviating from pattern decision (rare - requires strong technical justification).
 
 **Required Documentation:**
 ```markdown
-[CLAUDE.md OVERRIDE] {Alternative approach}
+[PATTERN OVERRIDE] {Alternative approach}
 - **Original Decision:** patterns-{file}.md:{line} "{decision}"
 - **Override Rationale:** {Technical justification specific to this artifact}
 - **Approval Status:** [APPROVED BY: {Tech Lead Name} - {Date}] or [REQUIRES TECH LEAD APPROVAL]
 
 Example:
-[CLAUDE.md OVERRIDE] Use Chi instead of Gin for this microservice
+[PATTERN OVERRIDE] Use Chi instead of Gin for this microservice
 - **Original Decision:** patterns-http-frameworks.md:238 "Default: Use Gin"
 - **Override Rationale:** Client mandate requires stdlib-only dependencies for security audit compliance
 - **Approval Status:** [APPROVED BY: Tech Lead John - 2025-10-20]
 ```
 
-### CLAUDE.md Gap Flagging
+### Pattern Gap Flagging
 
 **When Implementation Research suggests pattern worth standardizing:**
 ```markdown
-[EXTEND CLAUDE.md]
+[EXTEND PATTERNS]
 - **Pattern from Research:** §X.Y {Pattern name from Implementation Research}
 - **Generalization Opportunity:** {Why this should become project standard}
 - **Proposed File:** patterns-{domain}.md
 - **Action:** Tech Lead review for standardization
 
 Example:
-[EXTEND CLAUDE.md]
+[EXTEND PATTERNS]
 - **Pattern from Research:** §5.3 Cache invalidation with TTL expiration
 - **Generalization Opportunity:** Used across 3 services, should standardize TTL values and invalidation strategy
 - **Proposed File:** patterns-caching.md
-- **Action:** Tech Lead review for standardization (create new CLAUDE file)
+- **Action:** Tech Lead review for standardization (create new pattern file)
 ```
 
 ### Conflict Resolution Examples
 
-**Scenario 1: CLAUDE.md has decision, Implementation Research contradicts**
-- **Resolution:** Use CLAUDE.md decision (Tier 1 precedence)
-- **Generator Behavior:** Reference CLAUDE.md, ignore Implementation Research recommendation
-- **Example:** patterns-http-frameworks.md says "Gin", Implementation Research suggests "chi or gin" → Use Gin
+**Scenario 1: Pattern file has decision, Implementation Research contradicts**
+- **Resolution:** Use pattern decision (Tier 1 precedence)
+- **Generator Behavior:** Reference pattern file, ignore Implementation Research recommendation
+- **Example:** Pattern file says "Gin", Implementation Research suggests "chi or gin" → Use Gin
 
-**Scenario 2: CLAUDE.md silent, Implementation Research has recommendation**
+**Scenario 2: Pattern file silent, Implementation Research has recommendation**
 - **Resolution:** Use Implementation Research (Tier 2 applies when Tier 1 absent)
-- **Generator Behavior:** Reference Implementation Research with `[CLAUDE.md GAP]` marker
-- **Example:** No patterns-caching.md, Implementation Research §5.3 recommends TTL strategy → Use §5.3
+- **Generator Behavior:** Reference Implementation Research with `[PATTERN GAP]` marker
+- **Example:** No caching pattern file, Implementation Research §5.3 recommends TTL strategy → Use §5.3
 
-**Scenario 3: Neither CLAUDE.md nor Implementation Research covers topic**
+**Scenario 3: Neither patterns nor Implementation Research covers topic**
 - **Resolution:** Create artifact-specific decision (Tier 3), document in Open Questions
 - **Generator Behavior:** Mark with `[NEW DECISION REQUIRED]` or appropriate marker (`[REQUIRES TECH LEAD]`, `[REQUIRES ADR]`)
 - **Example:** Product-specific algorithm choice → Document decision rationale, consider ADR
@@ -144,19 +141,19 @@ Example:
 ### Template and Generator Enforcement
 
 **Templates include Decision Hierarchy guidance:**
-- PRD Template (lines 118-163): Explicit hierarchy with examples
-- Backlog Story Template: References to CLAUDE.md standards
-- Tech Spec Template: CLAUDE.md precedence for implementation patterns
+- PRD Template: Explicit hierarchy with examples
+- Backlog Story Template: References to pattern standards
+- Tech Spec Template: Pattern precedence for implementation patterns
 
 **Generators enforce precedence:**
-- Check CLAUDE.md files before referencing Implementation Research
-- Validate that CLAUDE.md decisions are not contradicted
+- Check pattern files before referencing Implementation Research
+- Validate that pattern decisions are not contradicted
 - Flag conflicts during generation (validation criteria)
 
 **Related Documents:**
-- PRD Template: Lines 118-163 (Technical Considerations section)
-- Lean Analysis Report v1.4: Recommendation 2 (lines 726-875)
-- Generator Validation Spec: Precedence validation rules (if applicable)
+- PRD Template: Technical Considerations section
+- Lean Analysis Report v1.4: Recommendation 2
+- Generator Validation Spec: Precedence validation rules
 
 ---
 
@@ -177,26 +174,6 @@ For artifacts that include `{descriptive-slug}` (Product Vision, Initiative, Epi
 - Title: "Implement User Authentication (OAuth 2.0)" → Slug: `implement_user_authentication_oauth`
 
 **Purpose:** Descriptive slugs enable file identification without opening files, improve codebase navigation, and maintain consistency with existing artifacts (US-001 to US-008 pattern).
-
----
-
-### Common Path Patterns
-
-| Artifact Type | Pattern | Resolved Example |
-|---------------|---------|------------------|
-| Business Research | `artifacts/research/{product_name}_business_research.md` | `artifacts/research/AI_Agent_MCP_Server_business_research.md` |
-| Implementation Research | `artifacts/research/{product_name}_implementation_research.md` | `artifacts/research/AI_Agent_MCP_Server_implementation_research.md` |
-| Product Vision | `artifacts/product_visions/VIS-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/product_visions/VIS-001_ai_agent_mcp_server_v1.md` |
-| Initiative | `artifacts/initiatives/INIT-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/initiatives/INIT-001_ai_agent_mcp_infrastructure_v4.md` |
-| Epic | `artifacts/epics/EPIC-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/epics/EPIC-000_project_foundation_bootstrap_v2.md` |
-| PRD | `artifacts/prds/PRD-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/prds/PRD-000_project_foundation_bootstrap_v3.md` |
-| High-Level Story | `artifacts/hls/HLS-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/hls/HLS-003_application_skeleton_implementation_v1.md` |
-| Functional Spec | `artifacts/funcspecs/FS-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/funcspecs/FS-001_user_login_flow_v1.md` |
-| Backlog Story | `artifacts/backlog_stories/US-{XXX}_{descriptive-slug}_v{N}.md` | `artifacts/backlog_stories/US-001_automated_setup_script_v1.md` |
-| Spike | `artifacts/spikes/SPIKE-{XXX}_v{N}.md` | `artifacts/spikes/SPIKE-001_v1.md` |
-| ADR | `artifacts/adrs/ADR-{XXX}_v{N}.md` | `artifacts/adrs/ADR-001_v1.md` |
-| Tech Spec | `artifacts/tech_specs/SPEC-{XXX}_v{N}.md` | `artifacts/tech_specs/SPEC-001_v1.md` |
-| Implementation Task | `artifacts/tasks/TASK-{XXX}_v{N}.md` | `artifacts/tasks/TASK-001_v1.md` |
 
 ---
 
