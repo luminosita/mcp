@@ -27,29 +27,29 @@ This document contains prioritized checklists for enhancing the hybrid CLAUDE.md
 
 ### Critical Missing Examples
 
-- [x] **Create `docs/hybrid/go/CLAUDE-database.md`** ✅
+- [x] **Create `new_prompts/patterns/go/patterns-database.md`** ✅
   - Purpose: Database patterns, Database Migration Patterns, Database schema versioning and migration strategies
   - Include: golang-migrate/migrate examples, up/down migrations, seed data
   - Example: Migration file structure, rollback strategies, CI/CD integration
 
-- [x] **Create `docs/hybrid/go/CLAUDE-api.md`** ✅
+- [x] **Create `new_prompts/patterns/go/patterns-api.md`** ✅
   - Purpose: API patterns
   - Include: API version management strategies, URL versioning (/v1/, /v2/), header versioning, deprecation policies
   - Example: Handler organization for multiple versions, backward compatibility
 
-- [x] **Create `docs/hybrid/go/CLAUDE-observability.md`** ✅
+- [x] **Create `new_prompts/patterns/go/patterns-observability.md`** ✅
   - Purpose: Monitoring, logging, and tracing patterns
   - Include: Structured logging (slog), Prometheus metrics, OpenTelemetry tracing, health checks
   - Example: Complete observability setup with middleware, metric collectors, trace spans
   - Reference: Go observability best practices, cloud-native patterns
 
-- [ ] **Create `docs/hybrid/go/CLAUDE-kubernetes.md`**
+- [ ] **Create `new_prompts/patterns/go/patterns-kubernetes.md`**
   - Purpose: Kubernetes deployment patterns and configurations for Go applications
   - Include: Deployment manifests, Service definitions, ConfigMaps/Secrets, Ingress, HPA, resource limits
   - Example: Complete k8s setup with health probes, rolling updates, init containers, pod security
   - Reference: Production-ready k8s patterns, 12-factor app deployment, observability integration
 
-- [ ] **Create `docs/hybrid/go/CLAUDE-crossplane.md`**
+- [ ] **Create `new_prompts/patterns/go/patterns-crossplane.md`**
   - Purpose: Crossplane infrastructure patterns and Composition definitions
   - Include: Composite Resource Definitions (XRDs), Compositions, Claims, provider configurations
   - Example: Database provisioning, cloud resource management, GitOps integration, policy enforcement
@@ -67,7 +67,7 @@ This document contains prioritized checklists for enhancing the hybrid CLAUDE.md
   - Example: Multi-resource compositions (VPC + RDS + S3), patch and transform patterns, dependencies
   - Reference: Crossplane best practices, composition functions, policy as code integration
 
-- [ ] **Create `docs/hybrid/go/CLAUDE-chainsaw.md`**
+- [ ] **Create `new_prompts/patterns/go/patterns-chainsaw.md`**
   - Purpose: Chainsaw (Kyverno) Kubernetes testing framework patterns and test scenarios
   - Include: Test suite structure, assertion patterns, resource operations, scenario composition
   - Example: E2E tests for k8s resources, policy validation, deployment verification, chaos testing
@@ -85,19 +85,19 @@ This document contains prioritized checklists for enhancing the hybrid CLAUDE.md
 
 ### Security Enhancements
 
-- [x] **Add OAuth2/OIDC Integration to `docs/hybrid/go/CLAUDE-security.md`** ✅
+- [x] **Add OAuth2/OIDC Integration to `new_prompts/patterns/go/patterns-security.md`** ✅
   - Purpose: Third-party authentication patterns
   - Include: OAuth2 flows, OIDC token validation, provider integration (Google, GitHub)
   - Example: Complete OAuth2 implementation with token exchange, refresh, PKCE
   - Add after: JWT section (line ~150)
 
-- [x] **Add CSRF Protection to `docs/hybrid/go/CLAUDE-security.md`** ✅
+- [x] **Add CSRF Protection to `new_prompts/patterns/go/patterns-security.md`** ✅
   - Purpose: Cross-Site Request Forgery prevention
   - Include: CSRF token generation, validation middleware, double-submit cookie pattern
   - Example: gorilla/csrf integration, stateless CSRF with JWT
   - Add after: Security headers middleware section
 
-- [x] **Add API Key Management to `docs/hybrid/go/CLAUDE-api.md`** ✅
+- [x] **Add API Key Management to `new_prompts/patterns/go/patterns-api.md`** ✅
   - Purpose: API key generation, rotation, and validation
   - Include: Secure key generation, hashing strategies, rotation policies, scoping
   - Example: Complete API key service with middleware, rate limiting per key
@@ -105,19 +105,19 @@ This document contains prioritized checklists for enhancing the hybrid CLAUDE.md
 
 ### Infrastructure Patterns
 
-- [x] **Create `docs/hybrid/go/CLAUDE-caching.md`** ✅
+- [x] **Create `new_prompts/patterns/go/patterns-caching.md`** ✅
   - Purpose: Caching strategies and Redis integration
   - Include: Cache-aside, read-through, write-through patterns, Redis client setup
   - Example: Distributed cache implementation, TTL strategies, cache invalidation
   - Reference: Cache coherence patterns, stampede prevention
 
-- [x] **Create `docs/hybrid/go/CLAUDE-grpc.md`** ✅
+- [x] **Create `new_prompts/patterns/go/patterns-grpc.md`** ✅
   - Purpose: gRPC service implementation patterns
   - Include: Proto definitions, server/client implementation, interceptors, streaming
   - Example: Complete gRPC service with unary and streaming RPCs, error handling
   - Reference: gRPC Go best practices, connection management
 
-- [x] **Create `docs/hybrid/go/CLAUDE-messaging.md`** ✅
+- [x] **Create `new_prompts/patterns/go/patterns-messaging.md`** ✅
   - Purpose: Message queue integration (RabbitMQ, Kafka, NATS)
   - Include: Publisher/subscriber patterns, dead letter queues, retry logic
   - Example: Event-driven architecture with message handlers, idempotency
@@ -138,13 +138,13 @@ This document contains prioritized checklists for enhancing the hybrid CLAUDE.md
 
 ### Additional Patterns
 
-- [x] **Create `docs/hybrid/go/CLAUDE-websockets.md`** ✅
+- [x] **Create `new_prompts/patterns/go/patterns-websockets.md`** ✅
   - Purpose: Real-time communication patterns
   - Include: WebSocket connection management, broadcasting, room patterns
   - Example: Chat server, real-time notifications, connection pooling
   - Reference: gorilla/websocket patterns, scaling considerations
 
-- [x] **Create `docs/hybrid/go/CLAUDE-cli.md`** ✅
+- [x] **Create `new_prompts/patterns/go/patterns-cli.md`** ✅
   - Purpose: Command-line application patterns
   - Include: Cobra framework setup, flag parsing, subcommands, configuration
   - Example: Complete CLI app with commands, persistent flags, completion
@@ -152,7 +152,7 @@ This document contains prioritized checklists for enhancing the hybrid CLAUDE.md
 
 - [x] **Add File Upload/Download Patterns** ✅
   - Purpose: File handling in HTTP services
-  - Location: Add to `docs/hybrid/go/CLAUDE-security.md` or create dedicated section
+  - Location: Add to `new_prompts/patterns/go/patterns-security.md` or create dedicated section
   - Include: Multipart form handling, streaming large files, progress tracking, validation
   - Example: Secure file upload with size limits, type validation, virus scanning hooks
 
@@ -194,13 +194,13 @@ This document contains prioritized checklists for enhancing the hybrid CLAUDE.md
 ### Advanced Topics
 
 - [ ] **Add GraphQL Patterns** (if using GraphQL)
-  - Location: Create `docs/hybrid/go/CLAUDE-graphql.md`
+  - Location: Create `new_prompts/patterns/go/patterns-graphql.md`
   - Include: Schema definitions, resolver patterns, dataloader for N+1, subscriptions
   - Example: Complete GraphQL server with gqlgen, error handling, authentication
   - Reference: GraphQL Go best practices
 
 - [ ] **Add Event Sourcing Patterns** (if applicable)
-  - Location: Add to `docs/hybrid/go/CLAUDE-events.md` or create dedicated file
+  - Location: Add to `new_prompts/patterns/go/patterns-events.md` or create dedicated file
   - Include: Event store implementation, aggregate patterns, projections, CQRS
   - Example: Event-sourced aggregate with command handlers, event replay
   - Reference: Event sourcing in Go, consistency boundaries

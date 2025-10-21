@@ -1,4 +1,4 @@
-# CLAUDE-typing.md - Type Safety & Annotations
+# patterns-typing - Type Safety & Annotations
 
 > **Specialized Guide**: Comprehensive type hints, annotations, and type safety patterns for Python projects.
 
@@ -1353,4 +1353,4 @@ def legacy_function() -> dict[str, any]:
 
 ---
 
-**Back to [Core Guide](./CLAUDE-core.md)**
+**Back to [Core Guide]mcp://resources/patterns/python/patterns-core**

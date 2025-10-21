@@ -1,11 +1,11 @@
-# CLAUDE-mcp.md - Model Context Protocol (MCP) Tool Implementation
+# patterns-mcp - Model Context Protocol (MCP) Tool Implementation
 
 > **Purpose**: Guidelines for implementing MCP tools with FastMCP SDK, including critical patterns learned from US-011 implementation.
 
 ## 📚 Related Documentation
-- **[CLAUDE-core.md](./CLAUDE-core.md)** - Core development philosophy
-- **[CLAUDE-validation-models.md](./CLAUDE-validation-models.md)** - Pydantic validation patterns
-- **[CLAUDE-typing.md](./CLAUDE-typing.md)** - Type safety requirements
+- **[patterns-core]mcp://resources/patterns/python/patterns-core** - Core development philosophy
+- **[patterns-validation-models]mcp://resources/patterns/python/patterns-validation-models** - Pydantic validation patterns
+- **[patterns-typing]mcp://resources/patterns/python/patterns-typing** - Type safety requirements
 
 ---
 

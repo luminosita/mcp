@@ -1,4 +1,4 @@
-# CLAUDE-validation-files.md - File Upload Security
+# patterns-validation-files - File Upload Security
 
 
 > **Specialized Guide**: Secure file upload handling, MIME type verification, virus scanning, and storage security.

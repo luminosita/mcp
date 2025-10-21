@@ -2,7 +2,7 @@
 
 Comprehensive testing strategies and patterns for Go applications.
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
 ## Testing Philosophy
 
@@ -652,12 +652,12 @@ go test -bench=BenchmarkUserRepository -benchmem ./...
 
 ## Related Files
 
-- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Test execution tasks (task test, task test:coverage), testify/gomock setup
-- **[CLAUDE-architecture.md](./CLAUDE-architecture.md)** - Testing each Clean Architecture layer independently
-- **[CLAUDE-database.md](./CLAUDE-database.md)** - Database integration tests, test fixtures, transaction rollback
-- **[CLAUDE-api.md](./CLAUDE-api.md)** - HTTP endpoint testing, API integration tests
-- **[CLAUDE-concurrency.md](./CLAUDE-concurrency.md)** - Race detector usage, testing goroutines safely
-- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Testing error cases, error assertions
+- **[patterns-tooling]mcp://resources/patterns/go/patterns-tooling** - Test execution tasks (task test, task test:coverage), testify/gomock setup
+- **[patterns-architecture]mcp://resources/patterns/go/patterns-architecture** - Testing each Clean Architecture layer independently
+- **[patterns-database]mcp://resources/patterns/go/patterns-database** - Database integration tests, test fixtures, transaction rollback
+- **[patterns-api]mcp://resources/patterns/go/patterns-api** - HTTP endpoint testing, API integration tests
+- **[patterns-concurrency]mcp://resources/patterns/go/patterns-concurrency** - Race detector usage, testing goroutines safely
+- **[patterns-error-handling]mcp://resources/patterns/go/patterns-error-handling** - Testing error cases, error assertions
 
 ---
 

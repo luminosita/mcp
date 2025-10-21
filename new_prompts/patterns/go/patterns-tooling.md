@@ -1,10 +1,10 @@
-# CLAUDE-tooling.md - Go Development Tools & Configuration
+# patterns-tooling - Go Development Tools & Configuration
 
 > **Specialized Guide**: Comprehensive tooling setup for Go development with golangci-lint, wire, swag, and testing frameworks.
 >
 > **Taskfile Interface**: All CLI commands are consolidated in `/Taskfile.yml` for consistent cross-platform execution. Use `task <command>` as the primary interface; individual tool commands documented below for understanding and configuration.
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
 ---
 
@@ -1280,13 +1280,13 @@ func TestUserService(t *testing.T) {
 
 ## 🐚 NuShell - Cross-Platform Shell (same as Python)
 
-See Python CLAUDE-tooling.md for comprehensive NuShell documentation. All NuShell patterns apply equally to Go projects.
+See Python mcp://resources/patterns/go/patterns-tooling for comprehensive NuShell documentation. All NuShell patterns apply equally to Go projects.
 
 ---
 
 ## 📦 Devbox - Portable Isolated Environments (same as Python)
 
-See Python CLAUDE-tooling.md for comprehensive Devbox documentation. Devbox works identically for Go projects.
+See Python mcp://resources/patterns/go/patterns-tooling for comprehensive Devbox documentation. Devbox works identically for Go projects.
 
 ### Go-Specific Devbox Configuration
 
@@ -1333,7 +1333,7 @@ See Python CLAUDE-tooling.md for comprehensive Devbox documentation. Devbox work
 
 ## 🐳 Podman - Daemonless Container Runtime (same as Python)
 
-See Python CLAUDE-tooling.md for comprehensive Podman documentation. All Podman patterns apply equally to Go projects.
+See Python mcp://resources/patterns/go/patterns-tooling for comprehensive Podman documentation. All Podman patterns apply equally to Go projects.
 
 ### Go-Specific Containerfile (Multi-Stage Build)
 
@@ -1751,4 +1751,4 @@ exclude: |
 
 ---
 
-**Back to [Core Orchestrator](./CLAUDE-core.md)** | **Back to [Main CLAUDE.md](/CLAUDE.md)**
+**Back to [Core Orchestrator]mcp://resources/patterns/go/patterns-core** | **Back to [Main CLAUDE.md](/CLAUDE.md)**

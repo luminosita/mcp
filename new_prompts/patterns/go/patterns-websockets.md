@@ -2,7 +2,7 @@
 
 Real-time communication patterns using WebSockets in Go applications.
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
 ## Basic WebSocket Server
 

@@ -1,4 +1,4 @@
-# CLAUDE-validation-api.md - API Rate Limiting & Validation
+# patterns-validation-api - API Rate Limiting & Validation
 
 
 > **Specialized Guide**: API rate limiting, request validation patterns, error handling, and security checklists.
@@ -873,4 +873,4 @@ def generate_secure_token() -> str:
 
 ---
 
-**Back to [Core Guide](./CLAUDE-core.md)**
+**Back to [Core Guide]mcp://resources/patterns/python/patterns-core**

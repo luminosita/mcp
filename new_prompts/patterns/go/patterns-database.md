@@ -1,6 +1,6 @@
 # CLAUDE.md - Database Patterns & Migrations
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
 ## Overview
 
@@ -730,12 +730,12 @@ migrate -path ./migrations -database "$DATABASE_URL" force 5
 
 ## Related Files
 
-- **[CLAUDE-architecture.md](./CLAUDE-architecture.md)** - Repository pattern, Clean Architecture layer boundaries, dependency injection
-- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Database error handling, wrapping errors with context
-- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Database integration tests, test fixtures, transaction rollback patterns
-- **[CLAUDE-concurrency.md](./CLAUDE-concurrency.md)** - Connection pooling, goroutines with database operations
-- **[CLAUDE-validation.md](./CLAUDE-validation.md)** - SQL injection prevention, parameterized queries
-- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - golang-migrate setup, database migration tasks in Taskfile
+- **[patterns-architecture]mcp://resources/patterns/go/patterns-architecture** - Repository pattern, Clean Architecture layer boundaries, dependency injection
+- **[patterns-error-handling]mcp://resources/patterns/go/patterns-error-handling** - Database error handling, wrapping errors with context
+- **[patterns-testing]mcp://resources/patterns/go/patterns-testing** - Database integration tests, test fixtures, transaction rollback patterns
+- **[patterns-concurrency]mcp://resources/patterns/go/patterns-concurrency** - Connection pooling, goroutines with database operations
+- **[patterns-validation]mcp://resources/patterns/go/patterns-validation** - SQL injection prevention, parameterized queries
+- **[patterns-tooling]mcp://resources/patterns/go/patterns-tooling** - golang-migrate setup, database migration tasks in Taskfile
 
 ---
 

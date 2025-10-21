@@ -1,6 +1,6 @@
-# CLAUDE-validation.md - Input Validation & Data Models
+# patterns-validation - Input Validation & Data Models
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
 ## Overview
 
@@ -527,11 +527,11 @@ type PaginatedResponse struct {
 
 ## Related Files
 
-- **[CLAUDE-security.md](./CLAUDE-security.md)** - Authentication, authorization, encryption, CSRF protection
-- **[CLAUDE-api.md](./CLAUDE-api.md)** - REST API design, error responses, versioning
-- **[CLAUDE-database.md](./CLAUDE-database.md)** - Repository pattern, parameterized queries, migrations
-- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing validation logic and error cases
-- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Error wrapping and HTTP error mapping
+- **[patterns-security]mcp://resources/patterns/go/patterns-security** - Authentication, authorization, encryption, CSRF protection
+- **[patterns-api]mcp://resources/patterns/go/patterns-api** - REST API design, error responses, versioning
+- **[patterns-database]mcp://resources/patterns/go/patterns-database** - Repository pattern, parameterized queries, migrations
+- **[patterns-testing]mcp://resources/patterns/go/patterns-testing** - Testing validation logic and error cases
+- **[patterns-error-handling]mcp://resources/patterns/go/patterns-error-handling** - Error wrapping and HTTP error mapping
 
 ---
 

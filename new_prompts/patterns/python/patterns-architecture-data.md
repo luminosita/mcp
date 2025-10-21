@@ -1,4 +1,4 @@
-# CLAUDE-architecture-data.md - Database Transactions & Models
+# patterns-architecture-data - Database Transactions & Models
 
 
 > **Specialized Guide**: Database transaction management patterns, isolation levels, and SQLAlchemy models.

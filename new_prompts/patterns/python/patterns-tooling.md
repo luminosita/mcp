@@ -1,4 +1,4 @@
-# CLAUDE-tooling.md - Development Tools & Configuration
+# patterns-tooling - Development Tools & Configuration
 
 > **Specialized Guide**: Comprehensive tooling setup for Python development with UV, Ruff, MyPy, and pytest.
 >
@@ -1633,4 +1633,4 @@ ruff check --select C90 .
 
 ---
 
-**Back to [Core Guide](./CLAUDE-core.md)**
+**Back to [Core Guide]mcp://resources/patterns/python/patterns-core**

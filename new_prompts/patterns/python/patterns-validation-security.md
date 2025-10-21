@@ -1,4 +1,4 @@
-# CLAUDE-validation-security.md - Input Validation & Security
+# patterns-validation-security - Input Validation & Security
 
 
 > **Specialized Guide**: Input sanitization, SQL injection prevention, and path traversal protection.

@@ -2,7 +2,7 @@
 
 This file provides detailed Clean Architecture implementation patterns with comprehensive code examples.
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
 ## Clean Architecture Layers
 
@@ -681,12 +681,12 @@ type UserQueryService interface {
 
 ## Related Files
 
-- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Wire dependency injection setup, code generation workflow
-- **[CLAUDE-database.md](./CLAUDE-database.md)** - Repository pattern implementation, database layer
-- **[CLAUDE-api.md](./CLAUDE-api.md)** - HTTP handlers (interface layer), REST API patterns
-- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing each layer independently with mocks
-- **[CLAUDE-validation.md](./CLAUDE-validation.md)** - Input validation at interface boundaries
-- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Error handling across layers
+- **[patterns-tooling]mcp://resources/patterns/go/patterns-tooling** - Wire dependency injection setup, code generation workflow
+- **[patterns-database]mcp://resources/patterns/go/patterns-database** - Repository pattern implementation, database layer
+- **[patterns-api]mcp://resources/patterns/go/patterns-api** - HTTP handlers (interface layer), REST API patterns
+- **[patterns-testing]mcp://resources/patterns/go/patterns-testing** - Testing each layer independently with mocks
+- **[patterns-validation]mcp://resources/patterns/go/patterns-validation** - Input validation at interface boundaries
+- **[patterns-error-handling]mcp://resources/patterns/go/patterns-error-handling** - Error handling across layers
 
 ---
 

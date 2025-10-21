@@ -1,4 +1,4 @@
-# CLAUDE-architecture-structure.md - Project Structure & Layouts
+# patterns-architecture-structure - Project Structure & Layouts
 
 > **Specialized Guide**: Project structure patterns, folder organization, and layout strategies for Python projects.
 

@@ -7,20 +7,20 @@
 ## 📚 Specialized Configuration Files
 
 ### Development Tools & Practices
-- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Development tools: Taskfile, Go toolchain, golangci-lint, gosec, govulncheck, staticcheck, Wire, Swagger, golang-migrate, testify, gomock, NuShell, Devbox, Podman, Trivy container security scanning
-- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing strategy: table-driven tests, testify/mock, gomock, race detection, benchmarks, integration tests with build tags
-- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Error patterns: custom errors, wrapping, errors.Is/As, HTTP error mapping, context handling, panic recovery
+- **[patterns-tooling]mcp://resources/patterns/go/patterns-tooling** - Development tools: Taskfile, Go toolchain, golangci-lint, gosec, govulncheck, staticcheck, Wire, Swagger, golang-migrate, testify, gomock, NuShell, Devbox, Podman, Trivy container security scanning
+- **[patterns-testing]mcp://resources/patterns/go/patterns-testing** - Testing strategy: table-driven tests, testify/mock, gomock, race detection, benchmarks, integration tests with build tags
+- **[patterns-error-handling]mcp://resources/patterns/go/patterns-error-handling** - Error patterns: custom errors, wrapping, errors.Is/As, HTTP error mapping, context handling, panic recovery
 
 ### Architecture & Design
-- **[CLAUDE-architecture.md](./CLAUDE-architecture.md)** - Clean Architecture: Domain/Application/Infrastructure/Interface layers, Wire dependency injection, CQRS pattern, project structure
-- **[CLAUDE-http-frameworks.md](./CLAUDE-http-frameworks.md)** - HTTP framework comparison: Gin vs Chi vs Fiber, selection criteria, performance benchmarks, observability integration, migration paths
-- **[CLAUDE-concurrency.md](./CLAUDE-concurrency.md)** - Concurrency patterns: goroutines, channels, worker pools, fan-out/fan-in, errgroup, graceful shutdown, race condition prevention
-- **[CLAUDE-database.md](./CLAUDE-database.md)** - Database patterns: Repository pattern, connection pooling, GORM/sqlx examples, golang-migrate setup, transaction patterns
+- **[patterns-architecture]mcp://resources/patterns/go/patterns-architecture** - Clean Architecture: Domain/Application/Infrastructure/Interface layers, Wire dependency injection, CQRS pattern, project structure
+- **[patterns-http-frameworks]mcp://resources/patterns/go/patterns-http-frameworks** - HTTP framework comparison: Gin vs Chi vs Fiber, selection criteria, performance benchmarks, observability integration, migration paths
+- **[patterns-concurrency]mcp://resources/patterns/go/patterns-concurrency** - Concurrency patterns: goroutines, channels, worker pools, fan-out/fan-in, errgroup, graceful shutdown, race condition prevention
+- **[patterns-database]mcp://resources/patterns/go/patterns-database** - Database patterns: Repository pattern, connection pooling, GORM/sqlx examples, golang-migrate setup, transaction patterns
 
 ### Validation & Security
-- **[CLAUDE-validation.md](./CLAUDE-validation.md)** - Input validation: struct tags, sanitization, SQL injection prevention, path traversal protection, request/response DTOs
-- **[CLAUDE-security.md](./CLAUDE-security.md)** - Security patterns: authentication (JWT, OAuth2, PKCE), authorization (RBAC), CSRF protection, rate limiting, encryption
-- **[CLAUDE-api.md](./CLAUDE-api.md)** - REST API design: RESTful patterns, API versioning strategies, Swagger annotations, API key management, request/response handling
+- **[patterns-validation]mcp://resources/patterns/go/patterns-validation** - Input validation: struct tags, sanitization, SQL injection prevention, path traversal protection, request/response DTOs
+- **[patterns-security]mcp://resources/patterns/go/patterns-security** - Security patterns: authentication (JWT, OAuth2, PKCE), authorization (RBAC), CSRF protection, rate limiting, encryption
+- **[patterns-api]mcp://resources/patterns/go/patterns-api** - REST API design: RESTful patterns, API versioning strategies, Swagger annotations, API key management, request/response handling
 
 ---
 
@@ -97,7 +97,7 @@ project-root/
     └── integration/
 ```
 
-**See [CLAUDE-architecture.md](./CLAUDE-architecture.md) for detailed Clean Architecture patterns and Wire DI setup**
+**See [patterns-architecture]mcp://resources/patterns/go/patterns-architecture for detailed Clean Architecture patterns and Wire DI setup**
 
 ---
 
@@ -116,7 +116,7 @@ Go offers several HTTP framework options. Choose based on your priorities:
 - ✅ Express.js-like API (familiar for Node.js developers)
 - Performance: Excellent (slight overhead vs fasthttp)
 
-**See [CLAUDE-http-frameworks.md](./CLAUDE-http-frameworks.md) for detailed framework comparison, benchmarks, and migration paths**
+**See [patterns-http-frameworks]mcp://resources/patterns/go/patterns-http-frameworks for detailed framework comparison, benchmarks, and migration paths**
 
 ---
 
@@ -161,7 +161,7 @@ func GetUser(ctx context.Context, finder UserFinder, id string) (*User, error) {
 }
 ```
 
-**See [CLAUDE-architecture.md](./CLAUDE-architecture.md) for comprehensive interface and dependency inversion patterns**
+**See [patterns-architecture]mcp://resources/patterns/go/patterns-architecture for comprehensive interface and dependency inversion patterns**
 
 ---
 
@@ -192,7 +192,7 @@ func (s *UserService) CreateUser(ctx context.Context, req CreateUserRequest) (*U
 }
 ```
 
-**See [CLAUDE-api.md](./CLAUDE-api.md) for Swagger/OpenAPI documentation patterns**
+**See [patterns-api]mcp://resources/patterns/go/patterns-api for Swagger/OpenAPI documentation patterns**
 
 ---
 
@@ -235,7 +235,7 @@ func TestUserService_CreateUser(t *testing.T) {
 }
 ```
 
-**See [CLAUDE-testing.md](./CLAUDE-testing.md) for comprehensive testing patterns with testify/mock and gomock**
+**See [patterns-testing]mcp://resources/patterns/go/patterns-testing for comprehensive testing patterns with testify/mock and gomock**
 
 ---
 
@@ -280,7 +280,7 @@ task generate:swagger      # Generate Swagger/OpenAPI docs
 task generate:all          # Run all generators
 ```
 
-**See [CLAUDE-tooling.md](./CLAUDE-tooling.md) for comprehensive Taskfile commands and tool configuration**
+**See [patterns-tooling]mcp://resources/patterns/go/patterns-tooling for comprehensive Taskfile commands and tool configuration**
 
 ---
 
@@ -317,8 +317,8 @@ if errors.Is(err, ErrUserNotFound) {
 - Use `crypto/rand` for security (never `math/rand`)
 - Enforce HTTPS/TLS 1.2+
 
-**See [CLAUDE-error-handling.md](./CLAUDE-error-handling.md) for comprehensive error patterns**
-**See [CLAUDE-security.md](./CLAUDE-security.md) for comprehensive security patterns**
+**See [patterns-error-handling]mcp://resources/patterns/go/patterns-error-handling for comprehensive error patterns**
+**See [patterns-security]mcp://resources/patterns/go/patterns-security for comprehensive security patterns**
 
 ---
 
@@ -365,7 +365,7 @@ Closes #156
 - Service interfaces MUST be in domain or application layer
 - Keep interfaces small and focused (Interface Segregation Principle)
 
-**See [CLAUDE-architecture.md](./CLAUDE-architecture.md) for detailed Clean Architecture implementation**
+**See [patterns-architecture]mcp://resources/patterns/go/patterns-architecture for detailed Clean Architecture implementation**
 
 ---
 
@@ -438,51 +438,51 @@ task --list                # List all available tasks (use Taskfile.yml)
 ## 🧭 When to Use Each File
 
 ### Starting a New Go Project?
-1. **CLAUDE-tooling.md** - Set up development tools (golangci-lint, wire, air, etc.)
-2. **CLAUDE-architecture.md** - Structure your project with Clean Architecture
+1. **mcp://resources/patterns/go/patterns-tooling** - Set up development tools (golangci-lint, wire, air, etc.)
+2. **mcp://resources/patterns/go/patterns-architecture** - Structure your project with Clean Architecture
 
 ### Implementing Features?
 
 **Need to validate input?**
-→ **CLAUDE-validation.md** - Struct validation, request/response models, sanitization
+→ **mcp://resources/patterns/go/patterns-validation** - Struct validation, request/response models, sanitization
 
 **Building REST API?**
-→ **CLAUDE-api.md** - RESTful design, versioning, Swagger documentation
+→ **mcp://resources/patterns/go/patterns-api** - RESTful design, versioning, Swagger documentation
 
 **Database operations?**
-→ **CLAUDE-database.md** - Repository pattern, migrations, connection pooling
+→ **mcp://resources/patterns/go/patterns-database** - Repository pattern, migrations, connection pooling
 
 **Background jobs or concurrent operations?**
-→ **CLAUDE-concurrency.md** - Goroutines, channels, worker pools, graceful shutdown
+→ **mcp://resources/patterns/go/patterns-concurrency** - Goroutines, channels, worker pools, graceful shutdown
 
 **Handling errors?**
-→ **CLAUDE-error-handling.md** - Custom errors, wrapping, context, HTTP mapping
+→ **mcp://resources/patterns/go/patterns-error-handling** - Custom errors, wrapping, context, HTTP mapping
 
 ### Adding Authentication/Security?
-→ **CLAUDE-security.md** - JWT, OAuth2, PKCE, CSRF protection, rate limiting, encryption
+→ **mcp://resources/patterns/go/patterns-security** - JWT, OAuth2, PKCE, CSRF protection, rate limiting, encryption
 
 ### Writing Tests?
-→ **CLAUDE-testing.md** - Table-driven tests, testify/mock, gomock, benchmarks, race detection
+→ **mcp://resources/patterns/go/patterns-testing** - Table-driven tests, testify/mock, gomock, benchmarks, race detection
 
 ### Specialized Domains?
 
 **gRPC service?**
-→ **CLAUDE-grpc.md** - Proto definitions, server/client implementation, streaming
+→ **mcp://resources/patterns/go/patterns-grpc** - Proto definitions, server/client implementation, streaming
 
 **WebSocket server?**
-→ **CLAUDE-websockets.md** - Connection handling, broadcast patterns, room management
+→ **mcp://resources/patterns/go/patterns-websockets** - Connection handling, broadcast patterns, room management
 
 **Message queues (RabbitMQ, Kafka, NATS)?**
-→ **CLAUDE-messaging.md** - Producer/consumer patterns, error handling, retries
+→ **mcp://resources/patterns/go/patterns-messaging** - Producer/consumer patterns, error handling, retries
 
 **Caching layer (Redis, in-memory)?**
-→ **CLAUDE-caching.md** - Cache-aside, write-through, TTL strategies
+→ **mcp://resources/patterns/go/patterns-caching** - Cache-aside, write-through, TTL strategies
 
 **CLI tool (Cobra)?**
-→ **CLAUDE-cli.md** - Command structure, flags, configuration, subcommands
+→ **mcp://resources/patterns/go/patterns-cli** - Command structure, flags, configuration, subcommands
 
 **Observability (logging, metrics, tracing)?**
-→ **CLAUDE-observability.md** - Structured logging, Prometheus, OpenTelemetry, health checks
+→ **mcp://resources/patterns/go/patterns-observability** - Structured logging, Prometheus, OpenTelemetry, health checks
 
 ---
 

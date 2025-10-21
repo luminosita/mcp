@@ -1,4 +1,4 @@
-# CLAUDE-validation-models.md - Pydantic Models & Validation
+# patterns-validation-models - Pydantic Models & Validation
 
 
 > **Specialized Guide**: Pydantic v2 models, field validation, model configuration, CRUD patterns, and environment settings.

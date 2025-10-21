@@ -335,6 +335,6 @@ Gin provides the best balance of:
 ---
 
 **See Also**:
-- [CLAUDE-api.md](./CLAUDE-api.md) - REST API patterns with Gin
-- [CLAUDE-testing.md](./CLAUDE-testing.md) - Testing HTTP handlers
-- [CLAUDE-observability.md](./CLAUDE-observability.md) - Monitoring and tracing
+- [patterns-api]mcp://resources/patterns/go/patterns-api - REST API patterns with Gin
+- [patterns-testing]mcp://resources/patterns/go/patterns-testing - Testing HTTP handlers
+- [patterns-observability]mcp://resources/patterns/go/patterns-observability - Monitoring and tracing

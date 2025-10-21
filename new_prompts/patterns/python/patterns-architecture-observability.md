@@ -1,4 +1,4 @@
-# CLAUDE-architecture-observability.md - Logging & Caching
+# patterns-architecture-observability - Logging & Caching
 
 
 > **Specialized Guide**: Structured logging with structlog and caching strategies for Python applications.
@@ -1591,4 +1591,4 @@ class User(Base):
 
 ---
 
-**Back to [Core Guide](./CLAUDE-core.md)**
+**Back to [Core Guide]mcp://resources/patterns/python/patterns-core**

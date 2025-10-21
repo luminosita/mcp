@@ -1,6 +1,6 @@
 # CLAUDE.md - API Patterns & Versioning
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
 ## Overview
 
@@ -743,12 +743,12 @@ func (h *UserHandlerV2) toV2Response(user *domain.User) *UserResponseV2 {
 
 ## Related Files
 
-- **[CLAUDE-validation.md](./CLAUDE-validation.md)** - Input validation, request/response DTOs, sanitization patterns
-- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - HTTP error responses, status code mapping, error wrapping
-- **[CLAUDE-security.md](./CLAUDE-security.md)** - API authentication (JWT, OAuth2), rate limiting, CSRF protection
-- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - API endpoint testing, integration tests, table-driven test patterns
-- **[CLAUDE-database.md](./CLAUDE-database.md)** - Repository pattern, database integration in handlers
-- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Swagger generation with swaggo, API documentation workflow
+- **[patterns-validation]mcp://resources/patterns/go/patterns-validation** - Input validation, request/response DTOs, sanitization patterns
+- **[patterns-error-handling]mcp://resources/patterns/go/patterns-error-handling** - HTTP error responses, status code mapping, error wrapping
+- **[patterns-security]mcp://resources/patterns/go/patterns-security** - API authentication (JWT, OAuth2), rate limiting, CSRF protection
+- **[patterns-testing]mcp://resources/patterns/go/patterns-testing** - API endpoint testing, integration tests, table-driven test patterns
+- **[patterns-database]mcp://resources/patterns/go/patterns-database** - Repository pattern, database integration in handlers
+- **[patterns-tooling]mcp://resources/patterns/go/patterns-tooling** - Swagger generation with swaggo, API documentation workflow
 
 ---
 

@@ -7,24 +7,24 @@
 ## 📚 Specialized Configuration Files
 
 ### Development Tools & Practices
-- **[CLAUDE-tooling.md](./CLAUDE-tooling.md)** - Development tools: Taskfile, UV, Ruff, MyPy, pytest, Renovate, NuShell, Devbox, Podman, Trivy container security scanning
-- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing strategy, fixtures, and coverage requirements
-- **[CLAUDE-typing.md](./CLAUDE-typing.md)** - Type hints, annotations, and type safety patterns
-- **[CLAUDE-mcp.md](./CLAUDE-mcp.md)** - Model Context Protocol (MCP) tool implementation patterns with FastMCP
+- **[patterns-tooling]mcp://resources/patterns/python/patterns-tooling** - Development tools: Taskfile, UV, Ruff, MyPy, pytest, Renovate, NuShell, Devbox, Podman, Trivy container security scanning
+- **[patterns-testing]mcp://resources/patterns/python/patterns-testing** - Testing strategy, fixtures, and coverage requirements
+- **[patterns-typing]mcp://resources/patterns/python/patterns-typing** - Type hints, annotations, and type safety patterns
+- **[patterns-mcp]mcp://resources/patterns/python/patterns-mcp** - Model Context Protocol (MCP) tool implementation patterns with FastMCP
 
 ### Architecture & Design
-- **[CLAUDE-architecture-structure.md](./CLAUDE-architecture-structure.md)** - Project structure, folder organization, and layout strategies
-- **[CLAUDE-architecture-patterns.md](./CLAUDE-architecture-patterns.md)** - Design patterns, dependency injection, and FastAPI structure
-- **[CLAUDE-architecture-middleware.md](./CLAUDE-architecture-middleware.md)** - Exception handling and CORS configuration
-- **[CLAUDE-architecture-data.md](./CLAUDE-architecture-data.md)** - Database transactions, isolation levels, and models
-- **[CLAUDE-architecture-observability.md](./CLAUDE-architecture-observability.md)** - Structured logging and caching strategies
+- **[patterns-architecture-structure]mcp://resources/patterns/python/patterns-architecture-structure** - Project structure, folder organization, and layout strategies
+- **[patterns-architecture-patterns]mcp://resources/patterns/python/patterns-architecture-patterns** - Design patterns, dependency injection, and FastAPI structure
+- **[patterns-architecture-middleware]mcp://resources/patterns/python/patterns-architecture-middleware** - Exception handling and CORS configuration
+- **[patterns-architecture-data]mcp://resources/patterns/python/patterns-architecture-data** - Database transactions, isolation levels, and models
+- **[patterns-architecture-observability]mcp://resources/patterns/python/patterns-architecture-observability** - Structured logging and caching strategies
 
 ### Validation & Security
-- **[CLAUDE-validation-models.md](./CLAUDE-validation-models.md)** - Pydantic models, field validation, and CRUD patterns
-- **[CLAUDE-validation-security.md](./CLAUDE-validation-security.md)** - Input sanitization, SQL injection prevention, and path traversal protection
-- **[CLAUDE-validation-auth.md](./CLAUDE-validation-auth.md)** - JWT authentication, token validation, and authorization
-- **[CLAUDE-validation-files.md](./CLAUDE-validation-files.md)** - Secure file upload handling and storage
-- **[CLAUDE-validation-api.md](./CLAUDE-validation-api.md)** - API rate limiting, validation patterns, and security checklists
+- **[patterns-validation-models]mcp://resources/patterns/python/patterns-validation-models** - Pydantic models, field validation, and CRUD patterns
+- **[patterns-validation-security]mcp://resources/patterns/python/patterns-validation-security** - Input sanitization, SQL injection prevention, and path traversal protection
+- **[patterns-validation-auth]mcp://resources/patterns/python/patterns-validation-auth** - JWT authentication, token validation, and authorization
+- **[patterns-validation-files]mcp://resources/patterns/python/patterns-validation-files** - Secure file upload handling and storage
+- **[patterns-validation-api]mcp://resources/patterns/python/patterns-validation-api** - API rate limiting, validation patterns, and security checklists
 
 ---
 
@@ -84,7 +84,7 @@ project-root/
     └── integration/
 ```
 
-**See [CLAUDE-architecture-structure.md](./CLAUDE-architecture-structure.md) for detailed structure patterns**
+**See [patterns-architecture-structure]mcp://resources/patterns/python/patterns-architecture-structure for detailed structure patterns**
 
 ---
 
@@ -124,7 +124,7 @@ def process_items(items: list[str]) -> dict[str, int]:
     return {item: len(item) for item in items}
 ```
 
-**See [CLAUDE-typing.md](./CLAUDE-typing.md) for comprehensive type annotation patterns**
+**See [patterns-typing]mcp://resources/patterns/python/patterns-typing for comprehensive type annotation patterns**
 
 ---
 
@@ -184,7 +184,7 @@ def test_should_return_user_when_valid_id_provided(sample_user):
     pass
 ```
 
-**See [CLAUDE-testing.md](./CLAUDE-testing.md) for comprehensive testing patterns**
+**See [patterns-testing]mcp://resources/patterns/python/patterns-testing for comprehensive testing patterns**
 
 ---
 
@@ -221,7 +221,7 @@ task test                  # Run tests with coverage
 task test:coverage         # Run tests with 80%+ enforcement
 ```
 
-**See [CLAUDE-tooling.md](./CLAUDE-tooling.md) for comprehensive Taskfile commands and tool configuration**
+**See [patterns-tooling]mcp://resources/patterns/python/patterns-tooling for comprehensive Taskfile commands and tool configuration**
 
 ---
 
@@ -247,7 +247,7 @@ class UserCreate(BaseModel):
 - Keep dependencies updated with `uv`
 - Follow OWASP guidelines
 
-**See [CLAUDE-validation-models.md](./CLAUDE-validation-models.md) for comprehensive validation patterns**
+**See [patterns-validation-models]mcp://resources/patterns/python/patterns-validation-models for comprehensive validation patterns**
 
 ---
 

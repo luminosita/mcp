@@ -9,7 +9,7 @@
 ## 🔴 HIGH PRIORITY - Critical Missing Examples
 
 ### 1. Async Context Managers & Patterns
-**File**: `CLAUDE-typing.md`
+**File**: `mcp://resources/patterns/python/patterns-typing`
 **Estimated Effort**: 2-3 hours
 **Instructions**:
 ```
@@ -38,7 +38,7 @@ Add error handling, timeout patterns, and nested async context managers.
 ```
 
 ### 2. Database Transaction Management
-**File**: `CLAUDE-architecture.md`
+**File**: `mcp://resources/patterns/python/patterns-architecture`
 **Estimated Effort**: 3-4 hours
 **Instructions**:
 ```
@@ -70,7 +70,7 @@ async def transaction(session: AsyncSession):
 ```
 
 ### 3. JWT Authentication Flow
-**File**: `CLAUDE-validation.md`
+**File**: `mcp://resources/patterns/python/patterns-validation`
 **Estimated Effort**: 3-4 hours
 **Instructions**:
 ```
@@ -103,7 +103,7 @@ Add dependency for protecting routes and token refresh endpoint.
 ```
 
 ### 4. File Upload Security
-**File**: `CLAUDE-validation.md`
+**File**: `mcp://resources/patterns/python/patterns-validation`
 **Estimated Effort**: 2-3 hours
 **Instructions**:
 ```
@@ -137,7 +137,7 @@ Add chunked upload handling and malware scanning integration.
 ```
 
 ### 5. API Rate Limiting Implementation
-**File**: `CLAUDE-validation.md`
+**File**: `mcp://resources/patterns/python/patterns-validation`
 **Estimated Effort**: 2-3 hours
 **Instructions**:
 ```
@@ -170,7 +170,7 @@ Add custom rate limit strategies and distributed rate limiting with Redis.
 ## 🟡 MEDIUM PRIORITY - Tool Configuration Expansions
 
 ### 6. pytest-xdist Parallel Testing
-**File**: `CLAUDE-testing.md`
+**File**: `mcp://resources/patterns/python/patterns-testing`
 **Estimated Effort**: 1-2 hours
 **Instructions**:
 ```
@@ -194,7 +194,7 @@ Add troubleshooting section for parallel test issues and fixture sharing.
 ```
 
 ### 7. Hypothesis Property-Based Testing
-**File**: `CLAUDE-testing.md`
+**File**: `mcp://resources/patterns/python/patterns-testing`
 **Estimated Effort**: 2-3 hours
 **Instructions**:
 ```
@@ -225,7 +225,7 @@ Add best practices for property selection and common patterns.
 ```
 
 ### 8. Syrupy Snapshot Testing
-**File**: `CLAUDE-testing.md`
+**File**: `mcp://resources/patterns/python/patterns-testing`
 **Estimated Effort**: 1-2 hours
 **Instructions**:
 ```
@@ -251,7 +251,7 @@ Add CI/CD integration and snapshot review process.
 ```
 
 ### 9. Structlog Structured Logging
-**File**: `CLAUDE-architecture.md`
+**File**: `mcp://resources/patterns/python/patterns-architecture`
 **Estimated Effort**: 2-3 hours
 **Instructions**:
 ```
@@ -290,7 +290,7 @@ Add ELK/CloudWatch integration examples.
 ## 🟡 MEDIUM PRIORITY - Security Critical Examples
 
 ### 10. Complete CORS Configuration
-**File**: `CLAUDE-architecture.md`
+**File**: `mcp://resources/patterns/python/patterns-architecture`
 **Estimated Effort**: 1-2 hours
 **Instructions**:
 ```
@@ -326,7 +326,7 @@ Add troubleshooting section for common CORS issues.
 ```
 
 ### 11. SQL Injection Prevention Examples
-**File**: `CLAUDE-validation.md`
+**File**: `mcp://resources/patterns/python/patterns-validation`
 **Estimated Effort**: 1-2 hours
 **Instructions**:
 ```
@@ -363,7 +363,7 @@ Add section on dynamic table/column names and escaping.
 ## 🟢 LOW PRIORITY - Advanced Features
 
 ### 12. Caching Strategies
-**File**: `CLAUDE-architecture.md`
+**File**: `mcp://resources/patterns/python/patterns-architecture`
 **Estimated Effort**: 3-4 hours
 **Instructions**:
 ```
@@ -410,7 +410,7 @@ Add cache key design patterns and TTL strategies.
 ```
 
 ### 13. WebSocket Real-time Patterns
-**File**: `CLAUDE-architecture.md`
+**File**: `mcp://resources/patterns/python/patterns-architecture`
 **Estimated Effort**: 3-4 hours
 **Instructions**:
 ```
@@ -453,7 +453,7 @@ Add scaling considerations and Redis pub/sub for multi-server.
 ```
 
 ### 14. Monorepo/Workspace Configuration
-**File**: New `CLAUDE-monorepo.md` or in `CLAUDE-tooling.md`
+**File**: New `mcp://resources/patterns/python/patterns-monorepo` or in `mcp://resources/patterns/python/patterns-tooling`
 **Estimated Effort**: 2-3 hours
 **Instructions**:
 ```
@@ -481,7 +481,7 @@ Add scripts for monorepo operations and CI/CD integration.
 ```
 
 ### 15. Background Job Processing
-**File**: `CLAUDE-architecture.md`
+**File**: `mcp://resources/patterns/python/patterns-architecture`
 **Estimated Effort**: 3-4 hours
 **Instructions**:
 ```
@@ -527,7 +527,7 @@ Add task monitoring, failure handling, and scheduling patterns.
 ## 📋 Configuration & Project Setup Gaps
 
 ### 16. Alembic Database Migrations
-**File**: New `CLAUDE-database.md` or in `CLAUDE-architecture.md`
+**File**: New `mcp://resources/patterns/python/patterns-database` or in `mcp://resources/patterns/python/patterns-architecture`
 **Estimated Effort**: 2-3 hours
 **Instructions**:
 ```
@@ -564,7 +564,7 @@ Add zero-downtime migration patterns and testing strategies.
 ```
 
 ### 17. Docker Best Practices
-**File**: New `CLAUDE-deployment.md`
+**File**: New `mcp://resources/patterns/python/patterns-deployment`
 **Estimated Effort**: 3-4 hours
 **Instructions**:
 ```
@@ -594,7 +594,7 @@ Add health checks, logging, and orchestration examples.
 ```
 
 ### 18. CI/CD Pipeline Configuration
-**File**: New `CLAUDE-deployment.md`
+**File**: New `mcp://resources/patterns/python/patterns-deployment`
 **Estimated Effort**: 2-3 hours
 **Instructions**:
 ```
@@ -629,7 +629,7 @@ Add GitLab CI, CircleCI examples and deployment strategies.
 ```
 
 ### 19. GraphQL API Patterns
-**File**: New `CLAUDE-graphql.md` or in `CLAUDE-architecture.md`
+**File**: New `mcp://resources/patterns/python/patterns-graphql` or in `mcp://resources/patterns/python/patterns-architecture`
 **Estimated Effort**: 3-4 hours
 **Instructions**:
 ```
@@ -668,7 +668,7 @@ Add N+1 query prevention with dataloaders and pagination.
 ```
 
 ### 20. API Versioning Strategies
-**File**: `CLAUDE-architecture.md`
+**File**: `mcp://resources/patterns/python/patterns-architecture`
 **Estimated Effort**: 1-2 hours
 **Instructions**:
 ```

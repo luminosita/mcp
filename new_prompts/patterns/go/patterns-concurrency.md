@@ -2,7 +2,7 @@
 
 Comprehensive concurrency patterns using goroutines, channels, and synchronization primitives.
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
 ## Core Concurrency Principles
 
@@ -749,11 +749,11 @@ func (c *MutexCounter) Increment() {
 
 ## Related Files
 
-- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Race detector (`go test -race`), testing concurrent code safely
-- **[CLAUDE-database.md](./CLAUDE-database.md)** - Connection pooling, database operations with goroutines
-- **[CLAUDE-error-handling.md](./CLAUDE-error-handling.md)** - Error handling in goroutines, errgroup patterns
-- **[CLAUDE-api.md](./CLAUDE-api.md)** - Concurrent request handling, timeout patterns
-- **[CLAUDE-observability.md](./CLAUDE-observability.md)** - Logging from goroutines, structured logging best practices
+- **[patterns-testing]mcp://resources/patterns/go/patterns-testing** - Race detector (`go test -race`), testing concurrent code safely
+- **[patterns-database]mcp://resources/patterns/go/patterns-database** - Connection pooling, database operations with goroutines
+- **[patterns-error-handling]mcp://resources/patterns/go/patterns-error-handling** - Error handling in goroutines, errgroup patterns
+- **[patterns-api]mcp://resources/patterns/go/patterns-api** - Concurrent request handling, timeout patterns
+- **[patterns-observability]mcp://resources/patterns/go/patterns-observability** - Logging from goroutines, structured logging best practices
 
 ---
 

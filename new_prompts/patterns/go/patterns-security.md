@@ -2,9 +2,9 @@
 
 Security-critical code examples and best practices for Go applications: authentication, authorization, encryption, CSRF protection, rate limiting, and secure file handling.
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
-> **Note:** Input validation patterns (struct validation, SQL injection prevention, path traversal protection, sanitization) have been moved to **[CLAUDE-validation.md](./CLAUDE-validation.md)**. This file focuses on authentication, authorization, and security mechanisms.
+> **Note:** Input validation patterns (struct validation, SQL injection prevention, path traversal protection, sanitization) have been moved to **[patterns-validation]mcp://resources/patterns/go/patterns-validation**. This file focuses on authentication, authorization, and security mechanisms.
 
 ---
 

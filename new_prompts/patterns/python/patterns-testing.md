@@ -1,4 +1,4 @@
-# CLAUDE-testing.md - Testing Strategy & Best Practices
+# patterns-testing - Testing Strategy & Best Practices
 
 > **Specialized Guide**: Comprehensive testing patterns, fixtures, and coverage requirements for Python projects.
 
@@ -1181,4 +1181,4 @@ asyncio_mode = "auto"  # Auto-detect async tests
 
 ---
 
-**Back to [Core Guide](./CLAUDE-core.md)**
+**Back to [Core Guide]mcp://resources/patterns/python/patterns-core**

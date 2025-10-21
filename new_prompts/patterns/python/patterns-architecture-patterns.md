@@ -1,4 +1,4 @@
-# CLAUDE-architecture-patterns.md - Design Patterns & FastAPI
+# patterns-architecture-patterns - Design Patterns & FastAPI
 
 
 > **Specialized Guide**: Design patterns, dependency injection, and FastAPI application structure.

@@ -2,7 +2,7 @@
 
 Comprehensive error handling patterns and best practices for Go.
 
-**← [Back to Go Development Guide](./CLAUDE-core.md)**
+**← [Back to Go Development Guide]mcp://resources/patterns/go/patterns-core**
 
 ## Core Error Handling Principles
 
@@ -566,11 +566,11 @@ func HandleError(err error) {
 
 ## Related Files
 
-- **[CLAUDE-api.md](./CLAUDE-api.md)** - HTTP error responses, status code mapping, error DTOs
-- **[CLAUDE-testing.md](./CLAUDE-testing.md)** - Testing error cases, error assertions with testify
-- **[CLAUDE-concurrency.md](./CLAUDE-concurrency.md)** - Error handling in goroutines, errgroup patterns
-- **[CLAUDE-database.md](./CLAUDE-database.md)** - Database error handling, transaction rollback
-- **[CLAUDE-observability.md](./CLAUDE-observability.md)** - Error logging with structured context
+- **[patterns-api]mcp://resources/patterns/go/patterns-api** - HTTP error responses, status code mapping, error DTOs
+- **[patterns-testing]mcp://resources/patterns/go/patterns-testing** - Testing error cases, error assertions with testify
+- **[patterns-concurrency]mcp://resources/patterns/go/patterns-concurrency** - Error handling in goroutines, errgroup patterns
+- **[patterns-database]mcp://resources/patterns/go/patterns-database** - Database error handling, transaction rollback
+- **[patterns-observability]mcp://resources/patterns/go/patterns-observability** - Error logging with structured context
 
 ---
 

@@ -1,4 +1,4 @@
-# CLAUDE-validation-auth.md - JWT Authentication & Authorization
+# patterns-validation-auth - JWT Authentication & Authorization
 
 
 > **Specialized Guide**: JWT token generation, validation, refresh flow, blacklist strategies, and security considerations.
