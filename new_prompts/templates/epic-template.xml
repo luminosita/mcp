@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Epic_Template</name>
+    <version>1.6</version>
+    <source>Generated based on industry best practices and Context Engineering framework</source>
+    <sdlc_phase>Epic</sdlc_phase>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.6: Added Standardized Marker System for Open Questions with v1/v2+ workflow, required sub-fields, Decisions Made section, and validation checklist (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)</changes>
+  </metadata>
+
+  <instructions>
+    <guideline>Decompose product vision into independently valuable epics</guideline>
+    <guideline>Each epic should deliver standalone user value</guideline>
+    <guideline>Epics should be sized for 2-3 month implementation</guideline>
+    <guideline>Include clear acceptance criteria at epic level</guideline>
+    <guideline>Define dependencies between epics at business level only</guideline>
+    <guideline>Link to parent product vision</guideline>
+    <guideline>STRATEGIC FOCUS: Epics describe WHAT and WHY, not HOW. No technical implementation details.</guideline>
+    <guideline>CROSS-REFERENCING: Key sections include § IDs (§1, §2, §3, §4) for cross-referencing from PRD and HLS artifacts, reducing business context duplication</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# Epic: [Epic Title]
+
+## Metadata
+- **Epic ID:** EPIC-[XXX]
+- **Status:** [Draft/In Review/Approved/Planned/In Progress/Completed]
+- **Priority:** [Critical/High/Medium/Low]
+- **Parent Product Vision:** VIS-[XXX]
+- **Parent Initiative:** INIT-[XXX] (if part of initiative)
+- **Owner:** [Name]
+- **Target Release:** [Q1 2025]
+- **Informed By Business Research:** {SDLC_DOCUMENTS_URL}/business-research
+
+## Epic Statement
+As [user persona], I need [capability] so that [business value].
+
+## Parent Artifact Context
+
+**Parent Product Vision:** [VIS-XXX: Vision Title]
+- **Link:** {SDLC_DOCUMENTS_URL}/product-vision/{id} (example: {SDLC_DOCUMENTS_URL}/product-vision/001)
+- **Vision Capability:** [Which key capability from vision this epic implements]
+
+**Parent Initiative:** [INIT-XXX: Initiative Title] (if applicable)
+- **Link:** {SDLC_DOCUMENTS_URL}/initiative/{id} (example: {SDLC_DOCUMENTS_URL}/initiative/042)
+- **Initiative Contribution:** [How this epic contributes to initiative OKRs]
+
+## §1. Business Value
+[Clear articulation of why this epic matters]
+
+### User Impact
+[How users benefit from this epic]
+
+### Business Impact
+[Quantified business outcomes]
+- [Metric 1]: [Expected improvement]
+- [Metric 2]: [Expected improvement]
+
+## §2. Problem Being Solved
+[Specific problem this epic addresses from product vision]
+
+## Business Research References
+
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/business-research
+
+**Market Insights Applied:**
+- **Gap Analysis (§3.1):** [Specific gap this epic addresses]
+- **Capability Recommendation (§4.1):** [Which recommended capability this implements]
+- **User Persona (§Appendix A):** [Target persona from research]
+
+**Competitive Context:**
+[Reference competitive analysis from business research that justifies this epic's approach]
+
+## Scope
+
+### In Scope
+- [Capability 1]
+- [Capability 2]
+- [Capability 3]
+
+### Out of Scope
+- [What is explicitly not included]
+- [Deferred to future epics]
+
+## User Stories (High-Level)
+[List of major user stories that comprise this epic - not detailed yet]
+
+1. **Story 1:** As [role], I want [feature] so that [benefit]
+2. **Story 2:** As [role], I want [feature] so that [benefit]
+3. **Story 3:** As [role], I want [feature] so that [benefit]
+
+## Acceptance Criteria (Epic Level)
+
+### Criterion 1
+**Given** [context]
+**When** [user action]
+**Then** [system response]
+
+### Criterion 2
+**Given** [context]
+**When** [user action]
+**Then** [system response]
+
+## §3. Success Metrics
+
+| Metric | Target | Measurement Method |
+|--------|--------|-------------------|
+| [Metric 1] | [Goal] | [How measured] |
+| [Metric 2] | [Goal] | [How measured] |
+
+## Dependencies & Risks (Business Level)
+
+### Epic Dependencies
+- **Depends On:** [EPIC-XXX: Must complete first]
+- **Blocks:** [EPIC-YYY: This epic must complete first]
+
+### §4. Business Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation Strategy |
+|------|------------|--------|-------------------|
+| [Business/Market Risk 1] | High/Med/Low | High/Med/Low | [Strategy] |
+| [Adoption/User Risk 2] | High/Med/Low | High/Med/Low | [Strategy] |
+
+**Note:** Technical dependencies, architecture decisions, and implementation risks are deferred to PRD phase (transition phase where technical research is introduced).
+
+## Effort Estimation
+- **Complexity:** [Low/Medium/High]
+- **Estimated Story Points:** [Range: e.g., 80-120]
+- **Estimated Duration:** [e.g., 2-3 months]
+- **Team Size:** [e.g., 2 frontend, 2 backend, 1 QA]
+
+## Milestones
+- **Milestone 1** (Week 4): [Deliverable]
+- **Milestone 2** (Week 8): [Deliverable]
+- **Milestone 3** (Week 12): [Deliverable]
+
+## Definition of Done (Epic Level)
+- [ ] All user stories completed and accepted
+- [ ] Acceptance criteria met and validated
+- [ ] Code reviewed and merged
+- [ ] Tests passing (unit, integration, e2e)
+- [ ] Documentation updated
+- [ ] Performance benchmarks met
+- [ ] Security review completed
+- [ ] Deployed to production
+- [ ] Success metrics baseline captured
+
+## Decisions Made
+
+**Note:** This section added in v2+ after feedback provided. Answered questions from Open Questions move here.
+
+**Q1: [Question]**
+- **Decision:** [Answer]
+- **Rationale:** [Why this decision was made]
+- **Decided By:** [Person/Role] ([Date])
+
+## Open Questions
+
+**IMPORTANT: Include ONLY business-level questions. Technical questions and product/technical trade-offs belong in PRD phase.**
+
+**Epic Open Questions focus on:**
+- Market priorities and user segments
+- Business model and pricing
+- Regulatory/compliance requirements
+- Strategic timing and resource allocation
+
+**EXCLUDE from Epic (defer to PRD phase):**
+- Technical questions (architecture, implementation, technology choices)
+- Product/technical trade-offs (requiring PM + Tech Lead collaboration)
+
+---
+
+✅ **Examples of ACCEPTABLE questions (business-only):**
+- "Should we prioritize enterprise or SMB customers in the initial release?"
+- "Are there data privacy regulations specific to our target markets?"
+- "What is the acceptable customer acquisition cost for this feature?"
+- "Should we target mobile or desktop users first?"
+
+❌ **Examples of UNACCEPTABLE questions - Technical (defer to PRD/Tech Spec/ADR):**
+- "Should we use OAuth2 or SAML for authentication?"
+- "What database should we use for storage?"
+- "Should the API be REST or GraphQL?"
+- "Which cloud provider should host this?"
+
+❌ **Examples of UNACCEPTABLE questions - Product/Technical Trade-offs (defer to PRD - PM + Tech Lead):**
+- "Should we prioritize offline-first capability or real-time sync in V1?"
+- "What authentication approach balances user experience with security requirements?"
+- "Should we build or integrate with third-party service for notifications?"
+
+---
+
+**MANDATORY MARKER USAGE (Hard Enforcement):**
+
+**Version 1 Artifacts:**
+- Open Questions should include **Recommendations** for each question (exploratory, not yet decided)
+- Include alternatives, context, decision criteria
+- No markers required in v1 (questions are exploratory)
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved questions MUST use standardized markers:
+  - [REQUIRES EXECUTIVE DECISION] (C-level or VP approval)
+  - [REQUIRES PORTFOLIO PLANNING] (affects multiple initiatives or roadmap)
+  - [REQUIRES RESOURCE PLANNING] (FTE, budget, or team allocation)
+  - [REQUIRES ORGANIZATIONAL ALIGNMENT] (stakeholder consensus)
+
+**Required Sub-fields for Each Marker:**
+
+[REQUIRES EXECUTIVE DECISION]
+- **Decision Needed:** {What needs executive approval}
+- **Options Considered:** {List alternatives}
+- **Business Impact:** {Revenue, risk, resource implications}
+- **Decision Deadline:** {Date by which decision needed}
+
+[REQUIRES PORTFOLIO PLANNING]
+- **Impact:** {Affects which initiatives or roadmap items}
+- **Timeline Dependencies:** {When this needs to be decided}
+- **Resource Impact:** {Teams or budgets affected}
+
+[REQUIRES RESOURCE PLANNING]
+- **Resource Type:** {FTE, budget, infrastructure}
+- **Quantity Needed:** {Number of people, dollar amount, capacity}
+- **Duration:** {Timeline for resource need}
+- **Blocking:** {What's blocked without resources}
+
+[REQUIRES ORGANIZATIONAL ALIGNMENT]
+- **Stakeholders:** {List departments/teams requiring alignment}
+- **Alignment Topic:** {What needs consensus}
+- **Impact Without Alignment:** {Risk of proceeding without consensus}
+- **Decision Deadline:** {Date}
+
+**PROHIBITED:**
+- ❌ Free-form text: "Decision: Executive approval needed"
+- ❌ Generic actions: "Action Required: Get executive sign-off..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```
+⚠️ **ACTION REQUIRED:** This artifact has 2 open questions without markers.
+Add [REQUIRES EXECUTIVE DECISION] or [REQUIRES ORGANIZATIONAL ALIGNMENT] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
+**If no business questions exist, state:** "No open business questions at this time. Technical decisions and product/technical trade-offs will be addressed in PRD phase."
+
+---
+
+- [Business Question 1 with marker if v2+]
+- [Business Question 2 with marker if v2+]
+
+## Related Documents
+- **Parent Product Vision:** {SDLC_DOCUMENTS_URL}/product-vision/{id}
+- **Parent Initiative:** {SDLC_DOCUMENTS_URL}/initiative/{id} (if applicable)
+- **Business Research:** {SDLC_DOCUMENTS_URL}/business-research (with specific sections referenced)
+- **Related ADRs:** {SDLC_DOCUMENTS_URL}/adr/{id}
+- **Technical Specs:** {SDLC_DOCUMENTS_URL}/tech-spec/{id}
+- **User Research:** [Links]
+    ]]>
+  </structure>
+
+  <examples>
+    <example>
+      # Epic: User Authentication System
+
+      As a CLI tool user, I need secure authentication so that my data remains private and only I can access my account.
+
+      Business Value:
+      - User Impact: Users can trust the tool with sensitive data
+      - Business Impact: Reduces support tickets by 40% (no password reset requests initially)
+
+      High-Level Stories:
+      1. As a new user, I want to create an account so that I can use the tool
+      2. As a returning user, I want to log in securely so that I can access my data
+      3. As a security-conscious user, I want 2FA so that my account is extra secure
+    </example>
+  </examples>
+</template>

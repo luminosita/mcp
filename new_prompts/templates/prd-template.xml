@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Product_Requirements_Document_Template</name>
+    <version>2.0</version>
+    <source>Section 6.1 of advanced_prompt_engineering_software_docs_code_final.md (lines 630-728), enhanced for Context Engineering Framework</source>
+    <sdlc_phase>PRD</sdlc_phase>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v2.0: **MAJOR UPDATE** - Added "High-Level User Stories" section consolidating HLS artifacts into PRD subsections (Lean Analysis Report v1.4 Strategic Recommendation - Option 2: Artifact Consolidation). PRD now contains Requirements (FR-XX, NFR-XX) AND High-Level User Stories (HLS-XXX subsections). Eliminates separate HLS artifacts, reduces navigation overhead. Artifact count: 6 types (Epic, PRD+HLS, FuncSpec, US, Tech Spec, Task)</changes>
+  </metadata>
+
+  <instructions>
+    <guideline>Fill all sections marked with [placeholder]</guideline>
+    <guideline>Ensure completeness, clarity, and stakeholder alignment</guideline>
+    <guideline>Success metrics must be SMART (Specific, Measurable, Achievable, Relevant, Time-bound)</guideline>
+    <guideline>All acceptance criteria must be testable</guideline>
+    <guideline>HIGH-LEVEL USER STORIES: PRD includes HLS-XXX subsections in "High-Level User Stories" section. Each HLS follows user story format and references parent PRD requirements (FR-XX). HLS artifacts no longer separate.</guideline>
+    <guideline>Each high-level user story should reference specific functional requirements (FR-XX) to maintain traceability</guideline>
+    <guideline>CROSS-REFERENCING: Use Epic Context section to reference Epic §1-§4 sections instead of duplicating business context (reduces overlap by 50%)</guideline>
+    <guideline>PRD focuses on REQUIREMENTS and HIGH-LEVEL USER STORIES (consolidated) - defer business context to Epic, detailed functional specs to FuncSpec, implementation details to Backlog Stories</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# PRD: [Product/Feature Name]
+
+## Metadata
+- **PRD ID:** PRD-[XXX]
+- **Author:** [name]
+- **Date:** [date]
+- **Version:** [version]
+- **Status:** [Draft/In Review/Approved]
+- **Parent Epic:** EPIC-[XXX]
+- **Informed By Business Research:** [{SDLC_DOCUMENTS_URL}/business-research - optional for market context]
+- **Informed By Implementation Research:** [{SDLC_DOCUMENTS_URL}/implementation-research - optional for technical feasibility]
+
+## Parent Artifact Context
+
+**Parent Epic:** [EPIC-XXX: Epic Title]
+- **Link:** {SDLC_DOCUMENTS_URL}/epic/{id} (example: {SDLC_DOCUMENTS_URL}/epic/003)
+- **Epic Scope Coverage:** [Which portion of the epic this PRD addresses]
+- **Epic Acceptance Criteria Mapping:** [Which epic-level criteria this PRD satisfies]
+
+## Research References
+
+### Business Research (Optional - When Market Context Needed)
+**Document:** {SDLC_DOCUMENTS_URL}/business-research
+
+**Applied Insights:**
+- **§[X.Y]: [Section Title]:** [Insight relevant to PRD requirements]
+- **§[X.Y]: [Section Title]:** [Market data supporting business case]
+
+*Use when PRD requires market validation, competitive positioning, or business model context.*
+
+### Implementation Research (Optional - When Technical Feasibility Needed)
+**Document:** {SDLC_DOCUMENTS_URL}/implementation-research
+
+**Applied Insights:**
+- **§[X.Y]: [Section Title]:** [Technical feasibility insight]
+- **§[X.Y]: [Section Title]:** [Architecture pattern or constraint]
+
+*Use when PRD includes NFRs, technical constraints, or architecture considerations requiring research validation.*
+
+**Note:** PRD is a bridge artifact. Business Research is typically consumed at Epic level, and Implementation Research at Backlog Story level. Only reference research here when needed to inform requirements definition.
+
+## Executive Summary
+[2-3 paragraph overview: problem, solution, impact]
+
+## Epic Context
+
+**Parent Epic:** [EPIC-XXX: Epic Title]
+- **Link:** {SDLC_DOCUMENTS_URL}/epic/{id} (example: {SDLC_DOCUMENTS_URL}/epic/006)
+
+**Business Value (from Epic §1):**
+[1-2 sentence summary referencing Epic §1. Business Value - full details in parent Epic]
+
+**Problem Being Solved (from Epic §2):**
+[1-2 sentence summary referencing Epic §2. Problem Being Solved - full details in parent Epic]
+
+**Success Metrics Alignment (from Epic §3):**
+This PRD contributes to the following Epic success metrics:
+- [Metric from Epic §3]: [How this PRD contributes]
+- [Metric from Epic §3]: [How this PRD contributes]
+
+**Note:** For comprehensive business context (market analysis, competitive landscape, user research), see parent Epic-XXX sections §1-§4 and Business Research document.
+
+## Goals & Success Metrics
+
+**PRD-Specific Goals** (refined from Epic §3):
+
+| Goal | Metric | Target | Measurement Method |
+|------|---------|--------|-------------------|
+| [Goal 1] | [Metric] | [Target] | [How measured] |
+
+**Note:** These metrics are PRD-specific refinements. See Epic-XXX §3. Success Metrics for epic-level targets.
+
+## Requirements
+
+### Functional Requirements
+| ID | Requirement | Priority | Acceptance Criteria |
+|----|-------------|----------|-------------------|
+| FR-01 | [Requirement] | Must-have | [Criteria] |
+
+### Non-Functional Requirements
+- **Performance:** [specific targets]
+- **Security:** [requirements]
+- **Scalability:** [targets]
+- **Accessibility:** [WCAG standards]
+
+## User Experience
+### User Flows
+[Mermaid diagrams or step-by-step flows]
+
+### Wireframes/Mockups
+[Link to designs]
+
+## High-Level User Stories
+
+**Purpose:** User-centric expression of functionality bridging PRD requirements (FR-XX) and detailed backlog stories (US-XXX). Each HLS represents a major user goal decomposing into multiple sprint-sized backlog stories.
+
+**Note:** High-Level Stories consolidated into PRD per Lean Analysis v1.4 Strategic Recommendation (Option 2 - Artifact Consolidation). Eliminates navigation overhead while maintaining clear user story structure.
+
+---
+
+### HLS-[XXX]: [Story Title]
+
+**User Story Statement:**
+**As a** [user persona],
+**I want** [goal or capability],
+**So that** [business value or user benefit].
+
+**Value Contribution:**
+- **Parent PRD Requirements:** FR-[XX], FR-[YY] (requirements this story implements)
+- **Epic Success Metrics Alignment:** [How this story contributes to Epic §3 metrics]
+- **User Impact:** [1-2 sentences on user benefit]
+
+**Primary User Flow:**
+
+**Actor Legend:**
+- **User:** [Primary user role]
+- **System:** [System component]
+
+**Happy Path Flow Sequence:**
+
+**Step 1:** User → System: [Action description]
+- [Brief input/output description if helpful for clarity]
+
+**Step 2:** System → User: [Response description]
+- [What system does from user perspective]
+
+**Step 3:** User → System: [Next action]
+
+**Step 4:** System → User: [Final response]
+
+**Step 5:** User achieves [goal]
+
+**Note:** Detailed I/O schemas (JSON examples, state changes) belong in Functional Specification (FuncSpec). HLS focuses on user-visible sequence.
+
+**Alternative Flows:**
+- **Alt Flow 1:** If [condition], then [alternative path]
+- **Alt Flow 2:** If [condition], then [alternative path]
+
+**Acceptance Criteria (High-Level):**
+
+**Criterion 1:** [Description]
+- **Given** [precondition]
+- **When** [user action]
+- **Then** [expected outcome]
+
+**Criterion 2:** [Description]
+- **Given** [precondition]
+- **When** [user action]
+- **Then** [expected outcome]
+
+**Edge Cases & Error Conditions:**
+- **Invalid Input:** [How system responds]
+- **System Unavailable:** [What user experiences]
+
+**Decomposition into Backlog Stories:**
+
+**Estimated Backlog Stories (Not Yet Detailed):**
+1. **US-[XXX]:** [Story title] - [Est. SP]
+2. **US-[YYY]:** [Story title] - [Est. SP]
+3. **US-[ZZZ]:** [Story title] - [Est. SP]
+
+**Total Estimated Effort:** [Sum of story points] SP
+
+**Dependencies:**
+- **Upstream:** [What must complete before this HLS]
+- **Downstream:** [What depends on this HLS]
+
+**Open Questions (if any):**
+- [Question with marker if v2+]
+
+---
+
+**[Repeat HLS-[XXX] structure for each High-Level Story in this PRD]**
+
+---
+
+## Technical Considerations
+
+**DECISION HIERARCHY:** CLAUDE.md (Authoritative) > Implementation Research (Advisory) > PRD-specific (Supplementary)
+
+**Note:** PRD generator enforces this hierarchy. CLAUDE.md decisions referenced by file+line, alternatives NOT suggested for decided topics.
+
+### Alignment with CLAUDE.md Standards
+
+**Established Decisions Applied:**
+- **CLAUDE-core.md:** [Core development philosophy]
+- **CLAUDE-architecture.md:** [Project structure, modularity patterns]
+- **CLAUDE-tooling.md:** [Build tools, linters, formatters - e.g., "UV for Python, Ruff for linting"]
+- **CLAUDE-testing.md:** [Testing framework - e.g., "pytest with fixtures, 80% coverage"]
+- **CLAUDE-http-frameworks.md (Go):** [HTTP framework - e.g., "Gin per line 238"]
+- [Additional CLAUDE-*.md files as applicable]
+
+**Example (Compliant):**
+```
+Use Gin HTTP framework per CLAUDE-http-frameworks.md:238 (Gin = default for Go REST APIs)
+```
+
+**Example (Non-Compliant - DON'T DO THIS):**
+```
+❌ "Use chi, gin, or gorilla/mux" (suggests alternatives when Gin already decided)
+```
+
+### Implementation Research (Gaps Only)
+
+**Applied Insights (ONLY for topics not in CLAUDE.md):**
+- **§[X.Y]: [Pattern Name]:** [Technical guidance]
+  - **CLAUDE.md Status:** `[CLAUDE.md GAP]` or `[ALIGNS WITH CLAUDE-{file}.md]`
+
+**Example:**
+```
+§5.3 Cache invalidation strategy - [CLAUDE-caching.md GAP]
+Recommendation: Time-based TTL with 5-minute expiration
+```
+
+### CLAUDE.md Override (When Justified)
+
+**If override needed, document:**
+```
+[CLAUDE.md OVERRIDE] {Alternative approach}
+- Original: CLAUDE-{file}.md:{line} "{decision}"
+- Rationale: {Technical justification}
+- Approval: [APPROVED BY: {name} - {date}]
+```
+
+### Architecture
+[High-level architecture approach - product-specific only, supplement CLAUDE.md]
+
+### Dependencies
+**System:** [Systems, services, databases]
+**External:** [Third-party integrations]
+
+### Technical Constraints
+[Limitations, platform requirements]
+
+### Data Model
+[Key entities, relationships]
+
+## Risks & Mitigations
+
+**PRD-Specific Risks** (technical, delivery, implementation):
+
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| [Technical/Delivery Risk 1] | High | Medium | [Strategy] |
+
+**Note:** Business and market risks are documented in Epic-XXX §4. Business Risks & Mitigations. This section focuses on PRD-specific technical and delivery risks.
+
+## Timeline & Milestones
+- Phase 1: [dates] - [deliverables]
+- Phase 2: [dates] - [deliverables]
+
+## Decisions Made
+
+**Note:** This section added in v2+ after feedback provided. Answered questions from Open Questions move here.
+
+**Q1: [Question]**
+- **Decision:** [Answer]
+- **Rationale:** [Why this decision was made]
+- **Decided By:** [Person/Role] ([Date])
+
+## Open Questions
+
+**PRD is a BRIDGE ARTIFACT: Include both business and strategic technical questions, but defer implementation details to later phases.**
+
+**✅ INCLUDE in PRD Open Questions:**
+
+1. **Business Questions (from Epic or new):**
+   - Market priorities and user segment questions
+   - Business model and pricing questions
+   - Regulatory/compliance uncertainties
+   - Strategic timing and resource allocation
+
+2. **Product/Technical Trade-offs (PM + Tech Lead discussion):**
+   - Questions balancing user experience with technical constraints
+   - Build vs. buy decisions affecting timeline and features
+   - Architecture approach questions affecting product decisions
+   - Technical feasibility questions impacting requirements or scope
+
+**❌ DEFER to ADR/Tech Spec phases:**
+- Specific implementation details (algorithms, data structures, patterns)
+- Granular technology choices (library selection, specific tools)
+- Low-level architecture decisions not affecting product requirements
+- Questions answerable during implementation without stakeholder input
+
+---
+
+**Examples of PRD-APPROPRIATE questions:**
+
+[BUSINESS] "Should we prioritize enterprise customers or SMB users in the initial release?"
+
+[TECHNICAL] "Should we prioritize offline-first capability or real-time sync in V1?" (affects user experience and architecture)
+
+[TECHNICAL] "What authentication approach balances user experience with security requirements?" (affects NFRs and user flows)
+
+[TECHNICAL] "Should we build notification infrastructure or integrate with third-party service?" (build vs. buy decision)
+
+---
+
+**Examples of questions to DEFER (for ADR/Tech Spec):**
+
+- "Should we use Redis or Memcached for caching?" (specific technology choice - ADR)
+- "What specific encryption algorithm for data at rest?" (implementation detail - Tech Spec)
+- "Should we use repository or active record pattern?" (low-level design - Tech Spec)
+
+---
+
+**MANDATORY MARKER USAGE (Hard Enforcement):**
+
+**Version 1 Artifacts:**
+- Open Questions should include **Recommendations** for each question (exploratory, not yet decided)
+- Include alternatives, context, decision criteria
+- No markers required in v1 (questions are exploratory)
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved questions MUST use standardized markers:
+  - [REQUIRES PM + TECH LEAD] (product/technical trade-offs)
+  - [REQUIRES EXECUTIVE DECISION] (business-level decisions from Epic)
+  - [REQUIRES ORGANIZATIONAL ALIGNMENT] (if cross-functional alignment needed)
+
+**Required Sub-fields for Each Marker:**
+
+[REQUIRES PM + TECH LEAD]
+- **Trade-off:** {Product vs. technical tension}
+- **PM Perspective:** {User experience, business value considerations}
+- **Tech Perspective:** {Implementation complexity, technical debt considerations}
+- **Decision Needed By:** {Date}
+
+[REQUIRES EXECUTIVE DECISION]
+- **Decision Needed:** {What needs executive approval}
+- **Options Considered:** {List alternatives}
+- **Business Impact:** {Revenue, risk, resource implications}
+- **Decision Deadline:** {Date by which decision needed}
+
+[REQUIRES ORGANIZATIONAL ALIGNMENT]
+- **Stakeholders:** {List departments/teams requiring alignment}
+- **Alignment Topic:** {What needs consensus}
+- **Impact Without Alignment:** {Risk of proceeding without consensus}
+- **Decision Deadline:** {Date}
+
+**PROHIBITED:**
+- ❌ Free-form text: "Decision: PM and Tech Lead need to discuss"
+- ❌ Generic actions: "Action Required: Schedule PM/Tech Lead meeting..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```
+⚠️ **ACTION REQUIRED:** This artifact has 3 open questions without markers.
+Add [REQUIRES PM + TECH LEAD] or [REQUIRES EXECUTIVE DECISION] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
+**If no open questions exist, state:** "No open questions at this time. Technical implementation details will be addressed in ADR and Technical Specification phases."
+
+---
+
+- [Question 1 with marker if v2+]
+- [Question 2 with marker if v2+]
+
+## Related Documents
+- **Parent Epic:** {SDLC_DOCUMENTS_URL}/epic/{id}
+- **Business Research:** {SDLC_DOCUMENTS_URL}/business-research (if referenced)
+- **Implementation Research:** {SDLC_DOCUMENTS_URL}/implementation-research (if referenced)
+
+## Appendix
+[Additional context, research data]
+    ]]>
+  </structure>
+
+  <process>
+    <step>CLARIFY requirements through questions</step>
+    <step>STRUCTURE document with standard sections</step>
+    <step>VALIDATE completeness against checklist</step>
+    <step>ITERATE based on stakeholder feedback</step>
+  </process>
+
+  <examples>
+    <example source="Section 6.1">
+      See research document for comprehensive PRD example with slot-filling process
+    </example>
+  </examples>
+</template>

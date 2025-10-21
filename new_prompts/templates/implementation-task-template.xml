@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Implementation_Task_Template</name>
+    <version>1.3</version>
+    <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
+    <sdlc_phase>Implementation Task</sdlc_phase>
+    <alias>Technical Task, Sub-task</alias>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.3: Added Standardized Marker System for Task-Level Uncertainties with v1/v2+ workflow, required sub-fields for task-level markers ([CLARIFY BEFORE START], [BLOCKED BY], [NEEDS PAIR PROGRAMMING], [TECH DEBT]), Decisions Made section, and validation checklist (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System)</changes>
+  </metadata>
+
+  <instructions>
+    <guideline>Developer-focused unit of work describing specific implementation actions</guideline>
+    <guideline>Smallest trackable unit of technical work</guideline>
+    <guideline>Time horizon: Hours to days (typically 1-2 days, max 16 hours)</guideline>
+    <guideline>Implementation domain-specific (frontend, backend, API, database, testing, DevOps)</guideline>
+    <guideline>Created during sprint planning by decomposing backlog stories</guideline>
+    <guideline>Assigned to individual developers</guideline>
+    <guideline>Optional in Strategy 2 - skip for 1 SP stories with single developer ownership</guideline>
+    <guideline>Required for complex stories spanning multiple domains</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# Implementation Task: [Task Title]
+
+## Metadata
+- **Task ID:** TASK-[XXX]
+- **Parent Story ID:** US-[XXX]
+- **Status:** [To Do/In Progress/In Review/Done]
+- **Priority:** [Critical/High/Medium/Low]
+- **Assigned To:** [Developer Name]
+- **Sprint:** [Sprint 15]
+- **Domain:** [Frontend/Backend/API/Database/Testing/DevOps/Infrastructure]
+
+## Task Description
+
+**Objective:**
+[Clear, specific description of what needs to be implemented]
+
+**Technical Context:**
+[Why this task is needed - how it fits into the larger story or system]
+
+## Technical Specifications
+
+### Implementation Approach
+[High-level approach to implementing this task]
+
+### Code Changes Required
+
+**Files to Modify:**
+- `[path/to/file1.ts]` - [Description of changes]
+- `[path/to/file2.tsx]` - [Description of changes]
+
+**New Files to Create:**
+- `[path/to/new-file.ts]` - [Purpose]
+
+### Technical Details
+
+**Domain-Specific Details:**
+
+#### [For Frontend Tasks]
+- **Component:** [Component name]
+- **State Management:** [Redux/Context/useState]
+- **Styling Approach:** [CSS-in-JS/Tailwind/etc.]
+- **Key Libraries:** [React Query, Axios, etc.]
+
+#### [For Backend Tasks]
+- **Service/Module:** [Service name]
+- **API Endpoint:** [Method + Path]
+- **Business Logic:** [Core logic description]
+- **Error Handling:** [Strategy]
+
+#### [For Database Tasks]
+- **Database:** [PostgreSQL/MongoDB/Redis/etc.]
+- **Schema Changes:** [Description]
+- **Migration Required:** [Yes/No]
+- **Indexing:** [Indexes to add/modify]
+
+#### [For API Tasks]
+- **Endpoint:** [POST /api/v1/resource]
+- **Request Schema:** [Brief description or reference]
+- **Response Schema:** [Brief description or reference]
+- **Authentication:** [Required auth method]
+
+#### [For Testing Tasks]
+- **Test Type:** [Unit/Integration/E2E]
+- **Test Framework:** [Jest/Cypress/Playwright/etc.]
+- **Coverage Target:** [% or specific scenarios]
+- **Test Scenarios:** [List of scenarios to cover]
+
+## Acceptance Criteria (Task Level)
+
+- [ ] [Specific technical criterion 1]
+- [ ] [Specific technical criterion 2]
+- [ ] [Specific technical criterion 3]
+- [ ] Code follows team coding standards
+- [ ] Tests written and passing (if applicable)
+- [ ] Code reviewed and approved
+- [ ] No new linting/type errors introduced
+
+## Implementation Guidance
+
+**HYBRID CLAUDE.md APPROACH:** When specialized CLAUDE-*.md files exist, reference (not duplicate) established implementation standards. Supplement with task-specific execution steps.
+
+### Development Workflow (when applicable)
+- **CLAUDE-tooling.md:** Use Taskfile commands for development workflow
+  - `task test` - Run test suite
+  - `task lint` - Run linting
+  - `task lint:fix` - Auto-fix linting issues
+  - `task type-check` - Run type checking
+  - `task format` - Format code
+  - `task test:coverage` - Run tests with coverage report
+
+### Implementation Standards (when applicable)
+- **CLAUDE-architecture.md:** Follow project structure, modularity patterns
+- **CLAUDE-typing.md:** Apply type hints (strict mode), use Pydantic for data validation
+- **CLAUDE-validation.md:** Input validation with Pydantic models, security patterns
+- **CLAUDE-testing.md:** Testing requirements (80% coverage minimum, fixture patterns, async test support)
+- **Additional domain-specific files:** Reference as needed per CLAUDE.md
+
+**Note:** Treat CLAUDE.md content as authoritative - supplement with task-specific implementation steps.
+
+### Code Example / Pseudo-code
+```[language]
+// Example implementation approach
+[Show key code structure or algorithm following CLAUDE-*.md patterns]
+```
+
+### Reference Implementation
+[Link to similar existing code or pattern in codebase]
+
+### Design Patterns to Use
+- [Pattern 1: e.g., "Use Repository pattern per CLAUDE-architecture.md"]
+- [Pattern 2: e.g., "Follow error handling pattern from CLAUDE-core.md"]
+
+### Implementation Research Reference
+[If applicable, reference Implementation Research sections]
+- **Primary Research:** {SDLC_DOCUMENTS_URL}/implementation-research
+- **§[X.Y] - [Pattern Name]:** [Specific guidance from research]
+- **§[X.Y] - [Anti-Pattern]:** [Pitfall to avoid with explanation]
+- **Code Example:** [Link to Appendix B example if applicable]
+
+**Relevant Patterns for This Task:**
+- **§[X.Y]: [Specific Pattern]:** [How to apply in this task]
+- **§[X.Y]: [Testing Pattern]:** [Test strategy for this task]
+
+**Reference Implementation:**
+[Link to similar existing code in codebase OR research code example]
+
+## Dependencies
+
+### Technical Dependencies
+- [Library/service dependency 1]
+- [API/database dependency 2]
+
+### Task Dependencies
+- **Blocked By:** [TASK-XXX: Must complete first]
+- **Blocks:** [TASK-YYY: This task must complete first]
+
+### Environment Requirements
+- [Development environment setup needed]
+- [Access to staging environment]
+- [API keys or credentials needed]
+
+## Estimation
+
+- **Estimated Hours:** [4-8 hours]
+- **Complexity:** [Low/Medium/High]
+- **Uncertainty Level:** [Low/Medium/High]
+- **Actual Hours:** [To be filled after completion]
+
+**Complexity Factors:**
+- [Factor 1: e.g., "New technology/library"]
+- [Factor 2: e.g., "Complex business logic"]
+- [Factor 3: e.g., "Legacy code refactoring"]
+
+## Testing Requirements
+
+**HYBRID CLAUDE.md APPROACH:** When CLAUDE-testing.md exists, follow established testing standards. Supplement with task-specific test scenarios.
+
+### Testing Standards (when applicable)
+- **CLAUDE-testing.md:** Follow testing requirements (80% coverage minimum, fixture patterns, async test support)
+- **CLAUDE-tooling.md:** Use Taskfile commands for test execution (`task test`, `task test:coverage`, `task test:unit`, `task test:integration`)
+- Task-specific test scenarios supplement standard requirements
+
+### Unit Tests
+- [ ] Test [scenario 1]
+- [ ] Test [scenario 2]
+- [ ] Test [error handling]
+- [ ] Achieve minimum coverage target per CLAUDE-testing.md (if exists)
+
+### Integration Tests (if applicable)
+- [ ] Test [integration scenario 1]
+- [ ] Test [integration scenario 2]
+
+### Manual Testing Steps
+1. [Step 1: Setup condition]
+2. [Step 2: Perform action]
+3. [Step 3: Verify outcome]
+4. Run `task check` to validate all quality checks pass
+
+## Non-Functional Requirements
+
+### Performance
+- [Specific performance requirement, e.g., "Query must complete in <100ms"]
+
+### Security
+- [Security consideration, e.g., "Sanitize user input", "Use parameterized queries"]
+
+### Observability
+- [Logging requirements, e.g., "Log API call failures with error details"]
+- [Metrics to emit, if applicable]
+
+## Risk & Complexity Notes
+
+**Technical Risks:**
+- [Risk 1: e.g., "Third-party API may have rate limits"]
+- [Risk 2: e.g., "Database migration may require downtime"]
+
+**Mitigation Strategies:**
+- [Strategy for risk 1]
+- [Strategy for risk 2]
+
+## Decisions Made
+
+**Note:** This section added in v2+ after feedback provided. Answered questions from Task-Level Uncertainties move here.
+
+**Q1: [Question]**
+- **Decision:** [Answer]
+- **Rationale:** [Why this decision was made]
+- **Decided By:** [Person/Role] ([Date])
+
+## Task-Level Uncertainties & Blockers
+
+**Implementation Task uncertainties are GRANULAR IMPLEMENTATION BLOCKERS or clarifications needed before starting or during task execution.**
+
+**✅ INCLUDE - Task-Level Uncertainties:**
+- Specific function or method-level clarifications
+- Edge case handling for specific code paths
+- Granular technical choices not covered in Tech Spec
+- Existing code reuse questions (which utility to use)
+- Specific error handling or logging approach
+- Transaction vs single-query for specific operation
+- Null/undefined handling for specific parameters
+- Synchronous vs asynchronous for specific operation
+
+**❌ EXCLUDE - Higher-Phase Questions:**
+- Library/framework choices → Backlog Story or Tech Spec
+- API design questions → Backlog Story or Tech Spec
+- Architecture decisions → ADR
+- Product/UX questions → High-Level Story or PRD
+
+---
+
+**Examples of Task-APPROPRIATE uncertainties:**
+- "Do we handle null userId in validateUser(), or assume caller validates?" [CLARIFY BEFORE START]
+- "Should error logging be synchronous (console.error) or async (Winston)?" [CLARIFY BEFORE START]
+- "Which utility to reuse: validateEmail() or validateInput()?" [CLARIFY BEFORE START]
+- "Waiting for TASK-042 to complete user service refactor" [BLOCKED BY]
+
+**Examples for OTHER phases:**
+- ❌ "Should we use Joi or Yup?" (Backlog Story)
+- ❌ "What API structure?" (Tech Spec/Backlog Story)
+- ❌ "Should we use Redis?" (ADR)
+
+---
+
+**MANDATORY MARKER USAGE (Hard Enforcement):**
+
+**Version 1 Artifacts:**
+- Uncertainties should include **Recommendations** or context (exploratory, not yet decided)
+- Include alternatives where applicable
+- No markers required in v1 (questions are exploratory)
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved uncertainties MUST use standardized markers:
+  - [CLARIFY BEFORE START] (must resolve before beginning task)
+  - [BLOCKED BY] (external dependency blocking task)
+  - [NEEDS PAIR PROGRAMMING] (complex area requiring collaboration)
+  - [TECH DEBT] (workaround needed due to existing code constraints)
+
+**Required Sub-fields for Each Marker:**
+
+[CLARIFY BEFORE START]
+- **Clarification Needed:** {Ambiguity to resolve}
+- **Stakeholder:** {Who can clarify}
+- **Blocking:** {Can't start task until clarified}
+
+[BLOCKED BY]
+- **Dependency:** {External system, team, decision}
+- **Expected Resolution:** {Date/milestone when unblocked}
+- **Workaround Available:** {Yes/No, if yes describe}
+
+[NEEDS PAIR PROGRAMMING]
+- **Complexity Area:** {What's complex requiring collaboration}
+- **Skills Needed:** {Expertise required}
+- **Duration:** {Estimated pairing time}
+
+[TECH DEBT]
+- **Tech Debt Description:** {Existing constraint}
+- **Workaround:** {How to work around constraint}
+- **Future Resolution:** {When/how to address properly}
+
+**PROHIBITED:**
+- ❌ Free-form text: "Decision: Need clarification on this"
+- ❌ Generic actions: "Action Required: Ask team about..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```
+⚠️ **ACTION REQUIRED:** This artifact has 2 uncertainties without markers.
+Add [CLARIFY BEFORE START] or [BLOCKED BY] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
+**If no uncertainties exist, state:** "No task-level uncertainties. Implementation approach clear from Tech Spec and Backlog Story."
+
+---
+
+- [Task-level uncertainty 1 with marker if v2+]
+- [Task-level uncertainty 2 with marker if v2+]
+
+## Definition of Done (Task Level)
+
+- [ ] Implementation complete and functionally correct
+- [ ] Code follows team coding standards and conventions
+- [ ] All tests written and passing (unit + integration where applicable)
+- [ ] Code reviewed and approved by [minimum 1] reviewer(s)
+- [ ] No new linting, type, or build errors introduced
+- [ ] Documentation updated (inline comments, README if needed)
+- [ ] Merged to [main/develop] branch
+- [ ] Task status updated to Done in tracking tool
+
+## Code Review Checklist
+
+**For Reviewer:**
+- [ ] Code is readable and follows conventions
+- [ ] Logic is correct and handles edge cases
+- [ ] Tests adequately cover functionality
+- [ ] No obvious security vulnerabilities
+- [ ] Performance considerations addressed
+- [ ] Error handling implemented properly
+- [ ] Documentation sufficient
+
+## Related Links
+- **Parent Story:** {SDLC_DOCUMENTS_URL}/backlog-story/{id}
+- **PRD Section:** {SDLC_DOCUMENTS_URL}/prd/{id} (section)
+- **ADR:** {SDLC_DOCUMENTS_URL}/adr/{id} (if architecture decision relevant)
+- **Tech Spec:** {SDLC_DOCUMENTS_URL}/tech-spec/{id} (if detailed spec exists)
+- **Implementation Research:** {SDLC_DOCUMENTS_URL}/implementation-research (§X.Y if applicable)
+- **Design Mockup:** [Link if UI task]
+- **API Documentation:** [Link if API task]
+
+## Notes & Comments
+
+**Implementation Notes:**
+[Any additional notes for the developer]
+
+**Blockers/Issues Encountered:**
+[To be filled during implementation if issues arise]
+    ]]>
+  </structure>
+
+  <examples>
+    <example>
+      # Implementation Task: Create Google OAuth Integration
+
+      ## Metadata
+      - **Task ID:** TASK-042
+      - **Parent Story ID:** US-015
+      - **Status:** In Progress
+      - **Assigned To:** Jane Doe
+      - **Sprint:** Sprint 12
+      - **Domain:** Backend
+
+      ## Task Description
+
+      **Objective:**
+      Integrate Google OAuth 2.0 API to enable user authentication via Google accounts
+
+      **Technical Context:**
+      This task implements the backend OAuth flow for the "Sign up with Google" feature. Frontend button already exists (TASK-041).
+
+      ## Technical Specifications
+
+      ### Implementation Approach
+      - Use Passport.js Google OAuth 2.0 strategy
+      - Create callback endpoint to handle Google's auth response
+      - Store OAuth tokens securely in database
+      - Create or update user record on successful authentication
+
+      ### Code Changes Required
+
+      **Files to Modify:**
+      - `src/auth/passport-config.ts` - Add Google strategy
+      - `src/routes/auth-routes.ts` - Add OAuth endpoints
+      - `src/services/user-service.ts` - Add Google user creation logic
+
+      **New Files to Create:**
+      - `src/auth/strategies/google-strategy.ts` - Google OAuth strategy configuration
+
+      ### Technical Details
+
+      #### Backend Task
+      - **Service/Module:** Auth Service
+      - **API Endpoints:**
+        - GET /auth/google - Initiates OAuth flow
+        - GET /auth/google/callback - Handles Google callback
+      - **Business Logic:** Create user if new, link if existing email
+      - **Error Handling:** Return user-friendly errors for OAuth failures
+
+      ## Acceptance Criteria
+
+      - [ ] Google OAuth flow successfully authenticates users
+      - [ ] New users created with Google profile data
+      - [ ] Existing users can link Google accounts
+      - [ ] OAuth tokens stored securely (encrypted)
+      - [ ] Error handling for failed OAuth attempts
+      - [ ] Integration tests passing
+
+      ## Implementation Guidance
+
+      ### Code Example
+      ```typescript
+      // Google OAuth Strategy setup
+      passport.use(new GoogleStrategy({
+          clientID: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          callbackURL: "/auth/google/callback"
+        },
+        async (accessToken, refreshToken, profile, done) => {
+          // Find or create user logic here
+        }
+      ));
+      ```
+
+      ### Reference Implementation
+      See `src/auth/strategies/github-strategy.ts` for similar OAuth implementation
+
+      ## Estimation
+      - **Estimated Hours:** 6-8 hours
+      - **Complexity:** Medium
+      - **Actual Hours:** [TBD]
+
+      ## Testing Requirements
+
+      ### Unit Tests
+      - [ ] Test user creation with Google profile
+      - [ ] Test existing user linking
+      - [ ] Test OAuth token encryption
+
+      ### Integration Tests
+      - [ ] Test full OAuth flow (mock Google API)
+      - [ ] Test error handling for invalid tokens
+    </example>
+  </examples>
+</template>

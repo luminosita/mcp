@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Initiative_Template</name>
+    <version>1.3</version>
+    <source>Generated based on SDLC Artifacts Comprehensive Guideline v1.1</source>
+    <sdlc_phase>Initiative</sdlc_phase>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.3: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
+  </metadata>
+
+  <instructions>
+    <guideline>Align initiative with organizational business goals and OKRs</guideline>
+    <guideline>Define measurable business outcomes (not output metrics)</guideline>
+    <guideline>Time horizon: Quarters to full year (3-12 months)</guideline>
+    <guideline>Initiative drives multiple epics and features</guideline>
+    <guideline>Link business strategy to product execution</guideline>
+    <guideline>Executive leadership ownership required</guideline>
+    <guideline>Portfolio-level planning and resource allocation</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# Initiative: [Initiative Title]
+
+## Metadata
+- **Initiative ID:** INIT-[XXX]
+- **Status:** [Draft/In Review/Approved/Active/Completed/Cancelled]
+- **Priority:** [Strategic/High/Medium]
+- **Owner:** [Executive Sponsor Name & Title]
+- **Business Unit:** [Product/Engineering/Sales/etc.]
+- **Time Horizon:** [Q1-Q3 2025]
+- **Budget:** $[Amount]
+- **Parent Product Vision:** VIS-[XXX]
+- **Related Strategy Doc:** [Link to portfolio/business strategy]
+- **Informed By Business Research:** {SDLC_DOCUMENTS_URL}/business-research
+
+## Strategic Objective
+
+**Initiative Statement:**
+[One-sentence strategic objective that aligns with organizational goals]
+
+**Business Context:**
+[Why this initiative matters now - market opportunity, competitive threat, internal capability gap]
+
+## Business Goals & OKRs
+
+### Objective
+[High-level qualitative goal this initiative achieves]
+
+### Key Results
+
+| Key Result | Baseline | Target | Due Date | Owner |
+|-----------|----------|--------|----------|-------|
+| [Measurable outcome 1] | [Current state] | [Goal state] | [Date] | [Name] |
+| [Measurable outcome 2] | [Current state] | [Goal state] | [Date] | [Name] |
+| [Measurable outcome 3] | [Current state] | [Goal state] | [Date] | [Name] |
+
+**Success Criteria:**
+- [ ] Key Result 1 achieved (≥80% of target)
+- [ ] Key Result 2 achieved (≥80% of target)
+- [ ] Key Result 3 achieved (≥80% of target)
+
+## Strategic Alignment
+
+### Organizational Strategy
+[How this initiative supports company strategy, mission, vision]
+
+### Portfolio Priorities
+[Where this initiative ranks among portfolio priorities]
+
+### Stakeholder Impact
+- **Customers:** [How customers benefit]
+- **Business:** [Revenue, cost, efficiency impact]
+- **Teams:** [Internal capability improvements]
+
+## Vision Alignment
+
+**Parent Product Vision:** [VIS-XXX: Vision Title]
+- **Link:** {SDLC_DOCUMENTS_URL}/product-vision/{id} (example: {SDLC_DOCUMENTS_URL}/product-vision/001)
+- **Vision Alignment:** [How this initiative directly implements the vision]
+
+## Business Research References
+
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/business-research
+
+**Strategic Insights Applied:**
+- **Market Opportunity (§2.1):** [Specific market segment or opportunity]
+- **Competitive Positioning (§5.1):** [How this initiative supports positioning]
+- **Roadmap Phase (§5.5):** [Which roadmap phase this initiative maps to]
+
+**Business Justification:**
+[Reference specific business research findings that justify investment in this initiative]
+
+## Scope & Approach
+
+### Supporting Epics
+
+| Epic | Description | Owner | Est. Timeline |
+|------|-------------|-------|---------------|
+| [EPIC-001] | [Brief description] | [Owner] | [Q1 2025] |
+| [EPIC-002] | [Brief description] | [Owner] | [Q2 2025] |
+| [EPIC-003] | [Brief description] | [Owner] | [Q2-Q3 2025] |
+
+### In Scope
+- [Strategic capability 1]
+- [Strategic capability 2]
+- [Strategic capability 3]
+
+### Out of Scope (Explicitly Deferred)
+- [What is not included in this initiative]
+- [Capabilities deferred to future initiatives]
+
+## Resource Allocation
+
+### Budget Breakdown
+| Category | Allocated | Spent to Date | Remaining |
+|----------|-----------|---------------|-----------|
+| Engineering | $[Amount] | $[Amount] | $[Amount] |
+| Design/UX | $[Amount] | $[Amount] | $[Amount] |
+| Infrastructure | $[Amount] | $[Amount] | $[Amount] |
+| Marketing/GTM | $[Amount] | $[Amount] | $[Amount] |
+| **Total** | **$[Amount]** | **$[Amount]** | **$[Amount]** |
+
+### Team Allocation
+- **Full-Time Equivalent (FTE):** [Total FTE across teams]
+- **Teams Involved:** [List of teams contributing]
+- **Organizational Commitment:** [% of portfolio capacity]
+
+## Risks & Dependencies
+
+### Strategic Risks
+
+| Risk | Likelihood | Impact | Mitigation Strategy | Owner |
+|------|------------|--------|-------------------|-------|
+| [Market risk 1] | High/Med/Low | High/Med/Low | [Strategy] | [Name] |
+| [Execution risk 2] | High/Med/Low | High/Med/Low | [Strategy] | [Name] |
+| [Financial risk 3] | High/Med/Low | High/Med/Low | [Strategy] | [Name] |
+
+### Dependencies
+
+**External Dependencies:**
+- [Partner/vendor dependency 1]
+- [Regulatory/compliance dependency 2]
+
+**Internal Dependencies:**
+- [Cross-team dependency 1]
+- [Platform/infrastructure dependency 2]
+
+**Blocking Initiatives:**
+- [INIT-XXX: Must complete before this initiative]
+
+## Success Metrics & Tracking
+
+### Primary Metrics (Outcomes)
+
+| Metric | Measurement Frequency | Current | Target | Tracking Method |
+|--------|---------------------|---------|--------|----------------|
+| [Business metric 1] | [Weekly/Monthly/Quarterly] | [Value] | [Goal] | [Dashboard/Report] |
+| [Business metric 2] | [Weekly/Monthly/Quarterly] | [Value] | [Goal] | [Dashboard/Report] |
+
+### Secondary Metrics (Leading Indicators)
+
+| Metric | Measurement Frequency | Target | Purpose |
+|--------|---------------------|--------|---------|
+| [Leading indicator 1] | [Frequency] | [Goal] | [Why tracked] |
+| [Leading indicator 2] | [Frequency] | [Goal] | [Why tracked] |
+
+### Progress Dashboard
+[Link to real-time dashboard tracking initiative progress]
+
+## Milestones & Timeline
+
+### Phase 1: Foundation (Month 1-3)
+- **Milestone 1.1** (End Month 1): [Deliverable]
+- **Milestone 1.2** (End Month 2): [Deliverable]
+- **Milestone 1.3** (End Month 3): [Deliverable]
+
+### Phase 2: Build (Month 4-6)
+- **Milestone 2.1** (End Month 4): [Deliverable]
+- **Milestone 2.2** (End Month 5): [Deliverable]
+- **Milestone 2.3** (End Month 6): [Deliverable]
+
+### Phase 3: Scale (Month 7-9)
+- **Milestone 3.1** (End Month 7): [Deliverable]
+- **Milestone 3.2** (End Month 8): [Deliverable]
+- **Milestone 3.3** (End Month 9): [Deliverable]
+
+## Governance & Decision-Making
+
+### Steering Committee
+- [Executive Sponsor Name] - [Title]
+- [Committee Member 2] - [Title]
+- [Committee Member 3] - [Title]
+
+### Review Cadence
+- **Weekly:** Execution team sync
+- **Bi-Weekly:** Progress review with stakeholders
+- **Monthly:** Steering committee review
+- **Quarterly:** Executive business review
+
+### Decision Authority
+- **Scope Changes:** [Who approves]
+- **Budget Variance (>10%):** [Who approves]
+- **Timeline Changes:** [Who approves]
+- **Initiative Cancellation:** [Who approves]
+
+## Communication Plan
+
+### Stakeholder Updates
+- **Executive Leadership:** [Frequency & format]
+- **Contributing Teams:** [Frequency & format]
+- **Broader Organization:** [Frequency & format]
+- **Customers:** [If applicable - timing & messaging]
+
+### Communication Channels
+- [Slack channel / Email list / Wiki page]
+- [All-hands presentation schedule]
+- [External communication plan]
+
+## Definition of Success
+
+**Initiative Completed When:**
+- [ ] All Key Results achieved (≥80% of targets)
+- [ ] All supporting epics completed
+- [ ] Success metrics baseline validated
+- [ ] Business impact measured and documented
+- [ ] Go-to-market (if applicable) executed
+- [ ] Post-initiative retrospective completed
+- [ ] Lessons learned documented
+
+## Open Questions & Assumptions
+
+### Open Questions
+
+**Initiative Open Questions focus on STRATEGIC EXECUTION and RESOURCE ALLOCATION uncertainties requiring executive or portfolio-level decision-making.**
+
+**✅ INCLUDE in Initiative Open Questions:**
+
+1. **Executive Approval Questions:**
+   - Budget range, headcount approvals, strategic direction
+   - C-level or VP-level decisions
+
+2. **Resource Allocation Questions:**
+   - FTE availability and team assignments
+   - Contractor hiring needs
+   - Budget allocation across teams/quarters
+
+3. **Portfolio & Sequencing Questions:**
+   - Initiative prioritization and dependencies
+   - Roadmap sequencing decisions
+   - Cross-initiative resource conflicts
+
+4. **Organizational Alignment Questions:**
+   - Stakeholder buy-in and consensus
+   - Executive sponsor commitment
+   - Cross-functional collaboration agreements
+
+5. **Strategic Assumptions Requiring Validation:**
+   - Market timing assumptions
+   - Regulatory changes
+   - Competitive landscape shifts
+
+**❌ EXCLUDE from Initiative (belong in other phases):**
+- Tactical business questions (market segments, pricing) → Epic phase
+- Product/technical trade-offs → PRD phase
+- User/UX questions → High-Level Story phase
+- Implementation questions → Backlog Story and below
+
+---
+
+**Question Markers:**
+- [REQUIRES EXECUTIVE DECISION] - needs C-level or VP approval
+- [REQUIRES PORTFOLIO PLANNING] - affects multiple initiatives or roadmap
+- [REQUIRES RESOURCE PLANNING] - FTE, budget, or team allocation
+- [REQUIRES ORGANIZATIONAL ALIGNMENT] - requires stakeholder consensus
+- [REQUIRES STRATEGIC DECISION] - major strategic choice
+
+---
+
+**Examples of Initiative-APPROPRIATE questions:**
+- "What is the approved budget range for this initiative: $500K-$1M or $1M-$2M?" [REQUIRES EXECUTIVE DECISION]
+- "Should we sequence this initiative before Platform Modernization (Q2-Q3) or after (Q4-Q1)?" [REQUIRES PORTFOLIO PLANNING]
+- "Do we have 3-4 FTE available in Q2, or do we need to hire contractors?" [REQUIRES RESOURCE PLANNING]
+- "Does this initiative align with the CEO's strategic priority for enterprise market expansion?" [REQUIRES ORGANIZATIONAL ALIGNMENT]
+
+**Examples of questions for OTHER phases:**
+- ❌ "What pricing model should we use?" (Epic - business question)
+- ❌ "Should we build or buy notification service?" (PRD - product/technical trade-off)
+- ❌ "Should settings be in profile page?" (High-Level Story - UX question)
+
+---
+
+**If no open questions exist, state:** "No strategic or resource questions at this time. All executive approvals and resource allocations confirmed."
+
+---
+
+- [Strategic/Resource Question 1 with marker]
+- [Strategic/Resource Question 2 with marker]
+
+### Key Assumptions
+- [Assumption 1: Market condition or constraint]
+- [Assumption 2: Resource availability]
+- [Assumption 3: Technical feasibility]
+
+## Related Documents
+- **Business Strategy:** [Link to organizational strategy doc]
+- **Initiative PRD:** [Link if separate detailed PRD exists]
+- **Market Research:** [Link to supporting research]
+- **Competitive Analysis:** [Link to analysis]
+- **Supporting Epics:** [Links to epic documents]
+- **Architecture Decisions:** [Links to relevant ADRs]
+    ]]>
+  </structure>
+
+  <examples>
+    <example>
+      # Initiative: Increase Mobile App Engagement by 20%
+
+      ## Strategic Objective
+      Drive mobile app engagement to increase customer lifetime value and reduce churn in our retail banking segment.
+
+      ## Business Goals &amp; OKRs
+
+      ### Objective
+      Make our mobile app the primary banking channel for retail customers
+
+      ### Key Results
+      | Key Result | Baseline | Target | Due Date |
+      |-----------|----------|--------|----------|
+      | Monthly Active Users (MAU) | 150K | 180K (+20%) | Q4 2025 |
+      | Average Session Duration | 2.5 min | 4.0 min (+60%) | Q4 2025 |
+      | Churn Rate | 5% | 4.25% (-15%) | Q4 2025 |
+
+      ## Supporting Epics
+      | Epic | Description | Timeline |
+      |------|-------------|----------|
+      | EPIC-101 | Proactive push notifications | Q1-Q2 2025 |
+      | EPIC-102 | In-app financial insights | Q2-Q3 2025 |
+      | EPIC-103 | One-tap bill payments | Q3 2025 |
+
+      ## Success Metrics
+      - MAU growth tracked weekly via Mixpanel
+      - Session duration measured via Firebase Analytics
+      - Churn calculated monthly from customer database
+    </example>
+  </examples>
+</template>

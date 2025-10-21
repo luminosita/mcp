@@ -53,14 +53,14 @@ After renaming, file references in all documents (main CLAUDE.md, generators, te
 **Note:** This is a documentation refactoring task, not a code implementation task. No direct code patterns from Implementation Research apply. The naming convention supports future MCP resource URI design.
 
 ## Functional Requirements
-1. Rename all CLAUDE-*.md files in `prompts/CLAUDE/python/` directory to patterns-*.md
+1. Rename all CLAUDE-*.md files in `new_prompts/CLAUDE/python/` directory to patterns-*.md
 2. Rename main SDLC content file (created in US-028) from tentative name to sdlc-core.md
 3. Update all file references in main CLAUDE.md orchestrator
 4. Update all file references in generator XML files (if any CLAUDE-*.md files referenced)
 5. Update all file references in template XML files (if any CLAUDE-*.md files referenced)
 6. Update folder structure documentation in sdlc-core.md to reflect new naming
 7. Preserve all file content (rename only, no content changes)
-8. Language-specific subdirectory structure unchanged (prompts/CLAUDE/python/, prompts/CLAUDE/go/)
+8. Language-specific subdirectory structure unchanged (new_prompts/CLAUDE/python/, new_prompts/CLAUDE/go/)
 
 ## Non-Functional Requirements
 - **Consistency:** All pattern files use "patterns-" prefix consistently
@@ -76,31 +76,31 @@ After renaming, file references in all documents (main CLAUDE.md, generators, te
 This is a manual file renaming and reference update task. Approach:
 
 1. **Inventory Current Files:**
-   - List all CLAUDE-*.md files in `prompts/CLAUDE/python/`
+   - List all CLAUDE-*.md files in `new_prompts/CLAUDE/python/`
    - Document current file names and line counts
    - Example inventory:
      ```
-     prompts/CLAUDE/python/CLAUDE-core.md (250 lines)
-     prompts/CLAUDE/python/CLAUDE-tooling.md (180 lines)
-     prompts/CLAUDE/python/CLAUDE-testing.md (220 lines)
-     prompts/CLAUDE/python/CLAUDE-typing.md (150 lines)
-     prompts/CLAUDE/python/CLAUDE-validation.md (200 lines)
-     prompts/CLAUDE/python/CLAUDE-architecture.md (170 lines)
+     new_prompts/CLAUDE/python/CLAUDE-core.md (250 lines)
+     new_prompts/CLAUDE/python/CLAUDE-tooling.md (180 lines)
+     new_prompts/CLAUDE/python/CLAUDE-testing.md (220 lines)
+     new_prompts/CLAUDE/python/CLAUDE-typing.md (150 lines)
+     new_prompts/CLAUDE/python/CLAUDE-validation.md (200 lines)
+     new_prompts/CLAUDE/python/CLAUDE-architecture.md (170 lines)
      ```
 
 2. **Execute Renaming:**
    - Use `git mv` to preserve version history:
      ```bash
-     git mv prompts/CLAUDE/python/CLAUDE-core.md prompts/CLAUDE/python/patterns-core.md
-     git mv prompts/CLAUDE/python/CLAUDE-tooling.md prompts/CLAUDE/python/patterns-tooling.md
-     git mv prompts/CLAUDE/python/CLAUDE-testing.md prompts/CLAUDE/python/patterns-testing.md
-     git mv prompts/CLAUDE/python/CLAUDE-typing.md prompts/CLAUDE/python/patterns-typing.md
-     git mv prompts/CLAUDE/python/CLAUDE-validation.md prompts/CLAUDE/python/patterns-validation.md
-     git mv prompts/CLAUDE/python/CLAUDE-architecture.md prompts/CLAUDE/python/patterns-architecture.md
+     git mv new_prompts/CLAUDE/python/CLAUDE-core.md new_prompts/CLAUDE/python/patterns-core.md
+     git mv new_prompts/CLAUDE/python/CLAUDE-tooling.md new_prompts/CLAUDE/python/patterns-tooling.md
+     git mv new_prompts/CLAUDE/python/CLAUDE-testing.md new_prompts/CLAUDE/python/patterns-testing.md
+     git mv new_prompts/CLAUDE/python/CLAUDE-typing.md new_prompts/CLAUDE/python/patterns-typing.md
+     git mv new_prompts/CLAUDE/python/CLAUDE-validation.md new_prompts/CLAUDE/python/patterns-validation.md
+     git mv new_prompts/CLAUDE/python/CLAUDE-architecture.md new_prompts/CLAUDE/python/patterns-architecture.md
      ```
    - Rename main SDLC file (if not already named):
      ```bash
-     git mv prompts/CLAUDE/sdlc-content.md prompts/CLAUDE/sdlc-core.md
+     git mv new_prompts/CLAUDE/sdlc-content.md new_prompts/CLAUDE/sdlc-core.md
      ```
 
 3. **Update File References:**
@@ -108,8 +108,8 @@ This is a manual file renaming and reference update task. Approach:
      - "CLAUDE-core.md" → "patterns-core.md"
      - "CLAUDE-tooling.md" → "patterns-tooling.md"
      - (continue for all files)
-   - Search and replace in all generator XML files (`prompts/*-generator.xml`)
-   - Search and replace in all template XML files (`prompts/templates/*-template.xml`)
+   - Search and replace in all generator XML files (`new_prompts/*-generator.xml`)
+   - Search and replace in all template XML files (`new_prompts/templates/*-template.xml`)
    - Use case-sensitive search to avoid false matches
 
 4. **Update Documentation:**
@@ -134,15 +134,15 @@ This is a manual file renaming and reference update task. Approach:
 ## Acceptance Criteria
 
 ### Scenario 1: All pattern files renamed successfully
-**Given** CLAUDE-*.md files exist in `prompts/CLAUDE/python/`
+**Given** CLAUDE-*.md files exist in `new_prompts/CLAUDE/python/`
 **When** renaming is complete
 **Then** all files use "patterns-" prefix: patterns-core.md, patterns-tooling.md, patterns-testing.md, patterns-typing.md, patterns-validation.md, patterns-architecture.md
 **And** main SDLC file named sdlc-core.md
-**And** no CLAUDE-*.md files remain in prompts/CLAUDE/ directory (excluding main CLAUDE.md orchestrator)
+**And** no CLAUDE-*.md files remain in new_prompts/CLAUDE/ directory (excluding main CLAUDE.md orchestrator)
 
 ### Scenario 2: Git history preserved
 **Given** files renamed using `git mv`
-**When** I run `git log --follow prompts/CLAUDE/python/patterns-core.md`
+**When** I run `git log --follow new_prompts/CLAUDE/python/patterns-core.md`
 **Then** Git history shows original CLAUDE-core.md commits
 **And** rename operation visible in Git history
 
@@ -154,14 +154,14 @@ This is a manual file renaming and reference update task. Approach:
 
 ### Scenario 4: File references updated in generators and templates
 **Given** generators and templates reference pattern files
-**When** I grep for "CLAUDE-" in `prompts/*.xml` and `prompts/templates/*.xml`
+**When** I grep for "CLAUDE-" in `new_prompts/*.xml` and `new_prompts/templates/*.xml`
 **Then** no CLAUDE-*.md references found (only CLAUDE.md orchestrator if applicable)
 **And** all pattern file references use patterns-*.md naming
 
 ### Scenario 5: Documentation updated
 **Given** sdlc-core.md documents folder structure
 **When** I read Folder Structure section
-**Then** naming convention documented: "prompts/CLAUDE/python/patterns-*.md"
+**Then** naming convention documented: "new_prompts/CLAUDE/python/patterns-*.md"
 **And** AI-agent-agnostic naming rationale explained
 **And** version history includes rename entry with date
 

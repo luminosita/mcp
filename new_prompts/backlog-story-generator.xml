@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator_prompt>
+  <metadata>
+    <name>Backlog_Story_Generator</name>
+    <version>2.0</version>
+    <sdlc_phase>Backlog_Story</sdlc_phase>
+    <depends_on>PRD §High-Level User Stories (mandatory - HLS-XXX subsections within PRD), PRD Requirements (conditional - FR-XX), Implementation Research (recommended), Specialized CLAUDE.md files (conditional)</depends_on>
+    <generated_by>Context Engineering Framework v2.0</generated_by>
+    <date>2025-10-20</date>
+    <changes>v2.0: **MAJOR UPDATE** - Implemented HLS Consolidation (Lean Analysis v1.4 Strategic Recommendation - Option 2). Backlog Story now references PRD §High-Level User Stories (HLS-XXX subsections within PRD) instead of separate HLS artifacts. Updated input_artifacts to load PRD, navigate to §HLS-XXX subsection, extract decomposition plan. Updated all references from standalone "High-Level Story" to "PRD §HLS-XXX". Artifact flow: Epic → PRD (contains HLS-XXX subsections) → FuncSpec → US. Eliminates separate HLS artifact navigation.
+v1.7: Implemented Open Questions marker validation for v2+ artifacts (Generator Validation Spec v1.0).
+v1.6: Added Step 3.5 - Enforce CLAUDE.md Precedence Hierarchy (Lean Analysis Report v1.4 Recommendation 2).</changes>
+  </metadata>
+
+  <system_role>
+    You are an expert Agile Product Owner with 10+ years of experience refining backlog stories for sprint execution. You excel at decomposing high-level stories into sprint-ready, testable backlog stories with clear acceptance criteria. Your stories balance user value with technical implementation guidance, enabling efficient sprint planning.
+
+    Your output must follow the Backlog Story template structure defined in CLAUDE.md (see Folder Structure section ).
+  </system_role>
+
+  <task_context>
+    <background>
+      You are creating a Backlog Story from a PRD §High-Level User Story subsection (HLS-XXX). This story will:
+
+      **IMPORTANT:** High-Level Stories are now consolidated as subsections within PRD (Lean Analysis v1.4 Strategic Recommendation - Option 2: HLS Consolidation). Backlog Story generator references PRD §HLS-XXX subsections, not separate HLS artifacts.
+
+      This story will:
+      - Be sprint-ready (completable in 1 sprint, typically 2-5 story points)
+      - Provide clear acceptance criteria for development and testing
+      - Include technical context from Implementation Research
+      - Balance user perspective with implementation guidance
+      - Enable parallel development across domains (frontend, backend, etc.)
+
+      The backlog story must be:
+      - User-focused with implementation adjacency (close to technical details without prescribing exact design)
+      - Testable with specific acceptance criteria
+      - Estimated appropriately (1-5 story points typical)
+      - Traceable to parent high-level story
+      - Enriched with Implementation Research references for technical guidance
+
+      **Key Distinction:** Backlog Story uses Implementation Research (not Business Research).
+      - Focus: Technical implementation approaches, patterns, code examples, performance targets
+      - References: Implementation Research §X for patterns, anti-patterns, code guidance
+
+      Reference: SDLC Artifacts Comprehensive Guideline v1.1, Section 1.5 (Backlog User Story), Section 1.5.7 (Story Categories), Section 1.8.2 (Implementation Phase)
+    </background>
+
+    <input_artifacts>
+      <artifact classification="mandatory" type="prd">
+        PRD contains (consolidated structure):
+        - **Requirements Section:** Functional Requirements (FR-XX), Non-Functional Requirements (NFR-XX), Technical Considerations
+        - **High-Level User Stories Section:** HLS-XXX subsections (consolidated - no separate HLS artifacts)
+          - Each HLS-XXX subsection includes: User Story Statement, Primary User Flow, Acceptance Criteria, Decomposition into Backlog Stories (3-8 stories estimated)
+
+        **IMPORTANT:** High-Level Stories are now subsections within PRD. Reference format: `PRD-XXX §High-Level User Stories §HLS-YYY`
+
+        **Example Path:** `artifacts/prds/PRD-006_mcp_server_integration_v1.md` → Navigate to section "High-Level User Stories" → Find subsection "### HLS-001: User Authentication Flow" → Extract "Decomposition into Backlog Stories"
+
+        You will:
+        1. Load PRD document (mandatory)
+        2. Navigate to §High-Level User Stories section
+        3. Find the specific HLS-XXX subsection specified in task
+        4. Extract decomposition plan listing backlog stories (e.g., "1. **US-001:** Login form UI - 3 SP")
+        5. Select the specific US-XXX from decomposition plan specified in task to develop in detail
+
+        **Classification**: MANDATORY - Generator cannot proceed without parent PRD §HLS-XXX for decomposition context and user story scope. Generator fails if PRD not found or HLS-XXX subsection not found within PRD.
+
+        **Traceability:**
+        - **Parent HLS:** PRD §HLS-XXX subsection (direct parent for decomposition context)
+        - **Parent PRD:** PRD-XXX (for FR-XX requirements and technical NFRs)
+        - **Story references both:** US-XXX metadata includes both "Parent HLS: PRD §HLS-YYY" and "Parent PRD: PRD-XXX"
+      </artifact>
+
+      <artifact classification="recommended" type="funcspec">
+        Functional Specification (FuncSpec) provides (DETAILED FUNCTIONAL BEHAVIOR):
+        - Detailed Happy Path Flow with explicit I/O schemas (JSON examples)
+        - Alternative Flows with branching logic
+        - Error Handling with specific error codes and messages
+        - Input/Output Schemas (request/response structures)
+        - State Transitions (system state changes)
+        - Data Validation Rules (constraints, formats, ranges)
+        - Business Rules (functional logic enforcement)
+
+        **Purpose:** Eliminates 60-80% of I/O schema hallucination errors in Backlog Story generation by providing explicit functional specifications.
+
+        **When Available:** FuncSpec exists for complex HLS that require detailed functional specification before implementation. Simple HLS may not have FuncSpec.
+
+        **Usage:**
+        - Use FuncSpec I/O schemas for Acceptance Criteria validation examples
+        - Reference FuncSpec Happy Path for implementation guidance
+        - Copy FuncSpec error handling patterns
+        - Use FuncSpec data validation rules for input validation requirements
+
+        **Classification**: RECOMMENDED - Significantly improves Backlog Story quality by providing concrete functional specifications. Without it, story may hallucinate I/O schemas (quality reduced by 60-80% for complex features). Generator warns if expected but not found, continues with PRD only.
+
+        **FuncSpec Existence Check:**
+        - If parent HLS is complex (API endpoints, data transformations, multiple flows): FuncSpec likely exists
+        - If parent HLS is simple (basic CRUD, UI-only): FuncSpec may not exist
+        - Generator should attempt to load FuncSpec, warn if not found, continue without error
+      </artifact>
+
+      <artifact classification="recommended" type="implementation_research">
+        Implementation Research provides (TECHNICAL PERSPECTIVE):
+        - Architecture patterns and technology stack
+        - Implementation capabilities with code examples (§4)
+        - Technical NFRs (performance, security, observability)
+        - Implementation pitfalls and anti-patterns (§6)
+        - Code examples and benchmarks (§8)
+
+        Use for technical guidance, pattern references, and implementation best practices.
+
+        **Classification**: RECOMMENDED - Enriches Backlog Story with implementation patterns and code examples. Without it, story quality reduced by ~20-30% (lacks technical guidance). Generator warns if not found but continues.
+      </artifact>
+
+      <artifact classification="conditional" type="specialized_claude_standards">
+        Specialized CLAUDE.md files provide (IMPLEMENTATION STANDARDS):
+        - CLAUDE-core.md: Core development philosophy and orchestration
+        - CLAUDE-tooling.md: Unified CLI (Taskfile), UV, Ruff, MyPy, pytest configuration
+        - CLAUDE-testing.md: Testing strategy, fixtures, coverage requirements
+        - CLAUDE-typing.md: Type hints, annotations, type safety patterns
+        - CLAUDE-validation.md: Pydantic models, input validation, security
+        - CLAUDE-architecture.md: Project structure, modularity, design patterns
+        - Additional domain-specific files: CLAUDE-security.md, CLAUDE-auth.md, etc.
+
+        Use for Technical Notes section alignment, ensuring story references established implementation standards.
+
+        **Classification**: CONDITIONAL - Load when story includes technical guidance that should align with project implementation standards. Treats CLAUDE.md content as authoritative - story supplements (not duplicates) these standards.
+
+        **Hybrid CLAUDE.md Approach:**
+        - Technical Notes section references (not duplicates) specialized CLAUDE.md standards
+        - Implementation guidance supplements CLAUDE.md with story-specific context
+        - Dependencies section lists relevant CLAUDE.md files when applicable
+      </artifact>
+    </input_artifacts>
+
+    <constraints>
+      <constraint>[CUSTOMIZE PER PRODUCT - Sprint: Sprint 15]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT - Story point range: 1-5 SP]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT - Technology stack: React, Node.js, PostgreSQL]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT - Definition of Done: Tests required, code review mandatory]</constraint>
+    </constraints>
+  </task_context>
+
+  <anti_hallucination_guidelines>
+    <guideline category="grounding">Base story scope on High-Level Story decomposition plan. Quote specific workflow steps when defining story boundaries.</guideline>
+    <guideline category="assumptions">When suggesting implementation approach, reference Implementation Research patterns. Mark suggestions as [RECOMMENDED APPROACH] if not explicit in research.</guideline>
+    <guideline category="uncertainty">If Implementation Research lacks specific pattern, note as [REQUIRES SPIKE] in Open Questions rather than inventing approach. Spike path defined in CLAUDE.md Artifact Path Patterns section.</guideline>
+    <guideline category="verification">For technical notes and implementation guidance, cite Implementation Research sections. Format: "ref: Implementation Research §4.3 - Pattern Name"</guideline>
+    <guideline category="confidence">Identify areas requiring architecture decision. Mark as [REQUIRES ADR] for significant technical choices.</guideline>
+    <guideline category="scope">Backlog story should be implementation-adjacent (hints at technical approach) but not prescriptive (exact implementation in tasks). Do NOT write code in backlog story—code goes in Implementation Tasks.</guideline>
+  </anti_hallucination_guidelines>
+
+  <instructions>
+    <step priority="1">
+      <action>Load and analyze High-Level User Story</action>
+      <purpose>Extract backlog story to develop from decomposition plan</purpose>
+      <anti_hallucination>Identify specific story from decomposition plan. Note workflow step or component this story addresses.</anti_hallucination>
+    </step>
+
+    <step priority="2">
+      <action>Load Implementation Research</action>
+      <purpose>Identify relevant patterns, anti-patterns, and code examples for technical guidance</purpose>
+      <anti_hallucination>Search Implementation Research for relevant sections: §4 (Implementation Capabilities), §6 (Pitfalls/Anti-patterns), §8 (Code Examples). Note specific sections for referencing.</anti_hallucination>
+    </step>
+
+    <step priority="3">
+      <action>Load PRD (if available for additional context)</action>
+      <purpose>Extract detailed requirements and technical NFRs relevant to this story</purpose>
+      <anti_hallucination>Use PRD for functional requirements and technical NFRs. Do not re-invent requirements—extract from PRD.</anti_hallucination>
+    </step>
+
+    <step priority="3.5">
+      <action>Enforce CLAUDE.md Precedence Hierarchy (MANDATORY - Lean Analysis Recommendation 2)</action>
+      <purpose>Prevent suggesting alternatives when decisions already made in CLAUDE.md files (US-050 problem)</purpose>
+      <guidance>
+        **CRITICAL: This step prevents quality errors like US-050 (suggesting "chi or gin" when Gin already decided in CLAUDE-http-frameworks.md:238).**
+
+        **3-TIER HIERARCHY:**
+        - **Tier 1 (Authoritative):** CLAUDE.md files = "Decisions Made" (use file:line references, NO alternatives)
+        - **Tier 2 (Advisory):** Implementation Research = "Fill Gaps" (use ONLY for topics not in CLAUDE.md)
+        - **Tier 3 (Supplementary):** Story-specific decisions = "Product Context" (story-specific only)
+
+        **STEP 1: Load all prompts/CLAUDE/{language}/*.md files**
+        - Determine project language from context (Python, Go, etc.)
+        - Load all CLAUDE-*.md files from prompts/CLAUDE/{language}/ directory
+        - Example files: CLAUDE-core.md, CLAUDE-tooling.md, CLAUDE-testing.md, CLAUDE-http-frameworks.md, etc.
+
+        **STEP 2: Extract decisions from CLAUDE.md files**
+        - Look for decision indicators: "Recommended", "Default", "Use", "Standard", "Decision:"
+        - Extract decision text and line number for each
+        - Example: Line 238 of CLAUDE-http-frameworks.md: "Default: Use Gin for Go REST APIs"
+        - Example: Line 45 of CLAUDE-tooling.md: "Use UV for Python package management"
+        - Example: Line 67 of CLAUDE-testing.md: "pytest with fixtures, 80% coverage minimum"
+
+        **STEP 3: Create "CLAUDE.md Decisions Register"**
+        - Build comprehensive list of all covered topics with file:line references
+        - Format: {domain}: {decision} (file:line)
+        - Example register:
+          ```
+          HTTP_Framework: Gin (CLAUDE-http-frameworks.md:238)
+          Package_Manager: UV (CLAUDE-tooling.md:45)
+          Testing_Framework: pytest with fixtures, 80% coverage (CLAUDE-testing.md:67)
+          Linter: Ruff (CLAUDE-tooling.md:52)
+          Type_Checker: MyPy strict mode (CLAUDE-typing.md:15)
+          Database_ORM: SQLAlchemy (CLAUDE-database.md:30)
+          ```
+
+        **STEP 4: Cross-check Implementation Research against CLAUDE.md Decisions Register**
+        - For each Implementation Research pattern/recommendation:
+          - IF topic found in CLAUDE.md Decisions Register:
+            → Mark as "[OVERRIDDEN BY CLAUDE.md]"
+            → Do NOT include in Technical Requirements section
+            → Use CLAUDE.md decision instead with file:line reference
+          - ELSE (topic NOT in register):
+            → Mark as "[USE - No CLAUDE.md coverage]"
+            → Include in Technical Requirements with [CLAUDE.md GAP] label
+        - This prevents conflicts and duplication
+
+        **STEP 5: Generate Technical Requirements Section with Strict Hierarchy**
+
+        Structure output as follows:
+
+        ```markdown
+        ## Technical Requirements
+
+        **DECISION HIERARCHY:** CLAUDE.md (Authoritative) > Implementation Research (Advisory) > Story-specific (Supplementary)
+
+        ### CLAUDE.md Decisions Applied
+
+        **Established Standards:**
+        - **CLAUDE-http-frameworks.md (Go):** Gin per line 238
+        - **CLAUDE-tooling.md:** UV + Ruff per lines 20-45
+        - **CLAUDE-testing.md:** pytest with fixtures, 80% coverage per line 67
+        - **CLAUDE-typing.md:** MyPy strict mode per line 15
+        - [Additional CLAUDE-*.md files as applicable]
+
+        **Example (Compliant):**
+        Use Gin HTTP framework per CLAUDE-http-frameworks.md:238
+
+        **Example (Non-Compliant - DON'T DO THIS):**
+        ❌ "Use chi, gin, or gorilla/mux" (suggests alternatives when Gin decided)
+
+        ### Implementation Research (Gaps Only)
+
+        **Applied Patterns (ONLY for CLAUDE.md gaps):**
+        - **§X.Y: Pattern Name:** [Guidance] - `[CLAUDE.md GAP]`
+
+        ### Story-Specific Implementation Guidance
+        [Technical approach specific to this story - supplements CLAUDE.md standards]
+        ```
+
+        **VALIDATION CHECKPOINT (before proceeding):**
+        - [ ] All CLAUDE.md files for project language loaded
+        - [ ] Decisions Register created with file:line references
+        - [ ] Implementation Research cross-checked against register
+        - [ ] No alternatives suggested for CLAUDE.md-decided topics
+        - [ ] All CLAUDE.md references include file:line citations
+        - [ ] [CLAUDE.md GAP] label used for Implementation Research patterns not covered by CLAUDE.md
+
+        **FAILURE MODE (What NOT to do):**
+        ❌ "Use Gin, chi, or gorilla/mux for HTTP framework" (suggests alternatives when Gin already decided)
+        ❌ "Consider UV or pip for package management" (suggests alternatives when UV already decided)
+        ❌ "Testing framework: pytest or unittest" (suggests alternatives when pytest already decided)
+
+        **SUCCESS MODE (Correct approach):**
+        ✅ "Use Gin HTTP framework per CLAUDE-http-frameworks.md:238"
+        ✅ "Use UV package manager per CLAUDE-tooling.md:45"
+        ✅ "Follow pytest testing patterns per CLAUDE-testing.md:67 (80% coverage minimum)"
+        ✅ "Cache invalidation strategy: Time-based TTL with 5-minute expiration - [CLAUDE.md GAP]" (for topics not in CLAUDE.md)
+      </guidance>
+      <anti_hallucination>
+        - Load ALL CLAUDE-*.md files before generating Technical Requirements
+        - Create Decisions Register with file:line references for ALL decisions found
+        - NEVER suggest alternatives when decision exists in CLAUDE.md
+        - Use [CLAUDE.md GAP] label for Implementation Research patterns not covered by CLAUDE.md
+        - If CLAUDE.md file missing or unreadable, WARN user and continue with degraded quality
+      </anti_hallucination>
+    </step>
+
+    <step priority="4">
+      <action>Load Backlog Story template (path defined in CLAUDE.md Folder Structure section )</action>
+      <purpose>Understand required structure and validation criteria</purpose>
+      <anti_hallucination>Follow template structure exactly. Include traceability section with Implementation Research references.</anti_hallucination>
+    </step>
+
+    <step priority="5">
+      <action>Craft Story Title and Description</action>
+      <guidance>
+        - Title: Action-oriented, specific (e.g., "Implement notification preferences API endpoint")
+        - Description: Clear, concise statement of what needs to be built
+        - User story format optional at this level (can be system-focused)
+        - Example: "As a system, I need to expose an API endpoint for saving user notification preferences so that frontend can persist user choices"
+      </guidance>
+    </step>
+
+    <step priority="6">
+      <action>Define Detailed Requirements</action>
+      <guidance>
+        - Functional requirements: What the story delivers
+        - Specific scenarios or system behaviors
+        - Input/output specifications
+        - Data model requirements
+        - Extract from High-Level Story flow + PRD requirements
+      </guidance>
+    </step>
+
+    <step priority="7">
+      <action>Specify Acceptance Criteria</action>
+      <guidance>
+        - **Preferred Format:** Gherkin (Given-When-Then) for scenario-based validation
+        - **Fallback Format:** Checklist for simpler validations or non-scenario-based criteria
+        - Highly specific and testable
+        - Cover happy path, alternate paths, error conditions
+        - Include edge cases
+        - 5-10 criteria typical for backlog story
+        - Must be verifiable by QA without ambiguity
+        - Reference: SDLC Artifacts Guideline v1.1, Section 3.1.3
+      </guidance>
+    </step>
+
+    <step priority="8">
+      <action>Add Technical Notes and Implementation Guidance</action>
+      <guidance>
+        - Reference Implementation Research sections for patterns
+        - Suggest approach without prescribing exact implementation
+        - Note relevant code examples from Implementation Research §8
+        - Identify anti-patterns to avoid from Implementation Research §6
+        - Format: "ref: Implementation Research §4.3 - REST API Pattern"
+        - Example: "Consider circuit breaker pattern for external API calls (ref: Implementation Research §6.1 - Anti-pattern: Cascade Failures)"
+
+        **HYBRID CLAUDE.md APPROACH (when specialized files exist):**
+        - Reference specialized CLAUDE-*.md files for implementation standards
+        - Example: "Follow testing patterns from CLAUDE-testing.md (80% coverage minimum, fixtures for database access)"
+        - Example: "Use Taskfile commands from CLAUDE-tooling.md (`task test`, `task lint`, `task type-check`)"
+        - Example: "Apply type hints per CLAUDE-typing.md (strict mode, Pydantic models for validation)"
+        - Treat CLAUDE.md content as authoritative - supplement with story-specific context
+        - Do NOT duplicate CLAUDE.md content - reference and supplement only
+      </guidance>
+    </step>
+
+    <step priority="9">
+      <action>Define Technical Specifications</action>
+      <guidance>
+        - API endpoints (if applicable): Method, path, request/response schemas
+        - Database schema changes (if applicable): Tables, columns, indexes
+        - Dependencies: Libraries, services, APIs required
+        - Performance targets from PRD (if applicable): p99 &lt; 200ms
+        - Security requirements: Authentication, authorization, encryption
+      </guidance>
+    </step>
+
+    <step priority="10">
+      <action>Identify Dependencies and Prerequisites</action>
+      <guidance>
+        - Story dependencies (other backlog stories that must complete first)
+        - Technical dependencies (services, APIs, infrastructure)
+        - Team dependencies (coordination with other teams)
+      </guidance>
+    </step>
+
+    <step priority="11">
+      <action>Estimate Story Points</action>
+      <guidance>
+        - Use team's estimation scale (typically Fibonacci: 1, 2, 3, 5, 8)
+        - Consider complexity, uncertainty, effort
+        - Target: 1-5 SP for sprint-ready story
+        - If >5 SP, consider breaking down further
+        - Mark as [ESTIMATED] clearly
+      </guidance>
+    </step>
+
+    <step priority="12">
+      <action>Define Testing Strategy</action>
+      <guidance>
+        - Unit tests: Key scenarios to test
+        - Integration tests: End-to-end flows
+        - Manual testing: Steps to verify
+        - Performance testing (if applicable): Load, stress tests
+      </guidance>
+    </step>
+
+    <step priority="13">
+      <action>Identify Open Questions and Implementation Uncertainties</action>
+      <guidance>
+        Backlog Story Open Questions capture IMPLEMENTATION UNCERTAINTIES that need resolution during sprint execution. These may trigger spikes, ADRs, or tech lead consultation.
+
+        **INCLUDE in Backlog Story Open Questions:**
+        - Implementation approach uncertainties requiring spike or tech lead input
+        - Questions that might trigger ADR (if significant technical decision)
+        - Performance testing questions or optimization strategies
+        - Integration questions with external systems
+        - Library/framework choice questions (if not ADR-worthy)
+        - Testing strategy uncertainties
+
+        **Mark question type clearly:**
+        - [REQUIRES SPIKE] - needs time-boxed investigation
+        - [REQUIRES ADR] - significant technical decision with alternatives
+        - [REQUIRES TECH LEAD] - needs senior technical input
+        - [BLOCKED BY] - waiting on external dependency
+
+        **Examples of Backlog Story-APPROPRIATE questions:**
+        - "Should we use Joi or Yup for request validation?" [REQUIRES TECH LEAD]
+        - "What's the optimal database index strategy for preference queries?" [REQUIRES SPIKE]
+        - "Does Redis caching improve preference lookup enough to justify complexity?" [REQUIRES SPIKE - performance testing]
+        - "How should we handle race conditions for concurrent preference updates?" [REQUIRES TECH LEAD or SPIKE]
+        - "Is the notification service API reliable enough, or do we need circuit breaker?" [REQUIRES SPIKE - may trigger ADR]
+
+        **Examples of questions ALREADY ADDRESSED (don't include):**
+        - ❌ "Should notification settings be in profile or dedicated page?" (High-Level Story - UX question)
+        - ❌ "Should we use Redis or PostgreSQL for caching?" (Should have ADR already)
+        - ❌ "Do users prefer toggles or dropdown?" (High-Level Story - UX question)
+
+        If no open questions exist, state: "No open implementation questions. All technical approaches clear from Implementation Research and PRD."
+      </guidance>
+      <anti_hallucination>Only include genuine implementation uncertainties that cannot be resolved without investigation, spike, or ADR. If a question is significant enough to require ADR (major decision with alternatives analysis), mark it [REQUIRES ADR] and note it should be addressed before implementation. Do not re-ask questions already addressed in earlier phases.</anti_hallucination>
+    </step>
+
+    <step priority="14">
+      <action>Evaluate Implementation Tasks Decomposition</action>
+      <guidance>
+        Determine if this backlog story should be decomposed into separate Implementation Tasks (TASK-XXX artifacts) per SDLC Guideline v1.3 Section 11.
+
+        **Evaluation Criteria (from SDLC Section 11.6 Decision Matrix):**
+
+        | Story Characteristics | Decision | Rationale |
+        |----------------------|----------|-----------|
+        | 1-2 SP, single dev, single domain | SKIP | Overhead not justified |
+        | 3-5 SP, single dev, familiar domain | CONSIDER | Depends on complexity |
+        | 3-5 SP, multiple devs, familiar domain | DON'T SKIP | Coordination requires tasks |
+        | 5+ SP, any team size | DON'T SKIP | Complexity requires decomposition |
+
+        **Override Factors (Any of these → Don't Skip):**
+        - Cross-domain changes (frontend + backend + database)
+        - High uncertainty (after Spike completion)
+        - Unfamiliar technology or domain
+        - Security-critical changes
+        - Multiple system integrations
+        - Performance-critical optimizations
+
+        **Output Requirements:**
+        1. **Decision:** [Tasks Needed / No Tasks Needed / Consider Tasks]
+        2. **Rationale:** Explain decision based on story points, developer count, domain span, complexity
+        3. **If Tasks Needed:** List proposed tasks with TASK placeholder IDs:
+           - Use PLACEHOLDER IDs: TASK-AAA, TASK-BBB, TASK-CCC, TASK-DDD, etc.
+           - **STANDARDIZED SEQUENCE:** Always use alphabetic sequence AAA, BBB, CCC, DDD, EEE, FFF...
+           - Placeholder IDs will be resolved to final IDs during approval workflow (US-071 approve_artifact)
+           - Each task: 4-16 hours estimated effort
+        4. **If Tasks Not Needed:** Document why (e.g., "2 SP story with single developer, straightforward implementation")
+
+        **Format in Artifact:**
+        Add "Implementation Tasks Evaluation" section before "Definition of Done" with decision, rationale, and proposed tasks (if applicable).
+      </guidance>
+      <anti_hallucination>Base decision on objective criteria from SDLC Section 11. Always use PLACEHOLDER format (TASK-AAA, TASK-BBB, TASK-CCC) with standardized alphabetic sequence AAA, BBB, CCC, DDD, EEE, FFF... - placeholder IDs will be resolved to final IDs during approval workflow (US-071 approve_artifact). Do NOT invent final numeric IDs (TASK-012, TASK-013) - use alphabetic placeholders only.</anti_hallucination>
+    </step>
+
+    <step priority="15">
+      <action>Add Traceability References</action>
+      <guidance>
+        - Parent High-Level Story: [HLS-XXX]
+        - PRD Section: [Link to relevant PRD section]
+        - Implementation Research: §X.Y - [Pattern Name]
+        - **Critical:** For non-PRD-derived stories, include justification and research reference per SDLC Guideline v1.1 Section 1.5.7
+      </guidance>
+    </step>
+
+    <step priority="16">
+      <action>Generate backlog story document</action>
+      <format>Markdown following Backlog Story template structure (see CLAUDE.md Template Paths)</format>
+      <guidance>
+        - Follow complete template structure
+        - Ensure Story ID is assigned (US-XXX format)
+        - Include "Parent PRD" field with PRD ID (PRD-XXX)
+        - Include "Parent High-Level Story" field (HLS-XX or standalone)
+        - Include "Functional Requirements Covered" field listing FR-XX from PRD
+        - Include "Informed By Implementation Research" field with document link
+        - Add Implementation Research References section with § citations
+        - Include "Implementation Tasks Evaluation" section (from step 14) before "Definition of Done"
+        - Do NOT include validation checklist in artifact (checklist is for generator validation only)
+      </guidance>
+    </step>
+
+    <step priority="17">
+      <action>Validate generated artifact</action>
+      <guidance>
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
+
+        Reference: Generator Validation Specification v1.0 (docs/generator_validation_spec.md)
+
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. For Open Questions marker validation failures (OQ-XX criteria), use error message formats from validation spec
+        3. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+
+        If all criteria pass, proceed to finalize the artifact.
+      </guidance>
+    </step>
+  </instructions>
+
+  <output_format>
+    <terminal_artifact>
+      <format>Markdown following Backlog Story template structure (see CLAUDE.md Template Paths)</format>
+      <validation_checklist>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">Story title is action-oriented and specific</criterion>
+        <criterion id="CQ-02" category="content_quality">Detailed requirements clearly stated</criterion>
+        <criterion id="CQ-03" category="content_quality">Acceptance criteria highly specific and testable (5-10 criteria)</criterion>
+        <criterion id="CQ-04" category="content_quality">Technical notes reference Implementation Research sections</criterion>
+        <criterion id="CQ-05" category="content_quality">CLAUDE.md precedence hierarchy enforced: No alternatives suggested for decided topics, all CLAUDE.md references include file:line citations, [CLAUDE.md GAP] label used for Implementation Research patterns not covered by CLAUDE.md</criterion>
+        <criterion id="CQ-06" category="content_quality">Technical specifications include API/database/dependencies (if applicable)</criterion>
+        <criterion id="CQ-07" category="content_quality">Story points estimated (1-5 SP typical)</criterion>
+        <criterion id="CQ-08" category="content_quality">Testing strategy defined (unit, integration, manual)</criterion>
+        <criterion id="CQ-09" category="content_quality">Dependencies identified (story, technical, team)</criterion>
+        <criterion id="CQ-10" category="content_quality">Open Questions capture implementation uncertainties with clear markers ([REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD])</criterion>
+        <criterion id="CQ-11" category="content_quality">Implementation-adjacent: Hints at approach without prescribing exact code</criterion>
+        <criterion id="CQ-12" category="content_quality">Sprint-ready: Can be completed in 1 sprint by team</criterion>
+        <criterion id="CQ-13" category="content_quality">For non-PRD-derived stories: Justification and Implementation Research reference per Section 1.5.7</criterion>
+        <criterion id="CQ-14" category="content_quality">CLAUDE.md Alignment: When story includes technical guidance, Technical Notes section references (not duplicates) specialized CLAUDE-*.md standards; treats CLAUDE.md content as authoritative</criterion>
+        <criterion id="CQ-15" category="content_quality">Implementation Tasks Evaluation: Section present before Definition of Done with clear decision (Tasks Needed/No Tasks Needed/Consider Tasks), rationale based on SDLC Section 11 criteria (story points, developer count, domain span, complexity), and proposed tasks with TASK-XXX IDs if applicable</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">"Parent PRD" field populated with valid PRD ID (PRD-XXX)</criterion>
+        <criterion id="UT-02" category="upstream_traceability">"Parent High-Level Story" field populated (HLS-XX or standalone)</criterion>
+        <criterion id="UT-03" category="upstream_traceability">"Functional Requirements Covered" lists all FR-XX from PRD</criterion>
+        <criterion id="UT-04" category="upstream_traceability">"Informed By Implementation Research" field populated with valid document link</criterion>
+        <criterion id="UT-05" category="upstream_traceability">Parent PRD document is in "Approved" status</criterion>
+        <criterion id="UT-06" category="upstream_traceability">Implementation Research document is in "Finalized" status</criterion>
+        <criterion id="UT-07" category="upstream_traceability">All Implementation Research section references (§X.Y format) are valid</criterion>
+        <criterion id="UT-08" category="upstream_traceability">Technical patterns from research are applied appropriately</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">Status value follows standardized format: Backlog/Ready/In Progress/In Review/Done</criterion>
+        <criterion id="CC-02" category="consistency">Story ID follows standard format: US-XXX</criterion>
+        <criterion id="CC-03" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
+        <criterion id="CC-04" category="consistency">User story follows format: "As [role], I want [feature], so that [benefit]"</criterion>
+        <criterion id="CC-05" category="consistency">Acceptance criteria are testable (Given-When-Then format preferred)</criterion>
+        <criterion id="CC-06" category="consistency">Story points estimated and sprint assigned</criterion>
+
+        <!-- Open Questions Marker Validation (v2+ only) - Ref: Generator Validation Spec v1.0 -->
+        <criterion id="OQ-01" category="open_questions_markers" applies_to="v2+">Version detected correctly (v1 skips marker validation, v2+ enforces)</criterion>
+        <criterion id="OQ-02" category="open_questions_markers" applies_to="v2+">Section Structure: "Decisions Made" section exists</criterion>
+        <criterion id="OQ-03" category="open_questions_markers" applies_to="v2+">Section Structure: "Open Questions &amp; Implementation Uncertainties" section exists</criterion>
+        <criterion id="OQ-04" category="open_questions_markers" applies_to="v2+">Decisions Made entries follow format: **Q[N]: [Question]** with Decision/Rationale/Decided By sub-fields</criterion>
+        <criterion id="OQ-05" category="open_questions_markers" applies_to="v2+">Each Open Question uses allowed marker: [REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD], or [BLOCKED BY]</criterion>
+        <criterion id="OQ-06" category="open_questions_markers" applies_to="v2+">No free-form text patterns (e.g., "Decision: X needed", "Action Required: Do Y" without ⚠️ prefix)</criterion>
+        <criterion id="OQ-07" category="open_questions_markers" applies_to="v2+">All [REQUIRES SPIKE] markers include: Investigation Needed, Spike Scope, Time Box, Blocking</criterion>
+        <criterion id="OQ-08" category="open_questions_markers" applies_to="v2+">All [REQUIRES ADR] markers include: Decision Topic, Alternatives, Impact Scope, Decision Deadline</criterion>
+        <criterion id="OQ-09" category="open_questions_markers" applies_to="v2+">All [REQUIRES TECH LEAD] markers include: Technical Question, Context, Blocking</criterion>
+        <criterion id="OQ-10" category="open_questions_markers" applies_to="v2+">All [BLOCKED BY] markers include: Dependency, Expected Resolution, Workaround Available</criterion>
+        <criterion id="OQ-11" category="open_questions_markers" applies_to="v2+">SPIKE Time Box values are exactly "1 day", "2 days", or "3 days" (hard limit)</criterion>
+      </validation_checklist>
+    </terminal_artifact>
+  </output_format>
+
+  <traceability>
+    <source_document>High-Level Story (see CLAUDE.md for path pattern)</source_document>
+    <template>Backlog Story template (see CLAUDE.md Folder Structure section )</template>
+    <research_reference>Implementation Research - §4 Implementation Capabilities, §6 Pitfalls/Anti-patterns, §8 Code Examples</research_reference>
+    <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.5 (Backlog User Story), Section 1.5.7 (Story Categories), Section 1.8.2 (Implementation Phase)</strategy_reference>
+  </traceability>
+
+
+  <quality_guidance>
+    <guideline category="completeness">
+      Every section must have substantive content. Technical notes should reference at least 1-2 Implementation Research sections. Testing strategy must be detailed enough for QA.
+    </guideline>
+
+    <guideline category="clarity">
+      Write for development team. Acceptance criteria must be unambiguous. Technical notes should guide (not prescribe) implementation.
+    </guideline>
+
+    <guideline category="actionability">
+      Story must be sprint-ready. Team should be able to estimate, plan, and execute without waiting for clarification. If unknowns exist, mark [REQUIRES SPIKE] or [REQUIRES ADR]. Spike and ADR paths defined in CLAUDE.md Artifact Path Patterns section.
+    </guideline>
+
+    <guideline category="traceability">
+      Every technical note should reference Implementation Research. Format: "ref: Implementation Research §4.3 - REST API Pattern" or "Consider pattern from Implementation Research §6.1"
+    </guideline>
+
+    <guideline category="open_questions">
+      Backlog Story Open Questions capture implementation uncertainties that may need spikes, ADRs, or tech lead consultation. Use clear markers: [REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD], [BLOCKED BY].
+
+      **Spike workflow:** Question marked [REQUIRES SPIKE] → Spike investigation (1-3 days, path per CLAUDE.md) → Spike findings inform ADR (if major decision) or Tech Spec (if implementation detail) → Story estimate updated.
+
+      **ADR workflow:** Question marked [REQUIRES ADR] → ADR created (path per CLAUDE.md) before implementation begins.
+
+      **Backlog Story questions (implementation uncertainties):**
+      - "Joi vs. Yup for validation?" [REQUIRES TECH LEAD] - minor choice
+      - "Optimal index strategy?" [REQUIRES SPIKE] - needs investigation
+      - "Need circuit breaker pattern?" [REQUIRES SPIKE, may become ADR] - performance/reliability
+
+      **ADR territory (don't include, trigger ADR instead):**
+      - "Redis vs. PostgreSQL for caching?" - Should already have ADR
+      - "REST vs. GraphQL?" - Should already have ADR from PRD phase
+
+      **High-Level Story territory (don't re-ask):**
+      - "Should settings be in profile or dedicated page?" - UX question from High-Level Story
+
+      **Marker Validation (v2+ artifacts only) - Reference: Generator Validation Spec v1.0:**
+
+      v1 artifacts: No marker validation (exploratory questions with recommendations allowed)
+      v2+ artifacts: Enforce standardized marker system with required sub-fields
+
+      Error message formats for OQ validation failures:
+
+      Missing Marker (OQ-05):
+      ❌ ERROR: Open Question missing standardized marker
+      Question text: "{question}"
+      Artifact: US-{XXX} v{N}
+      Required: [REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD], or [BLOCKED BY]
+
+      Missing Sub-fields (OQ-07/08/09/10):
+      ❌ ERROR: Marker missing required sub-fields
+      Marker: [REQUIRES SPIKE]
+      Question: "{question}"
+      Missing sub-fields: Investigation Needed, Spike Scope
+
+      Invalid Time Box (OQ-11):
+      ❌ ERROR: Invalid Time Box value for SPIKE
+      Question: "{question}"
+      Time Box Value: "{value}"
+      Valid values: "1 day", "2 days", "3 days" (HARD LIMIT)
+    </guideline>
+  </quality_guidance>
+
+  <examples>
+    <example type="technical_notes">
+      Good:
+      **Implementation Guidance:**
+      - Use REST API pattern with JSON payloads (ref: Implementation Research §4.2 - RESTful API Design)
+      - Implement request validation with Joi schema (ref: Implementation Research §4.5 - Input Validation)
+      - Apply circuit breaker for external notification service calls to prevent cascade failures (ref: Implementation Research §6.1 - Anti-pattern: Cascade Failures)
+      - Store preferences in PostgreSQL with user_id index for query performance (ref: Implementation Research §5.1 - Database Schema Design)
+
+      Bad:
+      **Technical Notes:**
+      - Build an API
+      - Make it secure
+      - Store data in database
+      [Too vague, no Implementation Research references, no actionable guidance]
+    </example>
+
+    <example type="acceptance_criteria">
+      Good (Gherkin Format - Preferred):
+      **Acceptance Criteria:**
+
+      Scenario 1: Successful notification preference update
+      Given I am an authenticated user with userId "12345"
+      When I POST to /api/v1/users/12345/notification-preferences with valid category array
+      Then the endpoint returns 200 OK
+      And the response contains updated preference object
+      And preferences are persisted to notifications_preferences table
+
+      Scenario 2: Invalid userId
+      Given userId "99999" does not exist in database
+      When I POST to /api/v1/users/99999/notification-preferences
+      Then the endpoint returns 404 Not Found
+      And the response contains error message "User not found"
+
+      Scenario 3: Invalid category name
+      Given I am an authenticated user with userId "12345"
+      When I POST to /api/v1/users/12345/notification-preferences with invalid category "invalid_category"
+      Then the endpoint returns 400 Bad Request
+      And the response lists valid category options
+
+      Scenario 4: Performance requirement
+      Given 100 concurrent requests to the endpoint
+      When all requests are processed
+      Then p99 response time is &lt; 200ms
+
+      Good (Checklist Format - Fallback):
+      **Acceptance Criteria:**
+      - [ ] POST /api/v1/users/{userId}/notification-preferences endpoint accepts JSON payload with category array
+      - [ ] Endpoint validates userId exists in database before updating preferences
+      - [ ] Endpoint returns 400 Bad Request for invalid category names with error message listing valid categories
+      - [ ] Endpoint returns 200 OK with updated preference object on success
+      - [ ] Preferences persist to PostgreSQL notifications_preferences table
+      - [ ] Endpoint response time p99 &lt; 200ms under 100 concurrent requests
+      - [ ] Unit tests cover happy path, invalid userId, invalid category, and database errors
+      - [ ] Integration test verifies end-to-end preference save and retrieval
+
+      Bad:
+      **Acceptance Criteria:**
+      - API works
+      - Data is saved
+      - Tests pass
+      [Too vague, not testable, no specific scenarios]
+    </example>
+
+    <example type="non_prd_derived_traceability">
+      Good (Category 2: Emergent Implementation Requirement):
+      **Story:** Implement circuit breaker pattern for notification service API
+      **Justification:** Necessary to implement PRD-042 requirement robustly and prevent cascade failures when notification service is unavailable
+      **Reference:** Implementation Research §6.1 - Anti-pattern: Cascade Failures
+      **Implementation Guidance:** Implementation Research §4.7 - Circuit Breaker Code Example
+
+      Bad:
+      **Story:** Add circuit breaker
+      [No justification, no research reference, no traceability to PRD]
+    </example>
+  </examples>
+</generator_prompt>

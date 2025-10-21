@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Architecture_Decision_Record_Template</name>
+    <version>1.1</version>
+    <source>Section 6.2 of advanced_prompt_engineering_software_docs_code_final.md (lines 773-849)</source>
+    <sdlc_phase>Architecture</sdlc_phase>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.1: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
+  </metadata>
+
+  <instructions>
+    <guideline>Document architectural decisions for long-term reference</guideline>
+    <guideline>List all considered alternatives with pros/cons</guideline>
+    <guideline>Justify chosen option with clear rationale</guideline>
+    <guideline>Document both positive and negative consequences</guideline>
+    <guideline>Include validation criteria for decision</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# ADR-[XXX]: [Decision Title]
+
+## Metadata
+- **Date:** [YYYY-MM-DD]
+- **Status:** [Proposed | Accepted | Active | Deprecated | Superseded]
+- **Deciders:** [Names]
+- **Parent Story ID:** US-[XXX]
+- **Informed By Spike:** SPIKE-[XXX] (if spike provided evidence)
+- **Informed By Implementation Research:** {SDLC_DOCUMENTS_URL}/implementation-research
+
+## Context
+What is the issue we're addressing?
+[2-3 paragraphs explaining problem, constraints, forces at play]
+
+## Research & Investigation Context
+
+**Parent Backlog Story:** [US-XXX: Story Title]
+- **Link:** {SDLC_DOCUMENTS_URL}/backlog-story/{id} (example: {SDLC_DOCUMENTS_URL}/backlog-story/234)
+- **Decision Driver:** [Why this decision was needed for the story]
+
+**Informed By Spike:** [SPIKE-XXX: Spike Title] (if applicable)
+- **Link:** {SDLC_DOCUMENTS_URL}/spike/{id} (example: {SDLC_DOCUMENTS_URL}/spike/042)
+- **Key Findings:** [Summary of spike findings that informed this decision]
+- **Evidence Applied:** [Benchmarks, prototypes, or data from spike]
+
+**Implementation Research References:**
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/implementation-research
+
+**Relevant Patterns:**
+- **§[X.Y]: [Architecture Pattern]:** [How this pattern informs the decision]
+- **§[X.Y]: [Technology Stack]:** [Technology comparison from research]
+
+**Pitfalls Considered:**
+- **§[X.Y]: [Anti-Pattern]:** [Why alternatives were rejected based on research]
+
+## Decision Drivers
+- [Driver 1: e.g., Performance requirements]
+- [Driver 2: e.g., Cost constraints]
+- [Driver 3: e.g., Team expertise]
+
+## Considered Options
+1. **Option 1:** [Name]
+2. **Option 2:** [Name]
+3. **Option 3:** [Name]
+
+## Decision Outcome
+**Chosen Option:** [Option name]
+
+**Rationale:** [Why this option selected over alternatives]
+
+### Consequences
+**Positive:**
+- [Benefit 1]
+- [Benefit 2]
+
+**Negative:**
+- [Tradeoff 1]
+- [Tradeoff 2]
+
+**Neutral:**
+- [Consideration 1]
+
+## Detailed Analysis
+
+### Option 1: [Name]
+**Pros:**
+- [Pro 1]
+- [Pro 2]
+
+**Cons:**
+- [Con 1]
+- [Con 2]
+
+**Cost:** [Estimation]
+**Risk:** [Assessment]
+
+[Repeat for each option]
+
+## Implementation Notes
+- [Technical detail 1]
+- [Migration path if applicable]
+- [Monitoring/observability considerations]
+
+## Validation
+- [ ] Proof of concept completed
+- [ ] Performance benchmarks met
+- [ ] Security review passed
+- [ ] Cost analysis approved
+
+## Related Decisions
+- {SDLC_DOCUMENTS_URL}/adr/{id}: [Related decision]
+
+## References
+- [Link to technical documentation]
+- [Link to benchmarks]
+    ]]>
+  </structure>
+
+  <examples>
+    <example source="Section 6.2 lines 872-880">
+      # ADR-001: Use PostgreSQL for Primary Datastore
+      Status: Accepted
+      Context: Application requires relational database...
+      Decision: We will use PostgreSQL as primary relational database.
+      Consequences: Positive - Leverages existing team expertise...
+    </example>
+  </examples>
+</template>

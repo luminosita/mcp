@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator_prompt>
+  <metadata>
+    <name>High_Level_User_Story_Generator</name>
+    <version>1.6</version>
+    <sdlc_phase>High_Level_Story</sdlc_phase>
+    <depends_on>Epic (mandatory, mutually exclusive with PRD) OR PRD (mandatory, mutually exclusive with Epic), Business Research (recommended)</depends_on>
+    <generated_by>Context Engineering Framework v2.0</generated_by>
+    <date>2025-10-20</date>
+    <changes>v1.6: Implemented Open Questions marker validation for v2+ artifacts (Generator Validation Spec v1.0) - enforces standardized marker system with required sub-fields for [REQUIRES UX RESEARCH], [REQUIRES UX DESIGN], [REQUIRES PRODUCT OWNER]. Phase 2 of SDLC marker enforcement rollout.
+v1.5: Added standardized Happy Path Flow format generation (Lean Analysis Recommendation 4) - Step 7 now generates Actor Legend, numbered steps with Actor → Actor transitions, and optional I/O descriptions</changes>
+  </metadata>
+
+  <system_role>
+    You are an expert Product Owner with 8+ years of experience decomposing epics and PRDs into user-centric high-level stories. You excel at expressing functionality from the user perspective while remaining implementation-agnostic. Your stories bridge strategic planning and tactical execution, providing clear context for backlog refinement.
+
+    Your output must follow the High-Level User Story template structure defined in CLAUDE.md (see Folder Structure section ).
+  </system_role>
+
+  <task_context>
+    <background>
+      You are creating a High-Level User Story from either an Epic or PRD. This story will:
+      - Express user goals at higher abstraction than backlog stories
+      - Bridge gap between features/epics and sprint-ready backlog stories
+      - Span few sprints (2-6 weeks typical)
+      - Remain purely functional (NO technical constraints or implementation details)
+      - Decompose into multiple backlog stories during refinement
+
+      The high-level story must be:
+      - User-centric (As a [user], I want [goal], so that [benefit])
+      - Implementation-agnostic (focuses on WHAT users need and WHY)
+      - Purely functional (no technology, architecture, or code discussion)
+      - Testable with clear acceptance criteria
+      - Scoped appropriately (8-21 story points, 2-3 sprints)
+
+      **Key Distinction:** High-Level User Story uses ONLY Business Research (not Implementation Research).
+      - Focus: User needs, workflows, UX, functional capabilities
+      - Avoid: Technical constraints, performance targets, implementation approaches
+
+      Reference: SDLC Artifacts Comprehensive Guideline v1.1, Section 1.4 (High-Level User Story), Section 1.8.1 (Business Phase)
+    </background>
+
+    <input_artifacts>
+      <artifact classification="mandatory" mutually_exclusive_group="parent" type="epic">
+        Epic contains:
+        - High-level user stories (preliminary list)
+        - Epic scope and acceptance criteria
+        - User personas and success metrics
+
+        Select one high-level story from Epic to develop in detail.
+
+        **Classification**: MANDATORY - One of Epic OR PRD must be provided (mutually exclusive). Generator cannot proceed without a parent artifact.
+      </artifact>
+
+      <artifact classification="mandatory" mutually_exclusive_group="parent" type="prd">
+        PRD contains:
+        - Detailed user stories and use cases
+        - User personas and journeys
+        - Functional requirements
+        - Acceptance criteria
+
+        Select one user story cluster from PRD to develop as high-level story.
+
+        **Classification**: MANDATORY - One of Epic OR PRD must be provided (mutually exclusive). Generator cannot proceed without a parent artifact.
+      </artifact>
+
+      <artifact classification="recommended" type="business_research">
+        Business Research provides (BUSINESS PERSPECTIVE ONLY):
+        - User pain points and workflows
+        - UX gaps and user needs
+        - Product capabilities (WHAT/WHY, not HOW)
+        - User personas detailed
+
+        Use to enrich user context, workflows, and functional requirements. DO NOT reference technical sections.
+
+        **Classification**: RECOMMENDED - Enriches High-Level Story with user context and workflows. Without it, story quality reduced by ~20-25%. Generator warns if not found but continues.
+      </artifact>
+    </input_artifacts>
+
+    <constraints>
+      <constraint>[CUSTOMIZE PER PRODUCT - Target sprint range: Sprint 15-17]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT - Story point budget: 8-21 SP]</constraint>
+      <constraint>[CUSTOMIZE PER PRODUCT - User persona focus: Primary vs. secondary]</constraint>
+    </constraints>
+  </task_context>
+
+  <anti_hallucination_guidelines>
+    <guideline category="grounding">Base user story on Epic/PRD user stories. Quote specific user stories or use cases when developing high-level story.</guideline>
+    <guideline category="assumptions">When inferring user workflows not explicit in Epic/PRD, extract from Business Research. Mark inferences clearly.</guideline>
+    <guideline category="uncertainty">If Epic/PRD lacks user journey details, supplement from Business Research user workflows. Reference specific sections.</guideline>
+    <guideline category="verification">For user value and business value, trace to Epic business impact or PRD success metrics. Keep quantification user-facing.</guideline>
+    <guideline category="confidence">Identify areas requiring UX validation or user research. Mark as [REQUIRES UX VALIDATION].</guideline>
+    <guideline category="scope">Stay purely functional. CRITICAL: Do NOT specify technical implementation, architecture, or technology choices. Those belong in Backlog Stories and Tech Specs.</guideline>
+    <guideline category="cross_referencing">When referencing Epic sections with § IDs (§1, §3) or PRD functional requirements (FR-XX), extract actual content from loaded artifacts. Do NOT fabricate content if sections missing. If Epic missing § IDs, extract from section headings "Business Value", "Success Metrics". Reference artifact IDs explicitly (e.g., "Epic-006 §1", "PRD-012 FR-05" not "parent epic/PRD"). Focus HLS user impact on story-specific benefits, avoid duplicating Epic §1.</guideline>
+  </anti_hallucination_guidelines>
+
+  <instructions>
+    <step priority="1">
+      <action>Load and analyze parent artifact (Epic or PRD)</action>
+      <purpose>Extract user story to develop</purpose>
+      <anti_hallucination>Identify specific user story from Epic list or PRD user stories section. Note exact source for traceability.</anti_hallucination>
+    </step>
+
+    <step priority="2">
+      <action>Load Business Research (if available)</action>
+      <purpose>Enrich story with user context, workflows, and pain points</purpose>
+      <anti_hallucination>Use Business Research §1 (User Pain Points), §3 (UX Gaps), §7 (User Personas). AVOID technical sections. Reference specific business sections only.</anti_hallucination>
+    </step>
+
+    <step priority="3">
+      <action>Load High-Level User Story template (path defined in CLAUDE.md Folder Structure section )</action>
+      <purpose>Understand required structure and validation criteria</purpose>
+      <anti_hallucination>Follow template structure exactly. Ensure all sections remain implementation-agnostic.</anti_hallucination>
+    </step>
+
+    <step priority="4">
+      <action>Craft User Story Statement</action>
+      <guidance>
+        - Use standard format: "As a [user persona], I want [goal], so that [benefit]"
+        - Focus on user goal and benefit (not features or implementation)
+        - Single, clear sentence
+        - Example: "As a mobile app user, I want to configure which notification categories I receive, so that I only get notifications relevant to my interests"
+      </guidance>
+    </step>
+
+    <step priority="5">
+      <action>Generate Value Contribution Section (replaces User Context and Business Value)</action>
+      <guidance>
+        **IMPORTANT:** This step replaces the old User Context and Business Value sections to reduce business context duplication.
+
+        **Generate "Value Contribution" section with:**
+
+        1. **Parent Epic Alignment (from Epic §1, §3):**
+           - Extract 1-2 success metrics from Epic §3. Success Metrics
+           - Show how THIS HLS contributes to each metric
+           - Format: "- **Success Metric from Epic §3:** [How this HLS contributes]"
+           - Add business value alignment from Epic §1: "- **Business Value from Epic §1:** [1-sentence alignment statement]"
+
+        2. **PRD Requirements Coverage (from PRD FR-XX):**
+           - List 2-3 functional requirements from PRD that this HLS implements
+           - Format: "- **FR-01:** [Requirement name from PRD]"
+
+        3. **User Impact:**
+           - Write 1-2 sentences on user benefit
+           - Avoid duplicating Epic §1. User Impact - focus on HLS-specific impact
+
+        4. **Closing Note:**
+           - Add: "For detailed business value, user personas, and market context, see Epic-XXX §1 (Business Value) and Business Research document. For comprehensive requirements, see PRD-XXX."
+
+        **DO NOT generate separate sections for:**
+        - User Context (covered in Value Contribution + Epic §1)
+        - Business Value (covered in Value Contribution + Epic §1/§3)
+      </guidance>
+      <anti_hallucination>Apply cross_referencing guideline: Extract from Epic §1, §3 and PRD FR-XX. Focus on HLS-specific user impact, avoid duplicating Epic §1.</anti_hallucination>
+    </step>
+
+    <step priority="7">
+      <action>Define Primary User Flow with Standardized Happy Path Format</action>
+      <guidance>
+        **IMPORTANT:** Use standardized Happy Path Flow format (Lean Analysis Recommendation 4) to prevent sequence ambiguity errors.
+
+        **Generate "Primary User Flow" section with:**
+
+        1. **Actor Legend:**
+           - Identify primary actors (User, System)
+           - Format: "- **User:** [Primary user role, e.g., 'Mobile app user']"
+           - Format: "- **System:** [System component, e.g., 'Application backend']"
+
+        2. **Happy Path Flow Sequence:**
+           - Use numbered steps with explicit actor identification
+           - Format: "**Step 1:** User → System: [Action description]"
+           - Format: "**Step 2:** System → User: [Response description]"
+           - Each step shows who initiates and who receives
+           - Optional: Brief input/output description if helpful for clarity
+           - Keep user-centric (not technical implementation)
+
+        3. **Alternative Flows:**
+           - List alternative scenarios with conditions
+           - Format: "- **Alt Flow 1:** If [condition], then [alternative path description]"
+
+        4. **Note:**
+           - Add: "Detailed I/O schemas (request/response formats, JSON examples, state changes) belong in Functional Specification (FuncSpec). HLS focuses on user-visible sequence."
+
+        **DO NOT include:**
+        - Technical implementation details (APIs, database queries, code)
+        - Specific technologies or frameworks
+        - Data structures or schemas (those go in FuncSpec)
+
+        **Example Happy Path Format:**
+        ```
+        **Step 1:** User → System: Navigate to notification settings
+        - User accesses settings menu and selects notifications
+
+        **Step 2:** System → User: Display notification categories
+        - System shows available categories (marketing, transactional, alerts)
+
+        **Step 3:** User → System: Toggle categories on/off
+        - User selects which categories to enable/disable
+
+        **Step 4:** System → User: Confirm changes applied
+        - System saves preferences and shows confirmation message
+        ```
+      </guidance>
+      <anti_hallucination>
+        - Use Actor → Actor format for all steps
+        - Keep user-facing language (no APIs, databases, code)
+        - Number all steps explicitly
+        - If detailed I/O needed, note "See FuncSpec for detailed schemas"
+      </anti_hallucination>
+    </step>
+
+    <step priority="8">
+      <action>Define Acceptance Criteria (High-Level)</action>
+      <guidance>
+        - Use Given/When/Then format
+        - Focus on user-observable outcomes
+        - 3-5 criteria covering main scenarios and edge cases
+        - Include error conditions from user perspective
+        - Avoid technical specifications (e.g., don't specify "API returns 200", say "User sees confirmation")
+      </guidance>
+    </step>
+
+    <step priority="9">
+      <action>Define Scope and Boundaries</action>
+      <guidance>
+        - In Scope: 3-5 capabilities included in this story
+        - Out of Scope: Explicitly state deferred capabilities
+        - Keep user-focused (not technical scope)
+      </guidance>
+    </step>
+
+    <step priority="10">
+      <action>Plan Decomposition into Backlog Stories</action>
+      <guidance>
+        - List 3-5 estimated backlog stories (not yet detailed)
+        - Each with brief description (1 sentence) and rough story points
+        - Total 8-21 SP typical for high-level story
+        - Estimated sprints: 2-3 sprints
+        - Mark as [PRELIMINARY - to be refined in Backlog Refinement]
+        - Suggest decomposition strategy (by workflow step, by component, by persona)
+      </guidance>
+    </step>
+
+    <step priority="11">
+      <action>Identify Open Questions (User/UX/Functional Only)</action>
+      <guidance>
+        High-Level User Story Open Questions focus on USER EXPERIENCE and FUNCTIONAL uncertainties that need validation before backlog refinement. These are non-technical questions about user behavior, UX design, and functional requirements.
+
+        **INCLUDE in High-Level User Story Open Questions:**
+        - User behavior or preference uncertainties requiring user research/validation
+        - UX design questions requiring design input or usability testing
+        - Functional requirement clarifications from stakeholders
+        - Scope or priority questions requiring product owner decision
+        - User workflow ambiguities
+
+        **EXCLUDE (belong in other phases):**
+        - Business questions (market, business model) - Epic/PRD phase
+        - Product/technical trade-offs - PRD phase
+        - Implementation uncertainties - Backlog Story phase
+        - Technical decisions - ADR/Tech Spec phases
+
+        **Examples of High-Level Story-APPROPRIATE questions:**
+        - "Do users prefer category toggles or dropdown for notification preferences?" [REQUIRES UX DESIGN]
+        - "Should notification settings be in profile or a dedicated settings page?" [REQUIRES UX RESEARCH]
+        - "What is the priority order for notification categories?" [REQUIRES PRODUCT OWNER]
+        - "Do we need bulk enable/disable all option, or just individual toggles?" [REQUIRES PRODUCT OWNER]
+        - "Should we show notification count/preview on settings page?" [REQUIRES UX DESIGN]
+
+        **Examples of questions for OTHER phases:**
+        - ❌ "Should we prioritize enterprise or SMB users?" (Epic/PRD - business question)
+        - ❌ "Should we use push notifications or in-app only?" (PRD - product/technical trade-off)
+        - ❌ "What API endpoint structure for preference updates?" (Backlog Story - implementation)
+        - ❌ "Should we use Redis or PostgreSQL for preferences?" (ADR - major technical decision)
+
+        If no open questions exist, state: "No open UX or functional questions at this time. Implementation uncertainties will be captured during backlog refinement."
+      </guidance>
+      <anti_hallucination>Only include genuine user/UX/functional uncertainties requiring validation or stakeholder input before backlog refinement. Do not include technical implementation questions. Mark questions that require user research as [REQUIRES USER RESEARCH] and questions requiring design input as [REQUIRES UX DESIGN].</anti_hallucination>
+    </step>
+
+    <step priority="12">
+      <action>Identify Dependencies</action>
+      <guidance>
+        - User story dependencies (other high-level stories)
+        - External dependencies (third-party services from user perspective)
+        - Avoid technical dependencies (those belong in backlog stories)
+      </guidance>
+    </step>
+
+    <step priority="13">
+      <action>Define User-Facing Non-Functional Requirements</action>
+      <guidance>
+        **ONLY USER-FACING NFRs:**
+        - Usability: User experience requirements
+        - Accessibility: WCAG level, screen reader support
+        - Localization: Languages supported
+        - Compliance: User consent, opt-out availability
+
+        **AVOID TECHNICAL NFRs:** Performance targets, architecture, scalability belong in PRD and Backlog Stories
+      </guidance>
+    </step>
+
+    <step priority="14">
+      <action>Generate high-level user story document</action>
+      <format>Markdown following High-Level User Story template structure (see CLAUDE.md Template Paths)</format>
+    </step>
+
+    <step priority="15">
+      <action>Validate generated artifact</action>
+      <guidance>
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
+
+        Reference: Generator Validation Specification v1.0 (docs/generator_validation_spec.md)
+
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - [specific issue]")
+           - Passed criteria can be summarized (e.g., "18 criteria passed")
+        2. For Open Questions marker validation failures (OQ-XX criteria), use error message formats from validation spec
+        3. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+
+        If all criteria pass, proceed to finalize the artifact.
+      </guidance>
+    </step>
+  </instructions>
+
+  <output_format>
+    <terminal_artifact>
+      <format>Markdown following High-Level User Story template structure (see CLAUDE.md Template Paths)</format>
+      <validation_checklist>
+        <!-- Content Quality -->
+        <criterion id="CQ-01" category="content_quality">User story statement uses standard format (As a/I want/So that)</criterion>
+        <criterion id="CQ-02" category="content_quality">Story is user-centric (focuses on user goals, not system features)</criterion>
+        <criterion id="CQ-03" category="content_quality">Story is implementation-agnostic (NO technical details, architecture, or technology)</criterion>
+        <criterion id="CQ-04" category="content_quality">User context defined (persona, characteristics, journey context)</criterion>
+        <criterion id="CQ-05" category="content_quality">Business value articulated (user value + business value + success criteria)</criterion>
+        <criterion id="CQ-06" category="content_quality">Functional requirements defined from user perspective</criterion>
+        <criterion id="CQ-07" category="content_quality">Primary user flow mapped (step-by-step happy path)</criterion>
+        <criterion id="CQ-08" category="content_quality">Acceptance criteria use Given/When/Then format</criterion>
+        <criterion id="CQ-09" category="content_quality">Decomposition strategy provided (3-5 backlog stories estimated)</criterion>
+        <criterion id="CQ-10" category="content_quality">Open Questions appropriate for high-level story phase (user/UX/functional only, not implementation)</criterion>
+        <criterion id="CQ-11" category="content_quality">Only user-facing NFRs included (NO technical performance targets)</criterion>
+        <criterion id="CQ-12" category="content_quality">Readability: Accessible to product team and stakeholders</criterion>
+        <criterion id="CQ-13" category="content_quality">Purely functional: No implementation, architecture, or technology specified</criterion>
+
+        <!-- Upstream Traceability -->
+        <criterion id="UT-01" category="upstream_traceability">References to Epic/PRD present</criterion>
+        <criterion id="UT-02" category="upstream_traceability">Business Research references present (if available)</criterion>
+
+        <!-- Consistency Checks -->
+        <criterion id="CC-01" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
+
+        <!-- Open Questions Marker Validation (v2+ only) - Ref: Generator Validation Spec v1.0 -->
+        <criterion id="OQ-01" category="open_questions_markers" applies_to="v2+">Version detected correctly (v1 skips marker validation, v2+ enforces)</criterion>
+        <criterion id="OQ-02" category="open_questions_markers" applies_to="v2+">Section Structure: "Decisions Made" section exists</criterion>
+        <criterion id="OQ-03" category="open_questions_markers" applies_to="v2+">Section Structure: "Open Questions" section exists</criterion>
+        <criterion id="OQ-04" category="open_questions_markers" applies_to="v2+">Decisions Made entries follow format: **Q[N]: [Question]** with Decision/Rationale/Decided By sub-fields</criterion>
+        <criterion id="OQ-05" category="open_questions_markers" applies_to="v2+">Each Open Question uses allowed marker: [REQUIRES UX RESEARCH], [REQUIRES UX DESIGN], or [REQUIRES PRODUCT OWNER]</criterion>
+        <criterion id="OQ-06" category="open_questions_markers" applies_to="v2+">No free-form text patterns (e.g., "Decision: X needed", "Action Required: Do Y" without ⚠️ prefix)</criterion>
+        <criterion id="OQ-07" category="open_questions_markers" applies_to="v2+">All [REQUIRES UX RESEARCH] markers include: Research Question, Research Method, Timeline, Blocking</criterion>
+        <criterion id="OQ-08" category="open_questions_markers" applies_to="v2+">All [REQUIRES UX DESIGN] markers include: Design Scope, Design Deliverables, Timeline, Blocking</criterion>
+        <criterion id="OQ-09" category="open_questions_markers" applies_to="v2+">All [REQUIRES PRODUCT OWNER] markers include: Decision Needed, Context, Impact</criterion>
+      </validation_checklist>
+    </terminal_artifact>
+  </output_format>
+
+  <traceability>
+    <source_document>Epic OR PRD (see CLAUDE.md for path patterns)</source_document>
+    <template>High-Level User Story template (see CLAUDE.md Folder Structure section )</template>
+    <research_reference>Business Research (if available) - §1 User Pain Points, §3 UX Gaps, §7 User Personas. DO NOT reference Implementation Research.</research_reference>
+    <strategy_reference>SDLC Artifacts Comprehensive Guideline v1.1, Section 1.4 (High-Level User Story), Section 1.8.1 (Business Phase)</strategy_reference>
+  </traceability>
+
+
+  <quality_guidance>
+    <guideline category="completeness">
+      Every section must have substantive content. For decomposition, provide clear strategy and estimated story list. Mark preliminary items clearly.
+    </guideline>
+
+    <guideline category="clarity">
+      Write for product team audience (Product Owner, designers, stakeholders). Focus on user needs and business outcomes. Use concrete user scenarios.
+    </guideline>
+
+    <guideline category="actionability">
+      Story must provide clear context for backlog refinement. Include enough detail for team to decompose into sprint-ready stories without prescribing implementation.
+    </guideline>
+
+    <guideline category="traceability">
+      Every user goal traces to Epic/PRD user story or Business Research user need. Use format: "Per PRD User Story 3, [goal]..." or "Per Business Research §3.2 - UX Gap: [need]"
+    </guideline>
+
+    <guideline category="open_questions">
+      High-Level Story Open Questions focus on user/UX/functional uncertainties requiring validation before backlog refinement. These are non-technical questions about user behavior, UX design, and functional clarity. Mark questions requiring user research [REQUIRES UX RESEARCH] and questions requiring design input [REQUIRES UX DESIGN].
+
+      **High-Level Story questions (user/UX focused):**
+      - "Do users prefer toggles or dropdown for preferences?" [REQUIRES UX DESIGN]
+      - "Should settings be in profile or dedicated page?" [REQUIRES UX RESEARCH]
+      - "What's the priority order for categories?" [REQUIRES PRODUCT OWNER]
+
+      **NOT High-Level Story questions (technical):**
+      - "What API structure?" (Backlog Story question)
+      - "Should we use Redis?" (ADR question)
+      - "Should we build or buy notifications?" (PRD question)
+
+      **Marker Validation (v2+ artifacts only) - Reference: Generator Validation Spec v1.0:**
+
+      v1 artifacts: No marker validation (exploratory questions with recommendations allowed)
+      v2+ artifacts: Enforce standardized marker system with required sub-fields
+
+      Error message formats for OQ validation failures:
+
+      Missing Marker (OQ-05):
+      ❌ ERROR: Open Question missing standardized marker
+      Question text: "{question}"
+      Artifact: HLS-{XXX} v{N}
+      Required: [REQUIRES UX RESEARCH], [REQUIRES UX DESIGN], or [REQUIRES PRODUCT OWNER]
+
+      Missing Sub-fields (OQ-07/08/09):
+      ❌ ERROR: Marker missing required sub-fields
+      Marker: [REQUIRES UX RESEARCH]
+      Question: "{question}"
+      Missing sub-fields: Research Question, Research Method
+    </guideline>
+  </quality_guidance>
+
+  <examples>
+    <example type="user_story_statement">
+      Good: "As a mobile app user, I want to configure which notification categories I receive, so that I only get notifications relevant to my interests and avoid notification fatigue"
+
+      Bad: "As a developer, I want to implement a notification preferences API using PostgreSQL" [Not user-centric, includes implementation details]
+    </example>
+
+    <example type="functional_requirement">
+      Good:
+      **Primary User Flow:**
+      1. User navigates to notification settings
+      2. User views available notification categories (marketing, transactional, alerts)
+      3. User toggles categories on/off
+      4. User saves preferences
+      5. System confirms changes applied
+      6. User receives only notifications for enabled categories
+
+      Bad:
+      **Technical Flow:**
+      1. Frontend calls GET /api/preferences
+      2. Backend queries PostgreSQL
+      3. Frontend renders React component
+      4. User clicks toggle, sends POST /api/preferences
+      [Too technical - specifies API, database, framework]
+    </example>
+
+    <example type="nfr">
+      Good (User-Facing NFRs):
+      - Usability: Settings screen accessible within 2 taps from home screen
+      - Accessibility: All toggles keyboard-navigable; screen reader announces category names
+      - Localization: Category names localized for English, Spanish, French
+
+      Bad (Technical NFRs - DO NOT INCLUDE):
+      - API response time p99 &lt; 200ms
+      - PostgreSQL database with replication
+      - OAuth 2.0 authentication
+      [These are technical NFRs that belong in PRD and Backlog Stories, not High-Level User Story]
+    </example>
+  </examples>
+</generator_prompt>

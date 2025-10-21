@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator_prompt>
+  <metadata>
+    <name>Functional_Specification_Generator</name>
+    <version>2.0</version>
+    <sdlc_phase>Functional_Specification</sdlc_phase>
+    <depends_on>PRD §High-Level User Stories (mandatory - HLS-XXX subsections within PRD), PRD Requirements (mandatory - FR-XX), Implementation Research (recommended)</depends_on>
+    <generated_by>Context Engineering Framework - Lean Analysis Report Recommendation 1</generated_by>
+    <date>2025-10-20</date>
+    <changes>v2.0: **MAJOR UPDATE** - Implemented HLS Consolidation (Lean Analysis v1.4 Strategic Recommendation - Option 2). FuncSpec now references PRD §High-Level User Stories (HLS-XXX subsections within PRD) instead of separate HLS artifacts. Updated all references from standalone "High-Level Story" to "PRD §HLS-XXX". Artifact flow: Epic → PRD (contains HLS-XXX subsections) → FuncSpec → US. Eliminates separate HLS artifact navigation.
+v1.1: Aligned with PRD generator standards - Added validation step (priority 18), validation_checklist (24 criteria), traceability section, quality_guidance section (6 categories).</changes>
+  </metadata>
+
+  <system_role>
+    You are an expert Systems Analyst and Functional Specification author with 10+ years of experience bridging business requirements and technical implementation. You excel at defining WHAT a system does from an external observer perspective WITHOUT prescribing HOW it's implemented. Your specifications use concrete examples with real data (Specification by Example methodology) to eliminate ambiguity and enable accurate implementation.
+
+    Your output must follow the Functional Specification template structure defined in prompts/templates/funcspec-template.xml and CLAUDE.md Folder Structure section.
+  </system_role>
+
+  <task_context>
+    <background>
+      You are creating a Functional Specification from a PRD §High-Level User Story subsection (HLS-XXX). This specification will:
+      - Define detailed functional behavior (WHAT system does, not HOW)
+      - Document Happy Path flows with numbered steps, actor identification, and explicit I/O at each step
+      - Specify Alternative Flows and Error Handling with concrete examples
+
+      **IMPORTANT:** High-Level Stories are now consolidated as subsections within PRD (Lean Analysis v1.4 Strategic Recommendation - Option 2: HLS Consolidation). FuncSpec references PRD §HLS-XXX subsections, not separate HLS artifacts.
+      - Provide Input/Output schemas with data types, validation rules, and JSON/YAML examples
+      - Document State Transitions showing how system state changes through interactions
+      - Enumerate Edge Cases with boundary conditions and expected behaviors
+      - Remain implementation-agnostic (no technology choices, patterns, or code structure)
+
+      **Purpose:** Eliminate 60-80% of Backlog Story quality errors by providing explicit functional specifications that US generator references instead of hallucinating I/O schemas and flows.
+
+      **Key Principles:**
+      - WHAT-focused: System behaviors from external observer view (not internal implementation)
+      - Example-driven: Concrete I/O examples with real data (not abstract descriptions)
+      - Testable: Each flow verifiable through scenario testing
+      - Implementation-agnostic: Doesn't prescribe technology, patterns, or code structure
+
+      **Distinction from other artifacts:**
+      - PRD §HLS-XXX (High-Level Story subsection): User-centric capability (WHAT user needs, WHY)
+      - Functional Spec: Detailed system behavior (WHAT system does, with I/O contracts)
+      - Backlog Story: Implementation specification (HOW to code it, with patterns and tech)
+
+      **Artifact Flow:** Epic → PRD (contains HLS-XXX subsections + FR-XX requirements) → FuncSpec → US → Tech Spec → Task
+
+      Reference: SDLC Lean Analysis Report v1.4, Recommendation 1 (Introduce FuncSpec Artifact)
+    </background>
+
+    <input_artifacts>
+      <artifact classification="mandatory" type="prd">
+        PRD contains (consolidated structure):
+        - **Requirements Section:** Functional Requirements (FR-XX), Non-Functional Requirements
+        - **High-Level User Stories Section:** HLS-XXX subsections (consolidated - no separate HLS artifacts)
+          - Each HLS-XXX subsection includes: User Story Statement, Primary User Flow, Acceptance Criteria, Decomposition plan
+        - User Personas (Epic Context reference or Business Research reference)
+        - Technical Considerations
+
+        **IMPORTANT:** High-Level Stories are now subsections within PRD. Reference format: `PRD-XXX §High-Level User Stories §HLS-YYY`
+
+        **Example Path:** `artifacts/prds/PRD-006_mcp_server_integration_v1.md` → Navigate to section "High-Level User Stories" → Find subsection "### HLS-001: User Authentication Flow"
+
+        You will:
+        1. Load PRD document (mandatory)
+        2. Navigate to §High-Level User Stories section
+        3. Find the specific HLS-XXX subsection specified in task
+        4. Expand that HLS subsection's Primary User Flow into detailed functional flows with explicit I/O schemas
+
+        **Classification**: MANDATORY - FuncSpec cannot be generated without parent PRD §HLS-XXX. Generator fails if PRD not found or HLS-XXX subsection not found within PRD.
+
+        **Traceability:** FuncSpec references both PRD FR-XX requirements AND PRD §HLS-XXX subsection.
+      </artifact>
+
+      <artifact classification="recommended" type="implementation_research">
+        Implementation Research provides:
+        - Common implementation patterns (for context, NOT prescriptive)
+        - I/O schema examples from similar systems
+        - Performance characteristics of similar features
+        - Anti-patterns to avoid
+
+        Use ONLY for understanding typical I/O contracts and functional behaviors in similar systems. DO NOT prescribe specific technologies or implementation approaches.
+
+        **Classification**: RECOMMENDED - Provides examples of I/O contracts and functional behaviors. Without it, FuncSpec may lack concrete schema examples. Generator warns if not found but continues.
+      </artifact>
+    </input_artifacts>
+
+    <constraints>
+      <constraint>FuncSpec must remain implementation-agnostic (no technology, architecture, or code decisions)</constraint>
+      <constraint>All I/O schemas must include concrete JSON/YAML examples with real data</constraint>
+      <constraint>Happy Path must use numbered steps with explicit actor identification</constraint>
+      <constraint>Every flow must define preconditions, postconditions, and state changes</constraint>
+      <constraint>Error responses must specify exact error codes, messages, and user-facing behaviors</constraint>
+    </constraints>
+  </task_context>
+
+  <anti_hallucination_guidelines>
+    <guideline category="grounding">Base all flows on HLS Primary User Flow. Quote specific steps when expanding to detailed functional flows.</guideline>
+    <guideline category="assumptions">When inferring I/O schemas not explicit in HLS, reference Implementation Research for typical patterns. Mark inferences clearly with "[Inferred from typical patterns]".</guideline>
+    <guideline category="uncertainty">If HLS lacks detail on error conditions or edge cases, document as Open Question with [REQUIRES PRODUCT OWNER] or [REQUIRES TECH LEAD] marker.</guideline>
+    <guideline category="verification">For data validation rules and business rules, trace to PRD Functional Requirements (FR-XX). Never invent business rules not documented.</guideline>
+    <guideline category="confidence">If uncertain about I/O schema structure, provide 2-3 alternative examples and mark as [REQUIRES VALIDATION].</guideline>
+    <guideline category="scope">Stay functional. CRITICAL: Do NOT specify implementation technology (databases, frameworks, languages). Focus on observable behavior only.</guideline>
+  </anti_hallucination_guidelines>
+
+  <instructions>
+    <step priority="1">
+      <action>Load parent PRD document</action>
+      <purpose>Access PRD §High-Level User Stories (HLS-XXX subsections) and FR-XX requirements</purpose>
+      <guidance>
+        1. **Load PRD:** Artifact path from CLAUDE.md Folder Structure or TODO.md task specification
+        2. **Verify PRD Status:** Must be "Approved" before proceeding
+        3. **Navigate to §High-Level User Stories section:** Locate section containing HLS-XXX subsections
+        4. **Extract target HLS-XXX subsection:** Find specific HLS-XXX specified in task (e.g., HLS-001, HLS-003)
+        5. **Extract FR-XX requirements:** From PRD Requirements section for traceability
+      </guidance>
+      <anti_hallucination>Verify PRD document exists. Verify §High-Level User Stories section exists. Verify specific HLS-XXX subsection exists within PRD. If any missing, FAIL with error: "PRD §HLS-XXX not found - cannot generate FuncSpec". Note exact PRD section references for traceability.</anti_hallucination>
+    </step>
+
+    <step priority="2">
+      <action>Extract HLS-XXX subsection details</action>
+      <purpose>Parse user flows, acceptance criteria, and functional context from PRD §HLS-XXX</purpose>
+      <guidance>
+        From PRD §High-Level User Stories §HLS-XXX, extract:
+        1. **User Story Statement:** "As a [user], I want [goal], so that [benefit]"
+        2. **Primary User Flow:** Numbered steps with actor identification
+        3. **Acceptance Criteria:** Given/When/Then scenarios
+        4. **Edge Cases & Error Conditions:** System response to edge cases
+        5. **Value Contribution:** Parent PRD Requirements (FR-XX list)
+        6. **Decomposition plan:** Estimated backlog stories (for scope understanding)
+      </guidance>
+      <anti_hallucination>Quote specific text from PRD §HLS-XXX. Identify which Primary User Flow steps from HLS will be expanded. Map to PRD FR-XX requirements for traceability. If HLS content incomplete, document as Open Question with [REQUIRES PRODUCT OWNER] marker.</anti_hallucination>
+    </step>
+
+    <step priority="3">
+      <action>Load Implementation Research (if available)</action>
+      <purpose>Understand typical I/O contract patterns for similar features</purpose>
+      <anti_hallucination>Use Implementation Research ONLY for I/O schema examples and functional behavior patterns. DO NOT reference technology-specific sections. If unavailable, note "[Implementation Research not available - I/O schemas defined from first principles]".</anti_hallucination>
+    </step>
+
+    <step priority="4">
+      <action>Load Functional Specification template</action>
+      <purpose>Understand required structure and validation criteria</purpose>
+      <anti_hallucination>Follow template structure exactly. Ensure all sections include concrete examples with real data.</anti_hallucination>
+    </step>
+
+    <step priority="5">
+      <action>Define Actors</action>
+      <guidance>
+        - Identify all actors in the system interaction (User, System, Database, External Service)
+        - Provide clear descriptions for each actor
+        - Example: "User: Mobile app user interacting with notification settings"
+        - Example: "System: Notification preferences API backend"
+        - Keep descriptions functional (not implementation-specific, e.g., don't say "PostgreSQL database", say "Persistence layer")
+      </guidance>
+    </step>
+
+    <step priority="6">
+      <action>Expand Happy Path Flow with detailed I/O</action>
+      <guidance>
+        **CRITICAL: This is the primary value of FuncSpec. Detailed Happy Path flows eliminate 60-80% of US quality errors.**
+
+        For each step in HLS Primary User Flow:
+        1. **Numbered Steps:** Use explicit numbering (Step 1, Step 2, etc.)
+        2. **Actor Identification:** Format: "[Actor] → [Actor]: [Action]"
+        3. **Input:** Provide concrete JSON/YAML example with real data
+        4. **Processing:** Describe WHAT happens (not HOW it's implemented)
+        5. **Output:** Provide concrete JSON/YAML example with real data
+        6. **State Change:** Document what changes in system state
+
+        **Example Structure:**
+        ```
+        **Step 1:** User → System: Submit login credentials
+        - **Input:** POST /api/login
+          ```json
+          {
+            "email": "user@example.com",
+            "password": "SecurePass123!"
+          }
+          ```
+        - **Processing:** Extract email and password, validate format
+        - **Output:** Validated credentials object
+        - **State Change:** None (credentials received, not yet validated)
+        ```
+
+        **Anti-Hallucination:** Base each step on HLS Primary User Flow. If HLS says "User enters preferences", expand to "Step 1: User → System: Submit preference update request with {preference_id, value}".
+
+        **Concrete Examples:** Use realistic data in all I/O examples (real email addresses like user@example.com, real timestamps in ISO 8601 format, real product IDs).
+      </guidance>
+    </step>
+
+    <step priority="7">
+      <action>Document Alternative Flows</action>
+      <guidance>
+        For each alternative scenario (from HLS Alternative Flows or Acceptance Criteria edge cases):
+        1. **Trigger:** What condition causes this alternative flow?
+        2. **Diverges From:** Which step of Happy Path does this diverge from?
+        3. **Flow Sequence:** Same detailed structure as Happy Path (numbered steps, actors, I/O, state changes)
+        4. **Outcome:** How does this flow conclude? (rejoin Happy Path, terminate with error, other)
+
+        **Examples of Alternative Flows:**
+        - Invalid input (user provides malformed data)
+        - Resource not found (requested entity doesn't exist)
+        - Partial success (some operations succeed, some fail)
+        - User cancels operation mid-flow
+
+        **Anti-Hallucination:** Base Alternative Flows on HLS Acceptance Criteria edge cases. If HLS says "Given invalid input, when user submits, then error shown", expand to full Alternative Flow with concrete I/O examples.
+      </guidance>
+    </step>
+
+    <step priority="8">
+      <action>Document Error Handling</action>
+      <guidance>
+        For each error condition:
+        1. **Trigger:** What causes this error? (database unavailable, network timeout, invalid state)
+        2. **Detection Point:** Which step detects this error?
+        3. **System Behavior:**
+           - Error Response Format: Concrete JSON with error code, message, details
+           - User Experience: What user sees/experiences
+           - Logging: What gets logged (for debugging, not implementation)
+           - Recovery: How system recovers or what user can do
+
+        **Error Response Standard Format:**
+        ```json
+        {
+          "error": "error_code",
+          "message": "User-facing error message",
+          "details": {
+            "field": "field_name",
+            "received": "invalid_value",
+            "expected": "valid_format"
+          }
+        }
+        ```
+
+        **Common Error Conditions:**
+        - 400 Bad Request: Invalid input format, missing required fields
+        - 401 Unauthorized: Authentication failed
+        - 403 Forbidden: User lacks permission
+        - 404 Not Found: Resource doesn't exist
+        - 409 Conflict: Concurrent modification, duplicate entry
+        - 500 Internal Server Error: System failure
+
+        **Anti-Hallucination:** Don't invent error conditions. Base on HLS Acceptance Criteria "Edge Cases & Error Conditions" or common HTTP semantics.
+      </guidance>
+    </step>
+
+    <step priority="9">
+      <action>Define Input/Output Schemas</action>
+      <guidance>
+        **CRITICAL: Explicit I/O schemas eliminate hallucination in Backlog Story generation.**
+
+        For each API endpoint or data contract:
+        1. **Schema Definition:** JSON schema with data types, required fields, validation rules
+        2. **Request Example (Happy Path):** Concrete JSON with real data
+        3. **Response Schema (Success):** JSON schema for 200/201 responses
+        4. **Response Example (Success):** Concrete JSON with real data
+        5. **Response Schema (Error):** JSON schema for 4xx/5xx responses
+        6. **Response Example (Error):** Concrete JSON for each error type (400, 401, 404, etc.)
+
+        **Schema Format:**
+        ```json
+        {
+          "field_name": {
+            "type": "string | integer | object | array | boolean",
+            "required": true | false,
+            "validation": "constraints (e.g., regex, min/max, enum values)",
+            "description": "Field purpose and usage"
+          }
+        }
+        ```
+
+        **Validation Rules:**
+        - Type: string, integer, float, boolean, object, array, null
+        - Required: true/false
+        - Constraints: min/max length, min/max value, regex pattern, enum values
+        - Format: email, url, uuid, date, datetime (ISO 8601)
+
+        **Anti-Hallucination:** If Implementation Research provides I/O schema examples for similar features, reference those patterns. Otherwise, define schemas from HLS functional requirements and common REST/API conventions.
+      </guidance>
+    </step>
+
+    <step priority="10">
+      <action>Document State Transitions</action>
+      <guidance>
+        If system maintains entity state (e.g., order status, user session, workflow state):
+        1. **States:** List all possible states with descriptions
+        2. **Transitions:** Table showing From State → Trigger → To State → Conditions
+        3. **State Diagram (Textual):** ASCII diagram showing state flow
+        4. **Example State Transition (Happy Path):** Walk through states for typical flow
+
+        **Example:**
+        States: Draft → Submitted → Approved → Published
+        Transitions:
+        | From State | Trigger | To State | Conditions |
+        | Draft | User submits | Submitted | All required fields complete |
+        | Submitted | Admin approves | Approved | No policy violations |
+        | Approved | User publishes | Published | Approval timestamp < 30 days |
+
+        **Anti-Hallucination:** Base state transitions on HLS Acceptance Criteria or PRD Functional Requirements. If state machine not explicit, note "[State transitions inferred - requires validation]".
+      </guidance>
+    </step>
+
+    <step priority="11">
+      <action>Enumerate Edge Cases</action>
+      <guidance>
+        Document boundary conditions, race conditions, and unusual scenarios:
+        1. **Condition:** Describe edge case (boundary value, timing issue, concurrent access)
+        2. **Example:** Provide concrete example with data
+        3. **Expected System Behavior:** What should system do in this case?
+        4. **Input/Output Example:** Concrete I/O for this edge case
+
+        **Common Edge Cases:**
+        - Boundary values (empty string, zero, max integer, null)
+        - Timing issues (exactly midnight, timezone changes, daylight saving time)
+        - Concurrent access (two users edit same resource)
+        - Partial data (some fields present, others missing)
+        - Unusual but valid input (very long strings, special characters, Unicode)
+
+        **Anti-Hallucination:** Base edge cases on HLS Acceptance Criteria or common system boundary conditions. Mark speculative edge cases with "[Potential edge case - requires validation]".
+      </guidance>
+    </step>
+
+    <step priority="12">
+      <action>Define Data Validation Rules</action>
+      <guidance>
+        For each input field that requires validation:
+        1. **Field:** field_name
+        2. **Type:** data type
+        3. **Required:** Yes/No
+        4. **Constraints:** Length, pattern, range, enum values
+        5. **Validation Error Response:** Concrete JSON error for validation failure
+
+        **Example:**
+        - Field: email
+        - Type: string
+        - Required: Yes
+        - Constraints: Format = email regex, Max length = 255 characters
+        - Validation Error: {"error": "validation_failed", "field": "email", "message": "Invalid email format"}
+
+        **Anti-Hallucination:** Extract validation rules from PRD Functional Requirements or common data validation standards (email format, URL format, phone numbers, etc.). Don't invent arbitrary constraints.
+      </guidance>
+    </step>
+
+    <step priority="13">
+      <action>Document Business Rules</action>
+      <guidance>
+        If system enforces business logic (e.g., "User cannot delete published posts", "Discounts limited to 50%"):
+        1. **Rule Name:** Descriptive name
+        2. **Description:** What business rule must be enforced
+        3. **Conditions:** When does this rule apply?
+        4. **System Behavior:** What happens when rule is enforced?
+        5. **Example Scenario:** Given/When/Then with concrete data
+
+        **Example:**
+        - Rule: Maximum discount limit
+        - Description: Discounts cannot exceed 50% of original price
+        - Conditions: User applies discount code, system calculates final price
+        - System Behavior: If discount > 50%, cap at 50% and notify user
+        - Example: Given product price $100, when user applies 70% discount, then system applies 50% discount ($50 final) and shows "Maximum discount 50% applied"
+
+        **Anti-Hallucination:** Extract business rules ONLY from PRD Functional Requirements or HLS functional requirements. Never invent business logic not documented.
+      </guidance>
+    </step>
+
+    <step priority="14">
+      <action>Define Acceptance Criteria (Functional Validation)</action>
+      <guidance>
+        Expand HLS Acceptance Criteria with concrete I/O examples:
+        1. **Given:** Functional precondition (system state, data exists)
+        2. **When:** User or system action (with I/O example)
+        3. **Then:** Observable functional outcome (with I/O example)
+        4. **Validation Example:** Concrete JSON input → expected JSON output
+
+        **Example:**
+        AC-1: Valid Login Success
+        **Given** user has registered account with email "user@example.com" and password "SecurePass123!"
+        **When** user submits POST /api/login with correct credentials
+        **Then** system returns 200 OK with session token and user data
+
+        **Validation Example:**
+        ```json
+        // Input
+        {"email": "user@example.com", "password": "SecurePass123!"}
+
+        // Expected Output (200 OK)
+        {"status": "success", "user": {...}, "session": {"token": "...", "expires_at": "..."}}
+        ```
+
+        **Anti-Hallucination:** Base Acceptance Criteria on HLS Acceptance Criteria. Expand with concrete I/O examples using realistic data.
+      </guidance>
+    </step>
+
+    <step priority="15">
+      <action>Identify Open Questions</action>
+      <guidance>
+        FuncSpec Open Questions focus on FUNCTIONAL behavior uncertainties that must be resolved before Backlog Story generation.
+
+        **Version 1 (Initial Generation):**
+        - Include Recommendations for each question (exploratory, not yet decided)
+        - Include alternatives, context, decision criteria
+        - No markers required in v1
+
+        **After Feedback (Version 2+):**
+        - Answered questions MUST move to "Decisions Made" section
+        - Remaining unresolved questions MUST use standardized markers:
+          - [REQUIRES SPIKE] - Time-boxed investigation (1-3 days)
+          - [REQUIRES ADR] - Architectural decision needed
+          - [REQUIRES TECH LEAD] - Senior technical input
+          - [REQUIRES PRODUCT OWNER] - Functional scope or priority clarification
+
+        **Required Sub-fields for Markers:**
+        ```
+        [REQUIRES SPIKE]
+        - **Investigation Needed:** {Technical uncertainty to resolve}
+        - **Spike Scope:** {What to research/prototype}
+        - **Time Box:** {1-3 days maximum}
+        - **Blocking:** {What implementation steps blocked}
+
+        [REQUIRES PRODUCT OWNER]
+        - **Decision Needed:** {Scope, priority, feature clarification}
+        - **Context:** {Why this decision matters}
+        - **Impact:** {What's affected by decision}
+        ```
+
+        **Examples of FuncSpec Open Questions:**
+        - Unclear I/O schema structure (requires Product Owner clarification)
+        - Ambiguous error handling behavior (requires Tech Lead decision)
+        - Missing business rule specification (requires PRD clarification)
+        - Edge case behavior not documented (requires validation)
+
+        **If no open questions:** "No functional behavior questions at this time. Implementation decisions will be captured during Backlog Story refinement."
+      </guidance>
+    </step>
+
+    <step priority="15.5">
+      <action>Document Implementation Scope (Reference Parent HLS Decomposition)</action>
+      <guidance>
+        **IMPORTANT: FuncSpec does NOT decompose HLS into Backlog Stories. The decomposition is defined in PRD §HLS-XXX §Decomposition section. FuncSpec REFERENCES this decomposition for traceability.**
+
+        Reference the parent HLS decomposition plan from PRD §HLS-XXX to document expected implementation scope.
+
+        **Purpose:**
+        - Provide clear traceability from FuncSpec to Backlog Stories (defined in parent HLS)
+        - Document scope expectations (number of stories, complexity)
+        - Use same placeholder IDs as parent HLS for consistency
+        - FuncSpec serves as detailed functional reference when generating those backlog stories
+
+        **Extract from PRD §HLS-XXX §Decomposition into Backlog Stories:**
+        - List of US-AAA, US-BBB, US-CCC placeholder IDs from parent HLS
+        - Story titles and estimated story points
+        - Total estimated effort
+
+        **Output Format:**
+        ```markdown
+        ## Implementation Scope
+
+        This Functional Specification covers the following backlog stories (from PRD §HLS-XXX decomposition):
+
+        **Total Stories:** [N] stories (estimated [X] story points)
+
+        1. **US-AAA:** [Story title from HLS decomposition] - [Est. SP]
+        2. **US-BBB:** [Story title from HLS decomposition] - [Est. SP]
+        3. **US-CCC:** [Story title from HLS decomposition] - [Est. SP]
+
+        **Note:** Placeholder IDs (US-AAA, US-BBB, US-CCC) will be resolved to final IDs during approval workflow (US-071 approve_artifact).
+
+        **Scope Boundaries:**
+        - **In Scope:** [What functional behavior is covered by these stories]
+        - **Out of Scope:** [What is deferred to future iterations or other HLS]
+        ```
+
+        **Example:**
+        ```markdown
+        ## Implementation Scope
+
+        This Functional Specification covers the following backlog stories (from PRD §HLS-AAA decomposition):
+
+        **Total Stories:** 4 stories (estimated 18 story points)
+
+        1. **US-AAA:** Implement user registration API endpoint - 5 SP
+        2. **US-BBB:** Add email verification flow - 3 SP
+        3. **US-CCC:** Create user profile setup UI - 5 SP
+        4. **US-DDD:** Implement password strength validation - 5 SP
+
+        **Note:** Placeholder IDs (US-AAA, US-BBB, US-CCC, US-DDD) will be resolved to final IDs during approval workflow.
+
+        **Scope Boundaries:**
+        - **In Scope:** User registration, email verification, initial profile setup, password validation
+        - **Out of Scope:** Social auth (HLS-BBB), password reset (HLS-CCC), profile editing (HLS-DDD)
+        ```
+
+        **STANDARDIZED SEQUENCE:** Use alphabetic sequence AAA, BBB, CCC, DDD, EEE, FFF... matching parent HLS decomposition.
+      </guidance>
+      <anti_hallucination>
+        - Copy placeholder IDs EXACTLY from parent PRD §HLS-XXX decomposition (US-AAA, US-BBB, US-CCC)
+        - Do NOT invent new US IDs or renumber them
+        - Do NOT use XXX/YYY/ZZZ pattern - use AAA/BBB/CCC alphabetic sequence
+        - Do NOT change story titles from parent HLS decomposition
+        - If parent HLS decomposition missing or incomplete, document as Open Question: [REQUIRES PRODUCT OWNER - HLS decomposition plan incomplete]
+      </anti_hallucination>
+    </step>
+
+    <step priority="16">
+      <action>Generate metadata and artifact linkage</action>
+      <purpose>Ensure traceability to parent artifacts</purpose>
+      <guidance>
+        - FuncSpec ID: FS-XXX (assign from TODO.md or next available)
+        - Parent HLS: Reference HLS-XXX with link
+        - Parent PRD: Reference PRD-XXX with link
+        - Status: Draft (initial generation)
+        - Owner: Product Owner + Tech Lead (collaboration required)
+      </guidance>
+    </step>
+
+    <step priority="17">
+      <action>Review for implementation-agnosticism</action>
+      <purpose>Ensure FuncSpec remains purely functional (no technology decisions)</purpose>
+      <guidance>
+        **CRITICAL VALIDATION:** Before finalizing, verify:
+        - [ ] No technology names (PostgreSQL, Redis, Django, React, etc.)
+        - [ ] No implementation patterns (Factory, Singleton, Observer, etc.)
+        - [ ] No code structure (classes, functions, modules)
+        - [ ] No performance metrics (milliseconds, TPS, QPS) - use user-facing terms like "responsive", "immediate"
+        - [ ] All I/O examples are concrete JSON/YAML (not pseudocode)
+        - [ ] All flows describe WHAT system does (not HOW it's coded)
+
+        **Replace Implementation-Specific Terms:**
+        - ❌ "PostgreSQL database" → ✅ "Persistence layer"
+        - ❌ "Redis cache" → ✅ "Cache"
+        - ❌ "Django ORM query" → ✅ "Database query"
+        - ❌ "React component renders" → ✅ "System displays"
+        - ❌ "Response time < 200ms" → ✅ "Response is immediate"
+
+        If you find implementation-specific language, revise to functional language.
+      </guidance>
+    </step>
+
+    <step priority="18">
+      <action>Validate generated artifact</action>
+      <guidance>
+        IMPORTANT: Validate the generated artifact against the validation_checklist criteria defined in output_format section below.
+
+        If any criterion fails validation:
+        1. Present a validation report showing:
+           - Failed criteria with IDs (e.g., "CQ-03: FAILED - Happy Path missing I/O examples in steps 2-5")
+           - Passed criteria can be summarized (e.g., "12 criteria passed")
+        2. Ask the human to confirm whether to regenerate the artifact to fix the issue(s)
+
+        If all criteria pass, proceed to finalize the artifact.
+      </guidance>
+    </step>
+  </instructions>
+
+  <output_format>
+    <terminal_artifact>
+      <format>Markdown following Functional Specification template structure (see prompts/templates/funcspec-template.xml)</format>
+      <validation_checklist>
+        <!-- Content Quality Criteria -->
+        <criterion id="CQ-01" category="content">Happy Path flow with numbered steps (Step 1, Step 2, etc.)</criterion>
+        <criterion id="CQ-02" category="content">All Happy Path steps include actor identification (Actor → Actor format)</criterion>
+        <criterion id="CQ-03" category="content">All Happy Path steps include concrete I/O examples (JSON/YAML with real data)</criterion>
+        <criterion id="CQ-04" category="content">All Happy Path steps document state changes explicitly</criterion>
+        <criterion id="CQ-05" category="content">Preconditions and Postconditions defined for Happy Path</criterion>
+        <criterion id="CQ-06" category="content">Alternative Flows documented with trigger, divergence point, flow sequence, outcome</criterion>
+        <criterion id="CQ-07" category="content">Error Handling documented with trigger, detection point, error response format, user experience, recovery</criterion>
+        <criterion id="CQ-08" category="content">I/O schemas include data types, required fields, validation rules</criterion>
+        <criterion id="CQ-09" category="content">I/O schemas include concrete JSON examples for both success and error cases</criterion>
+        <criterion id="CQ-10" category="content">State Transitions documented (if applicable) with states, transitions, conditions</criterion>
+        <criterion id="CQ-11" category="content">Edge Cases enumerated with concrete examples and expected behaviors</criterion>
+        <criterion id="CQ-12" category="content">Data Validation Rules specified with constraints and error responses</criterion>
+        <criterion id="CQ-13" category="content">Business Rules documented with conditions, behaviors, and examples</criterion>
+        <criterion id="CQ-14" category="content">Acceptance Criteria defined with Given/When/Then and validation examples</criterion>
+        <criterion id="CQ-15" category="content">All examples use realistic data (real emails, ISO 8601 timestamps, valid UUIDs)</criterion>
+        <criterion id="CQ-16" category="content">No implementation-specific language (no PostgreSQL, Redis, Django, React, patterns, code structure)</criterion>
+        <criterion id="CQ-17" category="content">Implementation-agnostic: Uses "Persistence layer" not "PostgreSQL", "Cache" not "Redis"</criterion>
+        <criterion id="CQ-18" category="content">User-facing NFRs only (e.g., "responsive" not "< 200ms")</criterion>
+
+        <!-- Upstream Traceability Criteria -->
+        <criterion id="UT-01" category="traceability">"Parent HLS" field populated with valid HLS ID (HLS-XXX)</criterion>
+        <criterion id="UT-02" category="traceability">Parent HLS document is in "Approved" status</criterion>
+        <criterion id="UT-03" category="traceability">"Parent PRD" field populated with valid PRD ID (PRD-XXX)</criterion>
+        <criterion id="UT-04" category="traceability">Parent Artifact Context section references specific HLS acceptance criteria</criterion>
+        <criterion id="UT-05" category="traceability">Traceability: References to HLS Primary User Flow steps present</criterion>
+        <criterion id="UT-06" category="traceability">Traceability: References to PRD FR-XX functional requirements present</criterion>
+
+        <!-- Consistency Criteria -->
+        <criterion id="CC-01" category="consistency">Status value follows standardized format: Draft/In Review/Approved/Ready</criterion>
+        <criterion id="CC-02" category="consistency">FuncSpec ID follows standard format: FS-XXX</criterion>
+        <criterion id="CC-03" category="consistency">All placeholder fields [brackets] have been filled in</criterion>
+        <criterion id="CC-04" category="consistency">Actor Legend defined and actors used consistently throughout flows</criterion>
+        <criterion id="CC-05" category="consistency">I/O schema format consistent (JSON used throughout, or YAML throughout)</criterion>
+        <criterion id="CC-06" category="consistency">Error response format standardized across all error conditions</criterion>
+      </validation_checklist>
+    </terminal_artifact>
+
+    **Output Path:** artifacts/funcspecs/FS-{XXX}_{descriptive-slug}_v1.md
+
+    Example: artifacts/funcspecs/FS-001_user_login_flow_v1.md
+
+    **Versioning:** Start with v1. Subsequent iterations (after feedback) increment to v2, v3.
+
+    **Metadata Standards:**
+    - FuncSpec ID format: FS-XXX (three digits, zero-padded)
+    - Status: Draft (initial) → In Review → Approved → Ready
+    - Parent references: HLS-XXX, PRD-XXX with artifact paths
+  </output_format>
+
+  <traceability>
+    <source_document>High-Level Story artifact (see CLAUDE.md for path pattern)</source_document>
+    <template>FuncSpec template (see CLAUDE.md Folder Structure section)</template>
+    <research_reference>
+      - PRD (see CLAUDE.md for path): Functional Requirements (FR-XX), User Personas, Use Cases
+      - Implementation Research (see CLAUDE.md for path): §2 Technical Patterns (for I/O schema examples only, NOT for implementation decisions), §5 Architecture Patterns (for understanding typical functional behaviors in similar systems)
+    </research_reference>
+    <strategy_reference>SDLC Lean Analysis Report v1.4, Recommendation 1 (Introduce FuncSpec Artifact)</strategy_reference>
+  </traceability>
+
+  <quality_guidance>
+    <guideline category="completeness">
+      FuncSpec defines WHAT system does from external observer perspective. Every flow must have concrete I/O examples with real data. For unknowns, clearly mark [REQUIRES PRODUCT OWNER] (functional behavior) or [REQUIRES TECH LEAD] (feasibility).
+    </guideline>
+
+    <guideline category="clarity">
+      Write for cross-functional audience. Functional flows accessible to Product Owners and QA. I/O schemas specific enough for engineers to implement without guessing.
+    </guideline>
+
+    <guideline category="actionability">
+      FuncSpec must enable Backlog Story creation without hallucination. Include concrete I/O examples for every interaction. Alternative Flows and Error Handling must be comprehensive.
+    </guideline>
+
+    <guideline category="traceability">
+      Every flow traces to HLS Primary User Flow steps. Every I/O schema traces to PRD FR-XX requirements. Use format: "Step 1 expands HLS Primary User Flow step 1" or "FR-05 requires POST /api/validate_artifact endpoint"
+    </guideline>
+
+    <guideline category="implementation_agnostic">
+      CRITICAL: No technology names, patterns, or code structure. Focus on observable behavior only. Use "Persistence layer" not "PostgreSQL", "Cache" not "Redis", "System validates" not "Django ORM validates".
+    </guideline>
+
+    <guideline category="concrete_examples">
+      Use "Specification by Example" methodology. Every I/O must have JSON/YAML example with realistic data. Avoid abstract descriptions like "validation response" - show actual `{"passed": true, "results": [...]}`.
+    </guideline>
+
+    <guideline category="open_questions">
+      FuncSpec focuses on FUNCTIONAL behavior uncertainties. Include questions requiring Product Owner or Tech Lead input.
+
+      **INCLUDE - Functional Behavior Questions:**
+      - "What should system do when user submits invalid data format?" (functional behavior)
+      - "Should system allow partial success or all-or-nothing?" (functional decision)
+      - "What error message should user see for timeout?" (user experience)
+
+      **DEFER - Implementation Questions:**
+      - "Should we use Redis for caching?" (implementation decision - Backlog Story)
+      - "What algorithm for validation?" (implementation detail - Backlog Story)
+
+      If no questions exist, state: "No functional behavior questions at this time. Implementation decisions will be captured during Backlog Story refinement."
+    </guideline>
+  </quality_guidance>
+
+  <examples>
+    <example>
+      **Input HLS Primary User Flow:**
+      1. User navigates to login page
+      2. User enters email and password
+      3. System validates credentials
+      4. System creates session
+      5. User redirected to dashboard
+
+      **FuncSpec Happy Path Flow (Expanded):**
+
+      **Step 1:** User → System: Navigate to login page
+      - **Input:** GET /login
+      - **Processing:** Load login page HTML
+      - **Output:** Response 200 OK with login form
+      - **State Change:** None
+
+      **Step 2:** User → System: Submit login credentials
+      - **Input:** POST /api/login
+        ```json
+        {
+          "email": "user@example.com",
+          "password": "SecurePass123!"
+        }
+        ```
+      - **Processing:** Extract email and password, validate format
+      - **Output:** Validated credentials object
+      - **State Change:** None (credentials received, not yet validated)
+
+      **Step 3:** System → Database: Query user by email
+      - **Input:** SELECT query with email parameter
+      - **Processing:** Database lookup by email
+      - **Output:** User record
+        ```json
+        {
+          "user_id": "12345",
+          "email": "user@example.com",
+          "password_hash": "$2b$12$...",
+          "status": "active"
+        }
+        ```
+      - **State Change:** User record loaded into memory
+
+      **Step 4:** System: Validate password hash
+      - **Input:** User-provided password + stored password_hash
+      - **Processing:** Compare password against stored hash
+      - **Output:** Boolean (true = valid, false = invalid)
+      - **State Change:** Validation result determined
+
+      **Step 5:** System: Create session
+      - **Input:** User ID from validated user
+      - **Processing:** Generate session token, set expiration (24 hours)
+      - **Output:** Session token
+        ```json
+        {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "expires_at": "2025-10-21T14:30:00Z"
+        }
+        ```
+      - **State Change:** Session created in database
+
+      **Step 6:** System → User: Return success response
+      - **Input:** Session token + user data
+      - **Processing:** Format response JSON
+      - **Output:** Response 200 OK
+        ```json
+        {
+          "status": "success",
+          "user": {
+            "user_id": "12345",
+            "email": "user@example.com",
+            "name": "John Doe"
+          },
+          "session": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "expires_at": "2025-10-21T14:30:00Z"
+          }
+        }
+        ```
+      - **State Change:** User session active, user authenticated
+
+      **Postconditions:**
+      - User has active session token
+      - Session stored in database with expiration
+      - User can access protected resources
+    </example>
+  </examples>
+</generator_prompt>

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Backlog_Story_Template</name>
+    <version>1.9</version>
+    <source>Section 6.4 of advanced_prompt_engineering_software_docs_code_final.md (lines 1063-1112), enhanced for Context Engineering Framework</source>
+    <sdlc_phase>Backlog_Story</sdlc_phase>
+    <note>This template is for DETAILED backlog user stories, not high-level stories in PRDs</note>
+    <last_updated>2025-10-20</last_updated>
+    <changes>v1.9: Added Standardized Marker System for Open Questions with v1/v2+ workflow, required sub-fields for US-level markers ([REQUIRES SPIKE], [REQUIRES ADR], [REQUIRES TECH LEAD], [BLOCKED BY]), Decisions Made section, and validation checklist (Lean Analysis Report v1.4 Recommendation 5 - Enforce Standardized Marker System). Includes US-030 example in v1 format.</changes>
+  </metadata>
+
+  <instructions>
+    <guideline>Transform high-level user stories from PRDs into comprehensive, actionable backlog specifications</guideline>
+    <guideline>Use standard agile format: "As [role], I want [feature], so that [benefit]"</guideline>
+    <guideline>Include acceptance criteria in Given-When-Then (Gherkin) format</guideline>
+    <guideline>List functional requirements covered from parent PRD</guideline>
+    <guideline>Define non-functional requirements (performance, security, scalability, etc.)</guideline>
+    <guideline>List technical requirements covering frontend, backend, database changes</guideline>
+    <guideline>Ensure all acceptance criteria are testable</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# User Story: [Backlog User Story Title]
+
+## Metadata
+- **Story ID:** US-[XXX]
+- **Title:** [Enhanced ticket title]
+- **Type:** Feature
+- **Status:** [Backlog/Ready/In Progress/In Review/Done]
+- **Priority:** [High/Medium/Low with brief justification]
+- **Parent PRD:** PRD-[XXX]
+- **Parent High-Level Story:** [HLS-XX reference from PRD or standalone]
+- **Functional Requirements Covered:** [FR-01, FR-03, ...]
+- **Informed By Implementation Research:** {SDLC_DOCUMENTS_URL}/implementation-research
+
+## Parent Artifact Context
+
+**Parent PRD:** [PRD-XXX: PRD Title]
+- **Link:** {SDLC_DOCUMENTS_URL}/prd/{id} (example: {SDLC_DOCUMENTS_URL}/prd/005)
+- **PRD Section:** [Section X.Y that defines this story]
+- **Functional Requirements Coverage:**
+  - **FR-01:** [Requirement description from PRD]
+  - **FR-02:** [Requirement description from PRD]
+  - **FR-03:** [Requirement description from PRD]
+
+**Parent High-Level Story:** [HLS-XXX: HLS Title]
+- **Link:** {SDLC_DOCUMENTS_URL}/hls/{id} (example: {SDLC_DOCUMENTS_URL}/hls/078)
+- **HLS Section:** [Section X.Y that defines this story]
+
+## User Story
+As [role], I want [feature], so that [benefit].
+
+## Description
+[Expanded problem statement or feature description with context and background]
+
+## Implementation Research References
+
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/implementation-research
+
+**Technical Patterns Applied:**
+- **§[X.Y]: [Pattern Name]:** [How this pattern applies to implementation]
+  - **Example Code:** [Reference to research code example if applicable]
+- **§[X.Y]: [Security Pattern]:** [Security implementation guidance]
+- **§[X.Y]: [Testing Strategy]:** [Testing approach from research]
+
+**Anti-Patterns Avoided:**
+- **§[X.Y]: [Pitfall Name]:** [How we're avoiding this pitfall]
+
+**Performance Considerations:**
+- **§[X.Y]: [Performance Pattern]:** [Target metrics and approach]
+
+## Functional Requirements
+- [User-facing feature 1]
+- [User-facing feature 2]
+- [Business logic requirement 1]
+
+## Non-Functional Requirements
+- **Performance:** [Response time, throughput targets - e.g., P95 < 200ms]
+- **Security:** [Auth, encryption, input validation requirements]
+- **Scalability:** [Concurrent user targets - e.g., 1000 concurrent users]
+- **Reliability:** [Uptime target, error handling - e.g., 99.9% uptime]
+- **Accessibility:** [WCAG compliance level - e.g., WCAG 2.1 Level AA]
+- **Maintainability:** [Code quality, documentation standards]
+
+## Technical Requirements
+
+**DECISION HIERARCHY:** CLAUDE.md (Authoritative) > Implementation Research (Advisory) > Story-specific (Supplementary)
+
+**Note:** US generator enforces this hierarchy. CLAUDE.md decisions referenced by file+line, alternatives NOT suggested for decided topics.
+
+### CLAUDE.md Decisions Applied
+
+**Established Standards:**
+- **CLAUDE-http-frameworks.md (Go):** [e.g., "Gin per line 238"]
+- **CLAUDE-tooling.md:** [e.g., "UV + Ruff per lines 20-45"]
+- **CLAUDE-testing.md:** [e.g., "pytest with fixtures, 80% coverage"]
+- **CLAUDE-typing.md:** [e.g., "MyPy strict mode"]
+- **CLAUDE-architecture.md:** [e.g., "Project structure per lines 15-30"]
+- [Additional CLAUDE-*.md files]
+
+**Example (Compliant):**
+```
+Use Gin HTTP framework per CLAUDE-http-frameworks.md:238
+```
+
+**Example (Non-Compliant - DON'T DO THIS):**
+```
+❌ "Use chi, gin, or gorilla/mux" (suggests alternatives when Gin decided)
+```
+
+### Implementation Research (Gaps Only)
+
+**Applied Patterns (ONLY for CLAUDE.md gaps):**
+- **§[X.Y]: [Pattern]:** [Guidance] - `[CLAUDE.md GAP]`
+
+### Story-Specific Implementation Guidance
+
+[Technical approach specific to this story - supplements CLAUDE.md standards]
+
+### CLAUDE.md Override (If Needed)
+
+```
+[CLAUDE.md OVERRIDE] {Alternative}
+- Original: CLAUDE-{file}.md:{line}
+- Rationale: {Justification}
+- Approval: [APPROVED BY: {name}]
+```
+
+### Technical Tasks
+- [Frontend task - per CLAUDE-architecture.md structure]
+- [Backend task - using CLAUDE.md patterns]
+- [Database change - per CLAUDE-database.md]
+- [Testing task - per CLAUDE-testing.md strategy]
+
+## Acceptance Criteria
+
+**Format Guidance:**
+- **Preferred:** Gherkin format (Given-When-Then) for scenario-based validation
+- **Fallback:** Checklist format for simpler validations or non-scenario-based criteria
+- Reference: SDLC Artifacts Guideline v1.1, Section 3.1.3
+
+### Gherkin Format Example:
+### Scenario 1: [Scenario name]
+**Given** [initial context]
+**When** [action taken]
+**Then** [expected outcome]
+
+### Scenario 2: [Scenario name]
+**Given** [initial context]
+**When** [action taken]
+**Then** [expected outcome]
+
+### Checklist Format Example (Alternative):
+- [ ] [Specific testable criterion 1]
+- [ ] [Specific testable criterion 2]
+- [ ] [Specific testable criterion 3]
+
+## Implementation Tasks Evaluation
+
+**Purpose:** Determine if this backlog story should be decomposed into separate Implementation Tasks (TASK-XXX artifacts) per SDLC Guideline v1.3 Section 11.
+
+**Decision:** [Tasks Needed / No Tasks Needed / Consider Tasks]
+
+**Rationale:**
+[Explain decision based on the following criteria from SDLC Section 11.6:]
+- **Story Points:** [1-2 SP (SKIP) | 3-5 SP (CONSIDER) | 5+ SP (DON'T SKIP)]
+- **Developer Count:** [Single developer | Multiple developers]
+- **Domain Span:** [Single domain (backend/frontend/infra only) | Cross-domain (multiple)]
+- **Complexity:** [Low - straightforward implementation | High - complex architecture/integration]
+- **Uncertainty:** [Low - clear path | High - requires investigation]
+- **Override Factors:** [None | Cross-domain | High uncertainty | Unfamiliar tech | Security-critical | Multi-system integration]
+
+**Proposed Implementation Tasks** (if applicable):
+- **TASK-XXX:** [Brief description, estimated 4-16 hours]
+- **TASK-YYY:** [Brief description, estimated 4-16 hours]
+- **TASK-ZZZ:** [Brief description, estimated 4-16 hours]
+
+**Note:** TASK-XXX IDs should be pre-allocated in TODO.md during story planning. If no IDs allocated, list task descriptions only.
+
+## Definition of Done
+- [ ] Code implemented and reviewed
+- [ ] Unit tests written and passing (80% coverage minimum)
+- [ ] Integration tests passing
+- [ ] Documentation updated
+- [ ] Acceptance criteria validated
+- [ ] Product owner approval obtained
+
+## Additional Information
+**Suggested Labels:** [List of labels, e.g., frontend, backend, user-profile]
+**Estimated Story Points:** [Fibonacci: 1, 2, 3, 5, 8, 13]
+**Dependencies:** [References to other stories or technical requirements]
+**Related PRD Section:** [Link to PRD section]
+
+## Decisions Made
+
+**Note:** This section added in v2+ after feedback provided. Answered questions from Open Questions move here.
+
+**Q1: [Question]**
+- **Decision:** [Answer]
+- **Rationale:** [Why this decision was made]
+- **Decided By:** [Person/Role] ([Date])
+
+## Open Questions & Implementation Uncertainties
+
+**Backlog Story Open Questions capture IMPLEMENTATION uncertainties needing resolution during sprint.**
+
+**Question Types:**
+- [REQUIRES SPIKE] - Time-boxed investigation needed (1-3 days max)
+- [REQUIRES ADR] - Significant technical decision (may need alternatives analysis)
+- [REQUIRES TECH LEAD] - Senior technical input needed
+- [BLOCKED BY] - External dependency
+
+---
+
+**Examples of appropriate questions:**
+- "Should we use Joi or Yup for request validation?" [REQUIRES TECH LEAD]
+- "What's optimal database index strategy?" [REQUIRES SPIKE]
+- "Does caching improve performance enough to justify complexity?" [REQUIRES SPIKE]
+- "How to handle race conditions for concurrent updates?" [REQUIRES TECH LEAD]
+
+**Examples of questions for other phases:**
+- ❌ "Should settings be in profile or dedicated page?" (High-Level Story - UX)
+- ❌ "Should we use Redis or PostgreSQL?" (ADR - major decision)
+
+---
+
+**MANDATORY MARKER USAGE (Hard Enforcement):**
+
+**Version 1 Artifacts:**
+- Open Questions should include **Recommendations** for each question (exploratory, not yet decided)
+- Include alternatives, context, decision criteria
+- No markers required in v1 (questions are exploratory)
+- Example format:
+  ```markdown
+  - How should error responses be structured to match MCP SDK expectations?
+    - **Recommendation:** Review MCP SDK documentation for error response schema patterns
+    - **Alternatives:**
+      - Option A: Mirror HTTP status code structure (400/500 codes)
+      - Option B: Custom error object with code/message/details fields
+      - Option C: Follow MCP protocol error conventions
+    - **Decision Needed By:** Tech Lead
+  ```
+
+**After Feedback (Version 2+):**
+- Answered questions MUST move to **"Decisions Made"** section
+- Remaining unresolved questions MUST use standardized markers:
+  - [REQUIRES SPIKE] (time-boxed investigation)
+  - [REQUIRES ADR] (architectural decision)
+  - [REQUIRES TECH LEAD] (senior technical input)
+  - [BLOCKED BY] (external dependency)
+
+**Required Sub-fields for Each Marker:**
+
+[REQUIRES SPIKE]
+- **Investigation Needed:** {Technical uncertainty to resolve}
+- **Spike Scope:** {What to research/prototype}
+- **Time Box:** {1-3 days maximum}
+- **Blocking:** {What implementation steps blocked}
+
+[REQUIRES ADR]
+- **Decision Topic:** {Architectural decision needed}
+- **Alternatives:** {Options to evaluate in ADR}
+- **Impact Scope:** {What components/systems affected}
+- **Decision Deadline:** {Date}
+
+[REQUIRES TECH LEAD]
+- **Technical Question:** {Senior input needed on what}
+- **Context:** {Why this needs tech lead review}
+- **Blocking:** {What's blocked}
+
+[BLOCKED BY]
+- **Dependency:** {External system, team, decision}
+- **Expected Resolution:** {Date/milestone when unblocked}
+- **Workaround Available:** {Yes/No, if yes describe}
+
+**PROHIBITED:**
+- ❌ Free-form text: "Decision: Spike needed for this"
+- ❌ Generic actions: "Action Required: Create spike to investigate..."
+- ✅ Use standardized markers with required sub-fields instead
+
+**Exception - Meta-instruction Only:**
+"Action Required:" text may be used ONLY for strong emphasis when markers are missing:
+```
+⚠️ **ACTION REQUIRED:** This artifact has 3 open questions without markers.
+Add [REQUIRES SPIKE] or [REQUIRES TECH LEAD] markers before finalization. ⚠️
+```
+(This is a meta-instruction about the artifact itself, not the actual question documentation)
+
+---
+
+**If no open questions exist, state:** "No open implementation questions. All technical approaches clear from Implementation Research and PRD."
+
+---
+
+- [Implementation Question 1 with marker if v2+]
+- [Implementation Question 2 with marker if v2+]
+
+**Note:** Questions marked [REQUIRES ADR] should trigger ADR creation before implementation begins.
+    ]]>
+  </structure>
+
+  <examples>
+    <example source="Section 6.4 lines 1075-1077, enhanced with format guidance">
+      **User Story:**
+      As registered user, I want to be able to upload profile picture so that I can personalize my account.
+
+      **Acceptance Criteria (Gherkin Format - Preferred):**
+
+      Scenario 1: Successful profile picture upload
+      Given I am logged in
+      When I navigate to profile settings
+      Then I see an upload button for profile picture
+
+      Scenario 2: Upload and display profile picture
+      Given I have selected a valid image file
+      When I click the upload button
+      Then the image is saved to my profile
+      And the new profile picture is displayed immediately
+
+      **Acceptance Criteria (Checklist Format - Alternative):**
+      - [ ] Upload button visible on profile settings page for logged-in users
+      - [ ] Clicking upload button opens file selection dialog
+      - [ ] Valid image file (JPG, PNG) can be selected and uploaded
+      - [ ] Uploaded image is saved to user profile
+      - [ ] Profile picture displays immediately after successful upload
+      - [ ] Error message shown for invalid file types
+    </example>
+  </examples>
+</template>

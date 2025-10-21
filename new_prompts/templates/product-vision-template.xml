@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <metadata>
+    <name>Product_Vision_Template</name>
+    <version>1.3</version>
+    <source>Generated based on industry best practices and Context Engineering framework</source>
+    <sdlc_phase>Vision</sdlc_phase>
+    <last_updated>2025-10-13</last_updated>
+    <changes>v1.3: Path consolidation - Updated link placeholders with CLAUDE.md path formats (Issue #2)</changes>
+  </metadata>
+
+  <instructions>
+    <guideline>Define high-level product vision and strategic direction</guideline>
+    <guideline>Problem statement must include quantified pain points with data</guideline>
+    <guideline>Target users must be clearly defined with personas</guideline>
+    <guideline>Success metrics must be SMART (Specific, Measurable, Achievable, Relevant, Time-bound)</guideline>
+    <guideline>Key features should be at epic-level (not detailed requirements)</guideline>
+    <guideline>Vision should be inspirational yet actionable</guideline>
+  </instructions>
+
+  <structure format="markdown">
+    <![CDATA[
+# Product Vision: [Product Name]
+
+## Metadata
+- **Vision ID:** VIS-[XXX]
+- **Author:** [name]
+- **Date:** [YYYY-MM-DD]
+- **Version:** [version]
+- **Status:** [Draft/In Review/Approved]
+- **Informed By Business Research:** {SDLC_DOCUMENTS_URL}/business-research
+
+## Executive Summary
+[2-3 paragraphs capturing the essence of the product vision: who it's for, what problem it solves, why it matters]
+
+## Problem Statement
+
+### Current State
+[Describe existing pain points with quantified data]
+- Pain point 1: [Description with metrics/data]
+- Pain point 2: [Description with metrics/data]
+- Pain point 3: [Description with metrics/data]
+
+### Impact if Not Solved
+[Quantified consequences of not addressing the problem]
+- [Impact 1 with data]
+- [Impact 2 with data]
+
+## Vision Statement
+[One compelling sentence capturing the aspirational future state]
+
+## Target Users
+
+### Primary Persona: [Name/Role]
+- **Demographics:** [age, location, role]
+- **Behaviors:** [key characteristics]
+- **Goals:** [what they want to achieve]
+- **Pain Points:** [specific challenges]
+- **Technical Proficiency:** [skill level]
+
+### Secondary Persona: [Name/Role]
+[Same structure as primary]
+
+## Key Capabilities
+[3-5 high-level features/epics that deliver the vision]
+
+1. **[Capability 1]**
+   - Value proposition: [why it matters]
+   - User benefit: [what users gain]
+
+2. **[Capability 2]**
+   - Value proposition: [why it matters]
+   - User benefit: [what users gain]
+
+3. **[Capability 3]**
+   - Value proposition: [why it matters]
+   - User benefit: [what users gain]
+
+## Success Metrics
+
+| Metric | Baseline | Target | Timeline | Measurement Method |
+|--------|----------|--------|----------|-------------------|
+| [Metric 1] | [Current value] | [Goal value] | [Timeframe] | [How measured] |
+| [Metric 2] | [Current value] | [Goal value] | [Timeframe] | [How measured] |
+| [Metric 3] | [Current value] | [Goal value] | [Timeframe] | [How measured] |
+
+## Competitive Landscape
+[Brief analysis of existing solutions and differentiation]
+
+### Existing Solutions
+- **[Competitor 1]:** [Strengths and limitations]
+- **[Competitor 2]:** [Strengths and limitations]
+
+### Our Differentiation
+[What makes this product unique/better]
+
+## Strategic Alignment
+[How this product aligns with broader organizational goals]
+
+## Business Research References
+
+**Primary Research Document:** {SDLC_DOCUMENTS_URL}/business-research
+
+**Key Insights Applied:**
+- **Market Positioning (§5.1):** [How positioning recommendation informs this vision]
+- **Target Users (§Appendix A):** [Which personas from research are primary focus]
+- **Success Metrics (§4.1):** [Which capability recommendations inform key features]
+
+**Market Data Supporting Vision:**
+- [Data point 1 from research with section reference]
+- [Data point 2 from research with section reference]
+
+## Constraints & Assumptions
+
+### Constraints
+- [Constraint 1: e.g., technical, budget, timeline]
+- [Constraint 2]
+
+### Assumptions
+- [Assumption 1: e.g., user behavior, market conditions]
+- [Assumption 2]
+
+### Strategic Uncertainties
+**Vision-level strategic uncertainties requiring validation or stakeholder alignment.**
+
+**Note:** Product Vision is typically created after thorough Business Research. If significant uncertainties remain, consider whether Business Research needs additional validation or whether these questions belong in Initiative/Epic phases.
+
+**Appropriate for Vision-level (if needed):**
+- Market validation questions requiring further research
+- Strategic positioning questions requiring executive alignment
+- Organizational readiness questions
+
+**Examples:**
+- "Is there sufficient market demand to justify 2-year investment?" [REQUIRES MARKET VALIDATION]
+- "Does this vision align with company's 5-year strategic plan?" [REQUIRES EXECUTIVE ALIGNMENT]
+- "Is there organizational appetite for this level of innovation?" [REQUIRES LEADERSHIP INPUT]
+
+**If no strategic uncertainties, state:** "No strategic uncertainties. Vision is grounded in comprehensive Business Research and validated with stakeholders."
+
+- [Strategic uncertainty 1 with marker - if applicable]
+- [Strategic uncertainty 2 with marker - if applicable]
+
+## Out of Scope
+[What this product explicitly will NOT do - important for focus]
+- [Out of scope item 1]
+- [Out of scope item 2]
+
+## High-Level Roadmap
+[Timeline of major phases/milestones]
+
+- **Phase 1** (Q1): [Focus area]
+- **Phase 2** (Q2): [Focus area]
+- **Phase 3** (Q3): [Focus area]
+
+## References
+- **Business Research:** {SDLC_DOCUMENTS_URL}/business-research
+- [Links to market research, user studies, competitive analysis]
+    ]]>
+  </structure>
+
+  <examples>
+    <example>
+      Problem Statement:
+      - 78% of developers spend >2 hours/day searching for code documentation (Stack Overflow Survey 2024)
+      - Average context switch costs 23 minutes of productivity (UC Irvine study)
+
+      Vision Statement:
+      "Empower developers to find answers instantly without leaving their development environment."
+    </example>
+  </examples>
+</template>
