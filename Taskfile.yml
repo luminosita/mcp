@@ -549,6 +549,99 @@ tasks:
       - uv run alembic history
 
   # ====================
+  # SonarQube Tasks (Code Quality Analysis)
+  # ====================
+
+  sonar:start:
+    desc: Start SonarQube server with PostgreSQL backend
+    vars:
+      RUNTIME:
+        sh: command -v podman-compose >/dev/null 2>&1 && echo "podman-compose" || echo "docker-compose"
+    cmds:
+      - '{{.RUNTIME}} up -d'
+      - echo "✅ SonarQube starting (may take 1-2 minutes)..."
+      - echo "Access SonarQube at http://localhost:9000"
+      - echo "Default credentials - admin/admin (change on first login)"
+      - echo "Waiting for SonarQube to be ready..."
+      - |
+        for i in {1..60}; do
+          if curl -s http://localhost:9000/api/system/status | grep -q '"status":"UP"'; then
+            echo "✅ SonarQube is ready!"
+            exit 0
+          fi
+          echo -n "."
+          sleep 2
+        done
+        echo ""
+        echo "⚠️  SonarQube may still be starting. Check logs with: task sonar:logs"
+
+  sonar:stop:
+    desc: Stop SonarQube server
+    vars:
+      RUNTIME:
+        sh: command -v podman-compose >/dev/null 2>&1 && echo "podman-compose" || echo "docker-compose"
+    cmds:
+      - '{{.RUNTIME}} down'
+      - echo "✅ SonarQube stopped"
+
+  sonar:restart:
+    desc: Restart SonarQube server
+    cmds:
+      - task: sonar:stop
+      - task: sonar:start
+
+  sonar:logs:
+    desc: View SonarQube server logs
+    vars:
+      RUNTIME:
+        sh: command -v podman-compose >/dev/null 2>&1 && echo "podman-compose" || echo "docker-compose"
+    cmds:
+      - '{{.RUNTIME}} logs -f sonarqube'
+
+  sonar:clean:
+    desc: Stop SonarQube and remove all data (WARNING - destroys analysis history)
+    vars:
+      RUNTIME:
+        sh: command -v podman-compose >/dev/null 2>&1 && echo "podman-compose" || echo "docker-compose"
+    cmds:
+      - echo "⚠️  WARNING - This will destroy all SonarQube data and analysis history!"
+      - echo "Press Ctrl+C to cancel, or wait 5 seconds to continue..."
+      - sleep 5
+      - '{{.RUNTIME}} down -v'
+      - echo "✅ SonarQube data removed"
+
+  sonar:scan:
+    desc: Run SonarQube code analysis (requires running SonarQube server)
+    cmds:
+      - |
+        if ! command -v sonar-scanner >/dev/null 2>&1; then
+          echo "❌ sonar-scanner not installed. Install with:"
+          echo "   macOS: brew install sonar-scanner"
+          echo "   Linux: https://docs.sonarqube.org/latest/analyzing-source-code/scanners/sonarscanner/"
+          exit 1
+        fi
+      - echo "📊 Generating test coverage report..."
+      - uv run pytest --cov={{.SRC_DIR}} --cov-report=xml --cov-report=term
+      - echo "🔍 Running SonarQube analysis..."
+      - sonar-scanner -Dsonar.host.url=http://localhost:9000 -Dsonar.token=sqb_f0bf20d90a94eac6393506d9da7b876933e9ab29
+      - echo "✅ Analysis complete - view results at http://localhost:9000"
+
+  sonar:scan:ci:
+    desc: Run SonarQube scan for CI/CD with token authentication
+    cmds:
+      - |
+        if [ -z "$SONAR_TOKEN" ]; then
+          echo "❌ SONAR_TOKEN environment variable not set"
+          echo "Generate token at http://localhost:9000/account/security"
+          exit 1
+        fi
+      - echo "📊 Generating test coverage report..."
+      - uv run pytest --cov={{.SRC_DIR}} --cov-report=xml --cov-report=term
+      - echo "🔍 Running SonarQube analysis with token..."
+      - sonar-scanner -Dsonar.host.url=http://localhost:9000 -Dsonar.token=$SONAR_TOKEN
+      - echo "✅ Analysis complete"
+
+  # ====================
   # Documentation Tasks
   # ====================
 
@@ -562,6 +655,78 @@ tasks:
     desc: Serve documentation locally
     cmds:
       - echo "Documentation serve not yet configured"
+
+  # ====================
+  # Performance Testing Tasks (US-033)
+  # ====================
+
+  perf:test:
+    desc: Run full load test (100 users, 5 minutes) - validates <100ms p95 target
+    cmds:
+      - echo "🔥 Starting load test (100 users, 5 minutes)..."
+      - echo "Target - less than 100ms p95 latency for resource loading"
+      - echo "Results will be saved to perf-results.csv"
+      - uv run locust -f locustfile.py --headless --users 100 --spawn-rate 10 --run-time 5m --csv=perf-results --html=perf-report.html --host http://localhost:8000
+      - echo "✅ Load test complete - see perf-report.html for results"
+
+  perf:test:quick:
+    desc: Run quick load test (30 users, 1 minute) - for CI/CD
+    cmds:
+      - echo "🔥 Starting quick load test (30 users, 1 minute)..."
+      - uv run locust -f locustfile.py --headless --users 30 --spawn-rate 5 --run-time 1m --csv=perf-quick --host http://localhost:8000
+      - echo "✅ Quick load test complete"
+
+  perf:profile:
+    desc: Profile running server with py-spy (60 seconds)
+    cmds:
+      - |
+        echo "🔍 Profiling server with py-spy (60 seconds)..."
+        echo "Ensure server is running: task dev"
+        echo "Finding uvicorn process..."
+        PID=$(pgrep -f "uvicorn.*mcp_server.main:app" | head -1)
+        if [ -z "$PID" ]; then
+          echo "❌ Server not running. Start with: task dev"
+          exit 1
+        fi
+        echo "Found server PID: $PID"
+        echo "Recording profile for 60 seconds..."
+        uv run py-spy record -o profile.svg --pid $PID --duration 60 --rate 100
+        echo "✅ Profile saved to profile.svg"
+        echo "Open profile.svg in browser to view flame graph"
+
+  perf:profile:interactive:
+    desc: Interactive profiling with py-spy top command
+    cmds:
+      - |
+        echo "🔍 Starting interactive profiling..."
+        PID=$(pgrep -f "uvicorn.*mcp_server.main:app" | head -1)
+        if [ -z "$PID" ]; then
+          echo "❌ Server not running. Start with: task dev"
+          exit 1
+        fi
+        echo "Found server PID: $PID"
+        echo "Press Ctrl+C to stop profiling"
+        uv run py-spy top --pid $PID
+
+  perf:benchmark:
+    desc: Run performance benchmarks and save to docs/performance-runbook.md
+    cmds:
+      - echo "📊 Running performance benchmarks..."
+      - 'echo "Step 1/3: Quick warmup test (10 users, 30 seconds)"'
+      - uv run locust -f locustfile.py --headless --users 10 --spawn-rate 5 --run-time 30s --host http://localhost:8000 >/dev/null 2>&1
+      - 'echo "Step 2/3: Full load test (100 users, 5 minutes)"'
+      - uv run locust -f locustfile.py --headless --users 100 --spawn-rate 10 --run-time 5m --csv=benchmark-results --html=benchmark-report.html --host http://localhost:8000
+      - 'echo "Step 3/3: Generating performance runbook..."'
+      - echo "✅ Benchmarks complete - results in benchmark-report.html"
+      - echo "📝 Document results in docs/performance-runbook.md"
+
+  perf:clean:
+    desc: Clean performance test artifacts
+    cmds:
+      - rm -f perf-results*.csv perf-quick*.csv benchmark-results*.csv
+      - rm -f perf-report.html benchmark-report.html
+      - rm -f profile.svg
+      - echo "✅ Performance artifacts cleaned"
 
   # ====================
   # Utility Tasks

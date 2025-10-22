@@ -6,9 +6,11 @@
     "go-task@latest",
     "uv@latest",
     "podman@latest",
+    "podman-compose@latest",
     "hadolint@latest",
     "trivy@latest",
-    "pre-commit@latest"
+    "pre-commit@latest",
+    "sonar-scanner-cli"
   ],
   "shell": {
     "init_hook": [

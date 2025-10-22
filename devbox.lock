@@ -153,6 +153,70 @@
         }
       }
     },
+    "podman-compose@latest": {
+      "last_modified": "2025-10-07T08:41:47Z",
+      "resolved": "github:NixOS/nixpkgs/bce5fe2bb998488d8e7e7856315f90496723793c#podman-compose",
+      "source": "devbox-search",
+      "version": "1.5.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lc7jl40irglz864wywnp09z4allgy5xn-podman-compose-1.5.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/lmhmbi9s89k6pxq5vzzbx7s83xplknll-podman-compose-1.5.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/lc7jl40irglz864wywnp09z4allgy5xn-podman-compose-1.5.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/6kll5jkjdgz1drd58zyay3z3315mz0yn-podman-compose-1.5.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/8cxnnhkwhzd61acd8aagmvfkf9ikzrbd-podman-compose-1.5.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/6kll5jkjdgz1drd58zyay3z3315mz0yn-podman-compose-1.5.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/khf19lcc20kgwshqpbw9zm593yihg96r-podman-compose-1.5.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/rj7npv04c28pkivp9h8n5gln8dg8v4qg-podman-compose-1.5.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/khf19lcc20kgwshqpbw9zm593yihg96r-podman-compose-1.5.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/bvyrglg4z8gpcz31brk8kjyhr1baanwq-podman-compose-1.5.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/skwyq8f97m0xgh8na8wr0dhv5yqv9d4j-podman-compose-1.5.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/bvyrglg4z8gpcz31brk8kjyhr1baanwq-podman-compose-1.5.0"
+        }
+      }
+    },
     "podman@latest": {
       "last_modified": "2025-10-07T08:41:47Z",
       "resolved": "github:NixOS/nixpkgs/bce5fe2bb998488d8e7e7856315f90496723793c#podman",
@@ -341,6 +405,10 @@
           "store_path": "/nix/store/ddiqchvpb8gq02q00k7rl0mb4izdigv9-python3-3.11.14"
         }
       }
+    },
+    "sonar-scanner-cli": {
+      "resolved": "github:NixOS/nixpkgs/82c2e0d6dde50b17ae366d2aa36f224dc19af469?narHash=sha256-h13YFQMi91nXkkRoJMIfezorz5SbD6849jw5L0fjK4I%3D#sonar-scanner-cli",
+      "source": "nixpkg"
     },
     "trivy@latest": {
       "last_modified": "2025-10-08T10:03:27Z",

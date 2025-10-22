@@ -10,6 +10,7 @@ import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
+from pathlib import Path
 
 import structlog
 from fastapi import FastAPI
@@ -17,6 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel
 
+from mcp_server.api.routes import resources
 from mcp_server.config import settings
 from mcp_server.core.constants import (
     APP_DESCRIPTION,
@@ -33,6 +35,9 @@ from mcp_server.core.dependencies import (
     initialize_db_session_maker,
     initialize_http_client,
 )
+from mcp_server.core.exception_handlers import setup_exception_handlers
+from mcp_server.prompts.registry import PromptRegistry
+from mcp_server.services import cache_service
 from mcp_server.tools.example_tool import (
     GreetingInput,
     GreetingOutput,
@@ -47,6 +52,11 @@ _startup_time: float = 0.0
 # bidirectional communication, JSON-RPC 2.0) while maintaining control over
 # authentication and observability.
 mcp = FastMCP(name="AI Agent MCP Server")
+
+# Initialize prompt registry for generator prompts (US-035)
+# Prompts directory path relative to project root
+_prompts_dir = Path(__file__).parent.parent.parent / "prompts"
+_prompt_registry = PromptRegistry(prompts_dir=_prompts_dir)
 
 
 def configure_logging() -> None:
@@ -128,6 +138,14 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     await initialize_db_session_maker()
     logger.info("database_session_maker_initialized")
 
+    # Initialize cache service (US-032)
+    await cache_service.connect()
+    logger.info(
+        "cache_service_initialized",
+        redis_url=settings.redis_url,
+        cache_ttl=settings.cache_ttl,
+    )
+
     logger.info("application_startup_complete")
 
     yield
@@ -140,6 +158,10 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
     await close_db_session_maker()
     logger.info("database_session_maker_closed")
+
+    # Disconnect cache service (US-032)
+    await cache_service.disconnect()
+    logger.info("cache_service_disconnected")
 
     logger.info("application_shutdown_complete", uptime_seconds=time.time() - _startup_time)
 
@@ -163,6 +185,14 @@ app.add_middleware(
     allow_methods=CORS_ALLOW_METHODS,
     allow_headers=CORS_ALLOW_HEADERS,
 )
+
+# Setup centralized exception handlers for REST endpoints
+# Follows patterns-architecture-middleware.md guidelines
+setup_exception_handlers(app)
+
+# Register API routers
+# MCP resources endpoints for serving implementation patterns and SDLC content
+app.include_router(resources.router)
 
 
 # Register MCP tools
@@ -225,6 +255,78 @@ async def example_greeting_tool(params: GreetingInput) -> GreetingOutput:
     # for JSON schema generation. Logger and Settings can't be serialized to JSON.
     logger = logging.getLogger("mcp_server.tools.example_tool")
     return await generate_greeting(params, settings, logger)
+
+
+# Register MCP prompts for generator XML files (US-035)
+# WHY DYNAMIC REGISTRATION: Scans prompts/ directory and registers all generators
+# as MCP prompts. New generators can be added by placing XML files in prompts/
+# without code changes.
+@mcp.prompt(
+    name="generator",
+    description="""
+    Retrieve artifact generator prompt by artifact name.
+
+    Exposes all SDLC artifact generators as MCP prompts:
+    - product-vision: Generate product vision artifacts
+    - initiative: Generate initiative artifacts
+    - epic: Generate epic artifacts
+    - prd: Generate PRD (Product Requirements Document) artifacts
+    - high-level-user-story (hls): Generate high-level user story artifacts
+    - backlog-story: Generate backlog user story artifacts
+    - spike: Generate spike (technical investigation) artifacts
+    - adr: Generate Architecture Decision Record artifacts
+    - tech-spec: Generate technical specification artifacts
+    - implementation-task: Generate implementation task artifacts
+
+    Returns generator XML content for use in artifact generation workflows.
+    Content is cached with 5-minute TTL for performance.
+
+    Security: Input validation prevents path traversal attacks.
+    Performance: p95 latency <100ms (cache hit <10ms, cache miss <100ms).
+
+    Example usage:
+        artifact_name: "epic"
+        Returns: Full XML content of epic-generator.xml
+    """,
+)
+async def get_generator_prompt(artifact_name: str) -> str:
+    """
+    MCP prompt for retrieving generator XML content.
+
+    Args:
+        artifact_name: Artifact name (e.g., "epic", "backlog-story")
+
+    Returns:
+        Generator XML content as string
+
+    Raises:
+        ValueError: If artifact_name fails security validation
+        FileNotFoundError: If generator file doesn't exist
+        OSError: If file read fails
+    """
+    logger = structlog.get_logger(__name__)
+    logger.info(
+        "generator_prompt_requested",
+        artifact_name=artifact_name,
+    )
+
+    try:
+        content = await _prompt_registry.load_prompt(artifact_name)
+        logger.info(
+            "generator_prompt_loaded",
+            artifact_name=artifact_name,
+            content_length=len(content),
+            cache_stats=_prompt_registry.get_cache_stats(),
+        )
+        return content
+    except (ValueError, FileNotFoundError, OSError) as e:
+        logger.error(
+            "generator_prompt_load_failed",
+            artifact_name=artifact_name,
+            error=str(e),
+            error_type=type(e).__name__,
+        )
+        raise
 
 
 class HealthCheckResponse(BaseModel):

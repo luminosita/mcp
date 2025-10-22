@@ -79,6 +79,36 @@ class Settings(BaseSettings):
         description="Secret key for session management",
     )
 
+    # MCP Resources configuration (US-030, US-031)
+    patterns_base_dir: str = Field(
+        default="prompts/CLAUDE",
+        description="Base directory for implementation pattern files",
+    )
+    sdlc_core_file_path: str = Field(
+        default="prompts/CLAUDE/sdlc-core.md",
+        description="Path to SDLC framework core file",
+    )
+    templates_dir: str = Field(
+        default="prompts/templates",
+        description="Directory containing artifact template files (US-031)",
+    )
+
+    # Cache configuration (US-032)
+    redis_url: str = Field(
+        default="redis://localhost:6379/0",
+        description="Redis connection URL for resource caching",
+    )
+    cache_ttl: int = Field(
+        default=300,
+        ge=1,
+        description="Cache TTL in seconds (default: 5 minutes)",
+    )
+    cache_max_size: int = Field(
+        default=1000,
+        ge=1,
+        description="Maximum number of cached resources (LRU eviction)",
+    )
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
