@@ -55,9 +55,11 @@ def expected_outputs_dir(fixtures_dir):
 @pytest.fixture
 def prompt_registry(prompts_dir):
     """Create prompt registry for MCP approach."""
-    from mcp_server.prompts.cache import PromptCache
+    from mcp_server.services.cache import ResourceCacheService
 
-    cache = PromptCache(ttl_seconds=300)
+    # Use ResourceCacheService with in-memory cache (no Redis for tests)
+    cache = ResourceCacheService(ttl_seconds=300)
+    # Don't call connect() - will use in-memory fallback
     return PromptRegistry(prompts_dir=prompts_dir, cache=cache)
 
 
@@ -450,14 +452,15 @@ class TestErrorScenarios:
         Note: Current implementation loads content without XML validation.
         This test documents expected behavior if validation is added.
         """
-        from mcp_server.prompts.cache import PromptCache
+        from mcp_server.services.cache import ResourceCacheService
 
         # Create temporary directory with malformed XML
         malformed_file = tmp_path / "malformed-generator.xml"
         malformed_file.write_text("Not valid XML content <<>>")
 
         # Create registry pointing to temp directory
-        registry = PromptRegistry(prompts_dir=tmp_path, cache=PromptCache())
+        cache = ResourceCacheService(ttl_seconds=300)
+        registry = PromptRegistry(prompts_dir=tmp_path, cache=cache)
 
         # Load malformed content (currently succeeds, no XML validation)
         content = await registry.load_prompt("malformed")

@@ -1,8 +1,8 @@
 """
-Prompt caching layer with TTL expiration.
+In-memory caching layer with TTL expiration.
 
-In-memory cache for generator XML content with 5-minute TTL.
-Implements TASK-010: Prompt caching layer with TTL.
+Generic in-memory cache for any string content with TTL-based expiration.
+Used as fallback when Redis is unavailable.
 """
 
 import time
@@ -18,7 +18,7 @@ class CacheEntry:
     """
     Cache entry with TTL metadata.
 
-    Stores cached prompt content along with creation timestamp for TTL expiration.
+    Stores cached content along with creation timestamp for TTL expiration.
     """
 
     content: str
@@ -32,13 +32,18 @@ class CacheEntry:
         return age > self.ttl_seconds
 
 
-class PromptCache:
+class MemoryCache:
     """
-    In-memory cache for generator prompts with TTL expiration.
+    In-memory cache for string content with TTL expiration.
+
+    Generic cache implementation used across MCP Server for:
+    - Resource files (patterns, templates, SDLC core)
+    - Generator prompts
+    - Any other string content requiring caching
 
     Features:
     - Cache-aside pattern (lazy loading)
-    - 5-minute default TTL for cache entries
+    - Configurable TTL for cache entries (default: 300 seconds)
     - Automatic expiration on access
     - Cache hit/miss metrics for observability
 
@@ -47,7 +52,7 @@ class PromptCache:
 
     def __init__(self, ttl_seconds: int = 300) -> None:
         """
-        Initialize prompt cache.
+        Initialize memory cache.
 
         Args:
             ttl_seconds: Time-to-live for cache entries in seconds (default: 300 = 5 minutes)
@@ -57,13 +62,16 @@ class PromptCache:
         self._hits = 0
         self._misses = 0
         logger.info(
-            "prompt_cache_initialized",
+            "memory_cache_initialized",
             ttl_seconds=ttl_seconds,
         )
 
-    def get(self, artifact_name: str) -> str | None:
+    def get(self, cache_key: str) -> str | None:
         """
-        Get cached prompt content by artifact name.
+        Get cached content by cache key.
+
+        Args:
+            cache_key: Unique cache key
 
         Returns:
             Cached content if exists and not expired, None otherwise
@@ -72,24 +80,24 @@ class PromptCache:
             - Increments cache hit/miss counters
             - Removes expired entries on access
         """
-        entry = self._cache.get(artifact_name)
+        entry = self._cache.get(cache_key)
 
         if entry is None:
             self._misses += 1
             logger.debug(
-                "prompt_cache_miss",
-                artifact_name=artifact_name,
+                "memory_cache_miss",
+                cache_key=cache_key,
                 hit_rate=self.hit_rate,
             )
             return None
 
         if entry.is_expired:
             # Remove expired entry
-            del self._cache[artifact_name]
+            del self._cache[cache_key]
             self._misses += 1
             logger.debug(
-                "prompt_cache_expired",
-                artifact_name=artifact_name,
+                "memory_cache_expired",
+                cache_key=cache_key,
                 age_seconds=time.time() - entry.created_at,
                 ttl_seconds=entry.ttl_seconds,
             )
@@ -97,51 +105,51 @@ class PromptCache:
 
         self._hits += 1
         logger.debug(
-            "prompt_cache_hit",
-            artifact_name=artifact_name,
+            "memory_cache_hit",
+            cache_key=cache_key,
             age_seconds=time.time() - entry.created_at,
             hit_rate=self.hit_rate,
         )
         return entry.content
 
-    def set(self, artifact_name: str, content: str) -> None:
+    def set(self, cache_key: str, content: str) -> None:
         """
-        Store prompt content in cache with TTL.
+        Store content in cache with TTL.
 
         Args:
-            artifact_name: Artifact name (cache key)
-            content: Generator XML content (cache value)
+            cache_key: Unique cache key
+            content: String content to cache
         """
         entry = CacheEntry(
             content=content,
             created_at=time.time(),
             ttl_seconds=self.ttl_seconds,
         )
-        self._cache[artifact_name] = entry
+        self._cache[cache_key] = entry
         logger.debug(
-            "prompt_cache_set",
-            artifact_name=artifact_name,
+            "memory_cache_set",
+            cache_key=cache_key,
             content_length=len(content),
             ttl_seconds=self.ttl_seconds,
         )
 
-    def invalidate(self, artifact_name: str) -> None:
+    def invalidate(self, cache_key: str) -> None:
         """
-        Invalidate cache entry for artifact.
+        Invalidate cache entry.
 
         Args:
-            artifact_name: Artifact name to invalidate
+            cache_key: Cache key to invalidate
         """
-        if artifact_name in self._cache:
-            del self._cache[artifact_name]
-            logger.debug("prompt_cache_invalidated", artifact_name=artifact_name)
+        if cache_key in self._cache:
+            del self._cache[cache_key]
+            logger.debug("memory_cache_invalidated", cache_key=cache_key)
 
     def clear(self) -> None:
         """Clear all cache entries."""
         self._cache.clear()
         self._hits = 0
         self._misses = 0
-        logger.info("prompt_cache_cleared")
+        logger.info("memory_cache_cleared")
 
     @property
     def size(self) -> int:

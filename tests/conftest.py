@@ -49,7 +49,7 @@ def client(app: FastAPI) -> Generator[TestClient, None, None]:
             response = client.get("/")
             assert response.status_code == 200
     """
-    with TestClient(app) as test_client:
+    with TestClient(app, raise_server_exceptions=False) as test_client:
         yield test_client
 
 

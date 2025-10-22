@@ -38,11 +38,6 @@ from mcp_server.core.dependencies import (
 from mcp_server.core.exception_handlers import setup_exception_handlers
 from mcp_server.prompts.registry import PromptRegistry
 from mcp_server.services import cache_service
-from mcp_server.tools.example_tool import (
-    GreetingInput,
-    GreetingOutput,
-    generate_greeting,
-)
 
 # Application startup time for uptime calculation
 _startup_time: float = 0.0
@@ -54,8 +49,8 @@ _startup_time: float = 0.0
 mcp = FastMCP(name="AI Agent MCP Server")
 
 # Initialize prompt registry for generator prompts (US-035)
-# Prompts directory path relative to project root
-_prompts_dir = Path(__file__).parent.parent.parent / "prompts"
+# Prompts directory path from configuration (supports environment overrides)
+_prompts_dir = Path(settings.prompts_dir)
 _prompt_registry = PromptRegistry(prompts_dir=_prompts_dir)
 
 
@@ -195,68 +190,6 @@ setup_exception_handlers(app)
 app.include_router(resources.router)
 
 
-# Register MCP tools
-# WHY SEPARATE REGISTRATION: Keeps tool definitions modular while centralizing
-# registration for visibility. Tools can be organized by domain (jira, k8s, rag)
-# in separate modules.
-@mcp.tool(
-    name="example.generate_greeting",
-    description="""
-    Generates a personalized greeting message (example tool for pattern demonstration).
-
-    Use this tool when:
-    - Demonstrating MCP tool patterns to developers
-    - Testing MCP server functionality
-    - Learning how to implement tools with validation and error handling
-
-    This is an example tool showing best practices:
-    - Pydantic input/output validation
-    - Error handling for validation and business logic errors
-    - Dependency injection for settings and logging
-    - Async patterns for consistency
-    - Comprehensive docstrings
-
-    Greeting styles:
-    - formal: "Good day, [name]"
-    - casual: "Hey, [name]"
-    - enthusiastic: "Hello there, [name]"
-
-    Returns structured greeting with metadata including style used and character count.
-    """,
-)
-async def example_greeting_tool(params: GreetingInput) -> GreetingOutput:
-    """
-    MCP tool wrapper for generate_greeting function.
-
-    WHY WRAPPER: Separates MCP tool registration (@mcp.tool decorator) from
-    business logic (generate_greeting function). This enables:
-    - Testing business logic without MCP protocol overhead
-    - Reusing business logic in different contexts (REST API, CLI)
-    - Clear separation between protocol concerns and domain logic
-
-    WHY NO DEPENDENCY PARAMETERS: FastMCP generates JSON schema from function
-    signature, so only Pydantic-serializable types allowed. Dependencies
-    accessed directly inside function instead of as parameters.
-
-    Args:
-        params: Validated greeting input parameters
-
-    Returns:
-        GreetingOutput: Structured greeting response with metadata
-
-    Raises:
-        BusinessLogicError: If greeting generation fails business rules
-        ValidationError: If input validation fails (handled by Pydantic/FastMCP)
-    """
-    import logging
-
-    # Access dependencies directly (not as function parameters)
-    # WHY: FastMCP requires all function parameters to be Pydantic-serializable
-    # for JSON schema generation. Logger and Settings can't be serialized to JSON.
-    logger = logging.getLogger("mcp_server.tools.example_tool")
-    return await generate_greeting(params, settings, logger)
-
-
 # Register MCP prompts for generator XML files (US-035)
 # WHY DYNAMIC REGISTRATION: Scans prompts/ directory and registers all generators
 # as MCP prompts. New generators can be added by placing XML files in prompts/
@@ -312,11 +245,12 @@ async def get_generator_prompt(artifact_name: str) -> str:
 
     try:
         content = await _prompt_registry.load_prompt(artifact_name)
+        cache_stats = await _prompt_registry.get_cache_stats()
         logger.info(
             "generator_prompt_loaded",
             artifact_name=artifact_name,
             content_length=len(content),
-            cache_stats=_prompt_registry.get_cache_stats(),
+            cache_stats=cache_stats,
         )
         return content
     except (ValueError, FileNotFoundError, OSError) as e:

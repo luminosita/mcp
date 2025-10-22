@@ -1,7 +1,7 @@
 ## Caching Staretegy
 
 **Issues:**
-- PromptRegistry uses PromptCache, in-memory cache implementation. Other resources (templates, patterns) use Redis-based cache service. There is no reason to use different caches for files loaded from the disk. 
+- PromptRegistry uses PromptCache, in-memory cache implementation. Other resources (templates, patterns) use Redis-based cache service. There is no reason to use different caches for files loaded from the disk.
 
 **Solution:**
 All files should use the same Redis-based cache service, and have the same logic for checking cache, loading from the disk, instead of having separate logic doing the same thing for each resource type separately. Unify logic into one class dealing with scans for files, loading to cache, and the rest of cache operations. Do not delete in-memory cache implementation, but merge it into cache service. Use it as a fallback in case Redis is not present or not configured.
@@ -22,7 +22,7 @@ Prompts, templates, patterns and artifacts are essentially files on the disk and
 
 **Issues**
 
-LocustFile is load testing script and it is located in the root of project. Does not seems as a good location for testing related file. 
+LocustFile is load testing script and it is located in the root of project. Does not seems as a good location for testing related file.
 
 **Solution**
 

@@ -71,13 +71,14 @@ def temp_templates_dir(tmp_path: Path):
     templates_dir = tmp_path / "templates"
     templates_dir.mkdir(parents=True)
 
-    # Create test template files for all 10 artifact types
+    # Create test template files for all 11 artifact types
     templates = {
         "product-vision-template.xml": "<?xml version='1.0'?><template><name>Vision</name></template>",
         "initiative-template.xml": "<?xml version='1.0'?><template><name>Initiative</name></template>",
         "epic-template.xml": "<?xml version='1.0'?><template><name>Epic</name></template>",
         "prd-template.xml": "<?xml version='1.0'?><template><name>PRD</name></template>",
         "hls-template.xml": "<?xml version='1.0'?><template><name>HLS</name></template>",
+        "funcspec-template.xml": "<?xml version='1.0'?><template><name>FuncSpec</name></template>",
         "backlog-story-template.xml": "<?xml version='1.0'?><template><name>Story</name></template>",
         "spike-template.xml": "<?xml version='1.0'?><template><name>Spike</name></template>",
         "adr-template.xml": "<?xml version='1.0'?><template><name>ADR</name></template>",
@@ -151,7 +152,7 @@ class TestPatternResourceEndpoint:
         response = client.get("/mcp/resources/patterns/nonexistent?language=python")
 
         assert response.status_code == 404
-        assert "Resource not found" in response.json()["detail"]
+        assert "Resource not found" in response.json()["message"]
 
     def test_missing_language_directory_returns_404(self, client: TestClient, temp_patterns_dir):
         """Test that missing language directory returns 404."""
@@ -184,7 +185,7 @@ class TestSDLCCoreResourceEndpoint:
         response = client.get("/mcp/resources/sdlc/core")
 
         assert response.status_code == 404
-        assert "Resource not found" in response.json()["detail"]
+        assert "Resource not found" in response.json()["message"]
 
         # Restore settings
         settings.sdlc_core_file_path = original_sdlc_path
@@ -202,7 +203,7 @@ class TestPathTraversalSecurity:
         paths before reaching our validation code.
 
         This is GOOD security - attacks are blocked at the HTTP server level.
-        All attack vectors should return either 404 (route not found) or 400 (validation).
+        All attack vectors should return either 404 (route not found), 400 (validation), or 422 (Pydantic validation).
         """
         attack_vectors = [
             "../etc/passwd",
@@ -215,7 +216,7 @@ class TestPathTraversalSecurity:
             response = client.get(f"/mcp/resources/patterns/{attack}?language=python")
             # Path traversal attempts are blocked at HTTP server level (normalized away)
             # or by validation - both return non-2xx status codes
-            assert response.status_code in [400, 404], f"Failed to block: {attack}"
+            assert response.status_code in [400, 404, 422], f"Failed to block: {attack}"
 
     def test_reject_absolute_path(self, client: TestClient, temp_patterns_dir):
         """
@@ -226,8 +227,8 @@ class TestPathTraversalSecurity:
         """
         response = client.get("/mcp/resources/patterns//etc/passwd?language=python")
 
-        # Should return 404 (route not found after normalization) or 400 (validation)
-        assert response.status_code in [400, 404]
+        # Should return 404 (route not found after normalization), 400 (validation), or 422 (Pydantic validation)
+        assert response.status_code in [400, 404, 422]
 
     def test_reject_invalid_characters(self, client: TestClient, temp_patterns_dir):
         """Test that invalid characters are rejected."""
@@ -240,7 +241,8 @@ class TestPathTraversalSecurity:
 
         for invalid_name in invalid_names:
             response = client.get(f"/mcp/resources/patterns/{invalid_name}?language=python")
-            assert response.status_code == 400, f"Failed to block: {invalid_name}"
+            # Pydantic validation returns 422, custom validation may return 400
+            assert response.status_code in [400, 422], f"Failed to block: {invalid_name}"
 
     def test_file_access_restricted_to_base_directory(self, client: TestClient, tmp_path):
         """Test that file access is restricted to configured base directory."""
@@ -279,8 +281,8 @@ class TestErrorHandling:
         python_dir = tmp_path / "python"
         python_dir.mkdir(parents=True)
 
-        # Create file with no read permissions
-        test_file = python_dir / "CLAUDE-core.md"
+        # Use unique resource name to avoid cache hits from other tests
+        test_file = python_dir / "CLAUDE-permission-test-unique.md"
         test_file.write_text("Test content")
         test_file.chmod(0o000)  # Remove all permissions
 
@@ -289,7 +291,7 @@ class TestErrorHandling:
         settings.patterns_base_dir = str(tmp_path)
 
         try:
-            response = client.get("/mcp/resources/patterns/core?language=python")
+            response = client.get("/mcp/resources/patterns/permission-test-unique?language=python")
 
             # Should return 403 Forbidden or 500 Internal Server Error
             assert response.status_code in [403, 500]
@@ -347,7 +349,7 @@ class TestTemplateResourceEndpoints:
     """Test /mcp/resources/templates endpoints (US-031)."""
 
     def test_list_all_templates(self, client: TestClient, temp_templates_dir):
-        """Test template enumeration endpoint returns all 10 templates."""
+        """Test template enumeration endpoint returns all 11 templates."""
         response = client.get("/mcp/resources/templates")
 
         assert response.status_code == 200
@@ -355,7 +357,7 @@ class TestTemplateResourceEndpoints:
 
         assert "templates" in data
         templates = data["templates"]
-        assert len(templates) == 10
+        assert len(templates) == 11
 
         # Verify all template names are present
         template_names = {t["name"] for t in templates}
@@ -365,6 +367,7 @@ class TestTemplateResourceEndpoints:
             "epic",
             "prd",
             "hls",
+            "funcspec",
             "story",
             "spike",
             "adr",
@@ -432,7 +435,7 @@ class TestTemplateResourceEndpoints:
         response = client.get("/mcp/resources/templates/nonexistent")
 
         assert response.status_code == 404
-        assert "Resource not found" in response.json()["detail"]
+        assert "Resource not found" in response.json()["message"]
 
     def test_path_traversal_protection(self, client: TestClient, temp_templates_dir):
         """Test that path traversal attempts are blocked."""
@@ -458,7 +461,7 @@ class TestTemplateResourceEndpoints:
 
         # Should return 404 because "custom" is not in TEMPLATE_FILE_MAP
         assert response.status_code == 404
-        assert "Resource not found" in response.json()["detail"]
+        assert "Resource not found" in response.json()["message"]
 
     def test_template_response_format(self, client: TestClient, temp_templates_dir):
         """Test that template responses include all required fields."""

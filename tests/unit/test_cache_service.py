@@ -88,6 +88,7 @@ class TestGetOrFetch:
         cache = ResourceCacheService()
         mock_redis = AsyncMock()
         cache._redis = mock_redis
+        cache._use_redis = True  # Enable Redis backend
 
         # Mock cache hit - return cached data
         cached_data = {
@@ -118,6 +119,7 @@ class TestGetOrFetch:
         cache = ResourceCacheService(ttl_seconds=300)
         mock_redis = AsyncMock()
         cache._redis = mock_redis
+        cache._use_redis = True  # Enable Redis backend
 
         # Mock cache miss - return None
         mock_redis.get.return_value = None
@@ -210,6 +212,7 @@ class TestCacheInvalidation:
         cache = ResourceCacheService()
         mock_redis = AsyncMock()
         cache._redis = mock_redis
+        cache._use_redis = True  # Enable Redis backend
 
         # Mock keys() to return matching cache keys
         mock_redis.keys.return_value = [
@@ -237,6 +240,7 @@ class TestCacheInvalidation:
         cache = ResourceCacheService()
         mock_redis = AsyncMock()
         cache._redis = mock_redis
+        cache._use_redis = True  # Enable Redis backend
 
         # Mock keys() to return empty list
         mock_redis.keys.return_value = []
@@ -253,6 +257,7 @@ class TestCacheInvalidation:
         cache = ResourceCacheService()
         mock_redis = AsyncMock()
         cache._redis = mock_redis
+        cache._use_redis = True  # Enable Redis backend
 
         # Mock Redis error
         mock_redis.keys.side_effect = RedisConnectionError("Redis unavailable")
@@ -270,6 +275,7 @@ class TestCacheSize:
         cache = ResourceCacheService()
         mock_redis = AsyncMock()
         cache._redis = mock_redis
+        cache._use_redis = True  # Enable Redis backend
 
         # Mock dbsize() to return cache size
         mock_redis.dbsize.return_value = 42
@@ -285,6 +291,7 @@ class TestCacheSize:
         cache = ResourceCacheService()
         mock_redis = AsyncMock()
         cache._redis = mock_redis
+        cache._use_redis = True  # Enable Redis backend
 
         # Mock Redis error
         mock_redis.dbsize.side_effect = RedisConnectionError("Redis unavailable")

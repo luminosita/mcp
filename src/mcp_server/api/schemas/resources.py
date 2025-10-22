@@ -7,21 +7,69 @@ Includes validation for resource names to prevent path traversal attacks.
 
 from pydantic import BaseModel, Field, field_validator
 
-# Template name mapping (US-031)
-# Maps simplified URI names to template filenames
-# Example: "prd" -> "prd-template.xml"
-TEMPLATE_FILE_MAP = {
-    "vision": "product-vision-template.xml",
-    "initiative": "initiative-template.xml",
-    "epic": "epic-template.xml",
-    "prd": "prd-template.xml",
-    "hls": "hls-template.xml",
-    "story": "backlog-story-template.xml",
-    "spike": "spike-template.xml",
-    "adr": "adr-template.xml",
-    "spec": "tech-spec-template.xml",
-    "task": "implementation-task-template.xml",
+# Artifact file name mapping (US-031, unified caching strategy)
+# Maps simplified artifact names to full filenames for templates and generators
+# Example: "prd" -> {"template": "prd-template.xml", "generator": "prd-generator.xml"}
+ARTIFACT_FILE_MAP = {
+    "vision": {
+        "template": "product-vision-template.xml",
+        "generator": "product-vision-generator.xml",
+        "full_name": "product-vision",
+    },
+    "initiative": {
+        "template": "initiative-template.xml",
+        "generator": "initiative-generator.xml",
+        "full_name": "initiative",
+    },
+    "epic": {
+        "template": "epic-template.xml",
+        "generator": "epic-generator.xml",
+        "full_name": "epic",
+    },
+    "prd": {
+        "template": "prd-template.xml",
+        "generator": "prd-generator.xml",
+        "full_name": "prd",
+    },
+    "hls": {
+        "template": "hls-template.xml",
+        "generator": "high-level-user-story-generator.xml",
+        "full_name": "high-level-user-story",
+    },
+    "funcspec": {
+        "template": "funcspec-template.xml",
+        "generator": "funcspec-generator.xml",
+        "full_name": "funcspec",
+    },
+    "story": {
+        "template": "backlog-story-template.xml",
+        "generator": "backlog-story-generator.xml",
+        "full_name": "backlog-story",
+    },
+    "spike": {
+        "template": "spike-template.xml",
+        "generator": "spike-generator.xml",
+        "full_name": "spike",
+    },
+    "adr": {
+        "template": "adr-template.xml",
+        "generator": "adr-generator.xml",
+        "full_name": "adr",
+    },
+    "spec": {
+        "template": "tech-spec-template.xml",
+        "generator": "tech-spec-generator.xml",
+        "full_name": "tech-spec",
+    },
+    "task": {
+        "template": "implementation-task-template.xml",
+        "generator": "implementation-task-generator.xml",
+        "full_name": "implementation-task",
+    },
 }
+
+# Backward compatibility: Keep TEMPLATE_FILE_MAP for existing code
+TEMPLATE_FILE_MAP = {key: val["template"] for key, val in ARTIFACT_FILE_MAP.items()}
 
 
 class ResourceResponse(BaseModel):

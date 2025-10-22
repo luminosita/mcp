@@ -3,15 +3,16 @@ Prompt registry for MCP Server.
 
 Registers generator prompts with FastMCP using async file loading and caching.
 Implements TASK-008 and TASK-009: Prompt registration with security validation.
+Uses unified caching service (Redis with in-memory fallback).
 """
 
 from pathlib import Path
 
-import aiofiles  # type: ignore[import-untyped]
 import structlog
 
-from mcp_server.prompts.cache import PromptCache
 from mcp_server.prompts.scanner import GeneratorScanner
+from mcp_server.services.cache import ResourceCacheService
+from mcp_server.utils import FileLoader
 
 logger = structlog.get_logger(__name__)
 
@@ -20,26 +21,28 @@ class PromptRegistry:
     """
     Registry for MCP generator prompts.
 
-    Combines generator scanning, async file loading, and caching to provide
+    Combines generator scanning, async file loading, and unified caching to provide
     efficient prompt content retrieval for MCP clients.
 
     Features:
     - Async file I/O with aiofiles (non-blocking)
-    - In-memory caching with 5-minute TTL
+    - Unified caching (Redis with in-memory fallback)
     - Security validation (path traversal prevention)
     - Structured logging for observability
     """
 
-    def __init__(self, prompts_dir: Path, cache: PromptCache | None = None) -> None:
+    def __init__(self, prompts_dir: Path, cache: ResourceCacheService | None = None) -> None:
         """
         Initialize prompt registry.
 
         Args:
             prompts_dir: Path to prompts directory containing generator XML files
-            cache: Optional PromptCache instance (creates default if not provided)
+            cache: Optional ResourceCacheService instance (uses global instance if not provided)
         """
+        from mcp_server.services import cache_service
+
         self.scanner = GeneratorScanner(prompts_dir)
-        self.cache = cache or PromptCache(ttl_seconds=300)
+        self.cache = cache or cache_service
         self.prompts_dir = prompts_dir
         logger.info(
             "prompt_registry_initialized",
@@ -51,11 +54,8 @@ class PromptRegistry:
         """
         Load generator prompt content by artifact name.
 
-        Implements cache-aside pattern:
-        1. Check cache for existing entry
-        2. If cache miss, load from disk asynchronously
-        3. Store in cache for future requests
-        4. Return content
+        Uses unified caching service (Redis with in-memory fallback).
+        Implements cache-aside pattern via ResourceCacheService.
 
         Args:
             artifact_name: Artifact name (e.g., "epic", "backlog-story")
@@ -69,7 +69,7 @@ class PromptRegistry:
             OSError: If file read fails
 
         Performance:
-            - Cache hit: <10ms (in-memory read)
+            - Cache hit: <10ms (Redis or in-memory)
             - Cache miss: <100ms (disk I/O + cache update)
         """
         # Security validation
@@ -82,17 +82,7 @@ class PromptRegistry:
             )
             raise ValueError(msg)
 
-        # Check cache first (cache-aside pattern)
-        cached_content = self.cache.get(artifact_name)
-        if cached_content is not None:
-            logger.debug(
-                "prompt_loaded_from_cache",
-                artifact_name=artifact_name,
-                content_length=len(cached_content),
-            )
-            return cached_content
-
-        # Cache miss - load from disk
+        # Get file path for artifact
         file_path = self.scanner.get_generator_path(artifact_name)
 
         if not file_path.exists():
@@ -104,30 +94,44 @@ class PromptRegistry:
             )
             raise FileNotFoundError(msg)
 
-        # Async file I/O (non-blocking)
-        try:
-            async with aiofiles.open(file_path, encoding="utf-8") as f:
-                content: str = await f.read()
-        except OSError as e:
-            logger.error(
-                "generator_file_read_error",
-                artifact_name=artifact_name,
-                file_path=str(file_path),
-                error=str(e),
-            )
-            raise
-
-        # Store in cache
-        self.cache.set(artifact_name, content)
-
-        logger.info(
-            "prompt_loaded_from_disk",
-            artifact_name=artifact_name,
+        # Use cache-aside pattern via ResourceCacheService
+        cache_key = f"prompt:{artifact_name}"
+        content = await self.cache.get_or_fetch(
+            cache_key=cache_key,
+            fetch_func=self._load_file_from_disk,
             file_path=str(file_path),
-            content_length=len(content),
+            resource_type="prompt",
         )
 
         return content
+
+    async def _load_file_from_disk(self, file_path: str) -> str:
+        """
+        Load file content from disk (used by cache on miss).
+
+        Args:
+            file_path: Absolute path to file
+
+        Returns:
+            str: File content
+
+        Raises:
+            FileNotFoundError: If file does not exist
+            PermissionError: If file cannot be read due to permissions
+            OSError: If file read fails
+        """
+        try:
+            return await FileLoader.load_file(
+                file_path=file_path,
+                validate_base_dir=False,  # Path already validated by scanner
+            )
+        except (FileNotFoundError, PermissionError, OSError) as e:
+            logger.error(
+                "generator_file_read_error",
+                file_path=file_path,
+                error=str(e),
+            )
+            raise
 
     def list_available_prompts(self) -> list[str]:
         """
@@ -152,11 +156,15 @@ class PromptRegistry:
 
         return artifact_names
 
-    def get_cache_stats(self) -> dict[str, int | float]:
+    async def get_cache_stats(self) -> dict[str, int | float]:
         """
         Get cache statistics for observability.
 
         Returns:
-            Dictionary with cache metrics (size, hits, misses, hit_rate)
+            Dictionary with cache metrics (size, ttl_seconds)
         """
-        return self.cache.get_stats()
+        size = await self.cache.get_cache_size()
+        return {
+            "size": size,
+            "ttl_seconds": self.cache.ttl_seconds,
+        }

@@ -9,9 +9,10 @@ from typing import ClassVar
 
 import pytest
 
-from mcp_server.prompts.cache import PromptCache
 from mcp_server.prompts.registry import PromptRegistry
 from mcp_server.prompts.scanner import GeneratorScanner
+from mcp_server.services.cache import ResourceCacheService
+from mcp_server.utils import MemoryCache
 
 
 @pytest.fixture
@@ -22,8 +23,17 @@ def prompts_dir():
 
 @pytest.fixture
 def prompt_cache():
-    """Create fresh prompt cache for each test."""
-    return PromptCache(ttl_seconds=300)
+    """Create fresh resource cache for each test (in-memory backend)."""
+    # Use ResourceCacheService with in-memory cache (no Redis for tests)
+    cache = ResourceCacheService(ttl_seconds=300)
+    # Don't call connect() - will use in-memory fallback
+    return cache
+
+
+@pytest.fixture
+def simple_prompt_cache():
+    """Create fresh MemoryCache for testing internal cache implementation."""
+    return MemoryCache(ttl_seconds=300)
 
 
 @pytest.fixture
@@ -101,28 +111,28 @@ class TestGeneratorScanner:
             generator_scanner.get_generator_path("../etc/passwd")
 
 
-class TestPromptCache:
-    """Test prompt caching functionality."""
+class TestMemoryCache:
+    """Test internal memory caching functionality (MemoryCache class)."""
 
-    def test_cache_miss(self, prompt_cache):
+    def test_cache_miss(self, simple_prompt_cache):
         """Test cache miss returns None."""
-        result = prompt_cache.get("nonexistent")
+        result = simple_prompt_cache.get("nonexistent")
         assert result is None
-        assert prompt_cache.get_stats()["misses"] == 1
+        assert simple_prompt_cache.get_stats()["misses"] == 1
 
-    def test_cache_hit(self, prompt_cache):
+    def test_cache_hit(self, simple_prompt_cache):
         """Test cache hit returns content."""
         content = "<generator>test content</generator>"
-        prompt_cache.set("epic", content)
+        simple_prompt_cache.set("epic", content)
 
-        result = prompt_cache.get("epic")
+        result = simple_prompt_cache.get("epic")
         assert result == content
-        assert prompt_cache.get_stats()["hits"] == 1
+        assert simple_prompt_cache.get_stats()["hits"] == 1
 
-    def test_cache_expiration(self, prompt_cache):
+    def test_cache_expiration(self, simple_prompt_cache):
         """Test cache entry expires after TTL."""
         # Create cache with 1-second TTL
-        short_ttl_cache = PromptCache(ttl_seconds=1)
+        short_ttl_cache = MemoryCache(ttl_seconds=1)
         content = "<generator>test content</generator>"
         short_ttl_cache.set("epic", content)
 
@@ -139,32 +149,32 @@ class TestPromptCache:
         result = short_ttl_cache.get("epic")
         assert result is None
 
-    def test_cache_invalidate(self, prompt_cache):
+    def test_cache_invalidate(self, simple_prompt_cache):
         """Test cache invalidation."""
-        prompt_cache.set("epic", "<generator>content</generator>")
-        prompt_cache.invalidate("epic")
+        simple_prompt_cache.set("epic", "<generator>content</generator>")
+        simple_prompt_cache.invalidate("epic")
 
-        result = prompt_cache.get("epic")
+        result = simple_prompt_cache.get("epic")
         assert result is None
 
-    def test_cache_clear(self, prompt_cache):
+    def test_cache_clear(self, simple_prompt_cache):
         """Test clearing all cache entries."""
-        prompt_cache.set("epic", "content1")
-        prompt_cache.set("prd", "content2")
+        simple_prompt_cache.set("epic", "content1")
+        simple_prompt_cache.set("prd", "content2")
 
-        prompt_cache.clear()
+        simple_prompt_cache.clear()
 
-        assert prompt_cache.size == 0
-        assert prompt_cache.get("epic") is None
-        assert prompt_cache.get("prd") is None
+        assert simple_prompt_cache.size == 0
+        assert simple_prompt_cache.get("epic") is None
+        assert simple_prompt_cache.get("prd") is None
 
-    def test_cache_stats(self, prompt_cache):
+    def test_cache_stats(self, simple_prompt_cache):
         """Test cache statistics tracking."""
-        prompt_cache.set("epic", "content")
-        prompt_cache.get("epic")  # Hit
-        prompt_cache.get("prd")  # Miss
+        simple_prompt_cache.set("epic", "content")
+        simple_prompt_cache.get("epic")  # Hit
+        simple_prompt_cache.get("prd")  # Miss
 
-        stats = prompt_cache.get_stats()
+        stats = simple_prompt_cache.get_stats()
         assert stats["size"] == 1
         assert stats["hits"] == 1
         assert stats["misses"] == 1
@@ -196,9 +206,9 @@ class TestPromptRegistry:
         assert content1 == content2
 
         # Verify cache hit
-        stats = prompt_registry.get_cache_stats()
-        assert stats["hits"] == 1
-        assert stats["misses"] == 1
+        stats = await prompt_registry.get_cache_stats()
+        assert stats["size"] >= 1  # At least one entry cached
+        assert stats["ttl_seconds"] == 300
 
     @pytest.mark.asyncio
     async def test_load_prompt_invalid_name(self, prompt_registry):

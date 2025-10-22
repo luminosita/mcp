@@ -92,6 +92,10 @@ class Settings(BaseSettings):
         default="prompts/templates",
         description="Directory containing artifact template files (US-031)",
     )
+    prompts_dir: str = Field(
+        default="prompts",
+        description="Base directory for generator prompt files (US-035)",
+    )
 
     # Cache configuration (US-032)
     redis_url: str = Field(
