@@ -66,3 +66,5 @@ coverage.xml
 
 code-review.csv
 .scannerwork
+
+.mcp.json
