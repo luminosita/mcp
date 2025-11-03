@@ -5978,7 +5978,1093 @@ func (s *errorAwareSampler) Description() string {
 - Budget for commercial observability solution
 - Already using cloud platform (AWS X-Ray for AWS deployments)
 
-### 10.5 References
+### 10.5 Integrating slog with OpenTelemetry Trace Context
+
+Correlate structured logs with distributed traces by injecting trace and span IDs into log records automatically[^42][^43]. This enables filtering logs by trace ID to see all logs for a request across services.
+
+**Core Benefits:**
+- **Log-Trace Correlation:** Click trace ID in logs → jump to full distributed trace in Jaeger/Zipkin
+- **Request Context:** All logs for a request include same trace ID (cross-service correlation)
+- **Zero Manual Effort:** Automatic trace/span ID injection via context propagation
+- **Structured Format:** JSON logs with `trace_id` and `span_id` fields for querying
+
+#### slog Handler with OpenTelemetry Context
+
+```go
+// File: internal/logging/otel_handler.go
+package logging
+
+import (
+	"context"
+	"log/slog"
+
+	"go.opentelemetry.io/otel/trace"
+)
+
+// OTelHandler wraps slog.Handler to inject OpenTelemetry trace context.
+type OTelHandler struct {
+	handler slog.Handler
+}
+
+// NewOTelHandler creates a handler that injects trace/span IDs into logs.
+func NewOTelHandler(handler slog.Handler) *OTelHandler {
+	return &OTelHandler{handler: handler}
+}
+
+// Enabled reports whether the handler handles records at the given level.
+func (h *OTelHandler) Enabled(ctx context.Context, level slog.Level) bool {
+	return h.handler.Enabled(ctx, level)
+}
+
+// Handle adds trace_id and span_id to log record if context has active span.
+func (h *OTelHandler) Handle(ctx context.Context, record slog.Record) error {
+	// Extract span from context
+	span := trace.SpanFromContext(ctx)
+	if span.IsRecording() {
+		spanCtx := span.SpanContext()
+
+		// Add trace_id and span_id attributes to log record
+		record.AddAttrs(
+			slog.String("trace_id", spanCtx.TraceID().String()),
+			slog.String("span_id", spanCtx.SpanID().String()),
+		)
+
+		// Add trace flags if sampled
+		if spanCtx.IsSampled() {
+			record.AddAttrs(slog.Bool("trace_sampled", true))
+		}
+	}
+
+	return h.handler.Handle(ctx, record)
+}
+
+// WithAttrs returns a new handler with additional attributes.
+func (h *OTelHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+	return &OTelHandler{handler: h.handler.WithAttrs(attrs)}
+}
+
+// WithGroup returns a new handler with the given group name.
+func (h *OTelHandler) WithGroup(name string) slog.Handler {
+	return &OTelHandler{handler: h.handler.WithGroup(name)}
+}
+```
+
+**Initialize logger with OTel context in main.go:**
+
+```go
+// File: cmd/server/main.go (initialization section)
+package main
+
+import (
+	"log/slog"
+	"os"
+
+	"github.com/example/project/internal/logging"
+)
+
+func main() {
+	// Create base JSON handler
+	jsonHandler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+		AddSource: true,
+	})
+
+	// Wrap with OTel context handler
+	otelHandler := logging.NewOTelHandler(jsonHandler)
+
+	// Set global logger
+	logger := slog.New(otelHandler)
+	slog.SetDefault(logger)
+
+	// Initialize telemetry (from section 10.2)
+	// ... telemetry initialization code ...
+
+	// Now all logs automatically include trace_id/span_id when context has active span
+	ctx := context.Background()
+	slog.InfoContext(ctx, "server starting", "port", 8080)
+}
+```
+
+**Usage in HTTP handlers with automatic trace context:**
+
+```go
+// File: internal/http/handler/user_handler.go
+package handler
+
+import (
+	"context"
+	"log/slog"
+	"net/http"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+)
+
+type UserHandler struct {
+	service UserService
+}
+
+func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context() // Context has trace span from TracingMiddleware
+
+	userID := r.PathValue("id")
+
+	// Log with context - automatically includes trace_id and span_id
+	slog.InfoContext(ctx, "fetching user",
+		"user_id", userID,
+		"method", r.Method,
+		"path", r.URL.Path,
+	)
+
+	user, err := h.service.GetUserByID(ctx, userID)
+	if err != nil {
+		// Error log automatically includes trace_id for correlation
+		slog.ErrorContext(ctx, "failed to fetch user",
+			"user_id", userID,
+			"error", err,
+		)
+		http.Error(w, "user not found", http.StatusNotFound)
+		return
+	}
+
+	// Success log with trace_id
+	slog.InfoContext(ctx, "user fetched successfully",
+		"user_id", userID,
+		"username", user.Username,
+	)
+
+	// ... encode response ...
+}
+```
+
+**Example log output with trace correlation:**
+
+```json
+{
+  "time": "2025-11-03T10:23:45.123Z",
+  "level": "INFO",
+  "msg": "fetching user",
+  "user_id": "user_12345",
+  "method": "GET",
+  "path": "/api/users/user_12345",
+  "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+  "span_id": "00f067aa0ba902b7",
+  "trace_sampled": true,
+  "source": "internal/http/handler/user_handler.go:23"
+}
+```
+
+**Query logs by trace ID in production:**
+
+```bash
+# Filter logs by trace ID to see all logs for a request
+$ kubectl logs -l app=user-service | jq 'select(.trace_id == "4bf92f3577b34da6a3ce929d0e0e4736")'
+
+# Output shows all logs for this trace across services
+{"time": "...", "msg": "fetching user", "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736", ...}
+{"time": "...", "msg": "database query started", "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736", ...}
+{"time": "...", "msg": "cache lookup", "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736", ...}
+{"time": "...", "msg": "user fetched successfully", "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736", ...}
+```
+
+### 10.6 OTLP Exporters Configuration (gRPC and HTTP)
+
+OpenTelemetry Protocol (OTLP) is the recommended exporter format for sending traces, metrics, and logs to observability backends[^44][^45]. OTLP supports both gRPC (high performance) and HTTP (firewall-friendly) transports.
+
+**Core Benefits:**
+- **Vendor-Neutral:** OTLP is standard protocol supported by Jaeger, Prometheus, Datadog, Honeycomb, etc.
+- **Efficient:** gRPC provides high-throughput binary encoding
+- **Firewall-Friendly:** HTTP/1.1 fallback for restrictive networks
+- **Single Endpoint:** Export traces AND metrics to same collector endpoint
+- **Production-Ready:** Used in production by CNCF projects
+
+#### OTLP gRPC Exporter (Recommended for Performance)
+
+```go
+// File: internal/telemetry/otlp_grpc.go
+package telemetry
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/sdk/resource"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.20.0"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+)
+
+// OTLPGRPCConfig holds OTLP gRPC exporter configuration.
+type OTLPGRPCConfig struct {
+	Endpoint       string  // OTLP collector endpoint (e.g., "localhost:4317")
+	ServiceName    string  // Service name for traces
+	ServiceVersion string  // Service version
+	Environment    string  // Environment: dev, staging, prod
+	SamplingRate   float64 // Trace sampling rate (0.0-1.0)
+	Insecure       bool    // Use insecure connection (dev only)
+}
+
+// InitOTLPGRPC initializes OpenTelemetry with OTLP gRPC exporter.
+func InitOTLPGRPC(ctx context.Context, cfg OTLPGRPCConfig) (*Telemetry, error) {
+	// Create resource with service metadata
+	res, err := resource.New(ctx,
+		resource.WithAttributes(
+			semconv.ServiceName(cfg.ServiceName),
+			semconv.ServiceVersion(cfg.ServiceVersion),
+			semconv.DeploymentEnvironment(cfg.Environment),
+		),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create resource: %w", err)
+	}
+
+	// Configure gRPC connection options
+	var grpcOpts []grpc.DialOption
+	if cfg.Insecure {
+		grpcOpts = append(grpcOpts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	}
+
+	// Create OTLP gRPC exporter
+	traceClient := otlptracegrpc.NewClient(
+		otlptracegrpc.WithEndpoint(cfg.Endpoint),
+		otlptracegrpc.WithDialOption(grpcOpts...),
+		otlptracegrpc.WithTimeout(5*time.Second),
+		otlptracegrpc.WithRetry(otlptracegrpc.RetryConfig{
+			Enabled:         true,
+			InitialInterval: 1 * time.Second,
+			MaxInterval:     10 * time.Second,
+			MaxElapsedTime:  30 * time.Second,
+		}),
+	)
+
+	traceExporter, err := otlptrace.New(ctx, traceClient)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create OTLP gRPC exporter: %w", err)
+	}
+
+	// Create trace provider with batch span processor
+	tracerProvider := sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(traceExporter,
+			sdktrace.WithBatchTimeout(5*time.Second),
+			sdktrace.WithMaxExportBatchSize(512),
+		),
+		sdktrace.WithResource(res),
+		sdktrace.WithSampler(sdktrace.ParentBased(sdktrace.TraceIDRatioBased(cfg.SamplingRate))),
+	)
+
+	// Set global tracer provider
+	otel.SetTracerProvider(tracerProvider)
+
+	// Set global trace context propagator (W3C Trace Context + Baggage)
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(
+		propagation.TraceContext{},
+		propagation.Baggage{},
+	))
+
+	// Cleanup function
+	shutdown := func(ctx context.Context) error {
+		return tracerProvider.Shutdown(ctx)
+	}
+
+	return &Telemetry{
+		TracerProvider: tracerProvider,
+		Shutdown:       shutdown,
+	}, nil
+}
+```
+
+#### OTLP HTTP Exporter (Firewall-Friendly Alternative)
+
+```go
+// File: internal/telemetry/otlp_http.go
+package telemetry
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/sdk/resource"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.20.0"
+)
+
+// OTLPHTTPConfig holds OTLP HTTP exporter configuration.
+type OTLPHTTPConfig struct {
+	Endpoint       string            // OTLP collector HTTP endpoint (e.g., "http://localhost:4318")
+	ServiceName    string            // Service name for traces
+	ServiceVersion string            // Service version
+	Environment    string            // Environment: dev, staging, prod
+	SamplingRate   float64           // Trace sampling rate (0.0-1.0)
+	Headers        map[string]string // Custom HTTP headers (e.g., API keys)
+}
+
+// InitOTLPHTTP initializes OpenTelemetry with OTLP HTTP exporter.
+func InitOTLPHTTP(ctx context.Context, cfg OTLPHTTPConfig) (*Telemetry, error) {
+	// Create resource with service metadata
+	res, err := resource.New(ctx,
+		resource.WithAttributes(
+			semconv.ServiceName(cfg.ServiceName),
+			semconv.ServiceVersion(cfg.ServiceVersion),
+			semconv.DeploymentEnvironment(cfg.Environment),
+		),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create resource: %w", err)
+	}
+
+	// Configure OTLP HTTP client options
+	httpOpts := []otlptracehttp.Option{
+		otlptracehttp.WithEndpoint(cfg.Endpoint),
+		otlptracehttp.WithTimeout(10 * time.Second),
+		otlptracehttp.WithRetry(otlptracehttp.RetryConfig{
+			Enabled:         true,
+			InitialInterval: 1 * time.Second,
+			MaxInterval:     10 * time.Second,
+			MaxElapsedTime:  30 * time.Second,
+		}),
+	}
+
+	// Add custom headers if provided (e.g., API keys for SaaS backends)
+	if len(cfg.Headers) > 0 {
+		httpOpts = append(httpOpts, otlptracehttp.WithHeaders(cfg.Headers))
+	}
+
+	// Create OTLP HTTP exporter
+	traceClient := otlptracehttp.NewClient(httpOpts...)
+	traceExporter, err := otlptrace.New(ctx, traceClient)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create OTLP HTTP exporter: %w", err)
+	}
+
+	// Create trace provider
+	tracerProvider := sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(traceExporter,
+			sdktrace.WithBatchTimeout(5*time.Second),
+			sdktrace.WithMaxExportBatchSize(512),
+		),
+		sdktrace.WithResource(res),
+		sdktrace.WithSampler(sdktrace.ParentBased(sdktrace.TraceIDRatioBased(cfg.SamplingRate))),
+	)
+
+	otel.SetTracerProvider(tracerProvider)
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(
+		propagation.TraceContext{},
+		propagation.Baggage{},
+	))
+
+	shutdown := func(ctx context.Context) error {
+		return tracerProvider.Shutdown(ctx)
+	}
+
+	return &Telemetry{
+		TracerProvider: tracerProvider,
+		Shutdown:       shutdown,
+	}, nil
+}
+```
+
+**Usage with environment-based configuration:**
+
+```go
+// File: cmd/server/main.go
+package main
+
+import (
+	"context"
+	"log/slog"
+	"os"
+
+	"github.com/example/project/internal/telemetry"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Determine exporter type from environment
+	exporterType := getEnv("OTEL_EXPORTER_TYPE", "otlp-grpc")
+
+	var telem *telemetry.Telemetry
+	var err error
+
+	switch exporterType {
+	case "otlp-grpc":
+		telem, err = telemetry.InitOTLPGRPC(ctx, telemetry.OTLPGRPCConfig{
+			Endpoint:       getEnv("OTEL_EXPORTER_OTLP_ENDPOINT", "localhost:4317"),
+			ServiceName:    "user-service",
+			ServiceVersion: "1.0.0",
+			Environment:    getEnv("ENVIRONMENT", "production"),
+			SamplingRate:   0.1,
+			Insecure:       getEnv("ENVIRONMENT", "production") == "development",
+		})
+
+	case "otlp-http":
+		telem, err = telemetry.InitOTLPHTTP(ctx, telemetry.OTLPHTTPConfig{
+			Endpoint:       getEnv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318"),
+			ServiceName:    "user-service",
+			ServiceVersion: "1.0.0",
+			Environment:    getEnv("ENVIRONMENT", "production"),
+			SamplingRate:   0.1,
+			Headers: map[string]string{
+				// Example: Add API key for SaaS backends (Honeycomb, Lightstep)
+				// "x-honeycomb-team": os.Getenv("HONEYCOMB_API_KEY"),
+			},
+		})
+
+	default:
+		slog.Error("unknown OTEL_EXPORTER_TYPE", "type", exporterType)
+		os.Exit(1)
+	}
+
+	if err != nil {
+		slog.Error("failed to initialize telemetry", "error", err)
+		os.Exit(1)
+	}
+	defer telem.Shutdown(ctx)
+
+	// ... rest of application initialization ...
+}
+
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
+}
+```
+
+**Docker Compose with OpenTelemetry Collector:**
+
+```yaml
+version: '3.8'
+services:
+  # Application service
+  user-service:
+    build: .
+    environment:
+      - OTEL_EXPORTER_TYPE=otlp-grpc
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - ENVIRONMENT=production
+    depends_on:
+      - otel-collector
+
+  # OpenTelemetry Collector (receives traces from services, exports to backends)
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+      - "8889:8889"   # Prometheus metrics exporter
+      - "13133:13133" # Health check
+    depends_on:
+      - jaeger
+      - prometheus
+
+  # Jaeger (trace backend)
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686" # Jaeger UI
+
+  # Prometheus (metrics backend)
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090" # Prometheus UI
+```
+
+**OpenTelemetry Collector configuration:**
+
+```yaml
+# File: otel-collector-config.yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 10s
+    send_batch_size: 1024
+
+exporters:
+  # Export traces to Jaeger
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+
+  # Export metrics to Prometheus
+  prometheus:
+    endpoint: 0.0.0.0:8889
+
+  # Debug exporter (print to console)
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [jaeger, logging]
+
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus, logging]
+```
+
+### 10.7 Distributed Tracing with Automatic net/http Instrumentation
+
+Use `otelhttp` package to automatically instrument HTTP clients and servers with distributed tracing[^36][^46]. This enables cross-service trace propagation without manual span creation.
+
+**Core Benefits:**
+- **Zero-Code Instrumentation:** Wrap `http.Handler` or `http.RoundTripper` for automatic tracing
+- **Cross-Service Propagation:** Trace context flows across service boundaries via HTTP headers
+- **Standard Attributes:** Automatic capture of HTTP method, status code, URL, user agent
+- **Client and Server:** Instrument both incoming requests (server) and outgoing calls (client)
+
+#### Automatic Server Instrumentation with otelhttp
+
+```go
+// File: cmd/server/main.go (simplified example with otelhttp)
+package main
+
+import (
+	"context"
+	"log/slog"
+	"net/http"
+	"os"
+	"os/signal"
+	"time"
+
+	"github.com/example/project/internal/config"
+	"github.com/example/project/internal/http/handler"
+	"github.com/example/project/internal/telemetry"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Initialize telemetry (OTLP gRPC from section 10.6)
+	telem, err := telemetry.InitOTLPGRPC(ctx, telemetry.OTLPGRPCConfig{
+		Endpoint:       "localhost:4317",
+		ServiceName:    "user-service",
+		ServiceVersion: "1.0.0",
+		Environment:    "production",
+		SamplingRate:   0.1,
+		Insecure:       true,
+	})
+	if err != nil {
+		slog.Error("failed to initialize telemetry", "error", err)
+		os.Exit(1)
+	}
+	defer telem.Shutdown(ctx)
+
+	// Create HTTP router
+	mux := http.NewServeMux()
+
+	// Health endpoints (no tracing overhead)
+	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("healthy"))
+	})
+
+	// Application routes
+	userHandler := handler.NewUserHandler()
+	mux.HandleFunc("GET /api/users/{id}", userHandler.GetUser)
+	mux.HandleFunc("POST /api/users", userHandler.CreateUser)
+
+	// Wrap entire mux with otelhttp for automatic tracing
+	instrumentedHandler := otelhttp.NewHandler(mux, "user-service",
+		otelhttp.WithSpanNameFormatter(func(operation string, r *http.Request) string {
+			// Custom span name: "GET /api/users/{id}" instead of generic "HTTP GET"
+			return r.Method + " " + r.URL.Path
+		}),
+	)
+
+	// Start server
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: instrumentedHandler,
+	}
+
+	go func() {
+		slog.Info("server starting", "port", 8080)
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			slog.Error("server error", "error", err)
+		}
+	}()
+
+	// Graceful shutdown
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt)
+	<-stop
+
+	slog.Info("shutting down server...")
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	server.Shutdown(shutdownCtx)
+}
+```
+
+#### Automatic HTTP Client Instrumentation with otelhttp
+
+```go
+// File: internal/client/order_client.go
+package client
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"time"
+
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+)
+
+// OrderClient calls external order service with automatic tracing.
+type OrderClient struct {
+	baseURL    string
+	httpClient *http.Client
+}
+
+// NewOrderClient creates HTTP client with automatic OTel instrumentation.
+func NewOrderClient(baseURL string) *OrderClient {
+	// Wrap http.DefaultTransport with otelhttp for automatic trace propagation
+	instrumentedTransport := otelhttp.NewTransport(http.DefaultTransport,
+		otelhttp.WithSpanNameFormatter(func(operation string, r *http.Request) string {
+			return "HTTP " + r.Method + " " + r.URL.Path
+		}),
+	)
+
+	return &OrderClient{
+		baseURL: baseURL,
+		httpClient: &http.Client{
+			Transport: instrumentedTransport,
+			Timeout:   10 * time.Second,
+		},
+	}
+}
+
+// GetOrder fetches order by ID with automatic trace propagation to order service.
+func (c *OrderClient) GetOrder(ctx context.Context, orderID string) (*Order, error) {
+	url := fmt.Sprintf("%s/api/orders/%s", c.baseURL, orderID)
+
+	// Create HTTP request with context (context has parent span from caller)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	// otelhttp.Transport automatically:
+	// 1. Extracts trace context from ctx
+	// 2. Injects W3C Trace Context headers (traceparent, tracestate)
+	// 3. Creates child span for HTTP call
+	// 4. Records HTTP attributes (method, status_code, url)
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to call order service: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("order service returned %d", resp.StatusCode)
+	}
+
+	var order Order
+	if err := json.NewDecoder(resp.Body).Decode(&order); err != nil {
+		return nil, fmt.Errorf("failed to decode response: %w", err)
+	}
+
+	return &order, nil
+}
+
+type Order struct {
+	ID     string  `json:"id"`
+	Total  float64 `json:"total"`
+	Status string  `json:"status"`
+}
+```
+
+**Usage example showing cross-service trace propagation:**
+
+```go
+// File: internal/http/handler/checkout_handler.go
+package handler
+
+import (
+	"log/slog"
+	"net/http"
+
+	"github.com/example/project/internal/client"
+	"go.opentelemetry.io/otel"
+)
+
+type CheckoutHandler struct {
+	orderClient *client.OrderClient
+}
+
+func (h *CheckoutHandler) ProcessCheckout(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context() // Context has trace span from otelhttp.NewHandler
+
+	tracer := otel.Tracer("github.com/example/project")
+
+	// Create manual span for business logic
+	ctx, span := tracer.Start(ctx, "CheckoutHandler.ProcessCheckout")
+	defer span.End()
+
+	orderID := r.PathValue("order_id")
+
+	slog.InfoContext(ctx, "processing checkout", "order_id", orderID)
+
+	// Call order service - trace context automatically propagated
+	// The HTTP client (OrderClient) automatically:
+	// 1. Creates child span for HTTP request
+	// 2. Injects trace context into HTTP headers (traceparent header)
+	// 3. Order service extracts trace context from headers
+	// 4. All spans linked in distributed trace
+	order, err := h.orderClient.GetOrder(ctx, orderID)
+	if err != nil {
+		span.RecordError(err)
+		slog.ErrorContext(ctx, "failed to fetch order", "order_id", orderID, "error", err)
+		http.Error(w, "order not found", http.StatusNotFound)
+		return
+	}
+
+	slog.InfoContext(ctx, "order fetched", "order_id", orderID, "total", order.Total)
+
+	// ... process payment, update inventory, etc. ...
+
+	w.Write([]byte("checkout successful"))
+}
+```
+
+**Trace visualization in Jaeger:**
+
+```
+user-service: GET /api/checkout/{order_id}                    [200ms]
+  ├─ CheckoutHandler.ProcessCheckout                          [195ms]
+  │   ├─ HTTP GET /api/orders/{id}                            [50ms]
+  │   │   └─ order-service: GET /api/orders/{id}              [45ms]
+  │   │       ├─ OrderRepository.GetByID                      [30ms]
+  │   │       │   └─ database query: SELECT * FROM orders     [25ms]
+  │   │       └─ serialize response                           [10ms]
+  │   ├─ PaymentService.ProcessPayment                        [80ms]
+  │   │   └─ HTTP POST /api/payments                          [75ms]
+  │   │       └─ payment-service: POST /api/payments          [70ms]
+  │   └─ InventoryService.UpdateStock                         [40ms]
+```
+
+**Verification - Check HTTP headers for trace propagation:**
+
+```bash
+# Incoming request headers (extracted by otelhttp.NewHandler)
+GET /api/checkout/order_123 HTTP/1.1
+traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+tracestate: vendor1=value1,vendor2=value2
+
+# Outgoing request headers (injected by otelhttp.NewTransport)
+GET /api/orders/order_123 HTTP/1.1
+traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-8c3c4ed519ae4f3a-01
+# Note: Same trace ID (4bf92f3577b34da6a3ce929d0e0e4736), different span ID
+```
+
+### 10.8 Context Propagation Patterns and Common Mistakes
+
+Proper `context.Context` propagation is critical for distributed tracing in Go[^40][^41]. Lost context = broken traces.
+
+#### Pattern 1: Always Pass context.Context as First Parameter
+
+**Go convention:** First parameter of functions should be `context.Context`[^47].
+
+```go
+// ✅ GOOD: Context as first parameter (Go convention)
+func (s *Service) GetUser(ctx context.Context, userID string) (*User, error) {
+	tracer := otel.Tracer("service")
+	ctx, span := tracer.Start(ctx, "Service.GetUser")
+	defer span.End()
+
+	// Pass context to repository (preserves trace)
+	return s.repo.FindByID(ctx, userID)
+}
+
+// ❌ BAD: No context parameter (trace context lost)
+func (s *Service) GetUser(userID string) (*User, error) {
+	// Cannot create span without context
+	return s.repo.FindByID(userID)
+}
+```
+
+#### Pattern 2: Propagate Context Through Goroutines
+
+**Problem:** Goroutines don't inherit context automatically - must explicitly pass it[^40].
+
+```go
+// ❌ BAD: Spawning goroutine without context (trace context lost)
+func (s *Service) ProcessAsync(ctx context.Context, data string) {
+	go func() {
+		// NO TRACE CONTEXT HERE - context.Background() creates orphan span
+		s.repo.Save(context.Background(), data)
+	}()
+}
+
+// ✅ GOOD: Pass context to goroutine (preserves trace)
+func (s *Service) ProcessAsync(ctx context.Context, data string) {
+	go func(ctx context.Context) {
+		// Trace context preserved from parent
+		s.repo.Save(ctx, data)
+	}(ctx)
+}
+```
+
+#### Pattern 3: Use context.WithTimeout for Bounded Operations
+
+**Create child context with timeout while preserving trace context[^41].**
+
+```go
+// ✅ GOOD: Create timeout context while preserving trace
+func (s *Service) CallExternalAPI(ctx context.Context, url string) (*Response, error) {
+	tracer := otel.Tracer("service")
+	ctx, span := tracer.Start(ctx, "Service.CallExternalAPI")
+	defer span.End()
+
+	// Create child context with 5s timeout (preserves trace context from parent)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	req, _ := http.NewRequestWithContext(timeoutCtx, http.MethodGet, url, nil)
+	// Trace context propagated to external service via HTTP headers
+	return http.DefaultClient.Do(req)
+}
+
+// ❌ BAD: Using context.Background() loses trace
+func (s *Service) CallExternalAPI(ctx context.Context, url string) (*Response, error) {
+	// WRONG: context.Background() discards parent trace context
+	timeoutCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	req, _ := http.NewRequestWithContext(timeoutCtx, http.MethodGet, url, nil)
+	return http.DefaultClient.Do(req) // Orphan span - not linked to parent trace
+}
+```
+
+#### Pattern 4: Extract Context from Middleware
+
+**HTTP middleware provides context with trace span - always use `r.Context()`.**
+
+```go
+// ✅ GOOD: Use r.Context() from HTTP request (has trace span from otelhttp)
+func (h *Handler) HandleRequest(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context() // Context has trace span from otelhttp.NewHandler
+
+	// All downstream calls inherit trace context
+	user, err := h.service.GetUser(ctx, r.PathValue("id"))
+	if err != nil {
+		slog.ErrorContext(ctx, "failed to get user", "error", err)
+		return
+	}
+
+	// Log automatically includes trace_id (from OTelHandler in section 10.5)
+	slog.InfoContext(ctx, "user fetched", "username", user.Username)
+}
+
+// ❌ BAD: Using context.Background() discards trace span
+func (h *Handler) HandleRequest(w http.ResponseWriter, r *http.Request) {
+	// WRONG: Creates new context without trace span
+	ctx := context.Background()
+
+	// This call creates orphan span (not linked to HTTP request trace)
+	user, err := h.service.GetUser(ctx, r.PathValue("id"))
+	// ...
+}
+```
+
+#### Pattern 5: Detached Context for Background Tasks
+
+**When spawning background work that should NOT inherit request timeout:**
+
+```go
+// ✅ GOOD: Detach context for background work while preserving trace
+func (h *Handler) ProcessOrder(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context() // Has trace span + request timeout (e.g., 30s)
+
+	order := parseOrder(r)
+
+	// Save order synchronously (inherits request timeout)
+	if err := h.service.SaveOrder(ctx, order); err != nil {
+		http.Error(w, "failed to save order", http.StatusInternalServerError)
+		return
+	}
+
+	// Respond immediately
+	w.WriteHeader(http.StatusCreated)
+
+	// Spawn background notification job AFTER response sent
+	// Use detached context (no timeout) but PRESERVE trace context
+	go func() {
+		// Create new context with trace context but no timeout
+		detachedCtx := trace.ContextWithSpanContext(
+			context.Background(),
+			trace.SpanContextFromContext(ctx), // Preserve trace ID
+		)
+
+		// This can run for 5 minutes without hitting request timeout
+		h.notificationService.SendOrderConfirmation(detachedCtx, order.ID)
+	}()
+}
+```
+
+#### Common Mistake: Context Propagation in Database Queries
+
+**Always pass context to database queries for trace correlation.**
+
+```go
+// ❌ BAD: Using context.Background() (orphan database span)
+func (r *Repository) FindByID(userID string) (*User, error) {
+	var user User
+	// WRONG: context.Background() creates orphan span
+	err := r.db.QueryRow(context.Background(), "SELECT * FROM users WHERE id = $1", userID).Scan(&user)
+	return &user, err
+}
+
+// ✅ GOOD: Pass context from caller (trace link preserved)
+func (r *Repository) FindByID(ctx context.Context, userID string) (*User, error) {
+	tracer := otel.Tracer("repository")
+	ctx, span := tracer.Start(ctx, "Repository.FindByID")
+	defer span.End()
+
+	var user User
+	err := r.db.QueryRowContext(ctx, "SELECT * FROM users WHERE id = $1", userID).Scan(&user)
+	return &user, err
+}
+```
+
+### 10.9 Verification and Troubleshooting
+
+#### Verify Trace Export to OTLP Collector
+
+```bash
+# Check OpenTelemetry Collector logs for received traces
+$ docker logs otel-collector 2>&1 | grep -i trace
+
+# Expected output:
+# 2025-11-03T10:23:45.123Z info ResourceSpans #0
+# Resource SchemaURL: https://opentelemetry.io/schemas/1.20.0
+# Resource attributes:
+#      -> service.name: Str(user-service)
+#      -> service.version: Str(1.0.0)
+# ScopeSpans #0
+# Span #0
+#     Trace ID       : 4bf92f3577b34da6a3ce929d0e0e4736
+#     Parent ID      : 00f067aa0ba902b7
+#     ID             : 8c3c4ed519ae4f3a
+#     Name           : GET /api/users/{id}
+#     Kind           : Server
+#     Status code    : Ok
+```
+
+#### Verify Trace Context in HTTP Headers
+
+```bash
+# Use curl with verbose output to see trace headers
+$ curl -v http://localhost:8080/api/users/user_123
+
+# Expected request headers (if propagating from upstream):
+> GET /api/users/user_123 HTTP/1.1
+> traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+
+# Check response headers (some systems echo trace ID for client correlation):
+< X-Trace-Id: 4bf92f3577b34da6a3ce929d0e0e4736
+```
+
+#### Verify Logs Include Trace Context
+
+```bash
+# Filter application logs by trace_id
+$ kubectl logs -l app=user-service --tail=100 | jq 'select(.trace_id != null)'
+
+# Expected output (logs with trace context):
+{
+  "time": "2025-11-03T10:23:45.123Z",
+  "level": "INFO",
+  "msg": "fetching user",
+  "user_id": "user_123",
+  "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+  "span_id": "00f067aa0ba902b7",
+  "trace_sampled": true
+}
+```
+
+#### Debug Missing Trace Context (Common Issues)
+
+**Issue 1: Trace context lost in goroutines**
+
+```bash
+# Symptom: Orphan spans in Jaeger (no parent link)
+# Cause: Goroutine spawned without passing context
+
+# Fix: Always pass context to goroutines
+go func(ctx context.Context) {
+    // Use ctx here
+}(ctx)
+```
+
+**Issue 2: context.Background() replaces trace context**
+
+```bash
+# Symptom: Logs missing trace_id field after certain point
+# Cause: Code using context.Background() instead of parent context
+
+# Fix: Search codebase for context.Background() and replace with ctx parameter
+grep -rn "context.Background()" internal/
+```
+
+**Issue 3: HTTP client not instrumented**
+
+```bash
+# Symptom: Outgoing HTTP calls don't appear as child spans
+# Cause: Using http.DefaultClient instead of instrumented client
+
+# Fix: Wrap transport with otelhttp.NewTransport
+client := &http.Client{
+    Transport: otelhttp.NewTransport(http.DefaultTransport),
+}
+```
+
+**Issue 4: Trace sampling excludes your traces**
+
+```bash
+# Symptom: No traces appear in Jaeger
+# Cause: Sampling rate too low (e.g., 0.01 = 1%)
+
+# Fix: Increase sampling rate temporarily for debugging
+cfg.SamplingRate = 1.0 // Sample 100% of traces
+# Or use error-aware sampler (section 10.2.3) to always sample errors
+```
+
+### 10.10 References
 
 [^35]: OpenTelemetry Documentation, "Getting Started with OpenTelemetry Go," https://opentelemetry.io/docs/instrumentation/go/getting-started/, accessed 2025-11-02.
 
@@ -5993,6 +7079,18 @@ func (s *errorAwareSampler) Description() string {
 [^40]: Go Blog, "Go Concurrency Patterns: Context," https://go.dev/blog/context, accessed 2025-11-02.
 
 [^41]: Go Documentation, "context Package," https://pkg.go.dev/context, accessed 2025-11-02.
+
+[^42]: OpenTelemetry Go, "Logging with slog," https://opentelemetry.io/docs/languages/go/instrumentation/#logging, accessed 2025-11-03.
+
+[^43]: GitHub OpenTelemetry Go, "Bridge slog with OpenTelemetry," https://github.com/open-telemetry/opentelemetry-go-contrib/tree/main/bridges/otelslog, accessed 2025-11-03.
+
+[^44]: OpenTelemetry Documentation, "OTLP Exporter Configuration," https://opentelemetry.io/docs/specs/otel/protocol/exporter/, accessed 2025-11-03.
+
+[^45]: Go OpenTelemetry, "OTLP gRPC Exporter," https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc, accessed 2025-11-03.
+
+[^46]: OpenTelemetry Go Contrib, "Instrumentation Libraries," https://github.com/open-telemetry/opentelemetry-go-contrib/tree/main/instrumentation, accessed 2025-11-03.
+
+[^47]: Go Code Review Comments, "Contexts," https://go.dev/wiki/CodeReviewComments#contexts, accessed 2025-11-03.
 
 ---
 

@@ -564,6 +564,39 @@ For Telemetry and Observability (Section 10):
 - Document **health check patterns** (liveness, readiness, startup probes)
 - Show **trace context in logs** (correlation IDs, structured logging integration)
 
+### 10.6 OpenTelemetry Logging Integration with Structlog
+[Comprehensive structlog integration with OTeL]
+- Pattern 1: Structlog with OpenTelemetry Processor (trace_id/span_id injection)
+- Pattern 2: OpenTelemetry Logs API (Beta) with OTLP export
+- Pattern 3: Logging Best Practices (trace-correlated logging, operation boundaries)
+
+### 10.7 OpenTelemetry Metrics Deep Dive
+[Complete OTeL metrics implementation]
+- Pattern 1: OpenTelemetry Metrics with OTLP Export (Counter, Histogram, UpDownCounter, Observable Gauge)
+- Pattern 2: Hybrid Prometheus + OpenTelemetry Metrics (OTeL instrumentation, Prometheus storage)
+- Pattern 3: Custom Observable Metrics (system metrics, callback-based collection)
+
+### 10.8 OpenTelemetry Distributed Tracing Patterns
+[Distributed tracing with FastAPI]
+- Pattern 1: Automatic FastAPI Instrumentation (OTLP exporter, BatchSpanProcessor)
+- Pattern 2: Manual Span Creation (nested spans, multi-stage pipelines)
+- Pattern 3: Cross-Service Trace Propagation (W3C Trace Context, HTTPX auto-instrumentation)
+- Pattern 4: Span Events and Annotations (timestamped events, batch processing milestones)
+
+### 10.9 OpenTelemetry Exporter Configuration
+[Backend integration patterns]
+- Pattern 1: OTLP Exporter (Recommended) - gRPC/HTTP with Jaeger/Tempo
+- Pattern 2: Grafana Cloud Integration (Tempo + Prometheus + Loki with API keys)
+- Pattern 3: Multi-Backend Export (Console + Jaeger dev, Grafana prod)
+- Pattern 4: Prometheus Remote Write (push-based metrics to Pushgateway)
+
+### 10.10 Common OpenTelemetry Troubleshooting
+[Production debugging guide]
+- Issue 1: Traces Not Appearing in Backend (OTLP endpoint validation, diagnostic endpoints)
+- Issue 2: High Memory Usage from Metrics (cardinality debugging, label reduction)
+- Issue 3: Missing Trace Context in Logs (structlog processor configuration)
+- Issue 4: Slow Application Startup (async initialization patterns)
+
 For Audit Logging (Section 11):
 - Show **structured audit events** (Pydantic models with schema validation)
 - Demonstrate **audit middleware** (FastAPI middleware with context capture)

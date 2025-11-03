@@ -592,6 +592,36 @@ For Telemetry and Observability (Section 10):
 - Document **health indicators** (liveness, readiness, custom health checks)
 - Show **MDC propagation** (async methods, reactive streams)
 
+### 10.6 OpenTelemetry SDK Manual Instrumentation
+[Manual SDK integration alongside agent]
+- Complete OpenTelemetry dependencies (API, SDK, exporters)
+- Full SDK initialization with OTLP/Zipkin/Jaeger exporters
+- Manual span creation with proper resource management
+- Async context propagation with TaskDecorator
+- OpenTelemetry metrics (counters, histograms, gauges)
+
+### 10.7 Logback MDC Integration with OpenTelemetry
+[Trace context in logs]
+- Logback XML configuration with trace context injection
+- Spring Boot Starter auto-configuration for MDC
+- Manual MDC injection with HandlerInterceptor
+- JSON logs with trace IDs (correlation)
+- Filtering logs by trace ID in Jaeger/Grafana
+
+### 10.8 Common OpenTelemetry Mistakes and Solutions
+[Production anti-patterns]
+- Async context propagation failures (TaskDecorator fix)
+- Span memory leaks (try-finally patterns)
+- High-cardinality attribute explosion (guidelines table)
+- Span sampling configuration (environment-based)
+
+### 10.9 OpenTelemetry Verification and Troubleshooting
+[Production debugging guide]
+- OTLP export verification to Collector
+- Docker Compose setup (Collector, Jaeger, Prometheus)
+- Debug controller for trace verification
+- Common troubleshooting scenarios with solutions
+
 For Audit Logging (Section 11):
 - Show **Spring Data JPA Auditing** (@EntityListeners, @CreatedBy, @CreatedDate)
 - Demonstrate **event-driven audit** (ApplicationEventPublisher, @EventListener)

@@ -579,6 +579,43 @@ For Telemetry and Observability (Section 10):
 - Document **health check handlers** (Kubernetes liveness/readiness probes)
 - Show **goroutine-safe patterns** (context propagation, span lifecycle)
 
+### 10.5 Integrating slog with OpenTelemetry Trace Context
+[Correlated logging with trace/span IDs]
+- Custom OTelHandler wrapping slog.Handler (automatic trace_id/span_id injection)
+- Log-trace correlation workflow (filter logs by trace ID)
+- JSON log output with trace context
+- Production debugging with kubectl + jq
+
+### 10.6 OTLP Exporters Configuration (gRPC and HTTP)
+[OTLP export to collectors]
+- OTLP gRPC Exporter (recommended for performance, batch span processor tuning)
+- OTLP HTTP Exporter (firewall-friendly alternative)
+- Environment-based exporter configuration
+- Docker Compose with OpenTelemetry Collector, Jaeger, Prometheus
+
+### 10.7 Distributed Tracing with Automatic net/http Instrumentation
+[Zero-code HTTP tracing]
+- Server instrumentation with otelhttp.NewHandler (automatic span creation)
+- Client instrumentation with otelhttp.NewTransport (W3C Trace Context propagation)
+- Cross-service trace example (checkout → order service)
+- Jaeger trace visualization
+
+### 10.8 Context Propagation Patterns and Common Mistakes
+[Critical Go patterns for distributed tracing]
+- Pattern 1: Always pass context.Context as first parameter
+- Pattern 2: Propagate context through goroutines (explicit passing)
+- Pattern 3: Use context.WithTimeout while preserving trace context
+- Pattern 4: Extract context from HTTP middleware (r.Context())
+- Pattern 5: Detached context for background tasks
+- Common mistakes: context.Background() orphan spans, lost trace context
+
+### 10.9 Verification and Troubleshooting
+[Production debugging guide]
+- Verify trace export to OTLP collector (docker logs)
+- Verify trace context in HTTP headers (curl verbose, traceparent)
+- Verify logs include trace context (kubectl + jq filtering)
+- Debug common issues (goroutine context loss, sampling rate, uninstrumented clients)
+
 For Audit Logging (Section 11):
 - Show **structured audit events** (Go structs with JSON encoding, validation tags)
 - Demonstrate **audit middleware** (HTTP handler with context capture)

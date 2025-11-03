@@ -8910,6 +8910,1199 @@ curl "http://zipkin:9411/api/v2/traces?serviceName=user-service&annotationQuery=
 
 ---
 
+### 10.6 OpenTelemetry SDK Manual Instrumentation
+
+For fine-grained control over distributed tracing, metrics, and logging context, use the OpenTelemetry SDK directly. This approach provides full control over span creation, metric instrumentation, and trace context propagation[^54][^60].
+
+#### 10.6.1 OpenTelemetry Dependencies
+
+```xml
+<!-- File: pom.xml -->
+<properties>
+    <opentelemetry.version>1.32.0</opentelemetry.version>
+    <opentelemetry-instrumentation.version>1.32.0-alpha</opentelemetry-instrumentation.version>
+</properties>
+
+<dependencies>
+    <!-- OpenTelemetry API (manual instrumentation) -->
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-api</artifactId>
+        <version>${opentelemetry.version}</version>
+    </dependency>
+
+    <!-- OpenTelemetry SDK (required for agent-less setup) -->
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk</artifactId>
+        <version>${opentelemetry.version}</version>
+    </dependency>
+
+    <!-- OpenTelemetry SDK Autoconfigure (environment-based config) -->
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
+        <version>${opentelemetry.version}</version>
+    </dependency>
+
+    <!-- OTLP Exporter (export to OpenTelemetry Collector) -->
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-exporter-otlp</artifactId>
+        <version>${opentelemetry.version}</version>
+    </dependency>
+
+    <!-- Zipkin Exporter (alternative to OTLP) -->
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-exporter-zipkin</artifactId>
+        <version>${opentelemetry.version}</version>
+    </dependency>
+
+    <!-- Jaeger Exporter (alternative to OTLP) -->
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-exporter-jaeger</artifactId>
+        <version>${opentelemetry.version}</version>
+    </dependency>
+
+    <!-- OpenTelemetry Metrics SDK -->
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk-metrics</artifactId>
+        <version>${opentelemetry.version}</version>
+    </dependency>
+
+    <!-- Spring Boot integration (optional - for auto-config) -->
+    <dependency>
+        <groupId>io.opentelemetry.instrumentation</groupId>
+        <artifactId>opentelemetry-spring-boot-starter</artifactId>
+        <version>${opentelemetry-instrumentation.version}</version>
+    </dependency>
+</dependencies>
+```
+
+#### 10.6.2 OpenTelemetry SDK Initialization
+
+```java
+// File: src/main/java/com/example/config/OpenTelemetryConfiguration.java
+package com.example.config;
+
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
+import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.metrics.SdkMeterProvider;
+import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader;
+import io.opentelemetry.sdk.resources.Resource;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+import io.opentelemetry.semconv.resource.attributes.ResourceAttributes;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.time.Duration;
+
+/**
+ * OpenTelemetry SDK configuration with OTLP exporter.
+ * Initializes tracer, meter provider, and context propagation.
+ */
+@Configuration
+public class OpenTelemetryConfiguration {
+
+    @Value("${otel.service.name:user-service}")
+    private String serviceName;
+
+    @Value("${otel.exporter.otlp.endpoint:http://localhost:4317}")
+    private String otlpEndpoint;
+
+    @Value("${otel.traces.sampler.probability:0.1}")
+    private double samplingProbability;
+
+    /**
+     * OpenTelemetry SDK instance with configured tracing, metrics, and propagation.
+     */
+    @Bean
+    public OpenTelemetry openTelemetry() {
+        // Define service resource attributes (service name, version, environment)
+        Resource resource = Resource.getDefault()
+            .merge(Resource.create(Attributes.builder()
+                .put(ResourceAttributes.SERVICE_NAME, serviceName)
+                .put(ResourceAttributes.SERVICE_VERSION, "1.0.0")
+                .put(ResourceAttributes.DEPLOYMENT_ENVIRONMENT, System.getenv().getOrDefault("ENV", "local"))
+                .build()));
+
+        // Configure OTLP gRPC span exporter
+        OtlpGrpcSpanExporter spanExporter = OtlpGrpcSpanExporter.builder()
+            .setEndpoint(otlpEndpoint)
+            .setTimeout(Duration.ofSeconds(10))
+            .build();
+
+        // Configure tracer provider with batch span processor
+        SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+            .setResource(resource)
+            .addSpanProcessor(BatchSpanProcessor.builder(spanExporter)
+                .setScheduleDelay(Duration.ofSeconds(5))
+                .setMaxQueueSize(2048)
+                .setMaxExportBatchSize(512)
+                .build())
+            .setSampler(Sampler.traceIdRatioBased(samplingProbability))
+            .build();
+
+        // Configure OTLP gRPC metric exporter
+        OtlpGrpcMetricExporter metricExporter = OtlpGrpcMetricExporter.builder()
+            .setEndpoint(otlpEndpoint)
+            .setTimeout(Duration.ofSeconds(10))
+            .build();
+
+        // Configure meter provider with periodic metric reader
+        SdkMeterProvider meterProvider = SdkMeterProvider.builder()
+            .setResource(resource)
+            .registerMetricReader(PeriodicMetricReader.builder(metricExporter)
+                .setInterval(Duration.ofSeconds(60))
+                .build())
+            .build();
+
+        // Build OpenTelemetry SDK with W3C Trace Context propagation
+        OpenTelemetrySdk openTelemetry = OpenTelemetrySdk.builder()
+            .setTracerProvider(tracerProvider)
+            .setMeterProvider(meterProvider)
+            .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+            .buildAndRegisterGlobal();
+
+        // Add shutdown hook to flush traces/metrics on JVM exit
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            tracerProvider.close();
+            meterProvider.close();
+        }));
+
+        return openTelemetry;
+    }
+
+    /**
+     * Tracer bean for manual span creation.
+     */
+    @Bean
+    public Tracer tracer(OpenTelemetry openTelemetry) {
+        return openTelemetry.getTracer(serviceName, "1.0.0");
+    }
+}
+```
+
+#### 10.6.3 Manual Span Creation with OpenTelemetry API
+
+```java
+// File: src/main/java/com/example/service/PaymentService.java
+package com.example.service;
+
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.context.Scope;
+import org.springframework.stereotype.Service;
+
+/**
+ * Payment service with manual OpenTelemetry instrumentation.
+ */
+@Service
+public class PaymentService {
+
+    private final Tracer tracer;
+    private final PaymentGateway paymentGateway;
+
+    public PaymentService(Tracer tracer, PaymentGateway paymentGateway) {
+        this.tracer = tracer;
+        this.paymentGateway = paymentGateway;
+    }
+
+    /**
+     * Process payment with manual span creation.
+     */
+    public PaymentResult processPayment(PaymentRequest request) {
+        // Create span for payment processing
+        Span span = tracer.spanBuilder("payment.process")
+            .setSpanKind(io.opentelemetry.api.trace.SpanKind.INTERNAL)
+            .setAttribute("payment.amount", request.getAmount())
+            .setAttribute("payment.currency", request.getCurrency())
+            .setAttribute("payment.method", request.getPaymentMethod())
+            .setAttribute("customer.id", request.getCustomerId())
+            .startSpan();
+
+        // Make span current (for context propagation)
+        try (Scope scope = span.makeCurrent()) {
+
+            // Add event (structured log point within span)
+            span.addEvent("payment.validation.started");
+
+            // Validate payment request
+            validatePaymentRequest(request);
+
+            span.addEvent("payment.validation.completed");
+
+            // Call payment gateway (child span auto-created if instrumented)
+            PaymentResult result = paymentGateway.charge(request);
+
+            // Add result attributes to span
+            span.setAttribute("payment.transaction_id", result.getTransactionId());
+            span.setAttribute("payment.status", result.getStatus().name());
+
+            // Mark span as successful
+            span.setStatus(StatusCode.OK);
+
+            return result;
+
+        } catch (PaymentValidationException ex) {
+            // Record exception in span
+            span.recordException(ex);
+            span.setStatus(StatusCode.ERROR, "Payment validation failed");
+            span.setAttribute("error.type", ex.getClass().getSimpleName());
+            span.setAttribute("error.message", ex.getMessage());
+
+            throw ex;
+
+        } catch (Exception ex) {
+            // Record unexpected exception
+            span.recordException(ex);
+            span.setStatus(StatusCode.ERROR, "Payment processing failed");
+            span.setAttribute("error.type", ex.getClass().getSimpleName());
+
+            throw ex;
+
+        } finally {
+            // Always end span (releases resources)
+            span.end();
+        }
+    }
+
+    /**
+     * Validate payment with nested span.
+     */
+    private void validatePaymentRequest(PaymentRequest request) {
+        Span parentSpan = Span.current();
+
+        // Create child span
+        Span validationSpan = tracer.spanBuilder("payment.validate")
+            .setParent(Context.current())
+            .setAttribute("validation.type", "payment_request")
+            .startSpan();
+
+        try (Scope scope = validationSpan.makeCurrent()) {
+
+            // Validation logic
+            if (request.getAmount() <= 0) {
+                throw new PaymentValidationException("Amount must be positive");
+            }
+
+            if (request.getCustomerId() == null) {
+                throw new PaymentValidationException("Customer ID required");
+            }
+
+            validationSpan.addEvent("validation.passed");
+            validationSpan.setStatus(StatusCode.OK);
+
+        } catch (Exception ex) {
+            validationSpan.recordException(ex);
+            validationSpan.setStatus(StatusCode.ERROR);
+            throw ex;
+
+        } finally {
+            validationSpan.end();
+        }
+    }
+
+    /**
+     * Async payment processing with manual context propagation.
+     */
+    public void processPaymentAsync(PaymentRequest request) {
+        // Capture current trace context
+        Context currentContext = Context.current();
+
+        // Submit async task with context propagation
+        CompletableFuture.runAsync(() -> {
+            // Attach parent context to async thread
+            try (Scope scope = currentContext.makeCurrent()) {
+
+                // Create span in async thread (parent context preserved)
+                Span asyncSpan = tracer.spanBuilder("payment.process_async")
+                    .setParent(currentContext)
+                    .startSpan();
+
+                try (Scope asyncScope = asyncSpan.makeCurrent()) {
+                    processPayment(request);
+                    asyncSpan.setStatus(StatusCode.OK);
+                } finally {
+                    asyncSpan.end();
+                }
+            }
+        });
+    }
+}
+```
+
+#### 10.6.4 OpenTelemetry Metrics with SDK
+
+```java
+// File: src/main/java/com/example/service/OrderMetricsService.java
+package com.example.service;
+
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.metrics.LongCounter;
+import io.opentelemetry.api.metrics.LongHistogram;
+import io.opentelemetry.api.metrics.Meter;
+import io.opentelemetry.api.metrics.ObservableDoubleGauge;
+import org.springframework.stereotype.Service;
+
+import java.util.concurrent.atomic.AtomicLong;
+
+/**
+ * Order service with OpenTelemetry metrics instrumentation.
+ */
+@Service
+public class OrderMetricsService {
+
+    private final Meter meter;
+
+    // Counter: monotonically increasing value (total orders created)
+    private final LongCounter ordersCreatedCounter;
+    private final LongCounter ordersFailedCounter;
+
+    // Histogram: distribution of values (order processing duration)
+    private final LongHistogram orderProcessingDuration;
+
+    // Gauge: current snapshot value (active orders)
+    private final AtomicLong activeOrders = new AtomicLong(0);
+
+    public OrderMetricsService(OpenTelemetry openTelemetry) {
+        this.meter = openTelemetry.getMeter("user-service", "1.0.0");
+
+        // Initialize counter for orders created
+        this.ordersCreatedCounter = meter.counterBuilder("orders.created")
+            .setDescription("Total number of orders created")
+            .setUnit("orders")
+            .build();
+
+        // Initialize counter for failed orders
+        this.ordersFailedCounter = meter.counterBuilder("orders.failed")
+            .setDescription("Total number of failed order creations")
+            .setUnit("orders")
+            .build();
+
+        // Initialize histogram for order processing duration
+        this.orderProcessingDuration = meter.histogramBuilder("orders.processing.duration")
+            .setDescription("Order processing duration")
+            .setUnit("ms")
+            .ofLongs()
+            .build();
+
+        // Initialize gauge for active orders (observable - polled by SDK)
+        ObservableDoubleGauge activeOrdersGauge = meter.gaugeBuilder("orders.active")
+            .setDescription("Number of active orders")
+            .setUnit("orders")
+            .buildWithCallback(measurement ->
+                measurement.record(activeOrders.get())
+            );
+    }
+
+    /**
+     * Record order creation with metrics.
+     */
+    public void recordOrderCreated(Order order) {
+        // Increment counter with attributes
+        ordersCreatedCounter.add(1,
+            io.opentelemetry.api.common.Attributes.builder()
+                .put("order.type", order.getType())
+                .put("customer.tier", order.getCustomer().getTier())
+                .build()
+        );
+
+        // Update active orders gauge
+        activeOrders.incrementAndGet();
+    }
+
+    /**
+     * Record order processing duration.
+     */
+    public void recordOrderProcessingDuration(long durationMs, String orderType) {
+        orderProcessingDuration.record(durationMs,
+            io.opentelemetry.api.common.Attributes.builder()
+                .put("order.type", orderType)
+                .build()
+        );
+    }
+
+    /**
+     * Record order failure with attributes.
+     */
+    public void recordOrderFailed(String orderType, String failureReason) {
+        ordersFailedCounter.add(1,
+            io.opentelemetry.api.common.Attributes.builder()
+                .put("order.type", orderType)
+                .put("failure.reason", failureReason)
+                .build()
+        );
+    }
+
+    /**
+     * Record order completion (decrement active orders).
+     */
+    public void recordOrderCompleted() {
+        activeOrders.decrementAndGet();
+    }
+}
+```
+
+---
+
+### 10.7 Logback MDC Integration with OpenTelemetry
+
+Integrating OpenTelemetry trace context into Logback MDC enables correlation between logs and traces. This section demonstrates automatic trace ID/span ID injection into log messages[^61][^62].
+
+#### 10.7.1 OpenTelemetry Logback Appender
+
+```xml
+<!-- File: src/main/resources/logback-spring.xml -->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- Console appender with trace context -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- Add OpenTelemetry trace context to JSON logs -->
+            <provider class="net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider">
+                <pattern>
+                    {
+                        "timestamp": "%date{ISO8601}",
+                        "level": "%level",
+                        "thread": "%thread",
+                        "logger": "%logger{36}",
+                        "message": "%message",
+                        "trace_id": "%mdc{trace_id}",
+                        "span_id": "%mdc{span_id}",
+                        "trace_flags": "%mdc{trace_flags}",
+                        "service.name": "${SERVICE_NAME:-user-service}",
+                        "exception": "%exception{full}"
+                    }
+                </pattern>
+            </provider>
+        </encoder>
+    </appender>
+
+    <!-- File appender with trace context -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/application-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <provider class="net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider">
+                <pattern>
+                    {
+                        "timestamp": "%date{ISO8601}",
+                        "level": "%level",
+                        "logger": "%logger",
+                        "message": "%message",
+                        "trace_id": "%mdc{trace_id}",
+                        "span_id": "%mdc{span_id}",
+                        "service.name": "${SERVICE_NAME:-user-service}"
+                    }
+                </pattern>
+            </provider>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
+```
+
+#### 10.7.2 MDC Injection with Spring Boot Starter
+
+```xml
+<!-- File: pom.xml -->
+<dependencies>
+    <!-- OpenTelemetry Spring Boot Starter (auto-configures MDC) -->
+    <dependency>
+        <groupId>io.opentelemetry.instrumentation</groupId>
+        <artifactId>opentelemetry-spring-boot-starter</artifactId>
+        <version>1.32.0-alpha</version>
+    </dependency>
+
+    <!-- Logback encoder for JSON output -->
+    <dependency>
+        <groupId>net.logstash.logback</groupId>
+        <artifactId>logstash-logback-encoder</artifactId>
+        <version>7.4</version>
+    </dependency>
+</dependencies>
+```
+
+```yaml
+# File: application.yml
+otel:
+  # Service name for traces/metrics/logs
+  service:
+    name: user-service
+
+  # Enable trace context propagation to MDC
+  logs:
+    exporter: none  # Don't export logs via OTLP (use Logback appenders)
+
+  # Automatic instrumentation configuration
+  instrumentation:
+    # Enable MDC context propagation
+    logback-appender:
+      enabled: true
+      experimental-log-attributes: true
+
+  # OTLP exporter for traces and metrics
+  exporter:
+    otlp:
+      endpoint: http://otel-collector:4317
+      protocol: grpc
+```
+
+#### 10.7.3 Manual MDC Injection (without Spring Boot Starter)
+
+```java
+// File: src/main/java/com/example/config/MdcConfiguration.java
+package com.example.config;
+
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.context.Context;
+import org.slf4j.MDC;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * Interceptor to inject OpenTelemetry trace context into SLF4J MDC.
+ */
+@Component
+public class TraceContextMdcInterceptor implements HandlerInterceptor {
+
+    @Override
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) {
+        // Get current span from OpenTelemetry context
+        Span currentSpan = Span.current();
+
+        // Extract trace ID and span ID
+        String traceId = currentSpan.getSpanContext().getTraceId();
+        String spanId = currentSpan.getSpanContext().getSpanId();
+        String traceFlags = currentSpan.getSpanContext().getTraceFlags().asHex();
+
+        // Inject into MDC (available in all log statements)
+        MDC.put("trace_id", traceId);
+        MDC.put("span_id", spanId);
+        MDC.put("trace_flags", traceFlags);
+
+        return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request,
+                                HttpServletResponse response,
+                                Object handler,
+                                Exception ex) {
+        // Clear MDC to prevent memory leaks
+        MDC.remove("trace_id");
+        MDC.remove("span_id");
+        MDC.remove("trace_flags");
+    }
+}
+```
+
+```java
+// File: src/main/java/com/example/config/WebMvcConfiguration.java
+package com.example.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+/**
+ * Register MDC interceptor for all HTTP requests.
+ */
+@Configuration
+public class WebMvcConfiguration implements WebMvcConfigurer {
+
+    private final TraceContextMdcInterceptor mdcInterceptor;
+
+    public WebMvcConfiguration(TraceContextMdcInterceptor mdcInterceptor) {
+        this.mdcInterceptor = mdcInterceptor;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(mdcInterceptor);
+    }
+}
+```
+
+#### 10.7.4 Verify Trace Context in Logs
+
+```java
+// File: src/main/java/com/example/controller/UserController.java
+package com.example.controller;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * User controller with trace-aware logging.
+ */
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Long id) {
+        // Log message automatically includes trace_id/span_id from MDC
+        log.info("Fetching user with ID: {}", id);
+
+        User user = userService.findById(id);
+
+        log.info("User fetched successfully: {}", user.getEmail());
+
+        return user;
+    }
+}
+```
+
+**Example Log Output (JSON with trace context):**
+
+```json
+{
+  "timestamp": "2025-11-03T10:15:23.456Z",
+  "level": "INFO",
+  "thread": "http-nio-8080-exec-1",
+  "logger": "com.example.controller.UserController",
+  "message": "Fetching user with ID: 12345",
+  "trace_id": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+  "span_id": "1234567890abcdef",
+  "trace_flags": "01",
+  "service.name": "user-service"
+}
+```
+
+**Correlate Logs with Traces:**
+
+1. **In Jaeger UI:** Search for trace ID `a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6`
+2. **In Logs:** Filter logs by `trace_id: "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"`
+3. **Result:** All log messages from request correlated with distributed trace spans
+
+---
+
+### 10.8 Common OpenTelemetry Mistakes and Solutions
+
+#### Mistake 1: Not Propagating Context in Async Operations
+
+**Problem:** Trace context lost when using `@Async`, `CompletableFuture`, or reactive streams without explicit context propagation.
+
+**Bad Example:**
+
+```java
+@Service
+public class NotificationService {
+
+    @Async
+    public void sendNotificationAsync(Long userId) {
+        // trace_id/span_id LOST - new trace started in async thread
+        log.info("Sending notification to user: {}", userId);
+
+        // Span.current() returns invalid span (no parent trace)
+        Span currentSpan = Span.current();
+    }
+}
+```
+
+**Good Example (Async with Context Propagation):**
+
+```java
+@Service
+public class NotificationService {
+
+    private final Tracer tracer;
+
+    @Async
+    public void sendNotificationAsync(Long userId) {
+        // Capture parent context BEFORE async execution
+        Context parentContext = Context.current();
+
+        CompletableFuture.runAsync(() -> {
+            // Attach parent context in async thread
+            try (Scope scope = parentContext.makeCurrent()) {
+
+                // Create child span in async thread
+                Span asyncSpan = tracer.spanBuilder("notification.send_async")
+                    .setParent(parentContext)
+                    .setAttribute("user.id", userId)
+                    .startSpan();
+
+                try (Scope asyncScope = asyncSpan.makeCurrent()) {
+                    // Trace context now available in MDC
+                    log.info("Sending notification to user: {}", userId);
+
+                    // Business logic
+                    emailService.send(userId);
+
+                    asyncSpan.setStatus(StatusCode.OK);
+
+                } finally {
+                    asyncSpan.end();
+                }
+            }
+        });
+    }
+}
+```
+
+**Solution with TaskDecorator (Automatic Context Propagation):**
+
+```java
+@Configuration
+@EnableAsync
+public class AsyncConfiguration implements AsyncConfigurer {
+
+    @Override
+    public Executor getAsyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(10);
+        executor.setMaxPoolSize(50);
+
+        // Automatically propagate OpenTelemetry context to async threads
+        executor.setTaskDecorator(runnable ->
+            Context.current().wrap(runnable)
+        );
+
+        executor.initialize();
+        return executor;
+    }
+}
+```
+
+---
+
+#### Mistake 2: Creating Spans Without Ending Them (Memory Leak)
+
+**Problem:** Spans not ended properly cause memory leaks and incomplete traces.
+
+**Bad Example:**
+
+```java
+public void processOrder(Order order) {
+    Span span = tracer.spanBuilder("order.process").startSpan();
+
+    if (order.isValid()) {
+        // Span never ended if validation fails! Memory leak!
+        processValidOrder(order);
+    }
+
+    span.end();  // Never reached if exception thrown
+}
+```
+
+**Good Example (Always Use Try-Finally):**
+
+```java
+public void processOrder(Order order) {
+    Span span = tracer.spanBuilder("order.process").startSpan();
+
+    try (Scope scope = span.makeCurrent()) {
+        if (order.isValid()) {
+            processValidOrder(order);
+        }
+
+        span.setStatus(StatusCode.OK);
+
+    } catch (Exception ex) {
+        span.recordException(ex);
+        span.setStatus(StatusCode.ERROR);
+        throw ex;
+
+    } finally {
+        // ALWAYS end span (even if exception thrown)
+        span.end();
+    }
+}
+```
+
+**Best Practice (Try-With-Resources for Scope):**
+
+```java
+public void processOrder(Order order) {
+    Span span = tracer.spanBuilder("order.process").startSpan();
+
+    // Try-with-resources ensures scope closed automatically
+    try (Scope scope = span.makeCurrent()) {
+        processValidOrder(order);
+        span.setStatus(StatusCode.OK);
+    } catch (Exception ex) {
+        span.recordException(ex);
+        span.setStatus(StatusCode.ERROR);
+        throw ex;
+    } finally {
+        span.end();
+    }
+}
+```
+
+---
+
+#### Mistake 3: Using High-Cardinality Attributes (Cardinality Explosion)
+
+**Problem:** Adding user IDs, timestamps, or unique identifiers as span attributes causes backend cardinality explosion.
+
+**Bad Example:**
+
+```java
+Span span = tracer.spanBuilder("user.fetch")
+    .setAttribute("user.id", userId)  // ❌ High cardinality (millions of unique values)
+    .setAttribute("request.timestamp", System.currentTimeMillis())  // ❌ Infinite cardinality
+    .setAttribute("user.email", email)  // ❌ PII + high cardinality
+    .startSpan();
+```
+
+**Good Example (Use Low-Cardinality Attributes):**
+
+```java
+Span span = tracer.spanBuilder("user.fetch")
+    .setAttribute("user.type", user.getType())  // ✅ Low cardinality: [FREE, PREMIUM, ENTERPRISE]
+    .setAttribute("user.region", user.getRegion())  // ✅ Low cardinality: [US, EU, APAC]
+    .setAttribute("request.method", "GET")  // ✅ Low cardinality: [GET, POST, PUT, DELETE]
+    .startSpan();
+
+// Use span events for high-cardinality data (not indexed)
+span.addEvent("user.fetched", Attributes.builder()
+    .put("user.id", userId)  // Events don't contribute to cardinality
+    .put("user.email", email)
+    .build()
+);
+```
+
+**Cardinality Guidelines:**
+
+| Attribute Type | Cardinality | Example | Use As |
+|----------------|-------------|---------|--------|
+| **Low (<100 values)** | ✅ Safe | HTTP method, status code, region | Span attribute |
+| **Medium (100-10K)** | ⚠️ Caution | Product category, error code | Span attribute (with limits) |
+| **High (>10K values)** | ❌ Avoid | User ID, email, IP address, timestamp | Span event (not attribute) |
+
+---
+
+#### Mistake 4: Not Configuring Span Sampling (Performance Overhead)
+
+**Problem:** 100% trace sampling causes excessive backend storage and network overhead.
+
+**Bad Configuration:**
+
+```java
+// Sample ALL traces (100%) - huge overhead in production!
+SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+    .setSampler(Sampler.alwaysOn())  // ❌ Samples 100% of traces
+    .build();
+```
+
+**Good Configuration (Probabilistic Sampling):**
+
+```java
+// Sample 10% of traces (sufficient for most use cases)
+SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+    .setSampler(Sampler.traceIdRatioBased(0.1))  // ✅ Sample 10% of traces
+    .build();
+```
+
+**Environment-Based Sampling:**
+
+```yaml
+# File: application.yml
+otel:
+  traces:
+    sampler:
+      # Local: Sample 100% for debugging
+      # Staging: Sample 50% for testing
+      # Production: Sample 5-10% to reduce overhead
+      probability: ${OTEL_TRACES_SAMPLER_PROBABILITY:0.1}
+```
+
+**Recommendation:**
+- **Local/Dev:** 100% sampling (`probability: 1.0`)
+- **Staging:** 30-50% sampling (`probability: 0.3-0.5`)
+- **Production:** 5-10% sampling (`probability: 0.05-0.1`)
+- **High-traffic APIs:** 1-5% sampling (`probability: 0.01-0.05`)
+
+---
+
+### 10.9 OpenTelemetry Verification and Troubleshooting
+
+#### 10.9.1 Verify OTLP Export to OpenTelemetry Collector
+
+```bash
+# Check OpenTelemetry Collector health
+curl http://otel-collector:13133/
+
+# Check Collector metrics endpoint
+curl http://otel-collector:8888/metrics
+
+# Verify spans received by Collector
+# (Look for otelcol_receiver_accepted_spans metric)
+curl http://otel-collector:8888/metrics | grep otelcol_receiver_accepted_spans
+```
+
+**Docker Compose for Local Testing:**
+
+```yaml
+# File: docker-compose.yml
+version: '3.8'
+
+services:
+  # OpenTelemetry Collector
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"  # OTLP gRPC receiver
+      - "4318:4318"  # OTLP HTTP receiver
+      - "8888:8888"  # Prometheus metrics
+      - "13133:13133"  # Health check
+
+  # Jaeger backend (trace visualization)
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "14250:14250"  # Jaeger gRPC receiver
+
+  # Prometheus (metrics storage)
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"  # Prometheus UI
+```
+
+**OpenTelemetry Collector Configuration:**
+
+```yaml
+# File: otel-collector-config.yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 10s
+    send_batch_size: 1024
+
+exporters:
+  # Export traces to Jaeger
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+
+  # Export metrics to Prometheus
+  prometheus:
+    endpoint: 0.0.0.0:8889
+
+  # Logging exporter for debugging
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [jaeger, logging]
+
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus, logging]
+```
+
+#### 10.9.2 Debug OpenTelemetry Instrumentation
+
+```java
+// File: src/main/java/com/example/debug/OtelDebugController.java
+package com.example.debug;
+
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+/**
+ * Debug endpoint to verify OpenTelemetry instrumentation.
+ */
+@RestController
+public class OtelDebugController {
+
+    private final Tracer tracer;
+
+    public OtelDebugController() {
+        this.tracer = GlobalOpenTelemetry.getTracer("debug", "1.0.0");
+    }
+
+    /**
+     * Test endpoint to verify trace context.
+     */
+    @GetMapping("/debug/trace")
+    public Map<String, String> debugTrace() {
+        Span currentSpan = Span.current();
+
+        return Map.of(
+            "traceId", currentSpan.getSpanContext().getTraceId(),
+            "spanId", currentSpan.getSpanContext().getSpanId(),
+            "traceFlags", currentSpan.getSpanContext().getTraceFlags().asHex(),
+            "isSampled", String.valueOf(currentSpan.getSpanContext().isSampled()),
+            "isValid", String.valueOf(currentSpan.getSpanContext().isValid())
+        );
+    }
+
+    /**
+     * Test endpoint to create manual span.
+     */
+    @GetMapping("/debug/manual-span")
+    public String testManualSpan() {
+        Span span = tracer.spanBuilder("debug.test")
+            .setAttribute("test.attribute", "value")
+            .startSpan();
+
+        try {
+            span.addEvent("test.event");
+            return "Manual span created: " + span.getSpanContext().getSpanId();
+        } finally {
+            span.end();
+        }
+    }
+}
+```
+
+**Verify Trace Context Propagation:**
+
+```bash
+# Call debug endpoint
+curl http://localhost:8080/debug/trace
+
+# Expected output:
+{
+  "traceId": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+  "spanId": "1234567890abcdef",
+  "traceFlags": "01",
+  "isSampled": "true",
+  "isValid": "true"
+}
+
+# Check Jaeger UI for trace
+open http://localhost:16686/search?service=user-service
+```
+
+#### 10.9.3 Common Troubleshooting Issues
+
+**Issue 1: Traces Not Appearing in Jaeger**
+
+```bash
+# Check OTLP exporter endpoint configuration
+# Verify application.yml has correct endpoint
+otel:
+  exporter:
+    otlp:
+      endpoint: http://otel-collector:4317  # Must be reachable
+
+# Check OpenTelemetry Collector logs
+docker logs otel-collector
+
+# Verify spans received by Collector
+curl http://otel-collector:8888/metrics | grep otelcol_receiver_accepted_spans
+
+# Check if traces sampled (if sampler probability too low)
+# Increase sampling for debugging
+otel:
+  traces:
+    sampler:
+      probability: 1.0  # Sample 100% for debugging
+```
+
+**Issue 2: MDC trace_id/span_id Missing in Logs**
+
+```bash
+# Verify OpenTelemetry Spring Boot Starter dependency
+# Check pom.xml includes:
+<dependency>
+    <groupId>io.opentelemetry.instrumentation</groupId>
+    <artifactId>opentelemetry-spring-boot-starter</artifactId>
+</dependency>
+
+# Verify Logback configuration includes MDC pattern
+# Check logback-spring.xml includes:
+"trace_id": "%mdc{trace_id}",
+"span_id": "%mdc{span_id}"
+
+# Enable debug logging for OpenTelemetry
+logging:
+  level:
+    io.opentelemetry: DEBUG
+    io.opentelemetry.instrumentation: DEBUG
+```
+
+**Issue 3: High Memory Usage (Span Leaks)**
+
+```bash
+# Check for unclosed spans in code
+# Ensure ALL spans ended with span.end() in finally block
+
+# Verify batch span processor configuration
+SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+    .addSpanProcessor(BatchSpanProcessor.builder(spanExporter)
+        .setMaxQueueSize(2048)  # Prevent unbounded queue growth
+        .setMaxExportBatchSize(512)
+        .setScheduleDelay(Duration.ofSeconds(5))
+        .build())
+    .build();
+
+# Monitor JVM heap usage
+jmap -heap <pid>
+```
+
+---
+
 ### 10.5 References
 
 [^48]: Spring Cloud Sleuth Documentation, "Integration with OpenTelemetry," https://docs.spring.io/spring-cloud-sleuth/docs/current/reference/html/integrations.html#sleuth-otel-integration, accessed 2025-11-02.
@@ -8935,6 +10128,12 @@ curl "http://zipkin:9411/api/v2/traces?serviceName=user-service&annotationQuery=
 [^58]: Prometheus Documentation, "Overview," https://prometheus.io/docs/introduction/overview/, accessed 2025-11-02.
 
 [^59]: Datadog Documentation, "APM & Distributed Tracing," https://docs.datadoghq.com/tracing/, accessed 2025-11-02.
+
+[^60]: OpenTelemetry Documentation, "Java SDK Manual Instrumentation," https://opentelemetry.io/docs/instrumentation/java/manual/, accessed 2025-11-03.
+
+[^61]: OpenTelemetry Documentation, "Context Propagation," https://opentelemetry.io/docs/instrumentation/java/manual/#context-propagation, accessed 2025-11-03.
+
+[^62]: OpenTelemetry GitHub, "Logback Appender," https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/logback/logback-appender-1.0, accessed 2025-11-03.
 
 ---
 

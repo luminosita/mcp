@@ -7228,7 +7228,2096 @@ async def telemetry_health():
 - Cost-conscious (pay-per-use vs. per-host)
 - Need AWS-specific integrations (Lambda, ECS, RDS)
 
-### 10.5 References
+### 10.5 OpenTelemetry Logging Integration with Structlog
+
+OpenTelemetry supports automatic trace context injection into logs, enabling correlation between logs, traces, and metrics[^51]. Integrating structlog with OTeL provides structured logs with automatic trace/span ID enrichment[^52].
+
+**Key Benefits:**
+- **Automatic Trace Context:** Every log includes trace_id and span_id
+- **Correlated Debugging:** Jump from trace span to related logs instantly
+- **Structured Output:** JSON logs with consistent fields across services
+- **Zero Manual Work:** Context propagation happens automatically
+
+#### Pattern 1: Structlog with OpenTelemetry Processor
+
+```python
+# File: src/core/logging.py
+import structlog
+from opentelemetry import trace
+from typing import Any
+import sys
+
+def add_opentelemetry_context(
+    logger: Any,
+    method_name: str,
+    event_dict: dict
+) -> dict:
+    """
+    Structlog processor to inject OpenTelemetry trace context.
+
+    Adds trace_id and span_id to every log entry automatically.
+    """
+    span = trace.get_current_span()
+    if span and span.is_recording():
+        ctx = span.get_span_context()
+        if ctx.is_valid:
+            # Add trace context in W3C format (32-char hex)
+            event_dict["trace_id"] = format(ctx.trace_id, "032x")
+            event_dict["span_id"] = format(ctx.span_id, "016x")
+            event_dict["trace_flags"] = f"{ctx.trace_flags:02x}"
+
+    return event_dict
+
+def setup_structured_logging(
+    service_name: str,
+    log_level: str = "INFO",
+    json_output: bool = True
+) -> None:
+    """
+    Configure structlog with OpenTelemetry integration.
+
+    Processors:
+    1. Add timestamp (ISO 8601)
+    2. Add log level
+    3. Add service name
+    4. Add trace context (trace_id, span_id)
+    5. Format as JSON or console
+    """
+    processors = [
+        structlog.stdlib.filter_by_level,
+        structlog.stdlib.add_logger_name,
+        structlog.stdlib.add_log_level,
+        structlog.processors.TimeStamper(fmt="iso", utc=True),
+        structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
+        structlog.processors.UnicodeDecoder(),
+        # OpenTelemetry trace context injection
+        add_opentelemetry_context,
+        # Add service name to every log
+        structlog.processors.CallsiteParameterAdder(
+            parameters=[
+                structlog.processors.CallsiteParameter.FUNC_NAME,
+                structlog.processors.CallsiteParameter.LINENO,
+            ]
+        ),
+    ]
+
+    if json_output:
+        # Production: JSON output
+        processors.append(structlog.processors.JSONRenderer())
+    else:
+        # Development: Console output with colors
+        processors.append(structlog.dev.ConsoleRenderer(colors=True))
+
+    structlog.configure(
+        processors=processors,
+        wrapper_class=structlog.stdlib.BoundLogger,
+        context_class=dict,
+        logger_factory=structlog.stdlib.LoggerFactory(),
+        cache_logger_on_first_use=True,
+    )
+
+    # Configure root logger
+    import logging
+    logging.basicConfig(
+        format="%(message)s",
+        stream=sys.stdout,
+        level=getattr(logging, log_level.upper()),
+    )
+```
+
+**Usage Example:**
+
+```python
+# File: src/api/routes/resources.py
+from fastapi import APIRouter, HTTPException
+from opentelemetry import trace
+import structlog
+
+router = APIRouter()
+logger = structlog.get_logger(__name__)
+tracer = trace.get_tracer(__name__)
+
+@router.post("/resources")
+async def create_resource(resource_data: dict):
+    """
+    Create resource with automatic trace-correlated logging.
+
+    All logs automatically include trace_id and span_id.
+    """
+    # Start trace span
+    with tracer.start_as_current_span("create_resource") as span:
+        span.set_attribute("resource.type", resource_data.get("type"))
+
+        # Log with automatic trace context
+        logger.info(
+            "creating_resource",
+            resource_type=resource_data.get("type"),
+            resource_name=resource_data.get("name")
+        )
+        # Output: {"event": "creating_resource", "trace_id": "abc123...", "span_id": "def456...", ...}
+
+        try:
+            # Simulate resource creation
+            resource_id = await save_resource(resource_data)
+
+            logger.info(
+                "resource_created",
+                resource_id=resource_id,
+                resource_type=resource_data.get("type")
+            )
+            # Same trace_id and span_id in this log
+
+            span.set_attribute("resource.id", resource_id)
+            return {"id": resource_id, "status": "created"}
+
+        except Exception as e:
+            logger.error(
+                "resource_creation_failed",
+                error=str(e),
+                resource_type=resource_data.get("type")
+            )
+            # Error log has same trace_id - easy debugging
+
+            span.record_exception(e)
+            raise HTTPException(status_code=500, detail="Resource creation failed")
+```
+
+**Sample Log Output (JSON):**
+
+```json
+{
+  "event": "creating_resource",
+  "timestamp": "2025-11-03T10:15:30.123456Z",
+  "level": "info",
+  "logger": "src.api.routes.resources",
+  "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+  "span_id": "00f067aa0ba902b7",
+  "trace_flags": "01",
+  "resource_type": "file",
+  "resource_name": "example.txt",
+  "func_name": "create_resource",
+  "lineno": 18
+}
+```
+
+#### Pattern 2: OpenTelemetry Logs API (Beta)
+
+OpenTelemetry Logs API provides native log signal support (currently in beta)[^53].
+
+```python
+# File: src/core/otel_logging.py
+from opentelemetry._logs import set_logger_provider
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
+from opentelemetry.sdk.resources import Resource
+import logging
+import structlog
+
+def setup_otel_logs(
+    service_name: str,
+    otlp_endpoint: str,
+    resource: Resource
+) -> None:
+    """
+    Configure OpenTelemetry Logs API (beta).
+
+    Exports logs directly to OTLP endpoint (e.g., Grafana Loki, CloudWatch).
+    """
+    # Create logger provider
+    logger_provider = LoggerProvider(resource=resource)
+
+    # Add OTLP log exporter
+    otlp_log_exporter = OTLPLogExporter(endpoint=otlp_endpoint, insecure=True)
+    logger_provider.add_log_record_processor(
+        BatchLogRecordProcessor(otlp_log_exporter)
+    )
+
+    set_logger_provider(logger_provider)
+
+    # Configure Python logging to use OTeL handler
+    handler = LoggingHandler(
+        level=logging.INFO,
+        logger_provider=logger_provider
+    )
+
+    # Attach to root logger
+    logging.getLogger().addHandler(handler)
+
+    structlog.get_logger(__name__).info(
+        "otel_logs_configured",
+        service_name=service_name,
+        otlp_endpoint=otlp_endpoint
+    )
+```
+
+**Complete Setup Example:**
+
+```python
+# File: src/main.py
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from src.core.telemetry import setup_telemetry, get_telemetry
+from src.core.logging import setup_structured_logging
+from src.core.otel_logging import setup_otel_logs
+from src.core.config import get_settings
+import structlog
+
+logger = structlog.get_logger(__name__)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application startup with logging + tracing."""
+    settings = get_settings()
+
+    # 1. Setup structured logging (structlog)
+    setup_structured_logging(
+        service_name=settings.app_name,
+        log_level=settings.log_level,
+        json_output=not settings.debug
+    )
+
+    # 2. Setup OpenTelemetry (traces + metrics)
+    telemetry = setup_telemetry(
+        service_name=settings.app_name,
+        service_version="1.0.0",
+        otlp_endpoint=settings.otlp_endpoint
+    )
+
+    # 3. Setup OTeL Logs API (optional - beta)
+    if settings.enable_otel_logs:
+        setup_otel_logs(
+            service_name=settings.app_name,
+            otlp_endpoint=settings.otlp_endpoint,
+            resource=telemetry.resource
+        )
+
+    # 4. Instrument FastAPI
+    telemetry.instrument_fastapi(app)
+
+    logger.info(
+        "application_started",
+        service_name=settings.app_name,
+        log_level=settings.log_level,
+        otel_enabled=True
+    )
+
+    yield
+
+    logger.info("application_shutdown")
+
+app = FastAPI(title="AI Agent MCP Server", lifespan=lifespan)
+```
+
+#### Pattern 3: Logging Best Practices with OTeL
+
+```python
+# File: src/domain/services/resource_service.py
+import structlog
+from opentelemetry import trace
+from typing import Optional
+import time
+
+logger = structlog.get_logger(__name__)
+tracer = trace.get_tracer(__name__)
+
+class ResourceService:
+    """Service with trace-correlated logging best practices."""
+
+    async def process_resource(
+        self,
+        resource_id: int,
+        user_id: int
+    ) -> dict:
+        """
+        Process resource with detailed logging and tracing.
+
+        Best practices:
+        1. Log at operation boundaries (start, success, failure)
+        2. Include business context (resource_id, user_id)
+        3. Use consistent event names (verb_noun pattern)
+        4. Add performance metrics (duration)
+        5. Leverage automatic trace context
+        """
+        with tracer.start_as_current_span(
+            "process_resource",
+            attributes={
+                "resource.id": resource_id,
+                "user.id": user_id
+            }
+        ) as span:
+            start_time = time.time()
+
+            # Log operation start
+            logger.info(
+                "processing_resource_started",
+                resource_id=resource_id,
+                user_id=user_id
+            )
+
+            try:
+                # Business logic
+                resource = await self._fetch_resource(resource_id)
+
+                logger.debug(
+                    "resource_fetched",
+                    resource_id=resource_id,
+                    resource_type=resource.type
+                )
+
+                result = await self._transform_resource(resource, user_id)
+
+                duration = time.time() - start_time
+                span.set_attribute("processing.duration_ms", duration * 1000)
+
+                # Log success with metrics
+                logger.info(
+                    "processing_resource_completed",
+                    resource_id=resource_id,
+                    user_id=user_id,
+                    duration_seconds=duration,
+                    result_size=len(result)
+                )
+
+                return result
+
+            except ValueError as e:
+                # Business exception (user error)
+                logger.warning(
+                    "processing_resource_invalid",
+                    resource_id=resource_id,
+                    user_id=user_id,
+                    error=str(e),
+                    error_type="validation_error"
+                )
+                span.set_attribute("error.type", "validation_error")
+                raise
+
+            except Exception as e:
+                # System exception (internal error)
+                duration = time.time() - start_time
+                logger.error(
+                    "processing_resource_failed",
+                    resource_id=resource_id,
+                    user_id=user_id,
+                    error=str(e),
+                    error_type=type(e).__name__,
+                    duration_seconds=duration
+                )
+                span.record_exception(e)
+                span.set_attribute("error", True)
+                raise
+
+    async def _fetch_resource(self, resource_id: int) -> dict:
+        """Fetch resource with nested span."""
+        with tracer.start_as_current_span("fetch_resource") as span:
+            span.set_attribute("resource.id", resource_id)
+
+            logger.debug("fetching_resource_from_db", resource_id=resource_id)
+
+            # Simulate DB fetch
+            resource = {"id": resource_id, "type": "file", "data": "..."}
+
+            return resource
+
+    async def _transform_resource(self, resource: dict, user_id: int) -> dict:
+        """Transform resource with nested span."""
+        with tracer.start_as_current_span("transform_resource") as span:
+            span.set_attribute("resource.type", resource["type"])
+            span.set_attribute("user.id", user_id)
+
+            logger.debug(
+                "transforming_resource",
+                resource_id=resource["id"],
+                resource_type=resource["type"]
+            )
+
+            # Simulate transformation
+            transformed = {**resource, "processed": True, "user_id": user_id}
+
+            return transformed
+```
+
+**Trace-to-Log Correlation Workflow:**
+
+1. **Jaeger Trace View:**
+   - Trace ID: `4bf92f3577b34da6a3ce929d0e0e4736`
+   - Spans: `process_resource → fetch_resource → transform_resource`
+   - Duration: 245ms
+
+2. **Loki/CloudWatch Log Query:**
+   ```
+   {trace_id="4bf92f3577b34da6a3ce929d0e0e4736"}
+   ```
+   Returns ALL logs for that trace:
+   - `processing_resource_started`
+   - `fetching_resource_from_db`
+   - `resource_fetched`
+   - `transforming_resource`
+   - `processing_resource_completed`
+
+3. **Grafana Dashboard:**
+   - Click trace span → "View Logs" → Filtered logs for that span_id
+   - Click log entry → "View Trace" → Full distributed trace
+
+---
+
+### 10.6 OpenTelemetry Metrics Deep Dive
+
+OpenTelemetry Metrics API provides three core metric types: Counter, Gauge, and Histogram[^54]. Unlike Prometheus client, OTeL metrics support push-based export to OTLP endpoints.
+
+**Metric Types:**
+
+| Type | Use Case | Example | Aggregation |
+|------|----------|---------|-------------|
+| **Counter** | Monotonically increasing values | Request count, errors, cache hits | Sum |
+| **UpDownCounter** | Values that increase/decrease | Active connections, queue size | Sum |
+| **Histogram** | Distribution of values | Request latency, payload size | Sum, Count, Buckets |
+| **Gauge** | Point-in-time snapshot | CPU usage, memory, temperature | Last Value |
+
+#### Pattern 1: OpenTelemetry Metrics with OTLP Export
+
+```python
+# File: src/core/otel_metrics.py
+from opentelemetry import metrics
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.sdk.resources import Resource
+import structlog
+
+logger = structlog.get_logger(__name__)
+
+class OTelMetricsManager:
+    """
+    OpenTelemetry Metrics Manager.
+
+    Provides business metrics using OTeL Metrics API.
+    Exports to Prometheus, Datadog, or any OTLP-compatible backend.
+    """
+
+    def __init__(
+        self,
+        service_name: str,
+        otlp_endpoint: str,
+        resource: Resource,
+        export_interval_ms: int = 60000
+    ):
+        # Configure OTLP exporter
+        otlp_exporter = OTLPMetricExporter(
+            endpoint=otlp_endpoint,
+            insecure=True
+        )
+
+        # Configure metric reader (export every 60s)
+        reader = PeriodicExportingMetricReader(
+            otlp_exporter,
+            export_interval_millis=export_interval_ms
+        )
+
+        # Create meter provider
+        provider = MeterProvider(
+            resource=resource,
+            metric_readers=[reader]
+        )
+
+        metrics.set_meter_provider(provider)
+        self.meter = metrics.get_meter(__name__)
+
+        # Create metrics
+        self._create_metrics()
+
+        logger.info(
+            "otel_metrics_configured",
+            service_name=service_name,
+            otlp_endpoint=otlp_endpoint,
+            export_interval_ms=export_interval_ms
+        )
+
+    def _create_metrics(self) -> None:
+        """Create OpenTelemetry metrics."""
+
+        # Counter: HTTP requests
+        self.http_requests_total = self.meter.create_counter(
+            name="http.server.requests",
+            description="Total HTTP requests",
+            unit="1"
+        )
+
+        # Histogram: HTTP request duration
+        self.http_request_duration = self.meter.create_histogram(
+            name="http.server.duration",
+            description="HTTP request duration",
+            unit="ms"
+        )
+
+        # Counter: Resources created
+        self.resources_created_total = self.meter.create_counter(
+            name="app.resources.created",
+            description="Total resources created",
+            unit="1"
+        )
+
+        # Histogram: Resource operation duration
+        self.resource_operation_duration = self.meter.create_histogram(
+            name="app.resources.operation.duration",
+            description="Resource operation duration",
+            unit="ms"
+        )
+
+        # UpDownCounter: Active resources
+        self.active_resources = self.meter.create_up_down_counter(
+            name="app.resources.active",
+            description="Number of active resources",
+            unit="1"
+        )
+
+        # Counter: Cache operations
+        self.cache_operations_total = self.meter.create_counter(
+            name="app.cache.operations",
+            description="Total cache operations",
+            unit="1"
+        )
+
+        # Gauge: Cache hit ratio (async observable)
+        self.cache_hit_ratio = self.meter.create_observable_gauge(
+            name="app.cache.hit_ratio",
+            description="Cache hit ratio",
+            unit="1",
+            callbacks=[self._observe_cache_hit_ratio]
+        )
+
+        logger.info("otel_metrics_created", metric_count=7)
+
+    def _observe_cache_hit_ratio(self, observer) -> None:
+        """
+        Callback for observable gauge.
+
+        Called periodically by OTeL SDK to collect current value.
+        """
+        # Calculate cache hit ratio from cache stats
+        from src.infrastructure.cache.redis_client import get_cache_stats
+
+        stats = get_cache_stats()
+        if stats["total_requests"] > 0:
+            hit_ratio = stats["hits"] / stats["total_requests"]
+            observer.observe(hit_ratio, attributes={})
+
+    def record_http_request(
+        self,
+        method: str,
+        endpoint: str,
+        status_code: int,
+        duration_ms: float
+    ) -> None:
+        """Record HTTP request metrics."""
+        attributes = {
+            "http.method": method,
+            "http.route": endpoint,
+            "http.status_code": status_code
+        }
+
+        self.http_requests_total.add(1, attributes=attributes)
+        self.http_request_duration.record(duration_ms, attributes=attributes)
+
+    def record_resource_created(self, resource_type: str) -> None:
+        """Record resource creation."""
+        self.resources_created_total.add(
+            1,
+            attributes={"resource.type": resource_type}
+        )
+
+    def record_resource_operation(
+        self,
+        operation: str,
+        resource_type: str,
+        duration_ms: float,
+        success: bool
+    ) -> None:
+        """Record resource operation."""
+        attributes = {
+            "operation": operation,
+            "resource.type": resource_type,
+            "success": str(success).lower()
+        }
+
+        self.resource_operation_duration.record(duration_ms, attributes=attributes)
+
+    def increment_active_resources(self, resource_type: str, delta: int = 1) -> None:
+        """Increment active resources count."""
+        self.active_resources.add(delta, attributes={"resource.type": resource_type})
+
+    def decrement_active_resources(self, resource_type: str, delta: int = 1) -> None:
+        """Decrement active resources count."""
+        self.active_resources.add(-delta, attributes={"resource.type": resource_type})
+
+    def record_cache_operation(self, operation: str, status: str) -> None:
+        """Record cache operation (hit, miss, set, delete)."""
+        self.cache_operations_total.add(
+            1,
+            attributes={
+                "operation": operation,
+                "status": status
+            }
+        )
+```
+
+**Usage Example:**
+
+```python
+# File: src/api/routes/resources.py
+from fastapi import APIRouter, Depends
+from src.core.otel_metrics import OTelMetricsManager
+from src.core.telemetry import get_telemetry
+import time
+import structlog
+
+router = APIRouter()
+logger = structlog.get_logger(__name__)
+
+def get_metrics() -> OTelMetricsManager:
+    """Dependency to get metrics manager."""
+    return get_telemetry().metrics
+
+@router.post("/resources")
+async def create_resource(
+    resource_data: dict,
+    metrics: OTelMetricsManager = Depends(get_metrics)
+):
+    """Create resource with OTeL metrics."""
+    start_time = time.time()
+    resource_type = resource_data.get("type")
+
+    try:
+        # Business logic
+        resource_id = await save_resource(resource_data)
+
+        # Record metrics
+        duration_ms = (time.time() - start_time) * 1000
+        metrics.record_resource_created(resource_type)
+        metrics.record_resource_operation(
+            operation="create",
+            resource_type=resource_type,
+            duration_ms=duration_ms,
+            success=True
+        )
+        metrics.increment_active_resources(resource_type)
+
+        logger.info(
+            "resource_created",
+            resource_id=resource_id,
+            resource_type=resource_type,
+            duration_ms=duration_ms
+        )
+
+        return {"id": resource_id, "status": "created"}
+
+    except Exception as e:
+        duration_ms = (time.time() - start_time) * 1000
+        metrics.record_resource_operation(
+            operation="create",
+            resource_type=resource_type,
+            duration_ms=duration_ms,
+            success=False
+        )
+
+        logger.error(
+            "resource_creation_failed",
+            resource_type=resource_type,
+            error=str(e)
+        )
+        raise
+```
+
+#### Pattern 2: Hybrid Prometheus + OpenTelemetry Metrics
+
+Many teams run Prometheus for metrics storage but want OTeL instrumentation. This hybrid approach uses OTeL for collection and Prometheus for storage[^55].
+
+```python
+# File: src/core/hybrid_metrics.py
+from opentelemetry import metrics
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.exporter.prometheus import PrometheusMetricReader
+from prometheus_client import start_http_server, REGISTRY
+from opentelemetry.sdk.resources import Resource
+import structlog
+
+logger = structlog.get_logger(__name__)
+
+def setup_hybrid_metrics(
+    service_name: str,
+    resource: Resource,
+    prometheus_port: int = 9090
+) -> metrics.Meter:
+    """
+    Hybrid metrics: OTeL instrumentation + Prometheus export.
+
+    Benefits:
+    - Use OTeL Metrics API (vendor-neutral)
+    - Export to Prometheus (native /metrics endpoint)
+    - No OTLP endpoint required
+    """
+    # Create Prometheus exporter (pull-based)
+    prometheus_reader = PrometheusMetricReader()
+
+    # Create meter provider
+    provider = MeterProvider(
+        resource=resource,
+        metric_readers=[prometheus_reader]
+    )
+
+    metrics.set_meter_provider(provider)
+    meter = metrics.get_meter(__name__)
+
+    # Start Prometheus HTTP server
+    start_http_server(port=prometheus_port, registry=REGISTRY)
+
+    logger.info(
+        "hybrid_metrics_configured",
+        service_name=service_name,
+        prometheus_port=prometheus_port,
+        metrics_endpoint=f"http://localhost:{prometheus_port}/metrics"
+    )
+
+    return meter
+```
+
+**Prometheus Scrape Configuration:**
+
+```yaml
+# prometheus.yml
+scrape_configs:
+  - job_name: 'ai-agent-mcp-server'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'ai-agent-mcp-server'
+          environment: 'production'
+```
+
+#### Pattern 3: Custom Observable Metrics (Callbacks)
+
+Observable metrics (gauges) are updated via callbacks, useful for system metrics[^56].
+
+```python
+# File: src/core/system_metrics.py
+from opentelemetry import metrics
+import psutil
+import structlog
+
+logger = structlog.get_logger(__name__)
+
+class SystemMetrics:
+    """System resource metrics (CPU, memory, disk)."""
+
+    def __init__(self, meter: metrics.Meter):
+        self.meter = meter
+
+        # CPU usage (observable gauge)
+        self.cpu_usage = self.meter.create_observable_gauge(
+            name="system.cpu.usage",
+            description="CPU usage percentage",
+            unit="%",
+            callbacks=[self._observe_cpu_usage]
+        )
+
+        # Memory usage (observable gauge)
+        self.memory_usage = self.meter.create_observable_gauge(
+            name="system.memory.usage",
+            description="Memory usage",
+            unit="bytes",
+            callbacks=[self._observe_memory_usage]
+        )
+
+        # Disk usage (observable gauge)
+        self.disk_usage = self.meter.create_observable_gauge(
+            name="system.disk.usage",
+            description="Disk usage",
+            unit="bytes",
+            callbacks=[self._observe_disk_usage]
+        )
+
+        logger.info("system_metrics_configured")
+
+    def _observe_cpu_usage(self, observer) -> None:
+        """Observe CPU usage."""
+        cpu_percent = psutil.cpu_percent(interval=0.1)
+        observer.observe(cpu_percent, attributes={})
+
+    def _observe_memory_usage(self, observer) -> None:
+        """Observe memory usage."""
+        memory = psutil.virtual_memory()
+        observer.observe(
+            memory.used,
+            attributes={"type": "used"}
+        )
+        observer.observe(
+            memory.available,
+            attributes={"type": "available"}
+        )
+
+    def _observe_disk_usage(self, observer) -> None:
+        """Observe disk usage."""
+        disk = psutil.disk_usage('/')
+        observer.observe(
+            disk.used,
+            attributes={"mount": "/", "type": "used"}
+        )
+        observer.observe(
+            disk.free,
+            attributes={"mount": "/", "type": "free"}
+        )
+```
+
+---
+
+### 10.7 OpenTelemetry Distributed Tracing Patterns
+
+Distributed tracing tracks requests across multiple services, providing end-to-end visibility[^57]. OpenTelemetry automatically propagates trace context via HTTP headers (W3C Trace Context standard)[^58].
+
+#### Pattern 1: Automatic FastAPI Instrumentation
+
+```python
+# File: src/core/tracing.py
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk.resources import Resource
+from fastapi import FastAPI
+import structlog
+
+logger = structlog.get_logger(__name__)
+
+def setup_tracing(
+    service_name: str,
+    otlp_endpoint: str,
+    resource: Resource
+) -> trace.Tracer:
+    """
+    Setup OpenTelemetry distributed tracing.
+
+    Configuration:
+    - OTLP gRPC exporter (Jaeger, Tempo, Datadog)
+    - Batch span processor (performance optimization)
+    - W3C Trace Context propagation (automatic)
+    """
+    # Create tracer provider
+    provider = TracerProvider(resource=resource)
+
+    # Add OTLP exporter
+    otlp_exporter = OTLPSpanExporter(
+        endpoint=otlp_endpoint,
+        insecure=True
+    )
+    provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
+
+    # Set global tracer provider
+    trace.set_tracer_provider(provider)
+
+    tracer = trace.get_tracer(__name__)
+
+    logger.info(
+        "tracing_configured",
+        service_name=service_name,
+        otlp_endpoint=otlp_endpoint
+    )
+
+    return tracer
+
+def instrument_fastapi_tracing(app: FastAPI) -> None:
+    """
+    Auto-instrument FastAPI with OpenTelemetry.
+
+    Automatic instrumentation:
+    - Creates span per HTTP request
+    - Captures HTTP method, path, status code
+    - Propagates trace context to downstream services
+    - Records exceptions as span events
+    """
+    FastAPIInstrumentor.instrument_app(app)
+
+    logger.info("fastapi_tracing_instrumented", app_title=app.title)
+```
+
+**Automatic Span Attributes (FastAPI):**
+
+```
+Span Name: GET /resources/{resource_id}
+Span Kind: SERVER
+Attributes:
+  - http.method: GET
+  - http.route: /resources/{resource_id}
+  - http.url: http://localhost:8000/resources/123
+  - http.status_code: 200
+  - http.target: /resources/123
+  - net.host.name: localhost
+  - net.host.port: 8000
+```
+
+#### Pattern 2: Manual Span Creation (Fine-Grained Control)
+
+```python
+# File: src/domain/services/resource_processor.py
+from opentelemetry import trace
+from opentelemetry.trace import Status, StatusCode, SpanKind
+import structlog
+import time
+
+logger = structlog.get_logger(__name__)
+tracer = trace.get_tracer(__name__)
+
+class ResourceProcessor:
+    """Resource processor with manual tracing."""
+
+    async def process_resource_pipeline(
+        self,
+        resource_id: int,
+        user_id: int
+    ) -> dict:
+        """
+        Process resource through multi-stage pipeline with nested spans.
+
+        Span hierarchy:
+        - process_resource_pipeline (root)
+          ├─ validate_resource (child)
+          ├─ fetch_resource (child)
+          ├─ transform_resource (child)
+          └─ save_result (child)
+        """
+        with tracer.start_as_current_span(
+            "process_resource_pipeline",
+            kind=SpanKind.INTERNAL,
+            attributes={
+                "resource.id": resource_id,
+                "user.id": user_id,
+                "pipeline.version": "v2.0"
+            }
+        ) as root_span:
+            start_time = time.time()
+
+            try:
+                # Stage 1: Validate
+                with tracer.start_as_current_span("validate_resource") as span:
+                    span.set_attribute("validation.schema", "v1.2")
+                    validation_result = await self._validate_resource(resource_id)
+                    span.set_attribute("validation.passed", validation_result)
+
+                    if not validation_result:
+                        span.set_status(Status(StatusCode.ERROR, "Validation failed"))
+                        raise ValueError("Resource validation failed")
+
+                # Stage 2: Fetch
+                with tracer.start_as_current_span("fetch_resource") as span:
+                    span.set_attribute("fetch.source", "database")
+                    resource = await self._fetch_resource(resource_id)
+                    span.set_attribute("resource.type", resource["type"])
+                    span.set_attribute("resource.size_bytes", len(str(resource)))
+
+                # Stage 3: Transform
+                with tracer.start_as_current_span("transform_resource") as span:
+                    span.set_attribute("transform.algorithm", "v2_enhanced")
+                    transform_start = time.time()
+
+                    result = await self._transform_resource(resource, user_id)
+
+                    transform_duration = (time.time() - transform_start) * 1000
+                    span.set_attribute("transform.duration_ms", transform_duration)
+                    span.set_attribute("result.size_bytes", len(str(result)))
+
+                # Stage 4: Save
+                with tracer.start_as_current_span("save_result") as span:
+                    span.set_attribute("save.destination", "database")
+                    saved_id = await self._save_result(result)
+                    span.set_attribute("saved.id", saved_id)
+
+                # Record pipeline success
+                total_duration = (time.time() - start_time) * 1000
+                root_span.set_attribute("pipeline.duration_ms", total_duration)
+                root_span.set_attribute("pipeline.status", "success")
+                root_span.set_status(Status(StatusCode.OK))
+
+                logger.info(
+                    "pipeline_completed",
+                    resource_id=resource_id,
+                    duration_ms=total_duration
+                )
+
+                return result
+
+            except Exception as e:
+                # Record exception in span
+                root_span.record_exception(e)
+                root_span.set_status(Status(StatusCode.ERROR, str(e)))
+                root_span.set_attribute("pipeline.status", "failed")
+                root_span.set_attribute("error.type", type(e).__name__)
+
+                logger.error(
+                    "pipeline_failed",
+                    resource_id=resource_id,
+                    error=str(e)
+                )
+                raise
+
+    async def _validate_resource(self, resource_id: int) -> bool:
+        """Validate resource (nested span created automatically)."""
+        # Validation logic
+        return True
+
+    async def _fetch_resource(self, resource_id: int) -> dict:
+        """Fetch resource."""
+        return {"id": resource_id, "type": "file", "data": "..."}
+
+    async def _transform_resource(self, resource: dict, user_id: int) -> dict:
+        """Transform resource."""
+        return {**resource, "processed": True, "user_id": user_id}
+
+    async def _save_result(self, result: dict) -> int:
+        """Save result."""
+        return 12345
+```
+
+**Trace Visualization (Jaeger/Tempo):**
+
+```
+Trace ID: 4bf92f3577b34da6a3ce929d0e0e4736
+Total Duration: 245ms
+
+├─ [245ms] process_resource_pipeline
+   ├─ [12ms] validate_resource
+   ├─ [85ms] fetch_resource
+   ├─ [120ms] transform_resource
+   └─ [28ms] save_result
+
+Attributes:
+  resource.id: 123
+  user.id: 456
+  pipeline.version: v2.0
+  pipeline.status: success
+```
+
+#### Pattern 3: Cross-Service Trace Propagation
+
+OpenTelemetry automatically propagates trace context via HTTP headers when using instrumented HTTP clients[^59].
+
+```python
+# File: src/infrastructure/external/api_client.py
+from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
+from opentelemetry import trace
+import httpx
+import structlog
+
+logger = structlog.get_logger(__name__)
+tracer = trace.get_tracer(__name__)
+
+# Auto-instrument HTTPX (propagates trace context automatically)
+HTTPXClientInstrumentor().instrument()
+
+class ExternalAPIClient:
+    """
+    External API client with automatic trace propagation.
+
+    Trace context propagated via W3C Trace Context headers:
+    - traceparent: 00-{trace_id}-{span_id}-{flags}
+    - tracestate: vendor-specific data
+    """
+
+    def __init__(self, base_url: str):
+        self.base_url = base_url
+        self.client = httpx.AsyncClient(base_url=base_url, timeout=30.0)
+
+    async def create_resource(self, resource_data: dict) -> dict:
+        """
+        Create resource in external service.
+
+        Trace context automatically propagated to downstream service.
+        """
+        with tracer.start_as_current_span(
+            "external_api_create_resource",
+            kind=trace.SpanKind.CLIENT,
+            attributes={
+                "http.method": "POST",
+                "http.url": f"{self.base_url}/resources",
+                "resource.type": resource_data.get("type")
+            }
+        ) as span:
+            try:
+                # HTTPX automatically adds traceparent header
+                response = await self.client.post(
+                    "/resources",
+                    json=resource_data
+                )
+                response.raise_for_status()
+
+                span.set_attribute("http.status_code", response.status_code)
+                span.set_status(Status(StatusCode.OK))
+
+                logger.info(
+                    "external_api_request_success",
+                    method="POST",
+                    url="/resources",
+                    status_code=response.status_code
+                )
+
+                return response.json()
+
+            except httpx.HTTPStatusError as e:
+                span.record_exception(e)
+                span.set_attribute("http.status_code", e.response.status_code)
+                span.set_status(Status(StatusCode.ERROR, str(e)))
+
+                logger.error(
+                    "external_api_request_failed",
+                    method="POST",
+                    url="/resources",
+                    status_code=e.response.status_code,
+                    error=str(e)
+                )
+                raise
+```
+
+**Trace Context Propagation Flow:**
+
+```
+Service A (AI Agent MCP Server)
+  └─ Span: process_resource (trace_id: abc123...)
+      └─ HTTP POST /resources (traceparent header sent)
+
+↓ HTTP Request Headers ↓
+traceparent: 00-abc123...-def456...-01
+
+Service B (External Resource API)
+  └─ Span: handle_create_resource (same trace_id: abc123...)
+      └─ Database operation
+
+Trace View (Jaeger):
+├─ [Service A] process_resource (245ms)
+│   └─ [Service A] external_api_create_resource (180ms)
+│       └─ [Service B] handle_create_resource (175ms)
+│           └─ [Service B] database_insert (120ms)
+```
+
+#### Pattern 4: Span Events and Annotations
+
+Span events add timestamped annotations to spans for key moments[^60].
+
+```python
+# File: src/domain/services/batch_processor.py
+from opentelemetry import trace
+import structlog
+import time
+
+logger = structlog.get_logger(__name__)
+tracer = trace.get_tracer(__name__)
+
+class BatchProcessor:
+    """Batch processor with span events."""
+
+    async def process_batch(self, items: list[dict]) -> dict:
+        """
+        Process batch with span events for progress tracking.
+
+        Span events capture:
+        - Batch validation started/completed
+        - Item processing milestones (25%, 50%, 75%, 100%)
+        - Errors and retries
+        """
+        with tracer.start_as_current_span(
+            "process_batch",
+            attributes={"batch.size": len(items)}
+        ) as span:
+            # Event: Batch validation started
+            span.add_event("batch_validation_started")
+
+            # Validate batch
+            await self._validate_batch(items)
+
+            span.add_event(
+                "batch_validation_completed",
+                attributes={"validation.passed": True}
+            )
+
+            processed = 0
+            failed = 0
+
+            for idx, item in enumerate(items):
+                try:
+                    await self._process_item(item)
+                    processed += 1
+
+                    # Event: Progress milestones
+                    progress = (idx + 1) / len(items) * 100
+                    if progress in [25, 50, 75, 100]:
+                        span.add_event(
+                            f"batch_progress_{int(progress)}pct",
+                            attributes={"processed_count": processed}
+                        )
+
+                except Exception as e:
+                    failed += 1
+
+                    # Event: Item processing failed
+                    span.add_event(
+                        "item_processing_failed",
+                        attributes={
+                            "item.index": idx,
+                            "error.type": type(e).__name__,
+                            "error.message": str(e)
+                        }
+                    )
+
+                    logger.warning(
+                        "batch_item_failed",
+                        item_index=idx,
+                        error=str(e)
+                    )
+
+            # Final span attributes
+            span.set_attribute("batch.processed", processed)
+            span.set_attribute("batch.failed", failed)
+            span.set_attribute("batch.success_rate", processed / len(items))
+
+            logger.info(
+                "batch_completed",
+                batch_size=len(items),
+                processed=processed,
+                failed=failed
+            )
+
+            return {"processed": processed, "failed": failed}
+
+    async def _validate_batch(self, items: list[dict]) -> None:
+        """Validate batch."""
+        pass
+
+    async def _process_item(self, item: dict) -> None:
+        """Process single item."""
+        pass
+```
+
+**Span Events Timeline (Jaeger):**
+
+```
+Span: process_batch (duration: 1.2s)
+
+Timeline:
+0.000s - Span Start
+0.050s - Event: batch_validation_started
+0.120s - Event: batch_validation_completed (validation.passed=true)
+0.300s - Event: batch_progress_25pct (processed_count=25)
+0.600s - Event: batch_progress_50pct (processed_count=50)
+0.750s - Event: item_processing_failed (item.index=67, error.type=ValueError)
+0.900s - Event: batch_progress_75pct (processed_count=74)
+1.200s - Event: batch_progress_100pct (processed_count=99)
+1.200s - Span End
+```
+
+---
+
+### 10.8 OpenTelemetry Exporter Configuration
+
+OpenTelemetry supports multiple exporters for traces, metrics, and logs[^61]. This section covers production-ready exporter configurations for common backends.
+
+#### Pattern 1: OTLP Exporter (Recommended)
+
+OTLP (OpenTelemetry Protocol) is the vendor-neutral standard for telemetry export[^62]. Supports gRPC and HTTP protocols.
+
+```python
+# File: src/core/exporters/otlp_config.py
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
+    OTLPSpanExporter as OTLPSpanExporterHTTP
+)
+from opentelemetry.sdk.resources import Resource
+import structlog
+
+logger = structlog.get_logger(__name__)
+
+class OTLPExporterConfig:
+    """
+    OTLP Exporter Configuration.
+
+    Supports:
+    - Jaeger (via OTLP)
+    - Grafana Tempo (OTLP)
+    - Datadog (OTLP)
+    - New Relic (OTLP)
+    - AWS X-Ray (via OTLP)
+    """
+
+    @staticmethod
+    def setup_otlp_grpc_traces(
+        otlp_endpoint: str,
+        resource: Resource,
+        use_tls: bool = False,
+        headers: dict = None
+    ) -> TracerProvider:
+        """
+        Configure OTLP gRPC trace exporter.
+
+        Args:
+            otlp_endpoint: OTLP endpoint (e.g., "localhost:4317")
+            resource: Service resource attributes
+            use_tls: Enable TLS (default: False for local dev)
+            headers: Custom headers (auth tokens, API keys)
+
+        Example endpoints:
+        - Jaeger: localhost:4317
+        - Grafana Cloud: tempo-us-central1.grafana.net:443
+        - Datadog: agent:4317
+        """
+        exporter = OTLPSpanExporter(
+            endpoint=otlp_endpoint,
+            insecure=not use_tls,
+            headers=headers or {}
+        )
+
+        provider = TracerProvider(resource=resource)
+        provider.add_span_processor(BatchSpanProcessor(exporter))
+
+        logger.info(
+            "otlp_grpc_traces_configured",
+            endpoint=otlp_endpoint,
+            tls_enabled=use_tls
+        )
+
+        return provider
+
+    @staticmethod
+    def setup_otlp_http_traces(
+        otlp_endpoint: str,
+        resource: Resource,
+        headers: dict = None
+    ) -> TracerProvider:
+        """
+        Configure OTLP HTTP trace exporter.
+
+        Args:
+            otlp_endpoint: OTLP HTTP endpoint (e.g., "http://localhost:4318/v1/traces")
+            resource: Service resource attributes
+            headers: Custom headers (auth tokens)
+
+        Example endpoints:
+        - Jaeger: http://localhost:4318/v1/traces
+        - Grafana Cloud: https://tempo-us-central1.grafana.net/v1/traces
+        """
+        exporter = OTLPSpanExporterHTTP(
+            endpoint=otlp_endpoint,
+            headers=headers or {}
+        )
+
+        provider = TracerProvider(resource=resource)
+        provider.add_span_processor(BatchSpanProcessor(exporter))
+
+        logger.info(
+            "otlp_http_traces_configured",
+            endpoint=otlp_endpoint
+        )
+
+        return provider
+
+    @staticmethod
+    def setup_otlp_grpc_metrics(
+        otlp_endpoint: str,
+        resource: Resource,
+        export_interval_ms: int = 60000,
+        use_tls: bool = False,
+        headers: dict = None
+    ) -> MeterProvider:
+        """
+        Configure OTLP gRPC metric exporter.
+
+        Args:
+            otlp_endpoint: OTLP endpoint
+            resource: Service resource attributes
+            export_interval_ms: Export interval (default: 60s)
+            use_tls: Enable TLS
+            headers: Custom headers
+        """
+        exporter = OTLPMetricExporter(
+            endpoint=otlp_endpoint,
+            insecure=not use_tls,
+            headers=headers or {}
+        )
+
+        reader = PeriodicExportingMetricReader(
+            exporter,
+            export_interval_millis=export_interval_ms
+        )
+
+        provider = MeterProvider(
+            resource=resource,
+            metric_readers=[reader]
+        )
+
+        logger.info(
+            "otlp_grpc_metrics_configured",
+            endpoint=otlp_endpoint,
+            export_interval_ms=export_interval_ms
+        )
+
+        return provider
+```
+
+**Usage with Jaeger:**
+
+```python
+# File: src/main.py (Jaeger via OTLP)
+from src.core.exporters.otlp_config import OTLPExporterConfig
+from opentelemetry.sdk.resources import Resource, SERVICE_NAME, SERVICE_VERSION
+from opentelemetry import trace, metrics
+
+# Create resource
+resource = Resource.create({
+    SERVICE_NAME: "ai-agent-mcp-server",
+    SERVICE_VERSION: "1.0.0",
+    "deployment.environment": "production"
+})
+
+# Setup traces (Jaeger OTLP endpoint)
+trace_provider = OTLPExporterConfig.setup_otlp_grpc_traces(
+    otlp_endpoint="localhost:4317",  # Jaeger OTLP receiver
+    resource=resource,
+    use_tls=False
+)
+trace.set_tracer_provider(trace_provider)
+
+# Setup metrics
+metrics_provider = OTLPExporterConfig.setup_otlp_grpc_metrics(
+    otlp_endpoint="localhost:4317",
+    resource=resource
+)
+metrics.set_meter_provider(metrics_provider)
+```
+
+**Jaeger Docker Setup:**
+
+```bash
+# Run Jaeger with OTLP support
+docker run -d \
+  --name jaeger \
+  -e COLLECTOR_OTLP_ENABLED=true \
+  -p 4317:4317 \
+  -p 4318:4318 \
+  -p 16686:16686 \
+  jaegertracing/all-in-one:latest
+
+# Access Jaeger UI: http://localhost:16686
+```
+
+#### Pattern 2: Grafana Cloud (Tempo + Prometheus + Loki)
+
+```python
+# File: src/core/exporters/grafana_cloud.py
+from src.core.exporters.otlp_config import OTLPExporterConfig
+from opentelemetry.sdk.resources import Resource
+import structlog
+import base64
+
+logger = structlog.get_logger(__name__)
+
+class GrafanaCloudExporter:
+    """
+    Grafana Cloud telemetry exporter.
+
+    Components:
+    - Grafana Tempo (traces)
+    - Grafana Cloud Prometheus (metrics)
+    - Grafana Loki (logs)
+    """
+
+    @staticmethod
+    def setup_grafana_cloud(
+        service_name: str,
+        service_version: str,
+        tempo_endpoint: str,
+        tempo_api_key: str,
+        instance_id: str
+    ):
+        """
+        Configure Grafana Cloud exporters.
+
+        Args:
+            service_name: Service name
+            service_version: Service version
+            tempo_endpoint: Tempo OTLP endpoint (e.g., "tempo-us-central1.grafana.net:443")
+            tempo_api_key: Grafana Cloud API key
+            instance_id: Grafana Cloud instance ID
+        """
+        resource = Resource.create({
+            "service.name": service_name,
+            "service.version": service_version,
+            "deployment.environment": "production"
+        })
+
+        # Encode API key for Authorization header
+        auth_header = f"{instance_id}:{tempo_api_key}"
+        encoded_auth = base64.b64encode(auth_header.encode()).decode()
+
+        # Grafana Cloud headers
+        headers = {
+            "Authorization": f"Basic {encoded_auth}"
+        }
+
+        # Setup traces (Grafana Tempo)
+        trace_provider = OTLPExporterConfig.setup_otlp_grpc_traces(
+            otlp_endpoint=tempo_endpoint,
+            resource=resource,
+            use_tls=True,
+            headers=headers
+        )
+
+        # Setup metrics (Grafana Cloud Prometheus)
+        metrics_provider = OTLPExporterConfig.setup_otlp_grpc_metrics(
+            otlp_endpoint=tempo_endpoint.replace("tempo", "prometheus"),
+            resource=resource,
+            use_tls=True,
+            headers=headers
+        )
+
+        logger.info(
+            "grafana_cloud_configured",
+            service_name=service_name,
+            tempo_endpoint=tempo_endpoint
+        )
+
+        return trace_provider, metrics_provider
+```
+
+**Environment Configuration:**
+
+```python
+# File: src/core/config.py
+from pydantic_settings import BaseSettings
+
+class Settings(BaseSettings):
+    # Grafana Cloud configuration
+    grafana_tempo_endpoint: str = "tempo-us-central1.grafana.net:443"
+    grafana_api_key: str
+    grafana_instance_id: str
+
+    class Config:
+        env_file = ".env"
+```
+
+#### Pattern 3: Multi-Backend Export (Development + Production)
+
+Export to multiple backends simultaneously for local development and production monitoring[^63].
+
+```python
+# File: src/core/exporters/multi_backend.py
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import (
+    BatchSpanProcessor,
+    ConsoleSpanExporter
+)
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.resources import Resource
+import structlog
+
+logger = structlog.get_logger(__name__)
+
+class MultiBackendExporter:
+    """
+    Export traces to multiple backends.
+
+    Use cases:
+    - Development: Console + Jaeger (local visibility)
+    - Production: Grafana Cloud + Datadog (redundancy)
+    """
+
+    @staticmethod
+    def setup_multi_backend_traces(
+        resource: Resource,
+        enable_console: bool = False,
+        jaeger_endpoint: str = None,
+        grafana_endpoint: str = None,
+        grafana_headers: dict = None
+    ) -> TracerProvider:
+        """
+        Configure multiple trace exporters.
+
+        Args:
+            resource: Service resource
+            enable_console: Enable console export (dev mode)
+            jaeger_endpoint: Jaeger OTLP endpoint
+            grafana_endpoint: Grafana Tempo endpoint
+            grafana_headers: Grafana auth headers
+        """
+        provider = TracerProvider(resource=resource)
+
+        # Console exporter (development)
+        if enable_console:
+            console_exporter = ConsoleSpanExporter()
+            provider.add_span_processor(BatchSpanProcessor(console_exporter))
+            logger.info("console_trace_exporter_enabled")
+
+        # Jaeger exporter (local/staging)
+        if jaeger_endpoint:
+            jaeger_exporter = OTLPSpanExporter(
+                endpoint=jaeger_endpoint,
+                insecure=True
+            )
+            provider.add_span_processor(BatchSpanProcessor(jaeger_exporter))
+            logger.info("jaeger_trace_exporter_enabled", endpoint=jaeger_endpoint)
+
+        # Grafana Tempo exporter (production)
+        if grafana_endpoint:
+            grafana_exporter = OTLPSpanExporter(
+                endpoint=grafana_endpoint,
+                insecure=False,
+                headers=grafana_headers or {}
+            )
+            provider.add_span_processor(BatchSpanProcessor(grafana_exporter))
+            logger.info("grafana_trace_exporter_enabled", endpoint=grafana_endpoint)
+
+        return provider
+```
+
+**Environment-Based Configuration:**
+
+```python
+# File: src/main.py (environment-aware exporters)
+from src.core.exporters.multi_backend import MultiBackendExporter
+from src.core.config import get_settings
+from opentelemetry.sdk.resources import Resource, SERVICE_NAME
+from opentelemetry import trace
+
+settings = get_settings()
+
+resource = Resource.create({
+    SERVICE_NAME: settings.app_name,
+    "deployment.environment": settings.environment
+})
+
+# Multi-backend based on environment
+if settings.environment == "development":
+    # Development: Console + Local Jaeger
+    trace_provider = MultiBackendExporter.setup_multi_backend_traces(
+        resource=resource,
+        enable_console=True,
+        jaeger_endpoint="localhost:4317"
+    )
+elif settings.environment == "production":
+    # Production: Grafana Cloud only
+    trace_provider = MultiBackendExporter.setup_multi_backend_traces(
+        resource=resource,
+        grafana_endpoint=settings.grafana_tempo_endpoint,
+        grafana_headers={"Authorization": f"Bearer {settings.grafana_api_key}"}
+    )
+
+trace.set_tracer_provider(trace_provider)
+```
+
+#### Pattern 4: Prometheus Remote Write (Metrics Only)
+
+For metrics-only export to Prometheus-compatible backends (Grafana Cloud, Thanos, Cortex)[^64].
+
+```python
+# File: src/core/exporters/prometheus_remote_write.py
+from prometheus_client import CollectorRegistry, Counter, Histogram, push_to_gateway
+import structlog
+import time
+
+logger = structlog.get_logger(__name__)
+
+class PrometheusRemoteWriteExporter:
+    """
+    Prometheus Remote Write exporter.
+
+    Use cases:
+    - Push metrics to Prometheus Pushgateway
+    - Push to Grafana Cloud Prometheus
+    - Push to Thanos/Cortex
+    """
+
+    def __init__(
+        self,
+        pushgateway_url: str,
+        job_name: str,
+        instance_label: str,
+        push_interval_seconds: int = 60
+    ):
+        self.pushgateway_url = pushgateway_url
+        self.job_name = job_name
+        self.instance_label = instance_label
+        self.push_interval = push_interval_seconds
+
+        # Create custom registry (isolated from global)
+        self.registry = CollectorRegistry()
+
+        logger.info(
+            "prometheus_remote_write_configured",
+            pushgateway_url=pushgateway_url,
+            job_name=job_name
+        )
+
+    def create_counter(self, name: str, description: str, labels: list[str]) -> Counter:
+        """Create counter metric."""
+        return Counter(
+            name,
+            description,
+            labelnames=labels,
+            registry=self.registry
+        )
+
+    def create_histogram(self, name: str, description: str, labels: list[str]) -> Histogram:
+        """Create histogram metric."""
+        return Histogram(
+            name,
+            description,
+            labelnames=labels,
+            registry=self.registry
+        )
+
+    def push_metrics(self) -> None:
+        """
+        Push metrics to Pushgateway.
+
+        Should be called periodically (background task).
+        """
+        try:
+            push_to_gateway(
+                gateway=self.pushgateway_url,
+                job=self.job_name,
+                registry=self.registry,
+                grouping_key={"instance": self.instance_label}
+            )
+
+            logger.debug(
+                "metrics_pushed",
+                pushgateway_url=self.pushgateway_url,
+                job_name=self.job_name
+            )
+
+        except Exception as e:
+            logger.error(
+                "metrics_push_failed",
+                pushgateway_url=self.pushgateway_url,
+                error=str(e)
+            )
+```
+
+**Background Task for Periodic Push:**
+
+```python
+# File: src/main.py (metrics push background task)
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+import asyncio
+from src.core.exporters.prometheus_remote_write import PrometheusRemoteWriteExporter
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Setup Prometheus remote write
+    exporter = PrometheusRemoteWriteExporter(
+        pushgateway_url="http://localhost:9091",
+        job_name="ai-agent-mcp-server",
+        instance_label="instance-1",
+        push_interval_seconds=60
+    )
+
+    # Start background task for periodic push
+    async def push_metrics_task():
+        while True:
+            await asyncio.sleep(exporter.push_interval)
+            exporter.push_metrics()
+
+    task = asyncio.create_task(push_metrics_task())
+
+    yield
+
+    # Cancel background task on shutdown
+    task.cancel()
+
+app = FastAPI(lifespan=lifespan)
+```
+
+---
+
+### 10.9 Common OpenTelemetry Troubleshooting
+
+#### Issue 1: Traces Not Appearing in Backend
+
+**Symptoms:**
+- Application starts successfully
+- No traces visible in Jaeger/Tempo UI
+- No errors in logs
+
+**Diagnosis:**
+
+```python
+# File: src/api/routes/debug.py
+from fastapi import APIRouter
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+import structlog
+
+router = APIRouter()
+logger = structlog.get_logger(__name__)
+
+@router.get("/debug/tracing")
+async def debug_tracing():
+    """
+    Debug tracing configuration.
+
+    Checks:
+    - Tracer provider configured
+    - Span processors registered
+    - Current span recording
+    """
+    provider = trace.get_tracer_provider()
+
+    # Check if tracer provider is configured
+    if not isinstance(provider, TracerProvider):
+        return {
+            "status": "error",
+            "message": "TracerProvider not configured (using NoOp)",
+            "fix": "Call setup_telemetry() during application startup"
+        }
+
+    # Check if span processors exist
+    if not provider._active_span_processor._span_processors:
+        return {
+            "status": "error",
+            "message": "No span processors registered",
+            "fix": "Add BatchSpanProcessor with exporter"
+        }
+
+    # Create test span
+    tracer = trace.get_tracer(__name__)
+    with tracer.start_as_current_span("test_span") as span:
+        span.set_attribute("test", "true")
+
+        ctx = span.get_span_context()
+
+        return {
+            "status": "ok",
+            "tracer_provider": str(type(provider).__name__),
+            "span_processors": len(provider._active_span_processor._span_processors),
+            "test_trace_id": format(ctx.trace_id, "032x"),
+            "test_span_id": format(ctx.span_id, "016x"),
+            "message": "Tracing configured correctly"
+        }
+```
+
+**Common Fixes:**
+
+1. **Telemetry not initialized:**
+   ```python
+   # ❌ Missing
+   # app = FastAPI()
+
+   # ✅ Initialize in lifespan
+   @asynccontextmanager
+   async def lifespan(app: FastAPI):
+       setup_telemetry(...)  # Initialize here
+       yield
+
+   app = FastAPI(lifespan=lifespan)
+   ```
+
+2. **Wrong OTLP endpoint:**
+   ```python
+   # ❌ Incorrect
+   OTLPSpanExporter(endpoint="http://localhost:4317")  # HTTP protocol on gRPC port
+
+   # ✅ Correct
+   OTLPSpanExporter(endpoint="localhost:4317", insecure=True)  # gRPC endpoint
+   ```
+
+3. **Firewall blocking OTLP:**
+   ```bash
+   # Test OTLP endpoint connectivity
+   nc -zv localhost 4317
+   ```
+
+#### Issue 2: High Memory Usage from Metrics
+
+**Symptoms:**
+- Memory usage grows over time
+- OOM errors in production
+- Slow metric export
+
+**Diagnosis:**
+
+```python
+# File: src/api/routes/debug.py
+from prometheus_client import REGISTRY
+
+@router.get("/debug/metrics")
+async def debug_metrics():
+    """
+    Debug metrics cardinality.
+
+    Checks:
+    - Number of unique metric series
+    - Label cardinality
+    - Memory usage
+    """
+    metric_families = list(REGISTRY.collect())
+
+    cardinality = {}
+    for family in metric_families:
+        series_count = len(list(family.samples))
+        cardinality[family.name] = series_count
+
+    # Check for high-cardinality metrics (>1000 series)
+    high_cardinality = {
+        name: count
+        for name, count in cardinality.items()
+        if count > 1000
+    }
+
+    if high_cardinality:
+        return {
+            "status": "warning",
+            "total_series": sum(cardinality.values()),
+            "high_cardinality_metrics": high_cardinality,
+            "message": "High cardinality detected - review metric labels",
+            "fix": "Use low-cardinality labels (user_type instead of user_id)"
+        }
+
+    return {
+        "status": "ok",
+        "total_series": sum(cardinality.values()),
+        "metric_count": len(cardinality)
+    }
+```
+
+**Fix: Reduce Label Cardinality:**
+
+```python
+# ❌ High cardinality (millions of series)
+requests_by_user = Counter(
+    'requests_by_user_total',
+    'Requests by user',
+    ['user_id']  # PROBLEM: unbounded
+)
+
+# ✅ Low cardinality (10-100 series)
+requests_by_user_type = Counter(
+    'requests_by_user_type_total',
+    'Requests by user type',
+    ['user_type', 'subscription_tier']  # Bounded: admin/user × free/premium
+)
+```
+
+#### Issue 3: Missing Trace Context in Logs
+
+**Symptoms:**
+- Logs don't include trace_id or span_id
+- Can't correlate logs with traces
+
+**Diagnosis:**
+
+```python
+# File: src/api/routes/test.py
+from fastapi import APIRouter
+from opentelemetry import trace
+import structlog
+
+router = APIRouter()
+logger = structlog.get_logger(__name__)
+
+@router.get("/test/trace-context")
+async def test_trace_context():
+    """Test trace context in logs."""
+    span = trace.get_current_span()
+    ctx = span.get_span_context()
+
+    # Log with trace context
+    logger.info(
+        "test_log_entry",
+        test_field="test_value"
+    )
+
+    if ctx.is_valid:
+        return {
+            "status": "ok",
+            "trace_id": format(ctx.trace_id, "032x"),
+            "span_id": format(ctx.span_id, "016x"),
+            "message": "Check logs for trace_id and span_id fields"
+        }
+    else:
+        return {
+            "status": "error",
+            "message": "No valid span context - tracing not initialized"
+        }
+```
+
+**Fix: Add OTeL Processor to Structlog:**
+
+```python
+# File: src/core/logging.py
+import structlog
+from opentelemetry import trace
+
+def add_opentelemetry_context(logger, method_name, event_dict):
+    """Inject trace context into logs."""
+    span = trace.get_current_span()
+    if span and span.is_recording():
+        ctx = span.get_span_context()
+        if ctx.is_valid:
+            event_dict["trace_id"] = format(ctx.trace_id, "032x")
+            event_dict["span_id"] = format(ctx.span_id, "016x")
+    return event_dict
+
+# Configure structlog
+structlog.configure(
+    processors=[
+        structlog.stdlib.filter_by_level,
+        add_opentelemetry_context,  # Add this processor
+        structlog.processors.JSONRenderer()
+    ]
+)
+```
+
+#### Issue 4: Slow Application Startup
+
+**Symptoms:**
+- Application takes 10+ seconds to start
+- High CPU during initialization
+- Blocking during OTeL setup
+
+**Fix: Async Initialization:**
+
+```python
+# File: src/main.py
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+import asyncio
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # ❌ Blocking initialization (10s startup)
+    # setup_telemetry(...)
+    # instrument_fastapi(app)
+    # initialize_metrics(...)
+
+    # ✅ Async initialization (1s startup)
+    await asyncio.gather(
+        asyncio.to_thread(setup_telemetry, ...),
+        asyncio.to_thread(instrument_fastapi, app),
+        asyncio.to_thread(initialize_metrics, ...)
+    )
+
+    yield
+
+app = FastAPI(lifespan=lifespan)
+```
+
+---
+
+### 10.10 References
 
 [^41]: OpenTelemetry Documentation, "Traces," https://opentelemetry.io/docs/concepts/signals/traces/, accessed 2025-11-02.
 
@@ -7249,6 +9338,34 @@ async def telemetry_health():
 [^49]: Prometheus Documentation, "Metric and Label Naming," https://prometheus.io/docs/practices/naming/, accessed 2025-11-02.
 
 [^50]: OpenTelemetry Documentation, "Context Propagation," https://opentelemetry.io/docs/concepts/context-propagation/, accessed 2025-11-02.
+
+[^51]: OpenTelemetry Documentation, "Logs," https://opentelemetry.io/docs/concepts/signals/logs/, accessed 2025-11-02.
+
+[^52]: Structlog Documentation, "OpenTelemetry Integration," https://www.structlog.org/en/stable/integrations.html#opentelemetry, accessed 2025-11-02.
+
+[^53]: OpenTelemetry Python Documentation, "Logs API," https://opentelemetry-python.readthedocs.io/en/latest/sdk/logs.html, accessed 2025-11-02.
+
+[^54]: OpenTelemetry Documentation, "Metrics," https://opentelemetry.io/docs/concepts/signals/metrics/, accessed 2025-11-02.
+
+[^55]: Prometheus Documentation, "OpenTelemetry Metrics," https://prometheus.io/docs/concepts/metric_types/, accessed 2025-11-02.
+
+[^56]: OpenTelemetry Python Documentation, "Metrics API," https://opentelemetry-python.readthedocs.io/en/latest/sdk/metrics.html, accessed 2025-11-02.
+
+[^57]: OpenTelemetry Documentation, "Distributed Tracing," https://opentelemetry.io/docs/concepts/observability-primer/#distributed-tracing, accessed 2025-11-02.
+
+[^58]: W3C Trace Context Specification, "W3C Recommendation," https://www.w3.org/TR/trace-context/, accessed 2025-11-02.
+
+[^59]: OpenTelemetry Python Documentation, "Propagators," https://opentelemetry-python.readthedocs.io/en/latest/api/propagate.html, accessed 2025-11-02.
+
+[^60]: OpenTelemetry Documentation, "Span Events," https://opentelemetry.io/docs/concepts/signals/traces/#span-events, accessed 2025-11-02.
+
+[^61]: OpenTelemetry Documentation, "Exporters," https://opentelemetry.io/docs/instrumentation/python/exporters/, accessed 2025-11-02.
+
+[^62]: OpenTelemetry Protocol Specification, "OTLP," https://opentelemetry.io/docs/specs/otlp/, accessed 2025-11-02.
+
+[^63]: OpenTelemetry Documentation, "Multiple Exporters," https://opentelemetry.io/docs/instrumentation/python/exporters/#multiple-exporters, accessed 2025-11-02.
+
+[^64]: Prometheus Documentation, "Remote Write," https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write, accessed 2025-11-02.
 
 ---
 
