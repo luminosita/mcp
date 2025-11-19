@@ -285,6 +285,70 @@
         }
       }
     },
+    "poppler-utils@latest": {
+      "last_modified": "2025-10-26T01:09:48Z",
+      "resolved": "github:NixOS/nixpkgs/de69d2ba6c70e747320df9c096523b623d3a4c35#poppler-utils",
+      "source": "devbox-search",
+      "version": "25.10.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/077nnn38cszqz78y2y4dch14ccr54vzy-poppler-utils-25.10.0",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/vy2xp1yhjl1h00mgvbkdk4kncn862cz2-poppler-utils-25.10.0-dev"
+            }
+          ],
+          "store_path": "/nix/store/077nnn38cszqz78y2y4dch14ccr54vzy-poppler-utils-25.10.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/6qg3fq0rpqkzrcii5wr1dx4xbp4ikmig-poppler-utils-25.10.0",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/1gl5ph2wf7xhvkvjx0nx4ipxnlmpi7qp-poppler-utils-25.10.0-dev"
+            }
+          ],
+          "store_path": "/nix/store/6qg3fq0rpqkzrcii5wr1dx4xbp4ikmig-poppler-utils-25.10.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/di3v6ndmcfw56fp8rp4nmfy3rwb4q17c-poppler-utils-25.10.0",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/isn68ncn3nky1hg23mddlarsfs06b01v-poppler-utils-25.10.0-dev"
+            }
+          ],
+          "store_path": "/nix/store/di3v6ndmcfw56fp8rp4nmfy3rwb4q17c-poppler-utils-25.10.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/6r6dnq9rh9wwcyzq3zds6sy2l658a0c7-poppler-utils-25.10.0",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/04pf9yc7v2h0zh0lips70ba6cg7hv10x-poppler-utils-25.10.0-dev"
+            }
+          ],
+          "store_path": "/nix/store/6r6dnq9rh9wwcyzq3zds6sy2l658a0c7-poppler-utils-25.10.0"
+        }
+      }
+    },
     "pre-commit@latest": {
       "last_modified": "2025-10-12T08:13:11Z",
       "resolved": "github:NixOS/nixpkgs/832e3b6db48508ae436c2c7bfc0cf914eac6938e#pre-commit",
@@ -409,6 +473,54 @@
     "sonar-scanner-cli": {
       "resolved": "github:NixOS/nixpkgs/82c2e0d6dde50b17ae366d2aa36f224dc19af469?narHash=sha256-h13YFQMi91nXkkRoJMIfezorz5SbD6849jw5L0fjK4I%3D#sonar-scanner-cli",
       "source": "nixpkg"
+    },
+    "tesseract4@latest": {
+      "last_modified": "2025-10-22T20:59:19Z",
+      "resolved": "github:NixOS/nixpkgs/01b6809f7f9d1183a2b3e081f0a1e6f8f415cb09#tesseract4",
+      "source": "devbox-search",
+      "version": "4.1.3",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lb9pybbx9cmyd5387kiqc025k4c350ai-tesseract-4.1.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lb9pybbx9cmyd5387kiqc025k4c350ai-tesseract-4.1.3"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/smz4qsx2c6pz7gasmyiq0jf0jfvyklz4-tesseract-4.1.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/smz4qsx2c6pz7gasmyiq0jf0jfvyklz4-tesseract-4.1.3"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/n9mcc7gxxxni89r0zs2hszxjid01ci1b-tesseract-4.1.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/n9mcc7gxxxni89r0zs2hszxjid01ci1b-tesseract-4.1.3"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/qbx67mwb74s47m6zp74qis45vyppghzf-tesseract-4.1.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/qbx67mwb74s47m6zp74qis45vyppghzf-tesseract-4.1.3"
+        }
+      }
     },
     "trivy@latest": {
       "last_modified": "2025-10-08T10:03:27Z",
